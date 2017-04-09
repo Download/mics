@@ -2,7 +2,7 @@
   "name": "mics",
   "version": "0.0.1",
   "description": "Multiple Inheritance Class System: Intuitive mixins for ES6 classes",
-  "main": "src/index.js",
+  "main": "dist/mics.cjs.js",
   "scripts": {
     "build-cjs": "webpack --output-path dist --output-filename mics.cjs.js --output-library-target commonjs2 \"./index.js\" ",
     "build-umd": "webpack --output-path dist --output-filename mics.umd.js --output-library-target umd \"./index.js\" ",
@@ -22,7 +22,7 @@
     "mixwith",
     "es6-class",
     "microscopically small",
-    "1kB"
+    "2kB"
   ],
   "author": "Stijn de Witt",
   "license": "CC-BY-4.0",

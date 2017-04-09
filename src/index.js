@@ -1,35 +1,6 @@
-
-
-// should combine `mix` and `mixin`
-// * no arguments: creates a new base class that has a `with` method to mix in other mics later
-// * `superclass` argument: 
-//    - optional, if supplied it must be a ES6 class
-//    - if the superclass is a `type` (has an `interface` property), return the superclass (extended by the given mixins if any)
-//    - if superclass is not a `type`, create a derived class from it, add an `interface` property and return the derived class (extended by the given mixins if any)
-// * optional es6 class as first argument
-//   --> if supplied, return an ES6 class, otherwise a mixin
-// * optional 0..n mixins
-//   --> will be mixed into resulting class/mixin
-// * optional class factory as last argument
-//   --> will be last in prototype chain
-//
-// should accept either an es6 class + optional mics
-// or optional mics and an optional class factory
-// when invoked with a single mics, return it unchanges
-// 
-// var MixinA = mics(superclass => class MixinA extends superclass {
-//   a(){}
-// })
-// 
-// var MixinB = mics(superclass => class MixinB extends superclass {
-//   b(){}
-// })
-// 
-// class Mixed extends mics(MixinA, MixinB, )
-
 export function mics(...args){
-	var superclass = args.length && isFunction(args[0]) && isClass(args[0]) && args.shift()
-	var factory = args.length && isFunction(args[args.length-1]) && !isMics(args[args.length-1]) && isFactory(args[args.length-1]) && args.pop()
+	var superclass = args.length && typeof args[0] == 'function' && isClass(args[0]) && args.shift()
+	var factory = args.length && typeof args[args.length-1] == 'function' && args[args.length-1].length == 1 && !isMics(args[args.length-1]) && args.pop()
 	// if neither superclass nor factory are provided, create a new superclass
 	if (!superclass && !factory) superclass = class{}
 	if (superclass) {
@@ -42,7 +13,6 @@ export function mics(...args){
 		}
 		return args.length ? superclass.with(args) : superclass
 	}
-
 	if (args.length) factory = (org => superclass => org(args.reduce((c,m) => m(c), superclass)))(factory)
 	function mixin(superclass, ...args) {
 		if (this instanceof mixin) return new mixin.class(superclass, ...args)
@@ -60,35 +30,7 @@ export function mics(...args){
 	return mixin
 }
 
-export function mix(superclass, ...mixins) {
-	if (! superclass) superclass = class{}
-	if (! superclass.with) {
-		superclass = class extends superclass {}
-		Object.defineProperties(superclass, {
-			with: {get:() => (...mixins) => mixins.reduce((c,m) => m(c), superclass)},
-			interface: {value:getInterface(superclass.prototype), writable:false}
-		})
-	}
-	return mixins.length ? superclass.with(mixins) : superclass
-}
-
-export function mixin(fn) {
-	function mixin(superclass, ...args) {
-		if (this instanceof mixin) {
-			console.info('invocation of mixin with new')
-			var result = new mixin.class(superclass, ...args)
-			console.info('result: ', result)
-			return result
-		}
-		var result = is(superclass, mixin) ? superclass : fn(superclass)
-		if (mixin.classes.indexOf(result) == -1) mixin.classes.push(result)
-		return result
-	}
-	mixin.classes = []
-	mixin.class = mixin(class {})
-	mixin.interface = getInterface(mixin.class.prototype)
-	return mixin
-}
+export default mics
 
 export function is(obj, type) {
 	function a(type) {
@@ -114,14 +56,21 @@ export function is(obj, type) {
 			f && (typeof itf[k] == 'function' ? typeof subject[k] == 'function' : k in subject), true
 		)
 	}
-	return type !== undefined ? a(type) : { a, as }
+	return type !== undefined ? a(type) : { a, an:a, as }
 }
 
-function getInterface(proto) {
-	return Object.getOwnPropertyNames(proto).reduce((o,k) => {o[k] = proto[k]; return o}, {})
+function getPropertyNames(proto) {
+	var results = []
+	while (proto !== Object.prototype) {
+		Object.getOwnPropertyNames(proto).reduce((arr,k) => arr.indexOf(k) === -1 ? arr.push(k) && arr : arr, results)
+		proto = proto.__proto__.constructor.prototype
+	}
+	return results
 }
 
-var isFunction = x => typeof x == 'function'
-var isClass = x => x.toString().indexOf('class') === 0
-var isMics = x => !!(x.interface && x.with)
-var isFactory = x => x.length === 1
+export function getInterface(proto) {
+	return getPropertyNames(proto).reduce((o,k) => {o[k] = proto[k]; return o}, {})
+}
+
+export const isClass = x => x.toString().indexOf('class') === 0
+export const isMics = x => !!(x.interface && x.with)

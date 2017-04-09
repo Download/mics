@@ -24,20 +24,18 @@ npm install --save mics
 
 ### require
 ```js
-var mix = require('mics').mix
-var mixin = require('mics').mixin
-var is = require('mics').is
+var mics = require('mics')
 ```
 
 ### import
 ```js
-import { mix, mixin, is } from 'mics'
+import mics from 'mics'
 ```
 
 ### AMD
 ```js
 define(['mics'], function(mics){
-  var { mix, mixin, is } = mics
+  // ...
 });
 ```
 
@@ -52,15 +50,15 @@ Mixins look a lot like classes, but they are regular ES5 constructor functions, 
 ES6 class. You create them with the `mixin` function:
 
 ```js
-import { mixin } from 'mics'
+import mics from 'mics'
 
-var Swimmer = mixin(superclass => class Swimmer extends superclass {
+var Looker = mics(superclass => class Looker extends superclass {
   constructor() {
     super()
-    console.info('A swimmer is born!')
+    console.info('A looker is born!')
   }
-  swim() {
-    console.info('Splash splash!')
+  look() {
+    console.info('Looking good!')
   }
 })
 ```
@@ -70,22 +68,38 @@ body of your mixin as a class that extends `superclass`. The `mixin` function wr
 a regular es5 constructor function that you can invoke with new to create instances:
 
 ```js
-var swimmer = new Swimmer()  // > A swimmer is born!
-swimmer.swim()               // > Splash splash!
+var looker = new Looker()      // > A looker is born!
+looker.look()                  // > Looking good!
 ```
 
 `instanceof` does not work on the instance. Instead use mics' `is` function, with it's 
-submethods `a` and `as`, like this:
+submethods `a`/`an` and `as`, like this:
 
 ```js
 import { is } from 'mics'
 
-is(swimmer).a(Swimmer)       // true
-var canSwim = {              // create an object with the
-  swim(){}                   // same interface as Swimmer
+looker instanceof Looker       // false, but:
+looker instanceof Looker.class // true, and (better):
+is(looker).a(Looker)           // true
+```
+
+Often, we don't really care whether the object *is* a certain type, we just want to know whether 
+we can treat is *as* a certain type. Use `is(subject).as(type)` to test whether a subject adheres
+to the same interface as is defined by `type`:
+
+```js
+var viewer = {                 // create an object with the
+  look(){}                     // same interface as Looker
 }     
-is(canSwim).a(Swimmer)       // false, but
-is(canSwim).as(Swimmer)      // true
+is(viewer).a(Looker)           // false, but
+is(viewer).as(Looker)          // true
+```
+
+For fluidity, `an` is an alias of `a`:
+
+```js
+is(animal).an(Elephant)
+is(animal).a(Lion)
 ```
 
 Now let us make some more mixins:
@@ -117,7 +131,7 @@ var Talker = mixin(superclass => class Talker extends superclass {
 var talker = new Talker()    // > A talker is born!
 talker.talk()                // > Blah blah blah...
 
-class Duck extends mix().with(Swimmer, Walker, Talker) {
+var Duck = mics(Looker, Walker, Talker, superclass => class Duck extends superclass {
   constructor() {
     super()
     console.info('A duck is born!')
@@ -134,20 +148,19 @@ var duck = new Duck()        // > A swimmer is born!
 talker.talk()                // > Quack quack...
 is(talker).a.(Duck)          // true
 is(talker).a(Walker)         // true
-is({walk()}).as(Walker)      // true 
 
+class Duckish extends mics(Looker, Walker, Talker) {
+  talk() {
+    console.info('I talk like a duck')
+  }
+}
 
-
-var 
-var results = bridalapp.products.search()
-bridalapp.log.info('Found ' + results.total + ' results.')
-
-var supplier = new Supplier().setName('Test Supplier)
-supplier = bridalapp.suppliers.create(supplier);
-bridalapp.log.info('Created supplier ' + supplier.name + ' with ID ' + supplier.id)
+var duckish = new Duckish()
+is(duskish).as(Duck)          // true
+```
 
 ## Issues
-Add an issue in this project's [issue tracker](https://github.com/download/bridalapp-client-js/issues)
+Add an issue in this project's [issue tracker](https://github.com/download/mics/issues)
 to let me know of any problems you find, or questions you may have.
 
 ## Copyright
