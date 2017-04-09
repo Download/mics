@@ -2,12 +2,21 @@
 ### Multiple Inheritance Class System
 **Intuitive mixins for ES6 classes**
 
+> Multiple Inheritance is like a parachute. You don't often need it, but when you do, you really need it.
+*Grady Booch*
 
 [![npm](https://img.shields.io/npm/v/mics.svg)](https://npmjs.com/package/mics)
 [![license](https://img.shields.io/npm/l/mics.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![travis](https://img.shields.io/travis/Download/mics.svg)](https://travis-ci.org/Download/mics)
 [![greenkeeper](https://img.shields.io/david/Download/mics.svg)](https://greenkeeper.io/)
 ![mind BLOWN](https://img.shields.io/badge/mind-BLOWN-ff69b4.svg)
+
+## What is it
+Mics *(pronounce: mix)* is a library that makes multiple inheritance in Javascript a 
+breeze. Inspired by the excellent blog post ["Real" Mixins with Javascript Classes](http://justinfagnani.com/2015/12/21/real-mixins-with-javascript-classes/) 
+by Justin Fagnani, mics tries to build a minimal library around the concept of using class expressions (factories)
+as mixins. Mics extends the concepts presented in the blog post by making the mixins first-class citizens that can be directly 
+used to instantiate objects and can be mixed in with other mixins instead of just with classes.
 
 
 ## Install with NPM
@@ -47,7 +56,7 @@ define(['mics'], function(mics){
 ## Usage
 ### Creating a mixin
 Mixins look a lot like classes, but they are regular ES5 constructor functions, powered by a real
-ES6 class. You create them with the `mixin` function:
+ES6 class. You create them with the `mics` function:
 
 ```js
 import mics from 'mics'
@@ -63,8 +72,8 @@ var Looker = mics(superclass => class Looker extends superclass {
 })
 ```
 
-Notice that the argument to `mixin` is a function that accepts a superclass. You then define the 
-body of your mixin as a class that extends `superclass`. The `mixin` function wraps that class in
+Notice that the argument to `mics` is a function that accepts a superclass. You then define the 
+body of your mixin as a class that extends `superclass`. The `mics` function wraps that class in
 a regular es5 constructor function that you can invoke with new to create instances:
 
 ```js
@@ -156,7 +165,7 @@ class Duckish extends mics(Looker, Walker, Talker) {
 }
 
 var duckish = new Duckish()
-is(duskish).as(Duck)          // true
+is(duckish).as(Duck)          // true
 ```
 
 ## Issues
