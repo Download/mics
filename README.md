@@ -2,14 +2,14 @@
 ### Multiple Inheritance Class System
 **Intuitive mixins for ES6 classes**
 
-> Multiple Inheritance is like a parachute. You don't often need it, but when you do, you really need it.
-*Grady Booch*
-
 [![npm](https://img.shields.io/npm/v/mics.svg)](https://npmjs.com/package/mics)
 [![license](https://img.shields.io/npm/l/mics.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![travis](https://img.shields.io/travis/Download/mics.svg)](https://travis-ci.org/Download/mics)
 [![greenkeeper](https://img.shields.io/david/Download/mics.svg)](https://greenkeeper.io/)
 ![mind BLOWN](https://img.shields.io/badge/mind-BLOWN-ff69b4.svg)
+
+> Multiple Inheritance is like a parachute. You don't often need it, but when you do, you really need it.
+*Grady Booch*
 
 ## What is it
 Mics *(pronounce: mix)* is a library that makes multiple inheritance in Javascript a 
