@@ -86,7 +86,7 @@ function getPropertyNames(proto) {
 	return results
 }
 
-export function getInterface(proto) {
+function getInterface(proto) {
 	return getPropertyNames(proto).reduce((o,k) => {o[k] = proto[k]; return o}, {})
 }
 

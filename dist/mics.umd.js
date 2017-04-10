@@ -78,14 +78,19 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["mix"] = mix;
-/* harmony export (immutable) */ __webpack_exports__["is"] = is;
-/* harmony export (immutable) */ __webpack_exports__["getInterface"] = getInterface;
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.mix = mix;
+exports.is = is;
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
@@ -184,7 +189,8 @@ function mix() {
 	return mixin;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (mix);
+exports.default = mix;
+
 
 var isFunc = function isFunc(x) {
 	return typeof x == 'function';

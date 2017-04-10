@@ -35,15 +35,11 @@ npm install --save mics
 ```js
 var mix = require('mics').mix
 var is = require('mics').is
-// or, shorthand
-var mix = require('mics')
 ```
 
 ### import
 ```js
 import { mix, is } from 'mics'
-// or, shorthand
-import mix from 'mics'
 ```
 
 ### AMD
@@ -64,7 +60,7 @@ Mixins look a lot like classes, but they are regular ES5 constructor functions, 
 ES6 class. You create them with the `mix` function:
 
 ```js
-import mix from 'mics'
+import { mix } from 'mics'
 
 var Looker = mix(superclass => class Looker extends superclass {
   constructor() {

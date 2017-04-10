@@ -5988,13 +5988,19 @@ module.exports = __webpack_amd_options__;
 
 /***/ }),
 /* 50 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = mix;
-/* harmony export (immutable) */ __webpack_exports__["b"] = is;
-/* unused harmony export getInterface */
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.mix = mix;
+exports.is = is;
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
@@ -6093,7 +6099,8 @@ function mix() {
 	return mixin;
 }
 
-/* unused harmony default export */ var _unused_webpack_default_export = (mix);
+exports.default = mix;
+
 
 var isFunc = function isFunc(x) {
 	return typeof x == 'function';
@@ -6339,20 +6346,26 @@ function createWritableStdioStream (fd) {
 
 /***/ }),
 /* 54 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ulog__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ulog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_ulog__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_chai__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_chai___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_chai__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_sinon__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_sinon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_sinon__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3____ = __webpack_require__(50);
+
+
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ulog = __webpack_require__(53);
+
+var _ulog2 = _interopRequireDefault(_ulog);
+
+var _chai = __webpack_require__(51);
+
+var _sinon = __webpack_require__(52);
+
+var _ = __webpack_require__(50);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6360,20 +6373,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-
-var log = __WEBPACK_IMPORTED_MODULE_0_ulog___default()('mics:spec');
-
-
-
+var log = (0, _ulog2.default)('mics:spec');
 
 
 describe('mix([superclass] [, ...mixins] [, factory])', function () {
 	it('is a function', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */]).to.be.a('function');
+		(0, _chai.expect)(_.mix).to.be.a('function');
 	});
 
 	it('creates a mixin from an ES6 class factory', function () {
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+		var M = (0, _.mix)(function (superclass) {
 			return function (_superclass) {
 				_inherits(M, _superclass);
 
@@ -6386,11 +6395,11 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 				return M;
 			}(superclass);
 		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(M).to.be.a('function');
+		(0, _chai.expect)(M).to.be.a('function');
 	});
 
 	it('creates a mixin from other mixins and a class factory', function () {
-		var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+		var X = (0, _.mix)(function (superclass) {
 			return function (_superclass2) {
 				_inherits(X, _superclass2);
 
@@ -6403,7 +6412,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 				return X;
 			}(superclass);
 		});
-		var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+		var Y = (0, _.mix)(function (superclass) {
 			return function (_superclass3) {
 				_inherits(X, _superclass3);
 
@@ -6416,7 +6425,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 				return X;
 			}(superclass);
 		});
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(X, Y, function (superclass) {
+		var M = (0, _.mix)(X, Y, function (superclass) {
 			return function (_superclass4) {
 				_inherits(M, _superclass4);
 
@@ -6429,18 +6438,18 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 				return M;
 			}(superclass);
 		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(M).to.be.a('function');
+		(0, _chai.expect)(M).to.be.a('function');
 	});
 
 	it('creates a class from a superclass', function () {
-		var C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function Base() {
+		var C = (0, _.mix)(function Base() {
 			_classCallCheck(this, Base);
 		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(C).to.be.a('function');
+		(0, _chai.expect)(C).to.be.a('function');
 	});
 
 	it('creates a mixin that can be invoked with new', function () {
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+		var M = (0, _.mix)(function (superclass) {
 			return function (_superclass5) {
 				_inherits(M, _superclass5);
 
@@ -6454,21 +6463,21 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 			}(superclass);
 		});
 		var m = new M();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(m).to.be.an('object');
+		(0, _chai.expect)(m).to.be.an('object');
 	});
 });
 
 describe('is(x [, type])', function () {
 	it('is a function', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */]).to.be.a('function');
+		(0, _chai.expect)(_.is).to.be.a('function');
 	});
 
 	it('accepts one or two arguments', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */].length).to.eq(2);
+		(0, _chai.expect)(_.is.length).to.eq(2);
 	});
 
 	it('when passed two arguments, acts as an alias for is(x).a(type)', function () {
-		var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+		var X = (0, _.mix)(function (superclass) {
 			return function (_superclass6) {
 				_inherits(X, _superclass6);
 
@@ -6482,21 +6491,21 @@ describe('is(x [, type])', function () {
 			}(superclass);
 		});
 		var x = new X();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(x).a(X)).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(x, X)).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(x).a(Date)).to.eq(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(x, Date));
+		(0, _chai.expect)((0, _.is)(x).a(X)).to.eq(true);
+		(0, _chai.expect)((0, _.is)(x, X)).to.eq(true);
+		(0, _chai.expect)((0, _.is)(x).a(Date)).to.eq((0, _.is)(x, Date));
 	});
 
 	it('when passed a single argument, returns an object', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({})).to.be.an('object');
+		(0, _chai.expect)((0, _.is)({})).to.be.an('object');
 	});
 
 	describe('a(type)', function () {
 		it('is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).a).to.be.a('function');
+			(0, _chai.expect)((0, _.is)({}).a).to.be.a('function');
 		});
 		it('tests whether object `x` implements `type`', function () {
-			var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			var X = (0, _.mix)(function (superclass) {
 				return function (_superclass7) {
 					_inherits(X, _superclass7);
 
@@ -6510,11 +6519,11 @@ describe('is(x [, type])', function () {
 				}(superclass);
 			});
 			var x = new X();
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(x).a(X)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(x).a(Date)).to.eq(false);
+			(0, _chai.expect)((0, _.is)(x).a(X)).to.eq(true);
+			(0, _chai.expect)((0, _.is)(x).a(Date)).to.eq(false);
 		});
 		it('tests whether class `x` implements `type`', function () {
-			var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			var Y = (0, _.mix)(function (superclass) {
 				return function (_superclass8) {
 					_inherits(Y, _superclass8);
 
@@ -6537,11 +6546,11 @@ describe('is(x [, type])', function () {
 				}
 
 				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(Y));
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(X).a(Y)).to.eq(true);
+			}((0, _.mix)(Y));
+			(0, _chai.expect)((0, _.is)(X).a(Y)).to.eq(true);
 		});
 		it('tests whether mixin `x` implements `type`', function () {
-			var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			var Y = (0, _.mix)(function (superclass) {
 				return function (_superclass9) {
 					_inherits(Y, _superclass9);
 
@@ -6554,7 +6563,7 @@ describe('is(x [, type])', function () {
 					return Y;
 				}(superclass);
 			});
-			var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(Y, function (superclass) {
+			var X = (0, _.mix)(Y, function (superclass) {
 				return function (_superclass10) {
 					_inherits(X, _superclass10);
 
@@ -6567,13 +6576,13 @@ describe('is(x [, type])', function () {
 					return X;
 				}(superclass);
 			});
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(X).a(Y)).to.eq(true);
+			(0, _chai.expect)((0, _.is)(X).a(Y)).to.eq(true);
 		});
 		it('for type == "class", tests whether `x` is an ES6 class', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function X() {
+			(0, _chai.expect)((0, _.is)(function X() {
 				_classCallCheck(this, X);
 			}).a('class')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
 				return function (_superclass11) {
 					_inherits(Y, _superclass11);
 
@@ -6586,17 +6595,17 @@ describe('is(x [, type])', function () {
 					return Y;
 				}(superclass);
 			})).a('class')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).a('class')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])('Hi').a('class')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function () {}).a('class')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x) {}).a('class')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x, y) {}).a('class')).to.eq(false);
+			(0, _chai.expect)((0, _.is)({}).a('class')).to.eq(false);
+			(0, _chai.expect)((0, _.is)('Hi').a('class')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function () {}).a('class')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x) {}).a('class')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x, y) {}).a('class')).to.eq(false);
 		});
 		it('for type == "mixin", tests whether `x` is a mixin', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function X() {
+			(0, _chai.expect)((0, _.is)(function X() {
 				_classCallCheck(this, X);
 			}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
 				return function (_superclass12) {
 					_inherits(Y, _superclass12);
 
@@ -6609,20 +6618,20 @@ describe('is(x [, type])', function () {
 					return Y;
 				}(superclass);
 			})).a('mixin')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])('Hi').a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function () {}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x) {}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x, y) {}).a('mixin')).to.eq(false);
+			(0, _chai.expect)((0, _.is)({}).a('mixin')).to.eq(false);
+			(0, _chai.expect)((0, _.is)('Hi').a('mixin')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function () {}).a('mixin')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x) {}).a('mixin')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x, y) {}).a('mixin')).to.eq(false);
 		});
 		it('for type == "mix", tests whether `x` is the result of calling mix()', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function X() {
+			(0, _chai.expect)((0, _.is)(function X() {
 				_classCallCheck(this, X);
 			}).a('mix')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function X() {
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function X() {
 				_classCallCheck(this, X);
 			})).a('mix')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (_mix2) {
+			(0, _chai.expect)((0, _.is)(function (_mix2) {
 				_inherits(X, _mix2);
 
 				function X() {
@@ -6632,8 +6641,8 @@ describe('is(x [, type])', function () {
 				}
 
 				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])())).a('mix')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			}((0, _.mix)())).a('mix')).to.eq(true);
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
 				return function (_superclass13) {
 					_inherits(Y, _superclass13);
 
@@ -6646,20 +6655,20 @@ describe('is(x [, type])', function () {
 					return Y;
 				}(superclass);
 			})).a('mix')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).a('mix')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])('Hi').a('mix')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function () {}).a('mix')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x) {}).a('mix')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x, y) {}).a('mix')).to.eq(false);
+			(0, _chai.expect)((0, _.is)({}).a('mix')).to.eq(false);
+			(0, _chai.expect)((0, _.is)('Hi').a('mix')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function () {}).a('mix')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x) {}).a('mix')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x, y) {}).a('mix')).to.eq(false);
 		});
 		it('for type == "factory", tests whether `x` is a class factory', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function X() {
+			(0, _chai.expect)((0, _.is)(function X() {
 				_classCallCheck(this, X);
 			}).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function X() {
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function X() {
 				_classCallCheck(this, X);
 			})).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (_mix3) {
+			(0, _chai.expect)((0, _.is)(function (_mix3) {
 				_inherits(X, _mix3);
 
 				function X() {
@@ -6669,8 +6678,8 @@ describe('is(x [, type])', function () {
 				}
 
 				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])())).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			}((0, _.mix)())).a('factory')).to.eq(false);
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
 				return function (_superclass14) {
 					_inherits(Y, _superclass14);
 
@@ -6683,20 +6692,20 @@ describe('is(x [, type])', function () {
 					return Y;
 				}(superclass);
 			})).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])('Hi').a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function () {}).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x) {}).a('factory')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x, y) {}).a('factory')).to.eq(false);
+			(0, _chai.expect)((0, _.is)({}).a('factory')).to.eq(false);
+			(0, _chai.expect)((0, _.is)('Hi').a('factory')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function () {}).a('factory')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x) {}).a('factory')).to.eq(true);
+			(0, _chai.expect)((0, _.is)(function (x, y) {}).a('factory')).to.eq(false);
 		});
 		it('for type == "function", tests whether `x` is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function X() {
+			(0, _chai.expect)((0, _.is)(function X() {
 				_classCallCheck(this, X);
 			}).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function X() {
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function X() {
 				_classCallCheck(this, X);
 			})).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (_mix4) {
+			(0, _chai.expect)((0, _.is)(function (_mix4) {
 				_inherits(X, _mix4);
 
 				function X() {
@@ -6706,8 +6715,8 @@ describe('is(x [, type])', function () {
 				}
 
 				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])())).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			}((0, _.mix)())).a('function')).to.eq(true);
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
 				return function (_superclass15) {
 					_inherits(Y, _superclass15);
 
@@ -6720,20 +6729,20 @@ describe('is(x [, type])', function () {
 					return Y;
 				}(superclass);
 			})).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).a('function')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])('Hi').a('function')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function () {}).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x) {}).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x, y) {}).a('function')).to.eq(true);
+			(0, _chai.expect)((0, _.is)({}).a('function')).to.eq(false);
+			(0, _chai.expect)((0, _.is)('Hi').a('function')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function () {}).a('function')).to.eq(true);
+			(0, _chai.expect)((0, _.is)(function (x) {}).a('function')).to.eq(true);
+			(0, _chai.expect)((0, _.is)(function (x, y) {}).a('function')).to.eq(true);
 		});
 		it('for type == "object", tests whether `x` is an object', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function X() {
+			(0, _chai.expect)((0, _.is)(function X() {
 				_classCallCheck(this, X);
 			}).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function X() {
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function X() {
 				_classCallCheck(this, X);
 			})).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (_mix5) {
+			(0, _chai.expect)((0, _.is)(function (_mix5) {
 				_inherits(X, _mix5);
 
 				function X() {
@@ -6743,8 +6752,8 @@ describe('is(x [, type])', function () {
 				}
 
 				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])())).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			}((0, _.mix)())).a('object')).to.eq(false);
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
 				return function (_superclass16) {
 					_inherits(Y, _superclass16);
 
@@ -6757,20 +6766,20 @@ describe('is(x [, type])', function () {
 					return Y;
 				}(superclass);
 			})).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).a('object')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])('Hi').a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function () {}).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x) {}).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x, y) {}).a('object')).to.eq(false);
+			(0, _chai.expect)((0, _.is)({}).a('object')).to.eq(true);
+			(0, _chai.expect)((0, _.is)('Hi').a('object')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function () {}).a('object')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x) {}).a('object')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x, y) {}).a('object')).to.eq(false);
 		});
 		it('for type == "string", tests whether `x` is a string', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function X() {
+			(0, _chai.expect)((0, _.is)(function X() {
 				_classCallCheck(this, X);
 			}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function X() {
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function X() {
 				_classCallCheck(this, X);
 			})).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (_mix6) {
+			(0, _chai.expect)((0, _.is)(function (_mix6) {
 				_inherits(X, _mix6);
 
 				function X() {
@@ -6780,8 +6789,8 @@ describe('is(x [, type])', function () {
 				}
 
 				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])())).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			}((0, _.mix)())).a('string')).to.eq(false);
+			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
 				return function (_superclass17) {
 					_inherits(Y, _superclass17);
 
@@ -6794,30 +6803,30 @@ describe('is(x [, type])', function () {
 					return Y;
 				}(superclass);
 			})).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])('Hi').a('string')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function () {}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x) {}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(function (x, y) {}).a('string')).to.eq(false);
+			(0, _chai.expect)((0, _.is)({}).a('string')).to.eq(false);
+			(0, _chai.expect)((0, _.is)('Hi').a('string')).to.eq(true);
+			(0, _chai.expect)((0, _.is)(function () {}).a('string')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x) {}).a('string')).to.eq(false);
+			(0, _chai.expect)((0, _.is)(function (x, y) {}).a('string')).to.eq(false);
 		});
 	});
 
 	describe('an(type)', function () {
 		it('is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).a).to.be.a('function');
+			(0, _chai.expect)((0, _.is)({}).a).to.be.a('function');
 		});
 		it('is an alias for `a(type)`', function () {
-			var x = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({});
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(x.a).to.eq(x.an);
+			var x = (0, _.is)({});
+			(0, _chai.expect)(x.a).to.eq(x.an);
 		});
 	});
 
 	describe('as(type)', function () {
 		it('is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).as).to.be.a('function');
+			(0, _chai.expect)((0, _.is)({}).as).to.be.a('function');
 		});
 		it('tests whether `x` can be treated as `type` (has the same interface)', function () {
-			var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+			var Looker = (0, _.mix)(function (superclass) {
 				return function (_superclass18) {
 					_inherits(Looker, _superclass18);
 
@@ -6835,14 +6844,14 @@ describe('is(x [, type])', function () {
 					return Looker;
 				}(superclass);
 			});
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])('Hi').as(Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(8).as(Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({}).as(Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(new Looker()).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({
+			(0, _chai.expect)((0, _.is)('Hi').as(Looker)).to.eq(false);
+			(0, _chai.expect)((0, _.is)(8).as(Looker)).to.eq(false);
+			(0, _chai.expect)((0, _.is)({}).as(Looker)).to.eq(false);
+			(0, _chai.expect)((0, _.is)(new Looker()).as(Looker)).to.eq(true);
+			(0, _chai.expect)((0, _.is)({
 				look: function look() {}
 			}).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])({
+			(0, _chai.expect)((0, _.is)({
 				walk: function walk() {}
 			}).as(Looker)).to.eq(false);
 
@@ -6859,8 +6868,8 @@ describe('is(x [, type])', function () {
 				return Base;
 			}();
 
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(Base).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(new Base()).as(Looker)).to.eq(true);
+			(0, _chai.expect)((0, _.is)(Base).as(Looker)).to.eq(true);
+			(0, _chai.expect)((0, _.is)(new Base()).as(Looker)).to.eq(true);
 
 			var Derived = function (_Base) {
 				_inherits(Derived, _Base);
@@ -6874,18 +6883,18 @@ describe('is(x [, type])', function () {
 				return Derived;
 			}(Base);
 
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(Derived).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["b" /* is */])(new Derived()).as(Looker)).to.eq(true);
+			(0, _chai.expect)((0, _.is)(Derived).as(Looker)).to.eq(true);
+			(0, _chai.expect)((0, _.is)(new Derived()).as(Looker)).to.eq(true);
 		});
 	});
 });
 
 describe('mix example', function () {
 	it('shows how to create a mixin using an es6 class', function () {
-		var constr = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
-		    _look = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
+		var constr = (0, _sinon.spy)(),
+		    _look = (0, _sinon.spy)();
 
-		var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+		var Looker = (0, _.mix)(function (superclass) {
 			return function (_superclass19) {
 				_inherits(Looker, _superclass19);
 
@@ -6911,26 +6920,26 @@ describe('mix example', function () {
 			}(superclass);
 		});
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(Looker).to.be.a('function');
+		(0, _chai.expect)(Looker).to.be.a('function');
 
 		var looker = new Looker();
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(looker).to.be.an('object');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(constr.called).to.eq(true);
+		(0, _chai.expect)(looker).to.be.an('object');
+		(0, _chai.expect)(constr.called).to.eq(true);
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(looker).to.have.a.property('look');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(looker.look).to.be.a('function');
+		(0, _chai.expect)(looker).to.have.a.property('look');
+		(0, _chai.expect)(looker.look).to.be.a('function');
 
 		looker.look();
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_look.called).to.eq(true);
+		(0, _chai.expect)(_look.called).to.eq(true);
 	});
 
 	it('shows how to composes multiple mixins', function () {
-		var _look2 = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
-		    _walk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
-		    _talk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
-		var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+		var _look2 = (0, _sinon.spy)(),
+		    _walk = (0, _sinon.spy)(),
+		    _talk = (0, _sinon.spy)();
+		var Looker = (0, _.mix)(function (superclass) {
 			return function (_superclass20) {
 				_inherits(Looker, _superclass20);
 
@@ -6952,7 +6961,7 @@ describe('mix example', function () {
 			}(superclass);
 		});
 
-		var Walker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+		var Walker = (0, _.mix)(function (superclass) {
 			return function (_superclass21) {
 				_inherits(Walker, _superclass21);
 
@@ -6974,7 +6983,7 @@ describe('mix example', function () {
 			}(superclass);
 		});
 
-		var Talker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(function (superclass) {
+		var Talker = (0, _.mix)(function (superclass) {
 			return function (_superclass22) {
 				_inherits(Talker, _superclass22);
 
@@ -6996,8 +7005,8 @@ describe('mix example', function () {
 			}(superclass);
 		});
 
-		var duckTalk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
-		var Duck = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3____["a" /* mix */])(Looker, Walker, Talker, function (superclass) {
+		var duckTalk = (0, _sinon.spy)();
+		var Duck = (0, _.mix)(Looker, Walker, Talker, function (superclass) {
 			return function (_superclass23) {
 				_inherits(Duck, _superclass23);
 
@@ -7021,20 +7030,20 @@ describe('mix example', function () {
 		});
 
 		var duck = new Duck();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.be.an('object');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.have.a.property('look');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck.look).to.be.a('function');
+		(0, _chai.expect)(duck).to.be.an('object');
+		(0, _chai.expect)(duck).to.have.a.property('look');
+		(0, _chai.expect)(duck.look).to.be.a('function');
 		duck.look();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_look2.called).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.have.a.property('walk');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck.walk).to.be.a('function');
+		(0, _chai.expect)(_look2.called).to.eq(true);
+		(0, _chai.expect)(duck).to.have.a.property('walk');
+		(0, _chai.expect)(duck.walk).to.be.a('function');
 		duck.walk();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_walk.called).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.have.a.property('talk');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck.talk).to.be.a('function');
+		(0, _chai.expect)(_walk.called).to.eq(true);
+		(0, _chai.expect)(duck).to.have.a.property('talk');
+		(0, _chai.expect)(duck.talk).to.be.a('function');
 		duck.talk();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_talk.called).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duckTalk.called).to.eq(true);
+		(0, _chai.expect)(_talk.called).to.eq(true);
+		(0, _chai.expect)(duckTalk.called).to.eq(true);
 	});
 });
 

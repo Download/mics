@@ -1,8 +1,8 @@
 import ulog from 'ulog'
 const log = ulog('mics:spec')
-
 import { expect } from 'chai'
 import { spy } from 'sinon'
+
 import { mix, is } from './'
 
 describe('mix([superclass] [, ...mixins] [, factory])', function(){
