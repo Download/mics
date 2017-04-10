@@ -14,8 +14,9 @@ export function mix(...args){
 		return args.length ? args.reduce((c,m) => m(c), superclass) : superclass
 	}
 	if (args.length) factory = (org => superclass => org(args.reduce((c,m) => m(c), superclass)))(factory)
-	function mixin(superclass, ...args) {
-		if (this instanceof mixin) return new mixin.class(superclass, ...args)
+	function mixin(...args) {
+		if (this instanceof mixin) return new mixin.class(...args)
+		var superclass = args.length && args.shift()
 		var result = is(superclass, mixin) ? superclass : factory(superclass)
 		if (mixin.classes.indexOf(result) == -1) mixin.classes.push(result)
 		return result

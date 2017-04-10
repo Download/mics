@@ -60,6 +60,8 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 		})
 		var m = new M('x','y','z')
 		expect(argsarg.length).to.eq(3)
+		var m = new M()
+		expect(argsarg.length).to.eq(0)
 	})
 })
 

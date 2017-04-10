@@ -6060,12 +6060,13 @@ function mix() {
 			}, superclass));
 		};
 	}(factory);
-	function mixin(superclass) {
-		for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-			args[_key3 - 1] = arguments[_key3];
+	function mixin() {
+		for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+			args[_key3] = arguments[_key3];
 		}
 
-		if (this instanceof mixin) return new (Function.prototype.bind.apply(mixin.class, [null].concat([superclass], args)))();
+		if (this instanceof mixin) return new (Function.prototype.bind.apply(mixin.class, [null].concat(args)))();
+		var superclass = args.length && args.shift();
 		var result = is(superclass, mixin) ? superclass : factory(superclass);
 		if (mixin.classes.indexOf(result) == -1) mixin.classes.push(result);
 		return result;
@@ -6516,6 +6517,8 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 		});
 		var m = new M('x', 'y', 'z');
 		(0, _chai.expect)(argsarg.length).to.eq(3);
+		var m = new M();
+		(0, _chai.expect)(argsarg.length).to.eq(0);
 	});
 });
 

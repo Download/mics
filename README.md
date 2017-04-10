@@ -158,7 +158,18 @@ var duck = new Duck()        // > A looker is born!
 talker.talk()                // > Quack quack...
 is(talker).a.(Duck)          // true
 is(talker).a(Walker)         // true
+```
 
+Notice how we are only creating and using mixins up until now. Mixins are more 
+flexible than classes so mics promotes their use over classes. However, sometimes you are working
+with a class and want to mix some mixins into that class. `mix` makes that easy as well. If you
+don't pass a factory as the last argument to `mix`, it will use the first argument as the superclass
+when available, or create a new superclass automatically and use that to derive from. It will then
+return a new class that derives from the superclass adding all the mixins that were passed.
+
+The reurned class can be extended from to inherit all the mixins:
+
+```js
 class Duckish extends mix(Looker, Walker, Talker) {
   talk() {
     console.info('I look, walk and talk like a duck!')
