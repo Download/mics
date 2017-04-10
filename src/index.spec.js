@@ -33,6 +33,34 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 		expect(m).to.be.an('object')
 	})
 
+	it('arguments passed when invoking the mixin with new are passed on to the constructor', function(){
+		var xarg,yarg,zarg
+		var M = mix(superclass => class M extends superclass {
+			constructor(x, y, z) {
+				super()
+				xarg = x
+				yarg = y
+				zarg = z
+			}
+		})
+		var m = new M('x','y','z')
+		expect(xarg).to.eq('x')
+		expect(yarg).to.eq('y')
+		expect(zarg).to.eq('z')
+	})
+
+
+	it('var args in constructor has correct length', function(){
+		var argsarg
+		var M = mix(superclass => class M extends superclass {
+			constructor(...args) {
+				super()
+				argsarg = args
+			}
+		})
+		var m = new M('x','y','z')
+		expect(argsarg.length).to.eq(3)
+	})
 })
 
 describe('is(x [, type])', function(){

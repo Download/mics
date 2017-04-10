@@ -6465,6 +6465,58 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 		var m = new M();
 		(0, _chai.expect)(m).to.be.an('object');
 	});
+
+	it('arguments passed when invoking the mixin with new are passed on to the constructor', function () {
+		var xarg, yarg, zarg;
+		var M = (0, _.mix)(function (superclass) {
+			return function (_superclass6) {
+				_inherits(M, _superclass6);
+
+				function M(x, y, z) {
+					_classCallCheck(this, M);
+
+					var _this6 = _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).call(this));
+
+					xarg = x;
+					yarg = y;
+					zarg = z;
+					return _this6;
+				}
+
+				return M;
+			}(superclass);
+		});
+		var m = new M('x', 'y', 'z');
+		(0, _chai.expect)(xarg).to.eq('x');
+		(0, _chai.expect)(yarg).to.eq('y');
+		(0, _chai.expect)(zarg).to.eq('z');
+	});
+
+	it('var args in constructor has correct length', function () {
+		var argsarg;
+		var M = (0, _.mix)(function (superclass) {
+			return function (_superclass7) {
+				_inherits(M, _superclass7);
+
+				function M() {
+					_classCallCheck(this, M);
+
+					var _this7 = _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).call(this));
+
+					for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+						args[_key] = arguments[_key];
+					}
+
+					argsarg = args;
+					return _this7;
+				}
+
+				return M;
+			}(superclass);
+		});
+		var m = new M('x', 'y', 'z');
+		(0, _chai.expect)(argsarg.length).to.eq(3);
+	});
 });
 
 describe('is(x [, type])', function () {
@@ -6478,8 +6530,8 @@ describe('is(x [, type])', function () {
 
 	it('when passed two arguments, acts as an alias for is(x).a(type)', function () {
 		var X = (0, _.mix)(function (superclass) {
-			return function (_superclass6) {
-				_inherits(X, _superclass6);
+			return function (_superclass8) {
+				_inherits(X, _superclass8);
 
 				function X() {
 					_classCallCheck(this, X);
@@ -6506,8 +6558,8 @@ describe('is(x [, type])', function () {
 		});
 		it('tests whether object `x` implements `type`', function () {
 			var X = (0, _.mix)(function (superclass) {
-				return function (_superclass7) {
-					_inherits(X, _superclass7);
+				return function (_superclass9) {
+					_inherits(X, _superclass9);
 
 					function X() {
 						_classCallCheck(this, X);
@@ -6524,8 +6576,8 @@ describe('is(x [, type])', function () {
 		});
 		it('tests whether class `x` implements `type`', function () {
 			var Y = (0, _.mix)(function (superclass) {
-				return function (_superclass8) {
-					_inherits(Y, _superclass8);
+				return function (_superclass10) {
+					_inherits(Y, _superclass10);
 
 					function Y() {
 						_classCallCheck(this, Y);
@@ -6551,8 +6603,8 @@ describe('is(x [, type])', function () {
 		});
 		it('tests whether mixin `x` implements `type`', function () {
 			var Y = (0, _.mix)(function (superclass) {
-				return function (_superclass9) {
-					_inherits(Y, _superclass9);
+				return function (_superclass11) {
+					_inherits(Y, _superclass11);
 
 					function Y() {
 						_classCallCheck(this, Y);
@@ -6564,8 +6616,8 @@ describe('is(x [, type])', function () {
 				}(superclass);
 			});
 			var X = (0, _.mix)(Y, function (superclass) {
-				return function (_superclass10) {
-					_inherits(X, _superclass10);
+				return function (_superclass12) {
+					_inherits(X, _superclass12);
 
 					function X() {
 						_classCallCheck(this, X);
@@ -6583,8 +6635,8 @@ describe('is(x [, type])', function () {
 				_classCallCheck(this, X);
 			}).a('class')).to.eq(true);
 			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
-				return function (_superclass11) {
-					_inherits(Y, _superclass11);
+				return function (_superclass13) {
+					_inherits(Y, _superclass13);
 
 					function Y() {
 						_classCallCheck(this, Y);
@@ -6606,8 +6658,8 @@ describe('is(x [, type])', function () {
 				_classCallCheck(this, X);
 			}).a('mixin')).to.eq(false);
 			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
-				return function (_superclass12) {
-					_inherits(Y, _superclass12);
+				return function (_superclass14) {
+					_inherits(Y, _superclass14);
 
 					function Y() {
 						_classCallCheck(this, Y);
@@ -6643,8 +6695,8 @@ describe('is(x [, type])', function () {
 				return X;
 			}((0, _.mix)())).a('mix')).to.eq(true);
 			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
-				return function (_superclass13) {
-					_inherits(Y, _superclass13);
+				return function (_superclass15) {
+					_inherits(Y, _superclass15);
 
 					function Y() {
 						_classCallCheck(this, Y);
@@ -6680,8 +6732,8 @@ describe('is(x [, type])', function () {
 				return X;
 			}((0, _.mix)())).a('factory')).to.eq(false);
 			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
-				return function (_superclass14) {
-					_inherits(Y, _superclass14);
+				return function (_superclass16) {
+					_inherits(Y, _superclass16);
 
 					function Y() {
 						_classCallCheck(this, Y);
@@ -6717,8 +6769,8 @@ describe('is(x [, type])', function () {
 				return X;
 			}((0, _.mix)())).a('function')).to.eq(true);
 			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
-				return function (_superclass15) {
-					_inherits(Y, _superclass15);
+				return function (_superclass17) {
+					_inherits(Y, _superclass17);
 
 					function Y() {
 						_classCallCheck(this, Y);
@@ -6754,8 +6806,8 @@ describe('is(x [, type])', function () {
 				return X;
 			}((0, _.mix)())).a('object')).to.eq(false);
 			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
-				return function (_superclass16) {
-					_inherits(Y, _superclass16);
+				return function (_superclass18) {
+					_inherits(Y, _superclass18);
 
 					function Y() {
 						_classCallCheck(this, Y);
@@ -6791,8 +6843,8 @@ describe('is(x [, type])', function () {
 				return X;
 			}((0, _.mix)())).a('string')).to.eq(false);
 			(0, _chai.expect)((0, _.is)((0, _.mix)(function (superclass) {
-				return function (_superclass17) {
-					_inherits(Y, _superclass17);
+				return function (_superclass19) {
+					_inherits(Y, _superclass19);
 
 					function Y() {
 						_classCallCheck(this, Y);
@@ -6827,8 +6879,8 @@ describe('is(x [, type])', function () {
 		});
 		it('tests whether `x` can be treated as `type` (has the same interface)', function () {
 			var Looker = (0, _.mix)(function (superclass) {
-				return function (_superclass18) {
-					_inherits(Looker, _superclass18);
+				return function (_superclass20) {
+					_inherits(Looker, _superclass20);
 
 					function Looker() {
 						_classCallCheck(this, Looker);
@@ -6895,17 +6947,17 @@ describe('mix example', function () {
 		    _look = (0, _sinon.spy)();
 
 		var Looker = (0, _.mix)(function (superclass) {
-			return function (_superclass19) {
-				_inherits(Looker, _superclass19);
+			return function (_superclass21) {
+				_inherits(Looker, _superclass21);
 
 				function Looker() {
 					_classCallCheck(this, Looker);
 
-					var _this26 = _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).call(this));
+					var _this28 = _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).call(this));
 
 					log.log('A looker is born!');
 					constr();
-					return _this26;
+					return _this28;
 				}
 
 				_createClass(Looker, [{
@@ -6940,8 +6992,8 @@ describe('mix example', function () {
 		    _walk = (0, _sinon.spy)(),
 		    _talk = (0, _sinon.spy)();
 		var Looker = (0, _.mix)(function (superclass) {
-			return function (_superclass20) {
-				_inherits(Looker, _superclass20);
+			return function (_superclass22) {
+				_inherits(Looker, _superclass22);
 
 				function Looker() {
 					_classCallCheck(this, Looker);
@@ -6962,8 +7014,8 @@ describe('mix example', function () {
 		});
 
 		var Walker = (0, _.mix)(function (superclass) {
-			return function (_superclass21) {
-				_inherits(Walker, _superclass21);
+			return function (_superclass23) {
+				_inherits(Walker, _superclass23);
 
 				function Walker() {
 					_classCallCheck(this, Walker);
@@ -6984,8 +7036,8 @@ describe('mix example', function () {
 		});
 
 		var Talker = (0, _.mix)(function (superclass) {
-			return function (_superclass22) {
-				_inherits(Talker, _superclass22);
+			return function (_superclass24) {
+				_inherits(Talker, _superclass24);
 
 				function Talker() {
 					_classCallCheck(this, Talker);
@@ -7007,8 +7059,8 @@ describe('mix example', function () {
 
 		var duckTalk = (0, _sinon.spy)();
 		var Duck = (0, _.mix)(Looker, Walker, Talker, function (superclass) {
-			return function (_superclass23) {
-				_inherits(Duck, _superclass23);
+			return function (_superclass25) {
+				_inherits(Duck, _superclass25);
 
 				function Duck() {
 					_classCallCheck(this, Duck);
