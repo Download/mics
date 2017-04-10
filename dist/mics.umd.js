@@ -82,11 +82,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["mics"] = mics;
+/* harmony export (immutable) */ __webpack_exports__["mix"] = mix;
 /* harmony export (immutable) */ __webpack_exports__["is"] = is;
 /* harmony export (immutable) */ __webpack_exports__["getInterface"] = getInterface;
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isClass", function() { return isClass; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isMics", function() { return isMics; });
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -95,19 +93,19 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function mics() {
+function mix() {
 	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 		args[_key] = arguments[_key];
 	}
 
-	var _superclass = args.length && typeof args[0] == 'function' && isClass(args[0]) && args.shift();
-	var factory = args.length && typeof args[args.length - 1] == 'function' && args[args.length - 1].length == 1 && !isMics(args[args.length - 1]) && args.pop();
+	var _superclass = args.length && is(args[0], 'class') && args.shift();
+	var factory = args.length && is(args[args.length - 1], 'factory') && args.pop();
 	// if neither superclass nor factory are provided, create a new superclass
 	if (!_superclass && !factory) _superclass = function superclass() {
 		_classCallCheck(this, superclass);
 	};
 	if (_superclass) {
-		if (!isMics(_superclass)) {
+		if (!is(_superclass, 'mix')) {
 			_superclass = function (_superclass2) {
 				_inherits(superclass, _superclass2);
 
@@ -126,9 +124,7 @@ function mics() {
 								mixins[_key2] = arguments[_key2];
 							}
 
-							return mixins.reduce(function (c, m) {
-								return m(c);
-							}, _superclass);
+							return mix.apply(undefined, [_superclass].concat(mixins));
 						};
 					} },
 				interface: { get: function (x) {
@@ -138,7 +134,9 @@ function mics() {
 					}() }
 			});
 		}
-		return args.length ? _superclass.with(args) : _superclass;
+		return args.length ? args.reduce(function (c, m) {
+			return m(c);
+		}, _superclass) : _superclass;
 	}
 	if (args.length) factory = function (org) {
 		return function (superclass) {
@@ -153,13 +151,14 @@ function mics() {
 		}
 
 		if (this instanceof mixin) return new (Function.prototype.bind.apply(mixin.class, [null].concat([superclass], args)))();
-		var result = is(superclass).a(mixin) ? superclass : factory(superclass);
+		var result = is(superclass, mixin) ? superclass : factory(superclass);
 		if (mixin.classes.indexOf(result) == -1) mixin.classes.push(result);
 		return result;
 	}
 	Object.defineProperties(mixin, { classes: { value: [], writable: false } });
 	// has to be 2 steps because mixin adds the created class to mixin.classes
 	Object.defineProperties(mixin, {
+		mixins: { value: args, writable: false },
 		class: { value: mixin(function () {
 				function _class() {
 					_classCallCheck(this, _class);
@@ -173,7 +172,7 @@ function mics() {
 						mixins[_key4] = arguments[_key4];
 					}
 
-					return mics(mixin.class, mixins);
+					return mix(mixin.class, mixins);
 				};
 			} },
 		interface: { get: function (x) {
@@ -185,17 +184,40 @@ function mics() {
 	return mixin;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (mics);
+/* harmony default export */ __webpack_exports__["default"] = (mix);
 
-function is(obj, type) {
+var isFunc = function isFunc(x) {
+	return typeof x == 'function';
+},
+    isClass = function isClass(x) {
+	return isFunc(x) && function (s) {
+		return (/^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, ''))
+		);
+	}(x.toString());
+},
+    isMix = function isMix(x) {
+	return isFunc(x) && !!(x.interface && x.with);
+},
+    isFactory = function isFactory(x) {
+	return isFunc(x) && x.length == 1 && !isMix(x);
+},
+    isMixin = function isMixin(x) {
+	return isMix(x) && !isClass(x);
+};
+
+function is(x, type) {
 	function a(type) {
-		if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) == 'object') {
-			if (obj instanceof type) return true;
+		if (typeof type == 'string') {
+			return type == 'factory' ? isFactory(x) : type == 'class' ? isClass(x) : type == 'mixin' ? isMixin(x) : type == 'mix' ? isMix(x) : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
+		}
+		if ((typeof x === 'undefined' ? 'undefined' : _typeof(x)) == 'object') {
+			if (x instanceof type) return true;
 			if (type.classes) return type.classes.reduce(function (f, c) {
 				return f || a(c);
 			}, false);
-		} else if (typeof obj == 'function') {
-			var c = obj;
+		} else if (typeof x == 'function') {
+			if (x.mixins && x.mixins.indexOf(type) !== -1) return true;
+			var c = x;
 			while (c !== Object) {
 				if (c === type) return true;
 				if (type.classes && type.classes.indexOf(c) !== -1) return true;
@@ -204,14 +226,17 @@ function is(obj, type) {
 		}
 		return false;
 	}
+
 	function as(type) {
 		if (a(type)) return true;
 		var itf = type.interface || typeof type == 'function' && getInterface(type.prototype);
-		var subject = typeof obj == 'function' ? obj.interface || getInterface(obj.prototype) : obj;
+		var subject = typeof x == 'function' ? x.interface || getInterface(x.prototype) : x;
 		return itf && Object.keys(itf).reduce(function (f, k) {
 			return f && (typeof itf[k] == 'function' ? typeof subject[k] == 'function' : k in subject);
 		}, true);
 	}
+
+	var str = x && x.toString() || '';
 	return type !== undefined ? a(type) : { a: a, an: a, as: as };
 }
 
@@ -231,13 +256,6 @@ function getInterface(proto) {
 		o[k] = proto[k];return o;
 	}, {});
 }
-
-var isClass = function isClass(x) {
-	return x.toString().indexOf('class') === 0;
-};
-var isMics = function isMics(x) {
-	return !!(x.interface && x.with);
-};
 
 /***/ })
 /******/ ]);

@@ -1,2 +1,2 @@
 ﻿require('babel-register');
-require('babel-core/polyfill');
+require('babel-polyfill');

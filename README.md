@@ -25,43 +25,48 @@ npm install --save mics
 ```
 
 ## Direct download
-* [mics.umd.js](https://cdn.rawgit.com/download/mics/0.0.1/mics.umd.js) (universal module works in browser and node)
-* [mics.min.js](https://cdn.rawgit.com/download/mics/0.0.1/mics.min.js) (minified version of universal module file)
+* [mics.umd.js](https://cdn.rawgit.com/download/mics/0.1.0/mics.umd.js) (universal module works in browser and node)
+* [mics.min.js](https://cdn.rawgit.com/download/mics/0.1.0/mics.min.js) (minified version of universal module file)
 
 
 ## Include in your app
 
 ### require
 ```js
-var mics = require('mics')
+var mix = require('mics').mix
+var is = require('mics').is
+// or, shorthand
+var mix = require('mics')
 ```
 
 ### import
 ```js
-import mics from 'mics'
+import { mix, is } from 'mics'
+// or, shorthand
+import mix from 'mics'
 ```
 
 ### AMD
 ```js
-define(['mics'], function(mics){
-  // ...
+define(['mics'], function(mix){
+  var is = mix.is
 });
 ```
 
 ### Script tag
 ```html
-<script src="https://cdn.rawgit.com/download/mics/0.0.1/mics.min.js"></script>
+<script src="https://cdn.rawgit.com/download/mics/0.1.0/mics.min.js"></script>
 ```
 
 ## Usage
 ### Creating a mixin
 Mixins look a lot like classes, but they are regular ES5 constructor functions, powered by a real
-ES6 class. You create them with the `mics` function:
+ES6 class. You create them with the `mix` function:
 
 ```js
-import mics from 'mics'
+import mix from 'mics'
 
-var Looker = mics(superclass => class Looker extends superclass {
+var Looker = mix(superclass => class Looker extends superclass {
   constructor() {
     super()
     console.info('A looker is born!')
@@ -72,8 +77,8 @@ var Looker = mics(superclass => class Looker extends superclass {
 })
 ```
 
-Notice that the argument to `mics` is a function that accepts a superclass. You then define the 
-body of your mixin as a class that extends `superclass`. The `mics` function wraps that class in
+Notice that the argument to `mix` is a function that accepts a superclass. You then define the 
+body of your mixin as a class that extends `superclass`. The `mix` function wraps that class in
 a regular es5 constructor function that you can invoke with new to create instances:
 
 ```js
@@ -85,11 +90,17 @@ looker.look()                  // > Looking good!
 submethods `a`/`an` and `as`, like this:
 
 ```js
-import { is } from 'mics'
+import { is } from 'mix'
 
 looker instanceof Looker       // false, but:
-looker instanceof Looker.class // true, and (better):
 is(looker).a(Looker)           // true
+```
+
+For fluidity, `an` is an alias of `a`:
+
+```js
+is(animal).an(Elephant)
+is(animal).a(Lion)
 ```
 
 Often, we don't really care whether the object *is* a certain type, we just want to know whether 
@@ -104,17 +115,10 @@ is(viewer).a(Looker)           // false, but
 is(viewer).as(Looker)          // true
 ```
 
-For fluidity, `an` is an alias of `a`:
-
-```js
-is(animal).an(Elephant)
-is(animal).a(Lion)
-```
-
 Now let us make some more mixins:
 
 ```js
-var Walker = mixin(superclass => class Walker extends superclass {
+var Walker = mix(superclass => class Walker extends superclass {
   constructor() {
     super()
     console.info('A walker is born!')
@@ -127,7 +131,7 @@ var Walker = mixin(superclass => class Walker extends superclass {
 var walker = new Walker()    // > A walker is born!
 walker.walk()                // > Step step step...
 
-var Talker = mixin(superclass => class Talker extends superclass {
+var Talker = mix(superclass => class Talker extends superclass {
   constructor() {
     super()
     console.info('A talker is born!')
@@ -140,7 +144,7 @@ var Talker = mixin(superclass => class Talker extends superclass {
 var talker = new Talker()    // > A talker is born!
 talker.talk()                // > Blah blah blah...
 
-var Duck = mics(Looker, Walker, Talker, superclass => class Duck extends superclass {
+var Duck = mix(Looker, Walker, Talker, superclass => class Duck extends superclass {
   constructor() {
     super()
     console.info('A duck is born!')
@@ -158,15 +162,34 @@ talker.talk()                // > Quack quack...
 is(talker).a.(Duck)          // true
 is(talker).a(Walker)         // true
 
-class Duckish extends mics(Looker, Walker, Talker) {
+class Duckish extends mix(Looker, Walker, Talker) {
   talk() {
-    console.info('I talk like a duck')
+    console.info('I look, walk and talk like a duck!')
   }
 }
 
 var duckish = new Duckish()
 is(duckish).as(Duck)          // true
 ```
+
+As a bonus, you can use `is(..).a(..)` to do some simple type tests by passing a 
+string for the type:
+
+```js
+function x(){}
+class Y {}
+is(x).a('function')           // true
+is(Y).a('function')           // true
+is('Hi').a('function')        // false
+is(X).a('class')              // false
+is(Y).a('class')              // true
+```
+
+Supported type strings: `"mixin"`, `"class"`, `"mix"`, `"factory"`, and any type strings that can be passed to `typeof`.
+* mixin: x is a function that is the result of calling `mix` with a class factory
+* class: x is an ES6 class
+* mix: x is a function that is the result of calling `mix`: could be a class or a mixin
+* factory: x is a function that accepts exactly one argument and that is not a mix
 
 ## Issues
 Add an issue in this project's [issue tracker](https://github.com/download/mics/issues)

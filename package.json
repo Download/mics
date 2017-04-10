@@ -1,17 +1,17 @@
 {
   "name": "mics",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Multiple Inheritance Class System: Intuitive mixins for ES6 classes",
   "main": "dist/mics.cjs.js",
   "scripts": {
+    "test": "mocha \"dist/mics.spec.js\"",
+    "dev": "webpack-dev-server --output-path test --output-filename index.spec.js \"mocha-loader!./index.spec.js\" --content-base test --port 8888",
+    "build": "npm run build-cjs && npm run build-umd && npm run build-min && npm run build-test",
     "build-cjs": "webpack --output-path dist --output-filename mics.cjs.js --output-library-target commonjs2 \"./index.js\" ",
     "build-umd": "webpack --output-path dist --output-filename mics.umd.js --output-library-target umd \"./index.js\" ",
     "build-min": "webpack -p --output-path dist --output-filename mics.min.js --output-library-target umd \"./index.js\" ",
-    "build": "npm run build-cjs && npm run build-umd && npm run build-min",
-    "build-test": "webpack --output-path dist --output-filename index.spec.js \"./index.spec.js\" && mocha \"dist/index.spec.js\" ",
-    "release": "npm run build && npm run build-test",
-    "test": "mocha --require test/test-helper.js \"src/**/*.spec.js\"",
-    "test-dev": "webpack-dev-server --output-path test --output-filename index.spec.js \"mocha-loader!./index.spec.js\" --content-base test --port 8888"
+    "build-test": "webpack --output-path dist --output-filename mics.spec.js --target node \"./index.spec.js\"",
+    "release": "npm run build && npm run test"
   },
   "repository": {
     "type": "git",
@@ -46,6 +46,7 @@
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^1.0.1",
+    "sinon": "^2.1.0",
     "webpack": "^2.3.3",
     "webpack-dev-server": "^2.4.2"
   },
