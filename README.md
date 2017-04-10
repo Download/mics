@@ -31,15 +31,15 @@ npm install --save mics
 
 ## Include in your app
 
+### import
+```js
+import { mix, is } from 'mics'
+```
+
 ### require
 ```js
 var mix = require('mics').mix
 var is = require('mics').is
-```
-
-### import
-```js
-import { mix, is } from 'mics'
 ```
 
 ### AMD
@@ -147,10 +147,11 @@ var Duck = mix(Looker, Walker, Talker, superclass => class Duck extends supercla
   }
   talk() {
     console.info('Quack quack...')
+    // optional: super.talk && super.talk()
   }
 })
 
-var duck = new Duck()        // > A swimmer is born!
+var duck = new Duck()        // > A looker is born!
                              // > A walker is born!
                              // > A talker is born!
                              // > A duck is born!
