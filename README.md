@@ -167,7 +167,7 @@ don't pass a factory as the last argument to `mix`, it will use the first argume
 when available, or create a new superclass automatically and use that to derive from. It will then
 return a new class that derives from the superclass adding all the mixins that were passed.
 
-The reurned class can be extended from to inherit all the mixins:
+The returned class can be extended from to inherit all the mixins:
 
 ```js
 class Duckish extends mix(Looker, Walker, Talker) {
