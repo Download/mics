@@ -6551,7 +6551,7 @@ describe('is(x [, type])', function () {
 		(0, _chai.expect)((0, _.is)(x).a(Date)).to.eq((0, _.is)(x, Date));
 	});
 
-	it('when passed a single argument, returns an object', function () {
+	it('when passed a single argument, returns an object with sub-methods', function () {
 		(0, _chai.expect)((0, _.is)({})).to.be.an('object');
 	});
 
@@ -6941,6 +6941,50 @@ describe('is(x [, type])', function () {
 			(0, _chai.expect)((0, _.is)(Derived).as(Looker)).to.eq(true);
 			(0, _chai.expect)((0, _.is)(new Derived()).as(Looker)).to.eq(true);
 		});
+
+		it('allows mixins to be used as interfaces', function (done) {
+			var expected = 'Hello, World!';
+			var Thenable = (0, _.mix)(function (superclass) {
+				return function (_superclass21) {
+					_inherits(Thenable, _superclass21);
+
+					function Thenable() {
+						_classCallCheck(this, Thenable);
+
+						return _possibleConstructorReturn(this, (Thenable.__proto__ || Object.getPrototypeOf(Thenable)).apply(this, arguments));
+					}
+
+					_createClass(Thenable, [{
+						key: 'then',
+						value: function then(results) {}
+					}]);
+
+					return Thenable;
+				}(superclass);
+			});
+
+			var MyPromise = function () {
+				function MyPromise() {
+					_classCallCheck(this, MyPromise);
+				}
+
+				_createClass(MyPromise, [{
+					key: 'then',
+					value: function then(resolve, reject) {
+						resolve(expected);
+					}
+				}]);
+
+				return MyPromise;
+			}();
+
+			var promise = new MyPromise();
+			(0, _chai.expect)((0, _.is)(promise).as(Thenable)).to.eq(true);
+			Promise.resolve(promise).then(function (result) {
+				(0, _chai.expect)(result).to.eq(expected);
+				done();
+			});
+		});
 	});
 });
 
@@ -6950,17 +6994,17 @@ describe('mix example', function () {
 		    _look = (0, _sinon.spy)();
 
 		var Looker = (0, _.mix)(function (superclass) {
-			return function (_superclass21) {
-				_inherits(Looker, _superclass21);
+			return function (_superclass22) {
+				_inherits(Looker, _superclass22);
 
 				function Looker() {
 					_classCallCheck(this, Looker);
 
-					var _this28 = _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).call(this));
+					var _this29 = _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).call(this));
 
 					log.log('A looker is born!');
 					constr();
-					return _this28;
+					return _this29;
 				}
 
 				_createClass(Looker, [{
@@ -6995,8 +7039,8 @@ describe('mix example', function () {
 		    _walk = (0, _sinon.spy)(),
 		    _talk = (0, _sinon.spy)();
 		var Looker = (0, _.mix)(function (superclass) {
-			return function (_superclass22) {
-				_inherits(Looker, _superclass22);
+			return function (_superclass23) {
+				_inherits(Looker, _superclass23);
 
 				function Looker() {
 					_classCallCheck(this, Looker);
@@ -7017,8 +7061,8 @@ describe('mix example', function () {
 		});
 
 		var Walker = (0, _.mix)(function (superclass) {
-			return function (_superclass23) {
-				_inherits(Walker, _superclass23);
+			return function (_superclass24) {
+				_inherits(Walker, _superclass24);
 
 				function Walker() {
 					_classCallCheck(this, Walker);
@@ -7039,8 +7083,8 @@ describe('mix example', function () {
 		});
 
 		var Talker = (0, _.mix)(function (superclass) {
-			return function (_superclass24) {
-				_inherits(Talker, _superclass24);
+			return function (_superclass25) {
+				_inherits(Talker, _superclass25);
 
 				function Talker() {
 					_classCallCheck(this, Talker);
@@ -7062,8 +7106,8 @@ describe('mix example', function () {
 
 		var duckTalk = (0, _sinon.spy)();
 		var Duck = (0, _.mix)(Looker, Walker, Talker, function (superclass) {
-			return function (_superclass25) {
-				_inherits(Duck, _superclass25);
+			return function (_superclass26) {
+				_inherits(Duck, _superclass26);
 
 				function Duck() {
 					_classCallCheck(this, Duck);

@@ -82,7 +82,7 @@ describe('is(x [, type])', function(){
 		expect(is(x).a(Date)).to.eq(is(x, Date))
 	})
 
-	it('when passed a single argument, returns an object', function(){
+	it('when passed a single argument, returns an object with sub-methods', function(){
 		expect(is({})).to.be.an('object')
 	})
 
@@ -211,6 +211,24 @@ describe('is(x [, type])', function(){
 			class Derived extends Base {}
 			expect(is(Derived).as(Looker)).to.eq(true)
 			expect(is(new Derived()).as(Looker)).to.eq(true)
+		})
+
+		it('allows mixins to be used as interfaces', (done) => {
+			var expected = 'Hello, World!'
+			var Thenable = mix(superclass => class Thenable extends superclass {
+				then(results) {}
+			})
+			class MyPromise {
+				then(resolve, reject) {
+					resolve(expected)
+				}
+			}
+			var promise = new MyPromise()
+			expect(is(promise).as(Thenable)).to.eq(true)
+			Promise.resolve(promise).then((result) => {
+				expect(result).to.eq(expected)
+				done()
+			})
 		})
 	})
 })

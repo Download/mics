@@ -100,7 +100,7 @@ is(animal).a(Lion)
 ```
 
 Often, we don't really care whether the object *is* a certain type, we just want to know whether 
-we can treat is *as* a certain type. Use `is(subject).as(type)` to test whether a subject adheres
+we can treat it *as* a certain type. Use `is(subject).as(type)` to test whether a subject adheres
 to the same interface as is defined by `type`:
 
 ```js
@@ -111,53 +111,39 @@ is(viewer).a(Looker)           // false, but
 is(viewer).as(Looker)          // true
 ```
 
-Now let us make some more mixins:
+A good example of how this might be useful can be found in the new ES6 feature Promises. Here we have
+the concept of a 'thenable'. This is any object that has a `then` method on it. Methods in the Promise 
+API often accept thenables instead of promise instances. Have a look at `Promise.resolve` for example:
+
+> Promise.resolve(value)
+> Returns a Promise object that is resolved with the given value. If the value is a thenable (i.e. 
+> has a then method), the returned promise will "follow" that thenable, adopting its eventual state; 
+> otherwise the returned promise will be fulfilled with the value.
+<sup>[mdn](https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Promise)</sup>
+
+Using `mix` to define an interface and `is..as` to test for it, we can very naturally express the
+concept of a thenable from the Promise spec in code:
 
 ```js
-var Walker = mix(superclass => class Walker extends superclass {
-  constructor() {
-    super()
-    console.info('A walker is born!')
-  }
-  walk() {
-    console.info('Step step step...')
-  }
+/** Defines a Thenable */
+var Thenable = mix(superclass => class Thenable extends superclass {
+  then() {}
 })
-
-var walker = new Walker()    // > A walker is born!
-walker.walk()                // > Step step step...
-
-var Talker = mix(superclass => class Talker extends superclass {
-  constructor() {
-    super()
-    console.info('A talker is born!')
+/** Some mixin which can be treated as a Thenable */
+var MyPromise = mix(superclass => class MyPromise extends superclass {
+  then(resolve, reject) {
+    resolve('Hello, World!')
   }
-  talk() {
-    console.info('Blah blah blah...')
-  }
+}
+// We can check whether the class is thenable using is..as
+is(MyPromise).as(Thenable)    // true 
+// we can also check instances
+var promise = new MyPromise()
+is(promise).as(Thenable)      // true 
+// Ok, that means we can use Promise.resolve!
+Promise.resolve(promise).then((result) => {
+  console.info(result)        // > 'Hello, World!'
 })
-
-var talker = new Talker()    // > A talker is born!
-talker.talk()                // > Blah blah blah...
-
-var Duck = mix(Looker, Walker, Talker, superclass => class Duck extends superclass {
-  constructor() {
-    super()
-    console.info('A duck is born!')
-  }
-  talk() {
-    console.info('Quack quack...')
-    // optional: super.talk && super.talk()
-  }
-})
-
-var duck = new Duck()        // > A looker is born!
-                             // > A walker is born!
-                             // > A talker is born!
-                             // > A duck is born!
-talker.talk()                // > Quack quack...
-is(talker).a.(Duck)          // true
-is(talker).a(Walker)         // true
 ```
 
 Notice how we are only creating and using mixins up until now. Mixins are more 
@@ -170,16 +156,50 @@ return a new class that derives from the superclass adding all the mixins that w
 The returned class can be extended from to inherit all the mixins:
 
 ```js
-class Duckish extends mix(Looker, Walker, Talker) {
-  talk() {
-    console.info('I look, walk and talk like a duck!')
-  }
-}
-
-var duckish = new Duckish()
-is(duckish).as(Duck)          // true
+class GreatLookingPromise extends mix(Looker, MyPromise) {}
+var promise = 
+  new GreatLookingPromise()    // > A looker is born!
+promise.look()                 // > Looking good!
+Promise.resolve(promise).then(
+  r => console.info(r)         // > Hello, World!
+)
 ```
 
+When your class needs to extend from a base class, pass it 
+as the first argument to `mix`:
+
+```js
+class Playboy extends mix(Looker, Talker) {
+  talk(){
+    console.info('How are *you* doin\'?')
+  }
+}
+class PlayboyPromise extends mix(Playboy, MyPromise) {}
+var promise = 
+  new PlayboyPromise()         // > A talker is born!
+                               // > A looker is born!
+promise.look()                 // > Looking good!
+promise.talk()                 // > How are *you* doin'?
+Promise.resolve(promise).then(
+  r => console.info(r)         // > Hello, World!
+)
+```
+
+> Pro Tip: The constructors returned from `mix` Include a `with` method, that allows
+> the `PlayboyPromise` to be declared even simpler:
+
+```js
+class PlayboyPromise extends Playboy.with(MyPromise) {
+  // ...
+}
+```
+
+> Pro Tip 2: Cool as `with` is, it will give you a class, which very often means you won't
+> be able to mix it further. I recommend sticking to mixins whenever possible as they hardly
+> have any downsides compared with regular classes. If you ever need the class, just use
+> `SomeMixin.class`, that's the real ES6 class that is used to create instances of the mixin.
+
+### Bonus
 As a bonus, you can use `is(..).a(..)` to do some simple type tests by passing a 
 string for the type:
 
