@@ -12,10 +12,10 @@
 *Grady Booch*
 
 ## What is it
-Mics *(pronounce: mix)* is a library that makes multiple inheritance in Javascript a 
+**mics** *(pronounce: mix)* is a library that makes multiple inheritance in Javascript a 
 breeze. Inspired by the excellent blog post ["Real" Mixins with Javascript Classes](http://justinfagnani.com/2015/12/21/real-mixins-with-javascript-classes/) 
-by Justin Fagnani, mics tries to build a minimal library around the concept of using class expressions (factories)
-as mixins. Mics extends the concepts presented in the blog post by making the mixins first-class citizens that can be directly 
+by Justin Fagnani, **mics** tries to build a minimal library around the concept of using class expressions (factories)
+as mixins. **mics** extends the concepts presented in the blog post by making the mixins first-class citizens that can be directly 
 used to instantiate objects and can be mixed in with other mixins instead of just with classes.
 
 
@@ -57,7 +57,12 @@ define(['mics'], function(mix){
 ## Usage
 ### Creating a mixin
 Mixins look a lot like classes, but they are regular ES5 constructor functions, powered by a real
-ES6 class. You create them with the `mix` function:
+ES6 class. You create them with the `mix` function.
+
+#### mix([superclass] [, ...mixins] [, factory])
+`mix` accepts an optional superclass as the first argument, then a bunch of mixins and an optional 
+factory as the last argument. If a `superclass` is given, or no `factory` is given, a class is created,
+otherwise a mixin. Mostly, you will be using `mix` with a factory to create mixins, like this:
 
 ```js
 import { mix } from 'mics'
@@ -82,8 +87,17 @@ var looker = new Looker()      // > A looker is born!
 looker.look()                  // > Looking good!
 ```
 
-`instanceof` does not work on the instance. Instead use mics' `is` function, with it's 
-submethods `a`/`an` and `as`, like this:
+### Testing if an object is (like) a mixin or class
+`instanceof` does not work for mixin instances. Instead use **mics**' `is` function, which works on 
+mixins (type as well as instance) and on classes (again, type as well as instance).
+
+#### is(subject [, type])
+The first parameter to `is` is required and defines the subject to test. The second parameter is optional.
+If specified, it calls `a` (see below) and returns a boolean. If not specified, it returns an object that
+has submethods `a`/`an` and `as`.
+
+#### a(type)
+Tests whether the subject is-a `type`.
 
 ```js
 import { is } from 'mix'
@@ -92,6 +106,7 @@ looker instanceof Looker       // false, but:
 is(looker).a(Looker)           // true
 ```
 
+#### an(type)
 For fluidity, `an` is an alias of `a`:
 
 ```js
@@ -99,6 +114,7 @@ is(animal).an(Elephant)
 is(animal).a(Lion)
 ```
 
+#### as(type)
 Often, we don't really care whether the object *is* a certain type, we just want to know whether 
 we can treat it *as* a certain type. Use `is(subject).as(type)` to test whether a subject adheres
 to the same interface as is defined by `type`:
@@ -146,8 +162,9 @@ Promise.resolve(promise).then((result) => {
 })
 ```
 
+### Mixing mixins into classes
 Notice how we are only creating and using mixins up until now. Mixins are more 
-flexible than classes so mics promotes their use over classes. However, sometimes you are working
+flexible than classes so **mics** promotes their use over classes. However, sometimes you are working
 with a class and want to mix some mixins into that class. `mix` makes that easy as well. If you
 don't pass a factory as the last argument to `mix`, it will use the first argument as the superclass
 when available, or create a new superclass automatically and use that to derive from. It will then
