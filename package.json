@@ -1,6 +1,6 @@
 {
   "name": "mics",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Multiple Inheritance Class System: Intuitive mixins for ES6 classes",
   "main": "dist/mics.cjs.js",
   "scripts": {

@@ -1,52 +1,40 @@
+var baseclass = class Object{}
+var derive = superclass => ({}[superclass.name || 'Object'] = class extends superclass {})
+
 export function mix(...args){
-	var superclass = args.length && is(args[0], 'class') && args.shift()
-	var factory = args.length && is(args[args.length-1], 'factory') && args.pop()
-	// if neither superclass nor factory are provided, create a new superclass
-	if (!superclass && !factory) superclass = class{}
-	if (superclass) {
-		if (!is(superclass, 'mix')) {
-			superclass = class extends superclass {}
-			Object.defineProperties(superclass, {
-				with: {get:() => (...mixins) => mix(superclass, ...mixins)},
-				interface: {get:(x => () => x ? x : x = getInterface(superclass.prototype))()}
-			})
-		}
-		return args.length ? args.reduce((c,m) => m(c), superclass) : superclass
+	var superclass = !is(args[0]).a('factory') && args.shift() || baseclass
+	var factory = (is(args[args.length-1]).a('factory') && args.pop()) || derive
+	if (!is(superclass, 'mix')) {
+		superclass = derive(superclass)
+		Object.defineProperties(superclass, {
+			interface: {value:getInterface(superclass.prototype), writable:false}
+		})
 	}
-	if (args.length) factory = (org => superclass => org(args.reduce((c,m) => m(c), superclass)))(factory)
-	function mixin(...args) {
-		if (this instanceof mixin) return new mixin.class(...args)
-		var superclass = args.length && args.shift()
-		var result = is(superclass, mixin) ? superclass : factory(superclass)
+	if (args.length) factory = (org => superclass => org(args.reduce((s,m) => m.mixin(s), superclass)))(factory)
+	function mixin(superclass) {
+		var result = is(superclass).a(mixin) ? superclass : factory(superclass) 
 		if (mixin.classes.indexOf(result) == -1) mixin.classes.push(result)
 		return result
 	}
-	Object.defineProperties(mixin, {classes: {value:[], writable:false}})
-	// has to be 2 steps because mixin adds the created class to mixin.classes
 	Object.defineProperties(mixin, {
+		classes: {value:[], writable:false},
 		mixins: {value:args, writable:false},
-		class: {value:mixin(class {}), writable:false},
-		with: {get:() => (...mixins) => mix(mixin.class, mixins)},
-		interface: {get:(x => () => x ? x : x = getInterface(mixin.class.prototype))()}
 	})
-	return mixin
+	var constructor = mixin(superclass)
+	return Object.defineProperties(constructor, {
+		mixin: {value:mixin, writable:false},
+		interface: {get:(x => () => x ? x : x = getInterface(constructor.prototype))()},
+	})
 }
 
 export default mix
 
-var isFunc = x => typeof x == 'function',
-    isClass = x => isFunc(x) && (s => /^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/,'').replace(/\s*}[^}]*$/,'')))(x.toString()),
-		isMix = x => isFunc(x) && !!(x.interface && x.with),
-		isFactory = x => isFunc(x) && x.length == 1 && !isMix(x),
-		isMixin = x => isMix(x) && !isClass(x)
-
 export function is(x, type) {
 	function a(type) {
 		if (typeof type == 'string') {
-			return type == 'factory' ? isFactory(x) :
-			       type == 'class' ? isClass(x) :
-			       type == 'mixin' ? isMixin(x) :
-			       type == 'mix' ? isMix(x) : 
+			return type == 'mixin' ? typeof x == 'function' && !!x.mixin :
+			       type == 'mix' ? typeof x == 'function' && !!x.interface : 
+			       type == 'factory' ? typeof x == 'function' && x.length == 1 && !x.interface :
 						 typeof x == type;
 		}
 		if (typeof x == 'object') {
@@ -54,11 +42,11 @@ export function is(x, type) {
 			if (type.classes) return type.classes.reduce((f,c) => f || a(c), false)
 		}
 		else if (typeof x == 'function') {
-			if (x.mixins && x.mixins.indexOf(type) !== -1) return true
+			if (x.mixin && x.mixin.mixins.indexOf(type) !== -1) return true
 			var c = x
 			while (c !== Object) {
-				if (c === type) return true
-				if (type.classes && type.classes.indexOf(c) !== -1) return true
+				if (c === type || c === type.class) return true
+				if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true
 				c = c.prototype.__proto__.constructor
 			}
 		}
@@ -67,10 +55,10 @@ export function is(x, type) {
 
 	function as(type) {
 		if (a(type)) return true
-		var itf = type.interface || ((typeof type == 'function') && getInterface(type.prototype))
-		var subject = typeof x == 'function' ? x.interface || getInterface(x.prototype) : x
+		var itf = type.interface || (is(type, 'function') && getInterface(type.prototype))
+		var subject = is(x, 'function') ? x.interface || getInterface(x.prototype) : x
 		return itf && Object.keys(itf).reduce((f, k) => 
-			f && (typeof itf[k] == 'function' ? typeof subject[k] == 'function' : k in subject), true
+			f && (is(itf[k], 'function') ? is(subject[k], 'function') : k in subject), true
 		)
 	}
 
@@ -90,4 +78,3 @@ function getPropertyNames(proto) {
 function getInterface(proto) {
 	return getPropertyNames(proto).reduce((o,k) => {o[k] = proto[k]; return o}, {})
 }
-

@@ -10,7 +10,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 		expect(mix).to.be.a('function')		
 	})
 
-	it('creates a mixin from an ES6 class factory', function(){
+	it('creates a mixin from a class factory', function(){
 		var M = mix(superclass => class M extends superclass {})
 		expect(M).to.be.a('function')
 	})
@@ -27,7 +27,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 		expect(C).to.be.a('function')
 	})
 
-	it('creates a mixin that can be invoked with new', function(){
+	it('created mixins can be invoked with new to instantiate instances', function(){
 		var M = mix(superclass => class M extends superclass {})
 		var m = new M()
 		expect(m).to.be.an('object')
@@ -49,8 +49,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 		expect(zarg).to.eq('z')
 	})
 
-
-	it('var args in constructor has correct length', function(){
+	it('var args in constructor has correct length when invoking with new', function(){
 		var argsarg
 		var M = mix(superclass => class M extends superclass {
 			constructor(...args) {
@@ -62,6 +61,23 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 		expect(argsarg.length).to.eq(3)
 		var m = new M()
 		expect(argsarg.length).to.eq(0)
+	})
+
+	it('result of invoking constructor with new is instanceof mixin', function(){
+		var M = mix(superclass => class M extends superclass {})
+		var m = new M('x','y','z')
+		expect(m instanceof M).to.eq(true)
+	})
+
+	it('has no side effects on it\'s arguments', function(){
+		class Test{}
+		expect(is(Test).a('mix')).to.eq(false)
+		var M = mix(Test)
+		expect(is(M).a('mix')).to.eq(true)
+		expect(is(Test).a('mix')).to.eq(false)
+		var N = mix(Test, superclass => class N extends superclass {})
+		expect(is(N).a('mix')).to.eq(true)
+		expect(is(Test).a('mix')).to.eq(false)
 	})
 })
 
@@ -105,15 +121,6 @@ describe('is(x [, type])', function(){
 			var Y = mix(superclass => class Y extends superclass {})
 			var X = mix(Y, superclass => class X extends superclass {})
 			expect(is(X).a(Y)).to.eq(true)
-		})
-		it('for type == "class", tests whether `x` is an ES6 class', function(){
-			expect(is(class X {}).a('class')).to.eq(true)
-			expect(is(mix(superclass => class Y extends superclass {})).a('class')).to.eq(false)
-			expect(is({}).a('class')).to.eq(false)
-			expect(is('Hi').a('class')).to.eq(false)
-			expect(is(function(){}).a('class')).to.eq(false)
-			expect(is(function(x){}).a('class')).to.eq(false)
-			expect(is(function(x,y){}).a('class')).to.eq(false)
 		})
 		it('for type == "mixin", tests whether `x` is a mixin', function(){
 			expect(is(class X {}).a('mixin')).to.eq(false)
@@ -179,6 +186,7 @@ describe('is(x [, type])', function(){
 			expect(is(function(x){}).a('string')).to.eq(false)
 			expect(is(function(x,y){}).a('string')).to.eq(false)
 		})
+
 	})
 
 	describe('an(type)', function(){

@@ -15,8 +15,8 @@
 **mics** *(pronounce: mix)* is a library that makes multiple inheritance in Javascript a 
 breeze. Inspired by the excellent blog post ["Real" Mixins with Javascript Classes](http://justinfagnani.com/2015/12/21/real-mixins-with-javascript-classes/) 
 by Justin Fagnani, **mics** tries to build a minimal library around the concept of using class expressions (factories)
-as mixins. **mics** extends the concepts presented in the blog post by making the mixins first-class citizens that can be directly 
-used to instantiate objects and can be mixed in with other mixins instead of just with classes.
+as mixins. **mics** extends the concepts presented in the blog post by making the mixins first-class (literally!) citizens 
+that can be directly used to instantiate objects and can be mixed in with other mixins instead of just with classes.
 
 
 ## Install with NPM
@@ -25,8 +25,8 @@ npm install --save mics
 ```
 
 ## Direct download
-* [mics.umd.js](https://cdn.rawgit.com/download/mics/0.1.0/mics.umd.js) (universal module works in browser and node)
-* [mics.min.js](https://cdn.rawgit.com/download/mics/0.1.0/mics.min.js) (minified version of universal module file)
+* [mics.umd.js](https://cdn.rawgit.com/download/mics/0.3.0/mics.umd.js) (universal module works in browser and node)
+* [mics.min.js](https://cdn.rawgit.com/download/mics/0.3.0/mics.min.js) (minified version of universal module file)
 
 
 ## Include in your app
@@ -51,18 +51,20 @@ define(['mics'], function(mix){
 
 ### Script tag
 ```html
-<script src="https://cdn.rawgit.com/download/mics/0.1.0/mics.min.js"></script>
+<script src="https://cdn.rawgit.com/download/mics/0.3.0/mics.min.js"></script>
 ```
 
 ## Usage
 ### Creating a mixin
-Mixins look a lot like classes, but they are regular ES5 constructor functions, powered by a real
-ES6 class. You create them with the `mix` function.
+Mixins are normal ES6 classes that have two class properties: `mixin` and `interface`. 
+You create them with the `mix` function.
 
 #### mix([superclass] [, ...mixins] [, factory])
 `mix` accepts an optional superclass as the first argument, then a bunch of mixins and an optional 
-factory as the last argument. If a `superclass` is given, or no `factory` is given, a class is created,
-otherwise a mixin. Mostly, you will be using `mix` with a factory to create mixins, like this:
+factory as the last argument. If no `factory` is given, a regular class is created, otherwise a 
+mixin class. In both cases, the result of the call will be an ES6 class.
+
+Mostly, you will be using `mix` with a factory to create mixins, like this:
 
 ```js
 import { mix } from 'mics'
@@ -78,13 +80,18 @@ var Looker = mix(superclass => class Looker extends superclass {
 })
 ```
 
-Notice that the argument to `mix` is a function that accepts a superclass. You then define the 
-body of your mixin as a class that extends `superclass`. The `mix` function wraps that class in
-a regular es5 constructor function that you can invoke with new to create instances:
+Notice that the argument to `mix` is an arrow function that accepts a superclass and returns a class 
+that extends the given superclass. The body of the mixin is defined in the returned class. We call this 
+a *class factory*. The `mix` function creates a mixing function based on the given mixins and the class 
+factory and uses it to create the resulting class. It then attaches the mixing function to the resulting 
+class (under the key `mixin`), creating what in the context of **mics** we call a mixin. We can directly
+use that mixin to create instances, because it is just a class:
 
 ```js
 var looker = new Looker()      // > A looker is born!
 looker.look()                  // > Looking good!
+looker instanceof Looker       // true
+typeof looker.mixin            // function
 ```
 
 ### Testing if an object is (like) a mixin or class
@@ -102,8 +109,13 @@ Tests whether the subject is-a `type`.
 ```js
 import { is } from 'mix'
 
-looker instanceof Looker       // false, but:
-is(looker).a(Looker)           // true
+looker instanceof Looker       // true, but:
+var GoodLooker = mix(Looker, superclass => class GoodLooker extends superclass {})
+var hottie = new GoodLooker()
+hottie instanceof Looker       // false! mix created a *new class* based on the factory
+
+// is..a to the rescue!
+is(hottie).a(Looker)           // true
 ```
 
 #### an(type)
@@ -162,79 +174,28 @@ Promise.resolve(promise).then((result) => {
 })
 ```
 
-### Mixing mixins into classes
-Notice how we are only creating and using mixins up until now. Mixins are more 
-flexible than classes so **mics** promotes their use over classes. However, sometimes you are working
-with a class and want to mix some mixins into that class. `mix` makes that easy as well. If you
-don't pass a factory as the last argument to `mix`, it will use the first argument as the superclass
-when available, or create a new superclass automatically and use that to derive from. It will then
-return a new class that derives from the superclass adding all the mixins that were passed.
-
-The returned class can be extended from to inherit all the mixins:
-
-```js
-class GreatLookingPromise extends mix(Looker, MyPromise) {}
-var promise = 
-  new GreatLookingPromise()    // > A looker is born!
-promise.look()                 // > Looking good!
-Promise.resolve(promise).then(
-  r => console.info(r)         // > Hello, World!
-)
-```
-
-When your class needs to extend from a base class, pass it 
-as the first argument to `mix`:
-
-```js
-class Playboy extends mix(Looker, Talker) {
-  talk(){
-    console.info('How are *you* doin\'?')
-  }
-}
-class PlayboyPromise extends mix(Playboy, MyPromise) {}
-var promise = 
-  new PlayboyPromise()         // > A talker is born!
-                               // > A looker is born!
-promise.look()                 // > Looking good!
-promise.talk()                 // > How are *you* doin'?
-Promise.resolve(promise).then(
-  r => console.info(r)         // > Hello, World!
-)
-```
-
-> Pro Tip: The constructors returned from `mix` Include a `with` method, that allows
-> the `PlayboyPromise` to be declared even simpler:
-
-```js
-class PlayboyPromise extends Playboy.with(MyPromise) {
-  // ...
-}
-```
-
-> Pro Tip 2: Cool as `with` is, it will give you a class, which very often means you won't
-> be able to mix it further. I recommend sticking to mixins whenever possible as they hardly
-> have any downsides compared with regular classes. If you ever need the class, just use
-> `SomeMixin.class`, that's the real ES6 class that is used to create instances of the mixin.
-
 ### Bonus
 As a bonus, you can use `is(..).a(..)` to do some simple type tests by passing a 
 string for the type:
 
 ```js
-function x(){}
-class Y {}
-is(x).a('function')           // true
+class X {}
+var Y = mix(superclass => class Y extends superclass {})
+var Z = mix(X, Y)
+is(X).a('function')           // true
+is(X).a('mix')                // false
 is(Y).a('function')           // true
-is('Hi').a('function')        // false
-is(X).a('class')              // false
-is(Y).a('class')              // true
+is(Y).a('mix')                // true
+is(Y).a('mixin')              // true
+is(Z).a('function')           // true
+is(Z).a('mix')                // true
+is(Z).a('mixin')              // false
 ```
 
-Supported type strings: `"mixin"`, `"class"`, `"mix"`, `"factory"`, and any type strings that can be passed to `typeof`.
-* mixin: x is a function that is the result of calling `mix` with a class factory
-* class: x is an ES6 class
-* mix: x is a function that is the result of calling `mix`: could be a class or a mixin
-* factory: x is a function that accepts exactly one argument and that is not a mix
+Supported type strings: `"mix"`, `"mixin"`, `"factory"`, and any type strings that can be passed to `typeof`.
+* mix: x is a class that is the result of calling `mix`: could be mixin
+* mixin: x is a class that is the result of calling `mix` with a class factory
+* factory: x is a class factory function
 
 ## Issues
 Add an issue in this project's [issue tracker](https://github.com/download/mics/issues)
