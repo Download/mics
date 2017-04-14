@@ -12,6 +12,10 @@ module.exports = {
 				test: /\.js/,
 				exclude: /node_modules/,
 				loader: 'babel-loader',
+				options: process.env['ES_MODULE'] ? {
+					// Options to configure babel. overrides .babelrc with modules=false
+					presets: [['es2015', {modules:false}]]
+				} :	{}
 			},
 		],
 		noParse: /\.min\.js/,
