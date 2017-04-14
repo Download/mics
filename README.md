@@ -25,8 +25,8 @@ npm install --save mics
 ```
 
 ## Direct download
-* [mics.umd.js](https://cdn.rawgit.com/download/mics/0.3.0/mics.umd.js) (universal module works in browser and node)
-* [mics.min.js](https://cdn.rawgit.com/download/mics/0.3.0/mics.min.js) (minified version of universal module file)
+* [mics.umd.js](https://cdn.rawgit.com/download/mics/dist/0.4.0/mics.umd.js) (universal module works in browser and node)
+* [mics.min.js](https://cdn.rawgit.com/download/mics/dist/0.4.0/mics.min.js) (minified version of universal module file)
 
 
 ## Include in your app
@@ -51,7 +51,7 @@ define(['mics'], function(mix){
 
 ### Script tag
 ```html
-<script src="https://cdn.rawgit.com/download/mics/0.3.0/mics.min.js"></script>
+<script src="https://cdn.rawgit.com/download/mics/dist/0.4.0/mics.min.js"></script>
 ```
 
 ## Usage
