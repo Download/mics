@@ -268,21 +268,34 @@ string for the type:
 
 ```js
 class X {}
-var Y = mix(superclass => class Y extends superclass {})
+var factory = superclass => class Y extends superclass {}
+var Y = mix(factory)
 var Z = mix(X, Y)
+
 is(X).a('function')           // true
-is(X).a('mix')                // false
+is(X).a('class')              // true
+is(X).a('mixin')              // false
+is(X).a('factory')            // false
+
+is(factory).a('function')     // true
+is(factory).a('class')        // false
+is(factory).a('mixin')        // false
+is(factory).a('factory')      // true
+
 is(Y).a('function')           // true
-is(Y).a('mix')                // true
+is(Y).a('class')              // false
 is(Y).a('mixin')              // true
+is(Y).a('factory')            // false
+
 is(Z).a('function')           // true
-is(Z).a('mix')                // true
-is(Z).a('mixin')              // false
+is(Z).a('class')              // false
+is(Z).a('mixin')              // true
+is(Z).a('factory')            // false
 ```
 
-Supported type strings: `"mix"`, `"mixin"`, `"factory"`, and any type strings that can be passed to `typeof`.
-* mix: x is a class that is the result of calling `mix`: could be mixin
-* mixin: x is a class that is the result of calling `mix` with a class factory
+Supported type strings: `"class"`, `"mixin"`, `"factory"`, and any type strings that can be passed to `typeof`.
+* class: x is a (possibly Babel-transpiled) ES6 class
+* mixin: x is a mixin that is the result of calling `mix`
 * factory: x is a class factory function
 
 ## Issues
