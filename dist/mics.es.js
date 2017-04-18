@@ -30,12 +30,7 @@ function mix() {
 
 	var superclass = !is(args[0]).a('factory') && args.shift() || baseclass;
 	var factory = is(args[args.length - 1]).a('factory') && args.pop() || derive;
-	if (!is(superclass, 'mix')) {
-		superclass = derive(superclass);
-		Object.defineProperties(superclass, {
-			interface: { value: getInterface(superclass.prototype), writable: false }
-		});
-	}
+	superclass = is(superclass).a('mixin') ? superclass.class : derive(superclass);
 	if (args.length) factory = function (org) {
 		return function (superclass) {
 			return org(args.reduce(function (s, m) {
@@ -45,19 +40,30 @@ function mix() {
 	}(factory);
 	function mixin(superclass) {
 		var result = is(superclass).a(mixin) ? superclass : factory(superclass);
-		if (mixin.classes.indexOf(result) == -1) mixin.classes.push(result);
+		if (mixin.classes.indexOf(result) === -1) mixin.classes.push(result);
 		return result;
 	}
 	Object.defineProperties(mixin, {
 		classes: { value: [], writable: false },
 		mixins: { value: args, writable: false }
 	});
-	var constructor = mixin(superclass);
+	var Class = mixin(superclass);
+	var constructor = Class.hasOwnProperty('constructor') ? Class.constructor.bind(Class) : function () {
+		for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+			args[_key2] = arguments[_key2];
+		}
+
+		return new (Function.prototype.bind.apply(Class, [null].concat(args)))();
+	};
+	Object.getOwnPropertyNames(Class).forEach(function (k) {
+		return Object.defineProperty(constructor, k, { value: Class[k] });
+	});
 	return Object.defineProperties(constructor, {
 		mixin: { value: mixin, writable: false },
+		class: { value: Class, writable: false },
 		interface: { get: function (x) {
 				return function () {
-					return x ? x : x = getInterface(constructor.prototype);
+					return x ? x : x = getInterface(Class.prototype);
 				};
 			}() }
 	});
@@ -66,11 +72,15 @@ function mix() {
 function is(x, type) {
 	function a(type) {
 		if (typeof type == 'string') {
-			return type == 'mixin' ? typeof x == 'function' && !!x.mixin : type == 'mix' ? typeof x == 'function' && !!x.interface : type == 'factory' ? typeof x == 'function' && x.length == 1 && !x.interface : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
+			return type == 'class' ? is(x).a('function') && function (s) {
+				return (/^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, ''))
+				);
+			}(x.toString()) : type == 'mixin' ? is(x).a('function') && !!x.mixin : type == 'factory' ? is(x).a('function') && !is(x).a('mixin') && !is(x).a('class') && x.length == 1 : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
 		}
 		if ((typeof x === 'undefined' ? 'undefined' : _typeof(x)) == 'object') {
 			if (x instanceof type) return true;
-			if (type.classes) return type.classes.reduce(function (f, c) {
+			if (type.class && x instanceof type.class) return true;
+			if (type.mixin && type.mixin.classes) return type.mixin.classes.reduce(function (f, c) {
 				return f || a(c);
 			}, false);
 		} else if (typeof x == 'function') {

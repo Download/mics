@@ -1,9 +1,11 @@
 import ulog from 'ulog'
-const log = ulog('mics:spec')
 import { expect } from 'chai'
 import { spy } from 'sinon'
+import t from 'tcomb'
 
 import { mix, is } from './'
+
+const log = ulog('mics:spec')
 
 describe('mix([superclass] [, ...mixins] [, factory])', function(){
 	it('is a function', function(){
@@ -22,14 +24,42 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 		expect(M).to.be.a('function')
 	})
 
-	it('creates a class from a superclass', function(){
+	it('creates a mixin from other mixins', function(){
+		var X = mix(superclass => class X extends superclass {})
+		var Y = mix(superclass => class X extends superclass {})
+		var M = mix(X, Y)
+		expect(is(M).a('mixin')).to.eq(true)
+	})
+
+	it('creates a mix from a superclass', function(){
 		var C = mix(class Base {})
 		expect(C).to.be.a('function')
+		expect(is(C).a('mixin')).to.eq(true)
+		// special case: class with one-arg constructor looks like a factory
+		class Base {constructor(arg){}}
+		C = mix(Base)
+		expect(C).to.be.a('function')
+		expect(is(C).a('mixin')).to.eq(true)
+		expect(new C() instanceof Base).to.eq(true)
+	})
+
+	it('creates a mix from a mixed superclass', function(){
+		var C = mix(class Base {})
+		expect(is(C).a('mixin')).to.eq(true)
+		var D = mix(C)
+		expect(is(D).a('mixin')).to.eq(true)
+		expect(new D() instanceof D).to.eq(true)
 	})
 
 	it('created mixins can be invoked with new to instantiate instances', function(){
 		var M = mix(superclass => class M extends superclass {})
 		var m = new M()
+		expect(m).to.be.an('object')
+	})
+
+	it('created mixins can be invoked without new to instantiate instances', function(){
+		var M = mix(superclass => class M extends superclass {})
+		var m = M()
 		expect(m).to.be.an('object')
 	})
 
@@ -49,6 +79,22 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 		expect(zarg).to.eq('z')
 	})
 
+	it('arguments passed when invoking the mixin without new are passed on to the constructor', function(){
+		var xarg,yarg,zarg
+		var M = mix(superclass => class M extends superclass {
+			constructor(x, y, z) {
+				super()
+				xarg = x
+				yarg = y
+				zarg = z
+			}
+		})
+		var m = M('x','y','z')
+		expect(xarg).to.eq('x')
+		expect(yarg).to.eq('y')
+		expect(zarg).to.eq('z')
+	})
+
 	it('var args in constructor has correct length when invoking with new', function(){
 		var argsarg
 		var M = mix(superclass => class M extends superclass {
@@ -63,21 +109,54 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 		expect(argsarg.length).to.eq(0)
 	})
 
+	it('var args in constructor has correct length when invoking without new', function(){
+		var argsarg
+		var M = mix(superclass => class M extends superclass {
+			constructor(...args) {
+				super()
+				argsarg = args
+			}
+		})
+		var m = M('x','y','z')
+		expect(argsarg.length).to.eq(3)
+		var m = M()
+		expect(argsarg.length).to.eq(0)
+	})
+
 	it('result of invoking constructor with new is instanceof mixin', function(){
 		var M = mix(superclass => class M extends superclass {})
 		var m = new M('x','y','z')
 		expect(m instanceof M).to.eq(true)
 	})
 
+	it('result of invoking constructor without new is instanceof mixin', function(){
+		var M = mix(superclass => class M extends superclass {})
+		var m = M('x','y','z')
+		expect(m instanceof M).to.eq(true)
+	})
+
+	it('picks up a static class method `constructor` and uses it in place of the default constructor', function(){
+		var check = spy()
+		var M = mix(superclass => class M extends superclass {
+			static constructor(...args) {
+				log.log('Custom constructor')
+				check()
+				return new this(...args)
+			}
+		})
+		var m = M()
+		expect(check.called).to.eq(true)
+	})
+
 	it('has no side effects on it\'s arguments', function(){
 		class Test{}
-		expect(is(Test).a('mix')).to.eq(false)
+		expect(is(Test).a('mixin')).to.eq(false)
 		var M = mix(Test)
-		expect(is(M).a('mix')).to.eq(true)
-		expect(is(Test).a('mix')).to.eq(false)
+		expect(is(M).a('mixin')).to.eq(true)
+		expect(is(Test).a('mixin')).to.eq(false)
 		var N = mix(Test, superclass => class N extends superclass {})
-		expect(is(N).a('mix')).to.eq(true)
-		expect(is(Test).a('mix')).to.eq(false)
+		expect(is(N).a('mixin')).to.eq(true)
+		expect(is(Test).a('mixin')).to.eq(false)
 	})
 })
 
@@ -130,17 +209,6 @@ describe('is(x [, type])', function(){
 			expect(is(function(){}).a('mixin')).to.eq(false)
 			expect(is(function(x){}).a('mixin')).to.eq(false)
 			expect(is(function(x,y){}).a('mixin')).to.eq(false)
-		})
-		it('for type == "mix", tests whether `x` is the result of calling mix()', function(){
-			expect(is(class X {}).a('mix')).to.eq(false)
-			expect(is(mix(class X {})).a('mix')).to.eq(true)
-			expect(is(class X extends mix(){}).a('mix')).to.eq(true)
-			expect(is(mix(superclass => class Y extends superclass {})).a('mix')).to.eq(true)
-			expect(is({}).a('mix')).to.eq(false)
-			expect(is('Hi').a('mix')).to.eq(false)
-			expect(is(function(){}).a('mix')).to.eq(false)
-			expect(is(function(x){}).a('mix')).to.eq(false)
-			expect(is(function(x,y){}).a('mix')).to.eq(false)
 		})
 		it('for type == "factory", tests whether `x` is a class factory', function(){
 			expect(is(class X {}).a('factory')).to.eq(false)
@@ -296,6 +364,7 @@ describe('mix example', function(){
 		})
 		
 		var duckTalk = spy()
+
 		var Duck = mix(Looker, Walker, Talker, superclass => class Duck extends superclass {
 			talk(){
 				log.log('Quack, quack, quack!')
@@ -306,18 +375,96 @@ describe('mix example', function(){
 
 		var duck = new Duck()
 		expect(duck).to.be.an('object')
+		expect(duck instanceof Duck).to.eq(true)
+		expect(duck instanceof Looker).to.eq(true)
+		expect(duck instanceof Walker).to.eq(false)
+		
+
 		expect(duck).to.have.a.property('look')
 		expect(duck.look).to.be.a('function')
 		duck.look()
 		expect(look.called).to.eq(true)
+
 		expect(duck).to.have.a.property('walk')
 		expect(duck.walk).to.be.a('function')
 		duck.walk()
 		expect(walk.called).to.eq(true)
+
 		expect(duck).to.have.a.property('talk')
 		expect(duck.talk).to.be.a('function')
 		duck.talk()
 		expect(talk.called).to.eq(true)
 		expect(duckTalk.called).to.eq(true)
-	})	
+	})
+})
+
+
+describe('type checked mixins with tcomb', function(){
+	it ('shows how to create an immutable, type-checked mixin with tcomb', function(){
+		// This is experimental... I think it shows we need to be able to hook into the
+		// mixin process itself. To enable this example I already added a hook for the
+		// ES5 constructor function: the `static constructor` will be picked up by `mix`
+		// and used as the result instead of the default generated constructor.
+		var a = spy(), b = spy()
+		var Person = mix(superclass => class Person extends superclass {
+			static get type() {
+				if (! this._tcomb) this._tcomb = t.struct({
+					name: t.String,              // required string
+					surname: t.maybe(t.String),  // optional string
+					age: t.Integer,              // required integer
+					tags: t.list(t.String)       // a list of strings
+				}, 'Person')
+				return this._tcomb
+			}
+
+			static testA() {
+				a()
+				log.log('A')
+			}
+
+			static testB() {
+				this.testA()
+				b()
+				log.log('B')
+			}
+
+			static constructor(...args) {
+				return this.type(new this(...args))
+			}
+
+			constructor(...args) {
+				super(...args)
+				Object.assign(this, ...args)
+			}
+		})
+		
+		expect(function(){
+			const person = Person({
+				surname: 'Canti'
+			});	
+		}).to.throw(TypeError)  // required fields missing
+		
+		expect(function(){
+			const person = Person({
+				name: 'Stijn',
+				age: 40,
+				tags: ['developer']
+			});	
+		}).to.not.throw()  // ok
+		
+		expect(function(){
+			const person = Person({
+				name: 'Stijn',
+				age: 40,
+				tags: ['developer']
+			});	
+			person.age = 41
+		}).to.throw(TypeError) // immutable
+
+		expect(function(){
+			Person.testB()
+			expect (a.called).to.eq(true)
+			expect (b.called).to.eq(true)
+		}).to.not.throw()  // ok
+	})
 })
