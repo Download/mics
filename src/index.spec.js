@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { spy } from 'sinon'
 import t from 'tcomb'
 
-import { mix, is } from './'
+import { mix, is, like } from './'
 
 const log = ulog('mics:spec')
 
@@ -28,26 +28,26 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 		var X = mix(superclass => class X extends superclass {})
 		var Y = mix(superclass => class X extends superclass {})
 		var M = mix(X, Y)
-		expect(is(M).a('mixin')).to.eq(true)
+		expect(is(M, 'mixin')).to.eq(true)
 	})
 
 	it('creates a mix from a superclass', function(){
 		var C = mix(class Base {})
 		expect(C).to.be.a('function')
-		expect(is(C).a('mixin')).to.eq(true)
+		expect(is(C, 'mixin')).to.eq(true)
 		// special case: class with one-arg constructor looks like a factory
 		class Base {constructor(arg){}}
 		C = mix(Base)
 		expect(C).to.be.a('function')
-		expect(is(C).a('mixin')).to.eq(true)
+		expect(is(C, 'mixin')).to.eq(true)
 		expect(new C() instanceof Base).to.eq(true)
 	})
 
 	it('creates a mix from a mixed superclass', function(){
 		var C = mix(class Base {})
-		expect(is(C).a('mixin')).to.eq(true)
+		expect(is(C, 'mixin')).to.eq(true)
 		var D = mix(C)
-		expect(is(D).a('mixin')).to.eq(true)
+		expect(is(D, 'mixin')).to.eq(true)
 		expect(new D() instanceof D).to.eq(true)
 	})
 
@@ -150,17 +150,18 @@ describe('mix([superclass] [, ...mixins] [, factory])', function(){
 
 	it('has no side effects on it\'s arguments', function(){
 		class Test{}
-		expect(is(Test).a('mixin')).to.eq(false)
+		expect(is(Test, 'mixin')).to.eq(false)
 		var M = mix(Test)
-		expect(is(M).a('mixin')).to.eq(true)
-		expect(is(Test).a('mixin')).to.eq(false)
+		expect(is(M, 'mixin')).to.eq(true)
+		expect(is(Test, 'mixin')).to.eq(false)
 		var N = mix(Test, superclass => class N extends superclass {})
-		expect(is(N).a('mixin')).to.eq(true)
-		expect(is(Test).a('mixin')).to.eq(false)
+		expect(is(N, 'mixin')).to.eq(true)
+		expect(is(Test, 'mixin')).to.eq(false)
 	})
 })
 
-describe('is(x [, type])', function(){
+
+describe('is(x , type)', function(){
 	it('is a function', function(){
 		expect(is).to.be.a('function')		
 	})
@@ -169,124 +170,96 @@ describe('is(x [, type])', function(){
 		expect(is.length).to.eq(2)		
 	})
 
-	it('when passed two arguments, acts as an alias for is(x).a(type)', function(){
+	it('tests whether object `x` implements `type`', function(){
 		var X = mix(superclass => class X extends superclass {})
 		var x = new X()
-		expect(is(x).a(X)).to.eq(true)
 		expect(is(x, X)).to.eq(true)
-		expect(is(x).a(Date)).to.eq(is(x, Date))
+		expect(is(x, Date)).to.eq(false)
+	})
+	it('tests whether class `x` implements `type`', function(){
+		var Y = mix(superclass => class Y extends superclass {})
+		var X = class X extends mix(Y) {}
+		expect(is(X, Y)).to.eq(true)
+	})
+	it('tests whether mixin `x` implements `type`', function(){
+		var Y = mix(superclass => class Y extends superclass {})
+		var X = mix(Y, superclass => class X extends superclass {})
+		expect(is(X, Y)).to.eq(true)
+	})
+	it('for type == "mixin", tests whether `x` is a mixin', function(){
+		expect(is(class X {}, 'mixin')).to.eq(false)
+		expect(is(mix(superclass => class Y extends superclass {}), 'mixin')).to.eq(true)
+		expect(is({}, 'mixin')).to.eq(false)
+		expect(is('Hi', 'mixin')).to.eq(false)
+		expect(is(function(){}, 'mixin')).to.eq(false)
+		expect(is(function(x){}, 'mixin')).to.eq(false)
+		expect(is(function(x,y){}, 'mixin')).to.eq(false)
+	})
+	it('for type == "factory", tests whether `x` is a class factory', function(){
+		expect(is(class X {}, 'factory')).to.eq(false)
+		expect(is(mix(class X {}), 'factory')).to.eq(false)
+		expect(is(class X extends mix(){}, 'factory')).to.eq(false)
+		expect(is(mix(superclass => class Y extends superclass {}), 'factory')).to.eq(false)
+		expect(is({}, 'factory')).to.eq(false)
+		expect(is('Hi', 'factory')).to.eq(false)
+		expect(is(function(){}, 'factory')).to.eq(false)
+		expect(is(function(x){}, 'factory')).to.eq(true)
+		expect(is(function(x,y){}, 'factory')).to.eq(false)
+	})
+	it('for type == "function", tests whether `x` is a function', function(){
+		expect(is(class X {}, 'function')).to.eq(true)
+		expect(is(mix(class X {}), 'function')).to.eq(true)
+		expect(is(class X extends mix(){}, 'function')).to.eq(true)
+		expect(is(mix(superclass => class Y extends superclass {}), 'function')).to.eq(true)
+		expect(is({}, 'function')).to.eq(false)
+		expect(is('Hi', 'function')).to.eq(false)
+		expect(is(function(){}, 'function')).to.eq(true)
+		expect(is(function(x){}, 'function')).to.eq(true)
+		expect(is(function(x,y){}, 'function')).to.eq(true)
+	})
+	it('for type == "object", tests whether `x` is an object', function(){
+		expect(is(class X {}, 'object')).to.eq(false)
+		expect(is(mix(class X {}), 'object')).to.eq(false)
+		expect(is(class X extends mix(){}, 'object')).to.eq(false)
+		expect(is(mix(superclass => class Y extends superclass {}), 'object')).to.eq(false)
+		expect(is({}, 'object')).to.eq(true)
+		expect(is('Hi', 'object')).to.eq(false)
+		expect(is(function(){}, 'object')).to.eq(false)
+		expect(is(function(x){}, 'object')).to.eq(false)
+		expect(is(function(x,y){}, 'object')).to.eq(false)
+	})
+	it('for type == "string", tests whether `x` is a string', function(){
+		expect(is(class X {}, 'string')).to.eq(false)
+		expect(is(mix(class X {}), 'string')).to.eq(false)
+		expect(is(class X extends mix(){}, 'string')).to.eq(false)
+		expect(is(mix(superclass => class Y extends superclass {}), 'string')).to.eq(false)
+		expect(is({}, 'string')).to.eq(false)
+		expect(is('Hi', 'string')).to.eq(true)
+		expect(is(function(){}, 'string')).to.eq(false)
+		expect(is(function(x){}, 'string')).to.eq(false)
+		expect(is(function(x,y){}, 'string')).to.eq(false)
 	})
 
-	it('when passed a single argument, returns an object with sub-methods', function(){
-		expect(is({})).to.be.an('object')
-	})
-
-	describe('a(type)', function(){
+	describe('like(type)', function(){
 		it('is a function', function(){
-			expect(is({}).a).to.be.a('function')		
-		})
-		it('tests whether object `x` implements `type`', function(){
-			var X = mix(superclass => class X extends superclass {})
-			var x = new X()
-			expect(is(x).a(X)).to.eq(true)
-			expect(is(x).a(Date)).to.eq(false)
-		})
-		it('tests whether class `x` implements `type`', function(){
-			var Y = mix(superclass => class Y extends superclass {})
-			var X = class X extends mix(Y) {}
-			expect(is(X).a(Y)).to.eq(true)
-		})
-		it('tests whether mixin `x` implements `type`', function(){
-			var Y = mix(superclass => class Y extends superclass {})
-			var X = mix(Y, superclass => class X extends superclass {})
-			expect(is(X).a(Y)).to.eq(true)
-		})
-		it('for type == "mixin", tests whether `x` is a mixin', function(){
-			expect(is(class X {}).a('mixin')).to.eq(false)
-			expect(is(mix(superclass => class Y extends superclass {})).a('mixin')).to.eq(true)
-			expect(is({}).a('mixin')).to.eq(false)
-			expect(is('Hi').a('mixin')).to.eq(false)
-			expect(is(function(){}).a('mixin')).to.eq(false)
-			expect(is(function(x){}).a('mixin')).to.eq(false)
-			expect(is(function(x,y){}).a('mixin')).to.eq(false)
-		})
-		it('for type == "factory", tests whether `x` is a class factory', function(){
-			expect(is(class X {}).a('factory')).to.eq(false)
-			expect(is(mix(class X {})).a('factory')).to.eq(false)
-			expect(is(class X extends mix(){}).a('factory')).to.eq(false)
-			expect(is(mix(superclass => class Y extends superclass {})).a('factory')).to.eq(false)
-			expect(is({}).a('factory')).to.eq(false)
-			expect(is('Hi').a('factory')).to.eq(false)
-			expect(is(function(){}).a('factory')).to.eq(false)
-			expect(is(function(x){}).a('factory')).to.eq(true)
-			expect(is(function(x,y){}).a('factory')).to.eq(false)
-		})
-		it('for type == "function", tests whether `x` is a function', function(){
-			expect(is(class X {}).a('function')).to.eq(true)
-			expect(is(mix(class X {})).a('function')).to.eq(true)
-			expect(is(class X extends mix(){}).a('function')).to.eq(true)
-			expect(is(mix(superclass => class Y extends superclass {})).a('function')).to.eq(true)
-			expect(is({}).a('function')).to.eq(false)
-			expect(is('Hi').a('function')).to.eq(false)
-			expect(is(function(){}).a('function')).to.eq(true)
-			expect(is(function(x){}).a('function')).to.eq(true)
-			expect(is(function(x,y){}).a('function')).to.eq(true)
-		})
-		it('for type == "object", tests whether `x` is an object', function(){
-			expect(is(class X {}).a('object')).to.eq(false)
-			expect(is(mix(class X {})).a('object')).to.eq(false)
-			expect(is(class X extends mix(){}).a('object')).to.eq(false)
-			expect(is(mix(superclass => class Y extends superclass {})).a('object')).to.eq(false)
-			expect(is({}).a('object')).to.eq(true)
-			expect(is('Hi').a('object')).to.eq(false)
-			expect(is(function(){}).a('object')).to.eq(false)
-			expect(is(function(x){}).a('object')).to.eq(false)
-			expect(is(function(x,y){}).a('object')).to.eq(false)
-		})
-		it('for type == "string", tests whether `x` is a string', function(){
-			expect(is(class X {}).a('string')).to.eq(false)
-			expect(is(mix(class X {})).a('string')).to.eq(false)
-			expect(is(class X extends mix(){}).a('string')).to.eq(false)
-			expect(is(mix(superclass => class Y extends superclass {})).a('string')).to.eq(false)
-			expect(is({}).a('string')).to.eq(false)
-			expect(is('Hi').a('string')).to.eq(true)
-			expect(is(function(){}).a('string')).to.eq(false)
-			expect(is(function(x){}).a('string')).to.eq(false)
-			expect(is(function(x,y){}).a('string')).to.eq(false)
-		})
-
-	})
-
-	describe('an(type)', function(){
-		it('is a function', function(){
-			expect(is({}).a).to.be.a('function')		
-		})
-		it('is an alias for `a(type)`', function(){
-			var x = is({})
-			expect(x.a).to.eq(x.an)
-		})
-	})
-
-	describe('as(type)', function(){
-		it('is a function', function(){
-			expect(is({}).as).to.be.a('function')		
+			expect(like).to.be.a('function')		
 		})
 		it('tests whether `x` can be treated as `type` (has the same interface)', function(){
 			var Looker = mix(superclass => class Looker extends superclass {
 				look(){}
 			})
-			expect(is('Hi').as(Looker)).to.eq(false)
-			expect(is(8).as(Looker)).to.eq(false)
-			expect(is({}).as(Looker)).to.eq(false)
-			expect(is(new Looker()).as(Looker)).to.eq(true)
-			expect(is({look(){}}).as(Looker)).to.eq(true)
-			expect(is({walk(){}}).as(Looker)).to.eq(false)
+			expect(like('Hi', Looker)).to.eq(false)
+			expect(like(8, Looker)).to.eq(false)
+			expect(like({}, Looker)).to.eq(false)
+			expect(like(new Looker(), Looker)).to.eq(true)
+			expect(like({look(){}}, Looker)).to.eq(true)
+			expect(like({walk(){}}, Looker)).to.eq(false)
 			class Base {look(){}}
-			expect(is(Base).as(Looker)).to.eq(true)
-			expect(is(new Base()).as(Looker)).to.eq(true)
+			expect(like(Base, Looker)).to.eq(true)
+			expect(like(new Base(), Looker)).to.eq(true)
 			class Derived extends Base {}
-			expect(is(Derived).as(Looker)).to.eq(true)
-			expect(is(new Derived()).as(Looker)).to.eq(true)
+			expect(like(Derived, Looker)).to.eq(true)
+			expect(like(new Derived(), Looker)).to.eq(true)
 		})
 
 		it('allows mixins to be used as interfaces', (done) => {
@@ -300,7 +273,7 @@ describe('is(x [, type])', function(){
 				}
 			}
 			var promise = new MyPromise()
-			expect(is(promise).as(Thenable)).to.eq(true)
+			expect(like(promise, Thenable)).to.eq(true)
 			Promise.resolve(promise).then((result) => {
 				expect(result).to.eq(expected)
 				done()
