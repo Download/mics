@@ -137,8 +137,8 @@ var Walker = mix(superclass => class Walker extends superclass{
   }
 })
 
-var Talker = mix(superclass => class Walker extends superclass{
-  walk(){
+var Talker = mix(superclass => class Talker extends superclass{
+  talk(){
     console.info('Blah, blah, blah')
   }
 })
