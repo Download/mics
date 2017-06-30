@@ -63,7 +63,7 @@ define(['mics'], function(mics){
 ### Creating a mixin
 Mixins are like classes on steroids. They look and feel a lot like ES6 classes, but they have some additional
 capabilities that ES6 classes do not have:
-* They can 'extend' from multiple other mixins including (at most one) ES6 class or ES5 constructor function
+* They can 'extend' from multiple other mixins including (at most one) ES6 class
 * They have an explicit `interface` which can be inspected and tested at runtime
 * They *have* an ES6 `class` that is used to create instances 
 * They have a `mixin` function that mixes in their class body into another type.

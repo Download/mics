@@ -9,7 +9,6 @@
     "dev": "webpack-dev-server --output-path test --output-filename index.spec.js \"mocha-loader!./index.spec.js\" --content-base test --port 8888",
     "build": "npm run build-cjs && npm run build-umd && npm run build-min && npm run build-es && npm run build-test",
     "build-cjs": "webpack --output-path dist --output-filename mics.cjs.js --output-library-target commonjs2 \"./index.js\" ",
-    "build-es-webpack": "cross-env ES_MODULE=true webpack --output-path dist --output-filename mics.es6.js --output-library-target commonjs-module \"./index.js\" ",
     "build-es": "rollup -c -o dist/mics.es.js -f es ",
     "build-umd": "webpack --output-path dist --output-filename mics.umd.js --output-library-target umd \"./index.js\" ",
     "build-min": "webpack -p --output-path dist --output-filename mics.min.js --output-library-target umd \"./index.js\" ",
