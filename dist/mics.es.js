@@ -6,31 +6,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var baseclass = function Object() {
-	_classCallCheck(this, Object);
-};
-var derive = function derive(superclass) {
-	return {}[superclass.name || 'Object'] = function (_superclass) {
-		_inherits(_class, _superclass);
-
-		function _class() {
-			_classCallCheck(this, _class);
-
-			return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
-		}
-
-		return _class;
-	}(superclass);
-};
-
 function mix() {
 	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 		args[_key] = arguments[_key];
 	}
 
-	var superclass = !is(args[0]).a('factory') && args.shift() || baseclass;
-	var factory = is(args[args.length - 1]).a('factory') && args.pop() || derive;
-	superclass = is(superclass).a('mixin') ? superclass.class : derive(superclass);
+	var superclass = !is(args[0], 'factory') && args.shift() || baseclass;
+	var factory = is(args[args.length - 1], 'factory') && args.pop() || derive;
+	superclass = is(superclass, 'mixin') ? superclass.class : derive(superclass);
 	if (args.length) factory = function (org) {
 		return function (superclass) {
 			return org(args.reduce(function (s, m) {
@@ -39,7 +22,7 @@ function mix() {
 		};
 	}(factory);
 	function mixin(superclass) {
-		var result = is(superclass).a(mixin) ? superclass : factory(superclass);
+		var result = is(superclass, mixin) ? superclass : factory(superclass);
 		if (mixin.classes.indexOf(result) === -1) mixin.classes.push(result);
 		return result;
 	}
@@ -70,42 +53,43 @@ function mix() {
 }
 
 function is(x, type) {
-	function a(type) {
-		if (typeof type == 'string') {
-			return type == 'class' ? is(x).a('function') && function (s) {
-				return (/^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, ''))
-				);
-			}(x.toString()) : type == 'mixin' ? is(x).a('function') && !!x.mixin : type == 'factory' ? is(x).a('function') && !is(x).a('mixin') && !is(x).a('class') && x.length == 1 : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
-		}
-		if ((typeof x === 'undefined' ? 'undefined' : _typeof(x)) == 'object') {
-			if (x instanceof type) return true;
-			if (type.class && x instanceof type.class) return true;
-			if (type.mixin && type.mixin.classes) return type.mixin.classes.reduce(function (f, c) {
-				return f || a(c);
-			}, false);
-		} else if (typeof x == 'function') {
-			if (x.mixin && x.mixin.mixins.indexOf(type) !== -1) return true;
-			var c = x;
-			while (c !== Object) {
-				if (c === type || c === type.class) return true;
-				if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true;
-				c = c.prototype.__proto__.constructor;
-			}
-		}
-		return false;
+	if (typeof type == 'string') {
+		return type == 'class' ? is(x, 'function') && function (s) {
+			return (/^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, ''))
+			);
+		}(x.toString()) : type == 'mixin' ? is(x, 'function') && !!x.mixin : type == 'factory' ? is(x, 'function') && !is(x, 'mixin') && !is(x, 'class') && x.length == 1 : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
 	}
-
-	function as(type) {
-		if (a(type)) return true;
-		var itf = type.interface || is(type, 'function') && getInterface(type.prototype);
-		var subject = is(x, 'function') ? x.interface || getInterface(x.prototype) : x;
-		return itf && Object.keys(itf).reduce(function (f, k) {
-			return f && (is(itf[k], 'function') ? is(subject[k], 'function') : k in subject);
-		}, true);
+	if ((typeof x === 'undefined' ? 'undefined' : _typeof(x)) == 'object') {
+		if (x instanceof type) return true;
+		if (type.class && x instanceof type.class) return true;
+		if (type.mixin && type.mixin.classes) return type.mixin.classes.reduce(function (f, c) {
+			return f || is(x, c);
+		}, false);
+	} else if (typeof x == 'function') {
+		if (x.mixin && x.mixin.mixins.indexOf(type) !== -1) return true;
+		var c = x;
+		while (c !== Object) {
+			if (c === type || c === type.class) return true;
+			if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true;
+			c = c.prototype.__proto__.constructor;
+		}
 	}
+	return false;
+}
 
-	var str = x && x.toString() || '';
-	return type !== undefined ? a(type) : { a: a, an: a, as: as };
+function like(x, type) {
+	if (is(x, type)) return true;
+	var itf = type.interface || is(type, 'function') && getInterface(type.prototype);
+	var subject = is(x, 'function') ? x.interface || getInterface(x.prototype) : x;
+	return itf && Object.keys(itf).reduce(function (f, k) {
+		return f && (is(itf[k], 'function') ? is(subject[k], 'function') : k in subject);
+	}, true);
+}
+
+function getInterface(proto) {
+	return getPropertyNames(proto).reduce(function (o, k) {
+		o[k] = proto[k];return o;
+	}, {});
 }
 
 function getPropertyNames(proto) {
@@ -119,11 +103,22 @@ function getPropertyNames(proto) {
 	return results;
 }
 
-function getInterface(proto) {
-	return getPropertyNames(proto).reduce(function (o, k) {
-		o[k] = proto[k];return o;
-	}, {});
-}
+var baseclass = function Object() {
+	_classCallCheck(this, Object);
+};
+var derive = function derive(superclass) {
+	return {}[superclass.name || 'Object'] = function (_superclass) {
+		_inherits(_class, _superclass);
 
-export { mix, is };export default mix;
+		function _class() {
+			_classCallCheck(this, _class);
+
+			return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+		}
+
+		return _class;
+	}(superclass);
+};
+
+export { mix, is, like };
 //# sourceMappingURL=mics.es.js.map

@@ -6787,8 +6787,9 @@ module.exports = __webpack_amd_options__;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = mix;
-/* harmony export (immutable) */ __webpack_exports__["b"] = is;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mix; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return is; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return like; });
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -6797,31 +6798,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var baseclass = function Object() {
-	_classCallCheck(this, Object);
-},
-    derive = function derive(superclass) {
-	return {}[superclass.name || 'Object'] = function (_superclass) {
-		_inherits(_class, _superclass);
 
-		function _class() {
-			_classCallCheck(this, _class);
-
-			return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
-		}
-
-		return _class;
-	}(superclass);
-};
 
 function mix() {
 	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 		args[_key] = arguments[_key];
 	}
 
-	var superclass = !is(args[0]).a('factory') && args.shift() || baseclass;
-	var factory = is(args[args.length - 1]).a('factory') && args.pop() || derive;
-	superclass = is(superclass).a('mixin') ? superclass.class : derive(superclass);
+	var superclass = !is(args[0], 'factory') && args.shift() || baseclass;
+	var factory = is(args[args.length - 1], 'factory') && args.pop() || derive;
+	superclass = is(superclass, 'mixin') ? superclass.class : derive(superclass);
 	if (args.length) factory = function (org) {
 		return function (superclass) {
 			return org(args.reduce(function (s, m) {
@@ -6830,7 +6816,7 @@ function mix() {
 		};
 	}(factory);
 	function mixin(superclass) {
-		var result = is(superclass).a(mixin) ? superclass : factory(superclass);
+		var result = is(superclass, mixin) ? superclass : factory(superclass);
 		if (mixin.classes.indexOf(result) === -1) mixin.classes.push(result);
 		return result;
 	}
@@ -6860,45 +6846,44 @@ function mix() {
 	});
 }
 
-/* unused harmony default export */ var _unused_webpack_default_export = (mix);
-
 function is(x, type) {
-	function a(type) {
-		if (typeof type == 'string') {
-			return type == 'class' ? is(x).a('function') && function (s) {
-				return (/^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, ''))
-				);
-			}(x.toString()) : type == 'mixin' ? is(x).a('function') && !!x.mixin : type == 'factory' ? is(x).a('function') && !is(x).a('mixin') && !is(x).a('class') && x.length == 1 : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
-		}
-		if ((typeof x === 'undefined' ? 'undefined' : _typeof(x)) == 'object') {
-			if (x instanceof type) return true;
-			if (type.class && x instanceof type.class) return true;
-			if (type.mixin && type.mixin.classes) return type.mixin.classes.reduce(function (f, c) {
-				return f || a(c);
-			}, false);
-		} else if (typeof x == 'function') {
-			if (x.mixin && x.mixin.mixins.indexOf(type) !== -1) return true;
-			var c = x;
-			while (c !== Object) {
-				if (c === type || c === type.class) return true;
-				if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true;
-				c = c.prototype.__proto__.constructor;
-			}
-		}
-		return false;
+	if (typeof type == 'string') {
+		return type == 'class' ? is(x, 'function') && function (s) {
+			return (/^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, ''))
+			);
+		}(x.toString()) : type == 'mixin' ? is(x, 'function') && !!x.mixin : type == 'factory' ? is(x, 'function') && !is(x, 'mixin') && !is(x, 'class') && x.length == 1 : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
 	}
-
-	function as(type) {
-		if (a(type)) return true;
-		var itf = type.interface || is(type, 'function') && getInterface(type.prototype);
-		var subject = is(x, 'function') ? x.interface || getInterface(x.prototype) : x;
-		return itf && Object.keys(itf).reduce(function (f, k) {
-			return f && (is(itf[k], 'function') ? is(subject[k], 'function') : k in subject);
-		}, true);
+	if ((typeof x === 'undefined' ? 'undefined' : _typeof(x)) == 'object') {
+		if (x instanceof type) return true;
+		if (type.class && x instanceof type.class) return true;
+		if (type.mixin && type.mixin.classes) return type.mixin.classes.reduce(function (f, c) {
+			return f || is(x, c);
+		}, false);
+	} else if (typeof x == 'function') {
+		if (x.mixin && x.mixin.mixins.indexOf(type) !== -1) return true;
+		var c = x;
+		while (c !== Object) {
+			if (c === type || c === type.class) return true;
+			if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true;
+			c = c.prototype.__proto__.constructor;
+		}
 	}
+	return false;
+}
 
-	var str = x && x.toString() || '';
-	return type !== undefined ? a(type) : { a: a, an: a, as: as };
+function like(x, type) {
+	if (is(x, type)) return true;
+	var itf = type.interface || is(type, 'function') && getInterface(type.prototype);
+	var subject = is(x, 'function') ? x.interface || getInterface(x.prototype) : x;
+	return itf && Object.keys(itf).reduce(function (f, k) {
+		return f && (is(itf[k], 'function') ? is(subject[k], 'function') : k in subject);
+	}, true);
+}
+
+function getInterface(proto) {
+	return getPropertyNames(proto).reduce(function (o, k) {
+		o[k] = proto[k];return o;
+	}, {});
 }
 
 function getPropertyNames(proto) {
@@ -6912,11 +6897,22 @@ function getPropertyNames(proto) {
 	return results;
 }
 
-function getInterface(proto) {
-	return getPropertyNames(proto).reduce(function (o, k) {
-		o[k] = proto[k];return o;
-	}, {});
-}
+var baseclass = function Object() {
+	_classCallCheck(this, Object);
+},
+    derive = function derive(superclass) {
+	return {}[superclass.name || 'Object'] = function (_superclass) {
+		_inherits(_class, _superclass);
+
+		function _class() {
+			_classCallCheck(this, _class);
+
+			return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+		}
+
+		return _class;
+	}(superclass);
+};
 
 /***/ }),
 /* 84 */
@@ -7290,7 +7286,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 			}(superclass);
 		});
 		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(X, Y);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M).a('mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M, 'mixin')).to.eq(true);
 	});
 
 	it('creates a mix from a superclass', function () {
@@ -7298,7 +7294,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 			_classCallCheck(this, Base);
 		});
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(C).to.be.a('function');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C).a('mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
 		// special case: class with one-arg constructor looks like a factory
 
 		var Base = function Base(arg) {
@@ -7307,7 +7303,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 
 		C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Base);
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(C).to.be.a('function');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C).a('mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(new C() instanceof Base).to.eq(true);
 	});
 
@@ -7315,9 +7311,9 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 		var C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function Base() {
 			_classCallCheck(this, Base);
 		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C).a('mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
 		var D = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(C);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(D).a('mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(D, 'mixin')).to.eq(true);
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(new D() instanceof D).to.eq(true);
 	});
 
@@ -7539,10 +7535,10 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 			_classCallCheck(this, Test);
 		};
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test).a('mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
 		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Test);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M).a('mixin')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test).a('mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M, 'mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
 		var N = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Test, function (superclass) {
 			return function (_superclass16) {
 				_inherits(N, _superclass16);
@@ -7556,12 +7552,12 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 				return N;
 			}(superclass);
 		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(N).a('mixin')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test).a('mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(N, 'mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
 	});
 });
 
-describe('is(x [, type])', function () {
+describe('is(x , type)', function () {
 	it('is a function', function () {
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */]).to.be.a('function');
 	});
@@ -7570,7 +7566,7 @@ describe('is(x [, type])', function () {
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */].length).to.eq(2);
 	});
 
-	it('when passed two arguments, acts as an alias for is(x).a(type)', function () {
+	it('tests whether object `x` implements `type`', function () {
 		var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
 			return function (_superclass17) {
 				_inherits(X, _superclass17);
@@ -7585,284 +7581,245 @@ describe('is(x [, type])', function () {
 			}(superclass);
 		});
 		var x = new X();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x).a(X)).to.eq(true);
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x, X)).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x).a(Date)).to.eq(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x, Date));
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x, Date)).to.eq(false);
+	});
+	it('tests whether class `x` implements `type`', function () {
+		var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass18) {
+				_inherits(Y, _superclass18);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		});
+		var X = function (_mix) {
+			_inherits(X, _mix);
+
+			function X() {
+				_classCallCheck(this, X);
+
+				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+			}
+
+			return X;
+		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y));
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X, Y)).to.eq(true);
+	});
+	it('tests whether mixin `x` implements `type`', function () {
+		var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass19) {
+				_inherits(Y, _superclass19);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		});
+		var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y, function (superclass) {
+			return function (_superclass20) {
+				_inherits(X, _superclass20);
+
+				function X() {
+					_classCallCheck(this, X);
+
+					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+				}
+
+				return X;
+			}(superclass);
+		});
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X, Y)).to.eq(true);
+	});
+	it('for type == "mixin", tests whether `x` is a mixin', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+			_classCallCheck(this, X);
+		}, 'mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass21) {
+				_inherits(Y, _superclass21);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		}), 'mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'mixin')).to.eq(false);
+	});
+	it('for type == "factory", tests whether `x` is a class factory', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+			_classCallCheck(this, X);
+		}, 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+			_classCallCheck(this, X);
+		}), 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix2) {
+			_inherits(X, _mix2);
+
+			function X() {
+				_classCallCheck(this, X);
+
+				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+			}
+
+			return X;
+		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass22) {
+				_inherits(Y, _superclass22);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		}), 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'factory')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'factory')).to.eq(false);
+	});
+	it('for type == "function", tests whether `x` is a function', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+			_classCallCheck(this, X);
+		}, 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+			_classCallCheck(this, X);
+		}), 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix3) {
+			_inherits(X, _mix3);
+
+			function X() {
+				_classCallCheck(this, X);
+
+				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+			}
+
+			return X;
+		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass23) {
+				_inherits(Y, _superclass23);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		}), 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'function')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'function')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'function')).to.eq(true);
+	});
+	it('for type == "object", tests whether `x` is an object', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+			_classCallCheck(this, X);
+		}, 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+			_classCallCheck(this, X);
+		}), 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix4) {
+			_inherits(X, _mix4);
+
+			function X() {
+				_classCallCheck(this, X);
+
+				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+			}
+
+			return X;
+		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass24) {
+				_inherits(Y, _superclass24);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		}), 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'object')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'object')).to.eq(false);
+	});
+	it('for type == "string", tests whether `x` is a string', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+			_classCallCheck(this, X);
+		}, 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+			_classCallCheck(this, X);
+		}), 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix5) {
+			_inherits(X, _mix5);
+
+			function X() {
+				_classCallCheck(this, X);
+
+				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+			}
+
+			return X;
+		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass25) {
+				_inherits(Y, _superclass25);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		}), 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'string')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'string')).to.eq(false);
 	});
 
-	it('when passed a single argument, returns an object with sub-methods', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({})).to.be.an('object');
-	});
-
-	describe('a(type)', function () {
+	describe('like(type)', function () {
 		it('is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a).to.be.a('function');
-		});
-		it('tests whether object `x` implements `type`', function () {
-			var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass18) {
-					_inherits(X, _superclass18);
-
-					function X() {
-						_classCallCheck(this, X);
-
-						return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-					}
-
-					return X;
-				}(superclass);
-			});
-			var x = new X();
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x).a(X)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x).a(Date)).to.eq(false);
-		});
-		it('tests whether class `x` implements `type`', function () {
-			var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass19) {
-					_inherits(Y, _superclass19);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			});
-			var X = function (_mix) {
-				_inherits(X, _mix);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y));
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X).a(Y)).to.eq(true);
-		});
-		it('tests whether mixin `x` implements `type`', function () {
-			var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass20) {
-					_inherits(Y, _superclass20);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			});
-			var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y, function (superclass) {
-				return function (_superclass21) {
-					_inherits(X, _superclass21);
-
-					function X() {
-						_classCallCheck(this, X);
-
-						return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-					}
-
-					return X;
-				}(superclass);
-			});
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X).a(Y)).to.eq(true);
-		});
-		it('for type == "mixin", tests whether `x` is a mixin', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-				_classCallCheck(this, X);
-			}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass22) {
-					_inherits(Y, _superclass22);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			})).a('mixin')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}).a('mixin')).to.eq(false);
-		});
-		it('for type == "factory", tests whether `x` is a class factory', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-				_classCallCheck(this, X);
-			}).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-				_classCallCheck(this, X);
-			})).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix2) {
-				_inherits(X, _mix2);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])())).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass23) {
-					_inherits(Y, _superclass23);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			})).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}).a('factory')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}).a('factory')).to.eq(false);
-		});
-		it('for type == "function", tests whether `x` is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-				_classCallCheck(this, X);
-			}).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-				_classCallCheck(this, X);
-			})).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix3) {
-				_inherits(X, _mix3);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])())).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass24) {
-					_inherits(Y, _superclass24);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			})).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a('function')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').a('function')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}).a('function')).to.eq(true);
-		});
-		it('for type == "object", tests whether `x` is an object', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-				_classCallCheck(this, X);
-			}).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-				_classCallCheck(this, X);
-			})).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix4) {
-				_inherits(X, _mix4);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])())).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass25) {
-					_inherits(Y, _superclass25);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			})).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a('object')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}).a('object')).to.eq(false);
-		});
-		it('for type == "string", tests whether `x` is a string', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-				_classCallCheck(this, X);
-			}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-				_classCallCheck(this, X);
-			})).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix5) {
-				_inherits(X, _mix5);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])())).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass26) {
-					_inherits(Y, _superclass26);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			})).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').a('string')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}).a('string')).to.eq(false);
-		});
-	});
-
-	describe('an(type)', function () {
-		it('is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a).to.be.a('function');
-		});
-		it('is an alias for `a(type)`', function () {
-			var x = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({});
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(x.a).to.eq(x.an);
-		});
-	});
-
-	describe('as(type)', function () {
-		it('is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).as).to.be.a('function');
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */]).to.be.a('function');
 		});
 		it('tests whether `x` can be treated as `type` (has the same interface)', function () {
 			var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass27) {
-					_inherits(Looker, _superclass27);
+				return function (_superclass26) {
+					_inherits(Looker, _superclass26);
 
 					function Looker() {
 						_classCallCheck(this, Looker);
@@ -7878,16 +7835,16 @@ describe('is(x [, type])', function () {
 					return Looker;
 				}(superclass);
 			});
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').as(Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(8).as(Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).as(Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(new Looker()).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])('Hi', Looker)).to.eq(false);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(8, Looker)).to.eq(false);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({}, Looker)).to.eq(false);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Looker(), Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
 				look: function look() {}
-			}).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({
+			}, Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
 				walk: function walk() {}
-			}).as(Looker)).to.eq(false);
+			}, Looker)).to.eq(false);
 
 			var Base = function () {
 				function Base() {
@@ -7902,8 +7859,8 @@ describe('is(x [, type])', function () {
 				return Base;
 			}();
 
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Base).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(new Base()).as(Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Base, Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Base(), Looker)).to.eq(true);
 
 			var Derived = function (_Base) {
 				_inherits(Derived, _Base);
@@ -7917,15 +7874,15 @@ describe('is(x [, type])', function () {
 				return Derived;
 			}(Base);
 
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Derived).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(new Derived()).as(Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Derived, Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Derived(), Looker)).to.eq(true);
 		});
 
 		it('allows mixins to be used as interfaces', function (done) {
 			var expected = 'Hello, World!';
 			var Thenable = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass28) {
-					_inherits(Thenable, _superclass28);
+				return function (_superclass27) {
+					_inherits(Thenable, _superclass27);
 
 					function Thenable() {
 						_classCallCheck(this, Thenable);
@@ -7958,7 +7915,7 @@ describe('is(x [, type])', function () {
 			}();
 
 			var promise = new MyPromise();
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(promise).as(Thenable)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(promise, Thenable)).to.eq(true);
 			Promise.resolve(promise).then(function (result) {
 				__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(result).to.eq(expected);
 				done();
@@ -7973,17 +7930,17 @@ describe('mix example', function () {
 		    _look = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
 
 		var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass29) {
-				_inherits(Looker, _superclass29);
+			return function (_superclass28) {
+				_inherits(Looker, _superclass28);
 
 				function Looker() {
 					_classCallCheck(this, Looker);
 
-					var _this35 = _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).call(this));
+					var _this34 = _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).call(this));
 
 					log.log('A looker is born!');
 					constr();
-					return _this35;
+					return _this34;
 				}
 
 				_createClass(Looker, [{
@@ -8018,8 +7975,8 @@ describe('mix example', function () {
 		    _walk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
 		    _talk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
 		var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass30) {
-				_inherits(Looker, _superclass30);
+			return function (_superclass29) {
+				_inherits(Looker, _superclass29);
 
 				function Looker() {
 					_classCallCheck(this, Looker);
@@ -8040,8 +7997,8 @@ describe('mix example', function () {
 		});
 
 		var Walker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass31) {
-				_inherits(Walker, _superclass31);
+			return function (_superclass30) {
+				_inherits(Walker, _superclass30);
 
 				function Walker() {
 					_classCallCheck(this, Walker);
@@ -8062,8 +8019,8 @@ describe('mix example', function () {
 		});
 
 		var Talker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass32) {
-				_inherits(Talker, _superclass32);
+			return function (_superclass31) {
+				_inherits(Talker, _superclass31);
 
 				function Talker() {
 					_classCallCheck(this, Talker);
@@ -8086,8 +8043,8 @@ describe('mix example', function () {
 		var duckTalk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
 
 		var Duck = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Looker, Walker, Talker, function (superclass) {
-			return function (_superclass33) {
-				_inherits(Duck, _superclass33);
+			return function (_superclass32) {
+				_inherits(Duck, _superclass32);
 
 				function Duck() {
 					_classCallCheck(this, Duck);
@@ -8141,8 +8098,8 @@ describe('type checked mixins with tcomb', function () {
 		var a = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
 		    b = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
 		var Person = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass34) {
-				_inherits(Person, _superclass34);
+			return function (_superclass33) {
+				_inherits(Person, _superclass33);
 
 				_createClass(Person, null, [{
 					key: 'testA',
@@ -8188,10 +8145,10 @@ describe('type checked mixins with tcomb', function () {
 						args[_key5] = arguments[_key5];
 					}
 
-					var _this40 = _possibleConstructorReturn(this, (_ref = Person.__proto__ || Object.getPrototypeOf(Person)).call.apply(_ref, [this].concat(args)));
+					var _this39 = _possibleConstructorReturn(this, (_ref = Person.__proto__ || Object.getPrototypeOf(Person)).call.apply(_ref, [this].concat(args)));
 
-					Object.assign.apply(Object, [_this40].concat(args));
-					return _this40;
+					Object.assign.apply(Object, [_this39].concat(args));
+					return _this39;
 				}
 
 				return Person;
