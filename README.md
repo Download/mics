@@ -114,19 +114,19 @@ constructor function, creating what in the context of **mics** we call a mixin.
 We can directly use the created mixin to create instances, because it is just a constructor function:
 
 ```js
-var looker = new Looker()      // > A looker is born!
-looker.look()                  // > Looking good!
-looker instanceof Looker       // true
-typeof looker.mixin            // 'function'
-typeof looker.class            // 'function'
-typeof looker.interface        // 'object'
+var looker = new Looker()     // > A looker is born!
+looker.look()                 // > Looking good!
+looker instanceof Looker      // true
+typeof looker.mixin           // 'function'
+typeof looker.class           // 'function'
+typeof looker.interface       // 'object'
 ```
 
 And because it's an ES5 constructor function, we are allowed to invoke it without `new`:
 
 ```js
-var looker = Looker()          // > A looker is born!
-looker.look()                  // > Looking good!
+var looker = Looker()         // > A looker is born!
+looker.look()                 // > Looking good!
 ```
 
 > ES6 made newless invocation of constructors throw an error for ES6 classes, because 
@@ -188,15 +188,15 @@ a type. The second parameter is either a type (constructor function, ES6 class o
 or a type string.  
 
 ```js
-duck instanceof Duck           // true
-duck instanceof Looker         // true, but:
-duck instanceof Walker         // false! mix created a *new class* based on the factory
+duck instanceof Duck          // true
+duck instanceof Looker        // true, but:
+duck instanceof Walker        // false! mix created a *new class* based on the factory
 
 // `is` to the rescue!
-is(duck, Walker)             // true
+is(duck, Walker)              // true
 // we can also test the type
-is(Duck, Walker)             // true
-is(Talker, Walker)           // false
+is(Duck, Walker)              // true
+is(Talker, Walker)            // false
 ```
 
 #### like(type)
@@ -205,11 +205,11 @@ whether we can treat it *like* a certain type. Use `like(subject, type)` to test
 a subject adheres to the same interface as is defined by `type`:
 
 ```js
-var viewer = {                 // create an object with the
-  look(){}                     // same interface as Looker
+var viewer = {                // create an object with the
+  look(){}                    // same interface as Looker
 }
-is(viewer, Looker)             // false, but
-like(viewer, Looker)           // true
+is(viewer, Looker)            // false, but
+like(viewer, Looker)          // true
 ```
 
 A good example of how this might be useful can be found in the new ES6 feature Promises. 
@@ -238,10 +238,10 @@ var MyPromise = mix(superclass => class MyPromise extends superclass {
   }
 }
 // We can check whether the class is thenable using like
-like(MyPromise, Thenable)    // true
+like(MyPromise, Thenable)     // true
 // we can also check instances
 var promise = new MyPromise()
-like(promise, Thenable)      // true
+like(promise, Thenable)       // true
 // Ok, that means we can use Promise.resolve!
 Promise.resolve(promise).then((result) => {
   console.info(result)        // > 'Hello, World!'
@@ -263,7 +263,7 @@ var Custom = mix(superclass => class Custom extends superclass{
 })
 
 var test = Custom()           // > 'Custom constructor called!'
-is(test).a(Custom)            // true
+is(test, Custom)              // true
 ```
 
 ### Bonus
@@ -276,25 +276,25 @@ var factory = superclass => class Y extends superclass {}
 var Y = mix(factory)
 var Z = mix(X, Y)
 
-is(X, 'function')           // true
-is(X, 'class')              // true
-is(X, 'mixin')              // false
-is(X, 'factory')            // false
+is(X, 'function')             // true
+is(X, 'class')                // true
+is(X, 'mixin')                // false
+is(X, 'factory')              // false
 
-is(factory, 'function')     // true
-is(factory, 'class')        // false
-is(factory, 'mixin')        // false
-is(factory, 'factory')      // true
+is(factory, 'function')       // true
+is(factory, 'class')          // false
+is(factory, 'mixin')          // false
+is(factory, 'factory')        // true
 
-is(Y, 'function')           // true
-is(Y, 'class')              // false
-is(Y, 'mixin')              // true
-is(Y, 'factory')            // false
+is(Y, 'function')             // true
+is(Y, 'class')                // false
+is(Y, 'mixin')                // true
+is(Y, 'factory')              // false
 
-is(Z, 'function')           // true
-is(Z, 'class')              // false
-is(Z, 'mixin')              // true
-is(Z, 'factory')            // false
+is(Z, 'function')             // true
+is(Z, 'class')                // false
+is(Z, 'mixin')                // true
+is(Z, 'factory')              // false
 ```
 
 Supported type strings: `"class"`, `"mixin"`, `"factory"`, and any type strings 
@@ -316,4 +316,3 @@ Copyright 2017 by [Stijn de Witt](https://StijnDeWitt.com). Some rights reserved
 
 ## License
 Licensed under the [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/) Open Source license.
-
