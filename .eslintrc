@@ -8,5 +8,12 @@
     "node": true,
     "es6": true,
     "mocha": true
+  },
+  "rules": {
+    "linebreak-style": ["warn", "windows"],
+    "indent": ["warn", 4],
+    "comma-dangle": "off",
+    "max-len": ["warn", 120],
+    "strict": "off"
   }
 }
