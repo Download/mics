@@ -95,6 +95,11 @@ var Looker = mix(superclass => class Looker extends superclass {
     console.info('Looking good!')
   }
 })
+
+typeof Looker                 // 'function'
+typeof Looker.mixin           // 'function'
+typeof Looker.class           // 'function'
+typeof Looker.interface       // 'object'
 ```
 
 Notice that the argument to `mix` is an arrow function that accepts a superclass and 
@@ -110,6 +115,7 @@ new instances of the mixin. Finally it constructs the mixin's interface from the
 prototype and attaches the `mixin` function, the `class` and the `interface` to the ES5 
 constructor function, creating what in the context of **mics** we call a mixin.
 
+
 ### Creating instances of mixins
 We can directly use the created mixin to create instances, because it is just a constructor function:
 
@@ -117,9 +123,6 @@ We can directly use the created mixin to create instances, because it is just a 
 var looker = new Looker()     // > A looker is born!
 looker.look()                 // > Looking good!
 looker instanceof Looker      // true
-typeof looker.mixin           // 'function'
-typeof looker.class           // 'function'
-typeof looker.interface       // 'object'
 ```
 
 And because it's an ES5 constructor function, we are allowed to invoke it without `new`:
@@ -141,14 +144,14 @@ looker.look()                 // > Looking good!
 Let us define mixins `Walker` and `Talker` to supplement our `Looker`:
 
 ```js
-var Walker = mix(superclass => class Walker extends superclass{
-  walk(){
+var Walker = mix(superclass => class Walker extends superclass {
+  walk() {
     console.info('Step, step, step')
   }
 })
 
-var Talker = mix(superclass => class Walker extends superclass{
-  walk(){
+var Talker = mix(superclass => class Walker extends superclass {
+  walk() {
     console.info('Blah, blah, blah')
   }
 })
