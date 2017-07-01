@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 88);
+/******/ 	return __webpack_require__(__webpack_require__.s = 93);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,9 +71,9 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(2);
-var isNil = __webpack_require__(6);
-var fail = __webpack_require__(151);
-var stringify = __webpack_require__(80);
+var isNil = __webpack_require__(7);
+var fail = __webpack_require__(155);
+var stringify = __webpack_require__(85);
 
 function assert(guard, message) {
   if (guard !== true) {
@@ -97,7 +97,7 @@ module.exports = assert;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isType = __webpack_require__(3);
-var getFunctionName = __webpack_require__(25);
+var getFunctionName = __webpack_require__(28);
 
 module.exports = function getTypeName(ctor) {
   if (isType(ctor)) {
@@ -119,7 +119,7 @@ module.exports = function isFunction(x) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(2);
-var isObject = __webpack_require__(11);
+var isObject = __webpack_require__(12);
 
 module.exports = function isType(x) {
   return isFunction(x) && isObject(x.meta);
@@ -130,9 +130,9 @@ module.exports = function isType(x) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
-var isString = __webpack_require__(32);
+var isString = __webpack_require__(38);
 var isFunction = __webpack_require__(2);
-var forbidNewOperator = __webpack_require__(24);
+var forbidNewOperator = __webpack_require__(27);
 
 module.exports = function irreducible(name, predicate) {
 
@@ -171,8 +171,8 @@ module.exports = function irreducible(name, predicate) {
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isNil = __webpack_require__(6);
-var isString = __webpack_require__(32);
+var isNil = __webpack_require__(7);
+var isString = __webpack_require__(38);
 
 module.exports = function isTypeName(name) {
   return isNil(name) || isString(name);
@@ -182,18 +182,57 @@ module.exports = function isTypeName(name) {
 /* 6 */
 /***/ (function(module, exports) {
 
+/*!
+ * Chai - flag utility
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .flag(object, key, [value])
+ *
+ * Get or set a flag value on an object. If a
+ * value is provided it will be set, else it will
+ * return the currently set value or `undefined` if
+ * the value is not set.
+ *
+ *     utils.flag(this, 'foo', 'bar'); // setter
+ *     utils.flag(this, 'foo'); // getter, returns `bar`
+ *
+ * @param {Object} object constructed Assertion
+ * @param {String} key
+ * @param {Mixed} value (optional)
+ * @namespace Utils
+ * @name flag
+ * @api private
+ */
+
+module.exports = function flag(obj, key, value) {
+  var flags = obj.__flags || (obj.__flags = Object.create(null));
+  if (arguments.length === 3) {
+    flags[key] = value;
+  } else {
+    return flags[key];
+  }
+};
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
 module.exports = function isNil(x) {
   return x === null || x === void 0;
 };
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isType = __webpack_require__(3);
-var getFunctionName = __webpack_require__(25);
+var getFunctionName = __webpack_require__(28);
 var assert = __webpack_require__(0);
-var stringify = __webpack_require__(80);
+var stringify = __webpack_require__(85);
 
 // creates an instance of a type, handling the optional new operator
 module.exports = function create(type, value, path) {
@@ -211,7 +250,7 @@ module.exports = function create(type, value, path) {
 };
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isType = __webpack_require__(3);
@@ -226,7 +265,7 @@ module.exports = function is(x, type) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = function isArray(x) {
@@ -234,11 +273,11 @@ module.exports = function isArray(x) {
 };
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
-var Boolean = __webpack_require__(71);
+var Boolean = __webpack_require__(76);
 var isType = __webpack_require__(3);
 var getTypeName = __webpack_require__(1);
 
@@ -255,29 +294,266 @@ module.exports = function isIdentity(type) {
 };
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isNil = __webpack_require__(6);
-var isArray = __webpack_require__(9);
+var isNil = __webpack_require__(7);
+var isArray = __webpack_require__(10);
 
 module.exports = function isObject(x) {
   return !isNil(x) && typeof x === 'object' && !isArray(x);
 };
 
 /***/ }),
-/* 12 */
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports['default'] = /*istanbul ignore end*/Diff;
+function Diff() {}
+
+Diff.prototype = { /*istanbul ignore start*/
+  /*istanbul ignore end*/diff: function diff(oldString, newString) {
+    /*istanbul ignore start*/var /*istanbul ignore end*/options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+    var callback = options.callback;
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
+    this.options = options;
+
+    var self = this;
+
+    function done(value) {
+      if (callback) {
+        setTimeout(function () {
+          callback(undefined, value);
+        }, 0);
+        return true;
+      } else {
+        return value;
+      }
+    }
+
+    // Allow subclasses to massage the input prior to running
+    oldString = this.castInput(oldString);
+    newString = this.castInput(newString);
+
+    oldString = this.removeEmpty(this.tokenize(oldString));
+    newString = this.removeEmpty(this.tokenize(newString));
+
+    var newLen = newString.length,
+        oldLen = oldString.length;
+    var editLength = 1;
+    var maxEditLength = newLen + oldLen;
+    var bestPath = [{ newPos: -1, components: [] }];
+
+    // Seed editLength = 0, i.e. the content starts with the same values
+    var oldPos = this.extractCommon(bestPath[0], newString, oldString, 0);
+    if (bestPath[0].newPos + 1 >= newLen && oldPos + 1 >= oldLen) {
+      // Identity per the equality and tokenizer
+      return done([{ value: this.join(newString), count: newString.length }]);
+    }
+
+    // Main worker method. checks all permutations of a given edit length for acceptance.
+    function execEditLength() {
+      for (var diagonalPath = -1 * editLength; diagonalPath <= editLength; diagonalPath += 2) {
+        var basePath = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
+        var addPath = bestPath[diagonalPath - 1],
+            removePath = bestPath[diagonalPath + 1],
+            _oldPos = (removePath ? removePath.newPos : 0) - diagonalPath;
+        if (addPath) {
+          // No one else is going to attempt to use this value, clear it
+          bestPath[diagonalPath - 1] = undefined;
+        }
+
+        var canAdd = addPath && addPath.newPos + 1 < newLen,
+            canRemove = removePath && 0 <= _oldPos && _oldPos < oldLen;
+        if (!canAdd && !canRemove) {
+          // If this path is a terminal then prune
+          bestPath[diagonalPath] = undefined;
+          continue;
+        }
+
+        // Select the diagonal that we want to branch from. We select the prior
+        // path whose position in the new string is the farthest from the origin
+        // and does not pass the bounds of the diff graph
+        if (!canAdd || canRemove && addPath.newPos < removePath.newPos) {
+          basePath = clonePath(removePath);
+          self.pushComponent(basePath.components, undefined, true);
+        } else {
+          basePath = addPath; // No need to clone, we've pulled it from the list
+          basePath.newPos++;
+          self.pushComponent(basePath.components, true, undefined);
+        }
+
+        _oldPos = self.extractCommon(basePath, newString, oldString, diagonalPath);
+
+        // If we have hit the end of both strings, then we are done
+        if (basePath.newPos + 1 >= newLen && _oldPos + 1 >= oldLen) {
+          return done(buildValues(self, basePath.components, newString, oldString, self.useLongestToken));
+        } else {
+          // Otherwise track this path as a potential candidate and continue.
+          bestPath[diagonalPath] = basePath;
+        }
+      }
+
+      editLength++;
+    }
+
+    // Performs the length of edit iteration. Is a bit fugly as this has to support the
+    // sync and async mode which is never fun. Loops over execEditLength until a value
+    // is produced.
+    if (callback) {
+      (function exec() {
+        setTimeout(function () {
+          // This should not happen, but we want to be safe.
+          /* istanbul ignore next */
+          if (editLength > maxEditLength) {
+            return callback();
+          }
+
+          if (!execEditLength()) {
+            exec();
+          }
+        }, 0);
+      })();
+    } else {
+      while (editLength <= maxEditLength) {
+        var ret = execEditLength();
+        if (ret) {
+          return ret;
+        }
+      }
+    }
+  },
+  /*istanbul ignore start*/ /*istanbul ignore end*/pushComponent: function pushComponent(components, added, removed) {
+    var last = components[components.length - 1];
+    if (last && last.added === added && last.removed === removed) {
+      // We need to clone here as the component clone operation is just
+      // as shallow array clone
+      components[components.length - 1] = { count: last.count + 1, added: added, removed: removed };
+    } else {
+      components.push({ count: 1, added: added, removed: removed });
+    }
+  },
+  /*istanbul ignore start*/ /*istanbul ignore end*/extractCommon: function extractCommon(basePath, newString, oldString, diagonalPath) {
+    var newLen = newString.length,
+        oldLen = oldString.length,
+        newPos = basePath.newPos,
+        oldPos = newPos - diagonalPath,
+        commonCount = 0;
+    while (newPos + 1 < newLen && oldPos + 1 < oldLen && this.equals(newString[newPos + 1], oldString[oldPos + 1])) {
+      newPos++;
+      oldPos++;
+      commonCount++;
+    }
+
+    if (commonCount) {
+      basePath.components.push({ count: commonCount });
+    }
+
+    basePath.newPos = newPos;
+    return oldPos;
+  },
+  /*istanbul ignore start*/ /*istanbul ignore end*/equals: function equals(left, right) {
+    return left === right;
+  },
+  /*istanbul ignore start*/ /*istanbul ignore end*/removeEmpty: function removeEmpty(array) {
+    var ret = [];
+    for (var i = 0; i < array.length; i++) {
+      if (array[i]) {
+        ret.push(array[i]);
+      }
+    }
+    return ret;
+  },
+  /*istanbul ignore start*/ /*istanbul ignore end*/castInput: function castInput(value) {
+    return value;
+  },
+  /*istanbul ignore start*/ /*istanbul ignore end*/tokenize: function tokenize(value) {
+    return value.split('');
+  },
+  /*istanbul ignore start*/ /*istanbul ignore end*/join: function join(chars) {
+    return chars.join('');
+  }
+};
+
+function buildValues(diff, components, newString, oldString, useLongestToken) {
+  var componentPos = 0,
+      componentLen = components.length,
+      newPos = 0,
+      oldPos = 0;
+
+  for (; componentPos < componentLen; componentPos++) {
+    var component = components[componentPos];
+    if (!component.removed) {
+      if (!component.added && useLongestToken) {
+        var value = newString.slice(newPos, newPos + component.count);
+        value = value.map(function (value, i) {
+          var oldValue = oldString[oldPos + i];
+          return oldValue.length > value.length ? oldValue : value;
+        });
+
+        component.value = diff.join(value);
+      } else {
+        component.value = diff.join(newString.slice(newPos, newPos + component.count));
+      }
+      newPos += component.count;
+
+      // Common case
+      if (!component.added) {
+        oldPos += component.count;
+      }
+    } else {
+      component.value = diff.join(oldString.slice(oldPos, oldPos + component.count));
+      oldPos += component.count;
+
+      // Reverse add and remove so removes are output first to match common convention
+      // The diffing algorithm is tied to add then remove output and this is the simplest
+      // route to get the desired output with minimal overhead.
+      if (componentPos && components[componentPos - 1].added) {
+        var tmp = components[componentPos - 1];
+        components[componentPos - 1] = components[componentPos];
+        components[componentPos] = tmp;
+      }
+    }
+  }
+
+  // Special case handle for when one terminal is ignored. For this case we merge the
+  // terminal into the prior string and drop the change.
+  var lastComponent = components[componentLen - 1];
+  if (componentLen > 1 && (lastComponent.added || lastComponent.removed) && diff.equals('', lastComponent.value)) {
+    components[componentLen - 2].value += lastComponent.value;
+    components.pop();
+  }
+
+  return components;
+}
+
+function clonePath(path) {
+  return { newPos: path.newPos, components: path.components.slice(0) };
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL2Jhc2UuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OzRDQUF3QixJO0FBQVQsU0FBUyxJQUFULEdBQWdCLENBQUU7O0FBRWpDLEtBQUssU0FBTCxHQUFpQixFO3lCQUNmLElBRGUsZ0JBQ1YsU0FEVSxFQUNDLFNBREQsRUFDMEI7NkJBQUEsSSx1QkFBZCxPQUFjLHlEQUFKLEVBQUk7O0FBQ3ZDLFFBQUksV0FBVyxRQUFRLFFBQXZCO0FBQ0EsUUFBSSxPQUFPLE9BQVAsS0FBbUIsVUFBdkIsRUFBbUM7QUFDakMsaUJBQVcsT0FBWDtBQUNBLGdCQUFVLEVBQVY7QUFDRDtBQUNELFNBQUssT0FBTCxHQUFlLE9BQWY7O0FBRUEsUUFBSSxPQUFPLElBQVg7O0FBRUEsYUFBUyxJQUFULENBQWMsS0FBZCxFQUFxQjtBQUNuQixVQUFJLFFBQUosRUFBYztBQUNaLG1CQUFXLFlBQVc7QUFBRSxtQkFBUyxTQUFULEVBQW9CLEtBQXBCO0FBQTZCLFNBQXJELEVBQXVELENBQXZEO0FBQ0EsZUFBTyxJQUFQO0FBQ0QsT0FIRCxNQUdPO0FBQ0wsZUFBTyxLQUFQO0FBQ0Q7QUFDRjs7O0FBR0QsZ0JBQVksS0FBSyxTQUFMLENBQWUsU0FBZixDQUFaO0FBQ0EsZ0JBQVksS0FBSyxTQUFMLENBQWUsU0FBZixDQUFaOztBQUVBLGdCQUFZLEtBQUssV0FBTCxDQUFpQixLQUFLLFFBQUwsQ0FBYyxTQUFkLENBQWpCLENBQVo7QUFDQSxnQkFBWSxLQUFLLFdBQUwsQ0FBaUIsS0FBSyxRQUFMLENBQWMsU0FBZCxDQUFqQixDQUFaOztBQUVBLFFBQUksU0FBUyxVQUFVLE1BQXZCO0FBQUEsUUFBK0IsU0FBUyxVQUFVLE1BQWxEO0FBQ0EsUUFBSSxhQUFhLENBQWpCO0FBQ0EsUUFBSSxnQkFBZ0IsU0FBUyxNQUE3QjtBQUNBLFFBQUksV0FBVyxDQUFDLEVBQUUsUUFBUSxDQUFDLENBQVgsRUFBYyxZQUFZLEVBQTFCLEVBQUQsQ0FBZjs7O0FBR0EsUUFB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LFVBQUwsQ0FBZ0IsS0FBaEIsQ0FBc0IsQ0FBdEIsQ0FBbkMsRUFBUDtBQUNEIiwiZmlsZSI6ImJhc2UuanMiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBEaWZmKCkge31cblxuRGlmZi5wcm90b3R5cGUgPSB7XG4gIGRpZmYob2xkU3RyaW5nLCBuZXdTdHJpbmcsIG9wdGlvbnMgPSB7fSkge1xuICAgIGxldCBjYWxsYmFjayA9IG9wdGlvbnMuY2FsbGJhY2s7XG4gICAgaWYgKHR5cGVvZiBvcHRpb25zID09PSAnZnVuY3Rpb24nKSB7XG4gICAgICBjYWxsYmFjayA9IG9wdGlvbnM7XG4gICAgICBvcHRpb25zID0ge307XG4gICAgfVxuICAgIHRoaXMub3B0aW9ucyA9IG9wdGlvbnM7XG5cbiAgICBsZXQgc2VsZiA9IHRoaXM7XG5cbiAgICBmdW5jdGlvbiBkb25lKHZhbHVlKSB7XG4gICAgICBpZiAoY2FsbGJhY2spIHtcbiAgICAgICAgc2V0VGltZW91dChmdW5jdGlvbigpIHsgY2FsbGJhY2sodW5kZWZpbmVkLCB2YWx1ZSk7IH0sIDApO1xuICAgICAgICByZXR1cm4gdHJ1ZTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIHJldHVybiB2YWx1ZTtcbiAgICAgIH1cbiAgICB9XG5cbiAgICAvLyBBbGxvdyBzdWJjbGFzc2VzIHRvIG1hc3NhZ2UgdGhlIGlucHV0IHByaW9yIHRvIHJ1bm5pbmdcbiAgICBvbGRTdHJpbmcgPSB0aGlzLmNhc3RJbnB1dChvbGRTdHJpbmcpO1xuICAgIG5ld1N0cmluZyA9IHRoaXMuY2FzdElucHV0KG5ld1N0cmluZyk7XG5cbiAgICBvbGRTdHJpbmcgPSB0aGlzLnJlbW92ZUVtcHR5KHRoaXMudG9rZW5pemUob2xkU3RyaW5nKSk7XG4gICAgbmV3U3RyaW5nID0gdGhpcy5yZW1vdmVFbXB0eSh0aGlzLnRva2VuaXplKG5ld1N0cmluZykpO1xuXG4gICAgbGV0IG5ld0xlbiA9IG5ld1N0cmluZy5sZW5ndGgsIG9sZExlbiA9IG9sZFN0cmluZy5sZW5ndGg7XG4gICAgbGV0IGVkaXRMZW5ndGggPSAxO1xuICAgIGxldCBtYXhFZGl0TGVuZ3RoID0gbmV3TGVuICsgb2xkTGVuO1xuICAgIGxldCBiZXN0UGF0aCA9IFt7IG5ld1BvczogLTEsIGNvbXBvbmVudHM6IFtdIH1dO1xuXG4gICAgLy8gU2VlZCBlZGl0TGVuZ3RoID0gMCwgaS5lLiB0aGUgY29udGVudCBzdGFydHMgd2l0aCB0aGUgc2FtZSB2YWx1ZXNcbiAgICBsZXQgb2xkUG9zID0gdGhpcy5leHRyYWN0Q29tbW9uKGJlc3RQYXRoWzBdLCBuZXdTdHJpbmcsIG9sZFN0cmluZywgMCk7XG4gICAgaWYgKGJlc3RQYXRoWzBdLm5ld1BvcyArIDEgPj0gbmV3TGVuICYmIG9sZFBvcyArIDEgPj0gb2xkTGVuKSB7XG4gICAgICAvLyBJZGVudGl0eSBwZXIgdGhlIGVxdWFsaXR5IGFuZCB0b2tlbml6ZXJcbiAgICAgIHJldHVybiBkb25lKFt7dmFsdWU6IHRoaXMuam9pbihuZXdTdHJpbmcpLCBjb3VudDogbmV3U3RyaW5nLmxlbmd0aH1dKTtcbiAgICB9XG5cbiAgICAvLyBNYWluIHdvcmtlciBtZXRob2QuIGNoZWNrcyBhbGwgcGVybXV0YXRpb25zIG9mIGEgZ2l2ZW4gZWRpdCBsZW5ndGggZm9yIGFjY2VwdGFuY2UuXG4gICAgZnVuY3Rpb24gZXhlY0VkaXRMZW5ndGgoKSB7XG4gICAgICBmb3IgKGxldCBkaWFnb25hbFBhdGggPSAtMSAqIGVkaXRMZW5ndGg7IGRpYWdvbmFsUGF0aCA8PSBlZGl0TGVuZ3RoOyBkaWFnb25hbFBhdGggKz0gMikge1xuICAgICAgICBsZXQgYmFzZVBhdGg7XG4gICAgICAgIGxldCBhZGRQYXRoID0gYmVzdFBhdGhbZGlhZ29uYWxQYXRoIC0gMV0sXG4gICAgICAgICAgICByZW1vdmVQYXRoID0gYmVzdFBhdGhbZGlhZ29uYWxQYXRoICsgMV0sXG4gICAgICAgICAgICBvbGRQb3MgPSAocmVtb3ZlUGF0aCA/IHJlbW92ZVBhdGgubmV3UG9zIDogMCkgLSBkaWFnb25hbFBhdGg7XG4gICAgICAgIGlmIChhZGRQYXRoKSB7XG4gICAgICAgICAgLy8gTm8gb25lIGVsc2UgaXMgZ29pbmcgdG8gYXR0ZW1wdCB0byB1c2UgdGhpcyB2YWx1ZSwgY2xlYXIgaXRcbiAgICAgICAgICBiZXN0UGF0aFtkaWFnb25hbFBhdGggLSAxXSA9IHVuZGVmaW5lZDtcbiAgICAgICAgfVxuXG4gICAgICAgIGxldCBjYW5BZGQgPSBhZGRQYXRoICYmIGFkZFBhdGgubmV3UG9zICsgMSA8IG5ld0xlbixcbiAgICAgICAgICAgIGNhblJlbW92ZSA9IHJlbW92ZVBhdGggJiYgMCA8PSBvbGRQb3MgJiYgb2xkUG9zIDwgb2xkTGVuO1xuICAgICAgICBpZiAoIWNhbkFkZCAmJiAhY2FuUmVtb3ZlKSB7XG4gICAgICAgICAgLy8gSWYgdGhpcyBwYXRoIGlzIGEgdGVybWluYWwgdGhlbiBwcnVuZVxuICAgICAgICAgIGJlc3RQYXRoW2RpYWdvbmFsUGF0aF0gPSB1bmRlZmluZWQ7XG4gICAgICAgICAgY29udGludWU7XG4gICAgICAgIH1cblxuICAgICAgICAvLyBTZWxlY3QgdGhlIGRpYWdvbmFsIHRoYXQgd2Ugd2FudCB0byBicmFuY2ggZnJvbS4gV2Ugc2VsZWN0IHRoZSBwcmlvclxuICAgICAgICAvLyBwYXRoIHdob3NlIHBvc2l0aW9uIGluIHRoZSBuZXcgc3RyaW5nIGlzIHRoZSBmYXJ0aGVzdCBmcm9tIHRoZSBvcmlnaW5cbiAgICAgICAgLy8gYW5kIGRvZXMgbm90IHBhc3MgdGhlIGJvdW5kcyBvZiB0aGUgZGlmZiBncmFwaFxuICAgICAgICBpZiAoIWNhbkFkZCB8fCAoY2FuUmVtb3ZlICYmIGFkZFBhdGgubmV3UG9zIDwgcmVtb3ZlUGF0aC5uZXdQb3MpKSB7XG4gICAgICAgICAgYmFzZVBhdGggPSBjbG9uZVBhdGgocmVtb3ZlUGF0aCk7XG4gICAgICAgICAgc2VsZi5wdXNoQ29tcG9uZW50KGJhc2VQYXRoLmNvbXBvbmVudHMsIHVuZGVmaW5lZCwgdHJ1ZSk7XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgYmFzZVBhdGggPSBhZGRQYXRoOyAgIC8vIE5vIG5lZWQgdG8gY2xvbmUsIHdlJ3ZlIHB1bGxlZCBpdCBmcm9tIHRoZSBsaXN0XG4gICAgICAgICAgYmFzZVBhdGgubmV3UG9zKys7XG4gICAgICAgICAgc2VsZi5wdXNoQ29tcG9uZW50KGJhc2VQYXRoLmNvbXBvbmVudHMsIHRydWUsIHVuZGVmaW5lZCk7XG4gICAgICAgIH1cblxuICAgICAgICBvbGRQb3MgPSBzZWxmLmV4dHJhY3RDb21tb24oYmFzZVBhdGgsIG5ld1N0cmluZywgb2xkU3RyaW5nLCBkaWFnb25hbFBhdGgpO1xuXG4gICAgICAgIC8vIElmIHdlIGhhdmUgaGl0IHRoZSBlbmQgb2YgYm90aCBzdHJpbmdzLCB0aGVuIHdlIGFyZSBkb25lXG4gICAgICAgIGlmIChiYXNlUGF0aC5uZXdQb3MgKyAxID49IG5ld0xlbiAmJiBvbGRQb3MgKyAxID49IG9sZExlbikge1xuICAgICAgICAgIHJldHVybiBkb25lKGJ1aWxkVmFsdWVzKHNlbGYsIGJhc2VQYXRoLmNvbXBvbmVudHMsIG5ld1N0cmluZywgb2xkU3RyaW5nLCBzZWxmLnVzZUxvbmdlc3RUb2tlbikpO1xuICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgIC8vIE90aGVyd2lzZSB0cmFjayB0aGlzIHBhdGggYXMgYSBwb3RlbnRpYWwgY2FuZGlkYXRlIGFuZCBjb250aW51ZS5cbiAgICAgICAgICBiZXN0UGF0aFtkaWFnb25hbFBhdGhdID0gYmFzZVBhdGg7XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgZWRpdExlbmd0aCsrO1xuICAgIH1cblxuICAgIC8vIFBlcmZvcm1zIHRoZSBsZW5ndGggb2YgZWRpdCBpdGVyYXRpb24uIElzIGEgYml0IGZ1Z2x5IGFzIHRoaXMgaGFzIHRvIHN1cHBvcnQgdGhlXG4gICAgLy8gc3luYyBhbmQgYXN5bmMgbW9kZSB3aGljaCBpcyBuZXZlciBmdW4uIExvb3BzIG92ZXIgZXhlY0VkaXRMZW5ndGggdW50aWwgYSB2YWx1ZVxuICAgIC8vIGlzIHByb2R1Y2VkLlxuICAgIGlmIChjYWxsYmFjaykge1xuICAgICAgKGZ1bmN0aW9uIGV4ZWMoKSB7XG4gICAgICAgIHNldFRpbWVvdXQoZnVuY3Rpb24oKSB7XG4gICAgICAgICAgLy8gVGhpcyBzaG91bGQgbm90IGhhcHBlbiwgYnV0IHdlIHdhbnQgdG8gYmUgc2FmZS5cbiAgICAgICAgICAvKiBpc3RhbmJ1bCBpZ25vcmUgbmV4dCAqL1xuICAgICAgICAgIGlmIChlZGl0TGVuZ3RoID4gbWF4RWRpdExlbmd0aCkge1xuICAgICAgICAgICAgcmV0dXJuIGNhbGxiYWNrKCk7XG4gICAgICAgICAgfVxuXG4gICAgICAgICAgaWYgKCFleGVjRWRpdExlbmd0aCgpKSB7XG4gICAgICAgICAgICBleGVjKCk7XG4gICAgICAgICAgfVxuICAgICAgICB9LCAwKTtcbiAgICAgIH0oKSk7XG4gICAgfSBlbHNlIHtcbiAgICAgIHdoaWxlIChlZGl0TGVuZ3RoIDw9IG1heEVkaXRMZW5ndGgpIHtcbiAgICAgICAgbGV0IHJldCA9IGV4ZWNFZGl0TGVuZ3RoKCk7XG4gICAgICAgIGlmIChyZXQpIHtcbiAgICAgICAgICByZXR1cm4gcmV0O1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuICB9LFxuXG4gIHB1c2hDb21wb25lbnQoY29tcG9uZW50cywgYWRkZWQsIHJlbW92ZWQpIHtcbiAgICBsZXQgbGFzdCA9IGNvbXBvbmVudHNbY29tcG9uZW50cy5sZW5ndGggLSAxXTtcbiAgICBpZiAobGFzdCAmJiBsYXN0LmFkZGVkID09PSBhZGRlZCAmJiBsYXN0LnJlbW92ZWQgPT09IHJlbW92ZWQpIHtcbiAgICAgIC8vIFdlIG5lZWQgdG8gY2xvbmUgaGVyZSBhcyB0aGUgY29tcG9uZW50IGNsb25lIG9wZXJhdGlvbiBpcyBqdXN0XG4gICAgICAvLyBhcyBzaGFsbG93IGFycmF5IGNsb25lXG4gICAgICBjb21wb25lbnRzW2NvbXBvbmVudHMubGVuZ3RoIC0gMV0gPSB7Y291bnQ6IGxhc3QuY291bnQgKyAxLCBhZGRlZDogYWRkZWQsIHJlbW92ZWQ6IHJlbW92ZWQgfTtcbiAgICB9IGVsc2Uge1xuICAgICAgY29tcG9uZW50cy5wdXNoKHtjb3VudDogMSwgYWRkZWQ6IGFkZGVkLCByZW1vdmVkOiByZW1vdmVkIH0pO1xuICAgIH1cbiAgfSxcbiAgZXh0cmFjdENvbW1vbihiYXNlUGF0aCwgbmV3U3RyaW5nLCBvbGRTdHJpbmcsIGRpYWdvbmFsUGF0aCkge1xuICAgIGxldCBuZXdMZW4gPSBuZXdTdHJpbmcubGVuZ3RoLFxuICAgICAgICBvbGRMZW4gPSBvbGRTdHJpbmcubGVuZ3RoLFxuICAgICAgICBuZXdQb3MgPSBiYXNlUGF0aC5uZXdQb3MsXG4gICAgICAgIG9sZFBvcyA9IG5ld1BvcyAtIGRpYWdvbmFsUGF0aCxcblxuICAgICAgICBjb21tb25Db3VudCA9IDA7XG4gICAgd2hpbGUgKG5ld1BvcyArIDEgPCBuZXdMZW4gJiYgb2xkUG9zICsgMSA8IG9sZExlbiAmJiB0aGlzLmVxdWFscyhuZXdTdHJpbmdbbmV3UG9zICsgMV0sIG9sZFN0cmluZ1tvbGRQb3MgKyAxXSkpIHtcbiAgICAgIG5ld1BvcysrO1xuICAgICAgb2xkUG9zKys7XG4gICAgICBjb21tb25Db3VudCsrO1xuICAgIH1cblxuICAgIGlmIChjb21tb25Db3VudCkge1xuICAgICAgYmFzZVBhdGguY29tcG9uZW50cy5wdXNoKHtjb3VudDogY29tbW9uQ291bnR9KTtcbiAgICB9XG5cbiAgICBiYXNlUGF0aC5uZXdQb3MgPSBuZXdQb3M7XG4gICAgcmV0dXJuIG9sZFBvcztcbiAgfSxcblxuICBlcXVhbHMobGVmdCwgcmlnaHQpIHtcbiAgICByZXR1cm4gbGVmdCA9PT0gcmlnaHQ7XG4gIH0sXG4gIHJlbW92ZUVtcHR5KGFycmF5KSB7XG4gICAgbGV0IHJldCA9IFtdO1xuICAgIGZvciAobGV0IGkgPSAwOyBpIDwgYXJyYXkubGVuZ3RoOyBpKyspIHtcbiAgICAgIGlmIChhcnJheVtpXSkge1xuICAgICAgICByZXQucHVzaChhcnJheVtpXSk7XG4gICAgICB9XG4gICAgfVxuICAgIHJldHVybiByZXQ7XG4gIH0sXG4gIGNhc3RJbnB1dCh2YWx1ZSkge1xuICAgIHJldHVybiB2YWx1ZTtcbiAgfSxcbiAgdG9rZW5pemUodmFsdWUpIHtcbiAgICByZXR1cm4gdmFsdWUuc3BsaXQoJycpO1xuICB9LFxuICBqb2luKGNoYXJzKSB7XG4gICAgcmV0dXJuIGNoYXJzLmpvaW4oJycpO1xuICB9XG59O1xuXG5mdW5jdGlvbiBidWlsZFZhbHVlcyhkaWZmLCBjb21wb25lbnRzLCBuZXdTdHJpbmcsIG9sZFN0cmluZywgdXNlTG9uZ2VzdFRva2VuKSB7XG4gIGxldCBjb21wb25lbnRQb3MgPSAwLFxuICAgICAgY29tcG9uZW50TGVuID0gY29tcG9uZW50cy5sZW5ndGgsXG4gICAgICBuZXdQb3MgPSAwLFxuICAgICAgb2xkUG9zID0gMDtcblxuICBmb3IgKDsgY29tcG9uZW50UG9zIDwgY29tcG9uZW50TGVuOyBjb21wb25lbnRQb3MrKykge1xuICAgIGxldCBjb21wb25lbnQgPSBjb21wb25lbnRzW2NvbXBvbmVudFBvc107XG4gICAgaWYgKCFjb21wb25lbnQucmVtb3ZlZCkge1xuICAgICAgaWYgKCFjb21wb25lbnQuYWRkZWQgJiYgdXNlTG9uZ2VzdFRva2VuKSB7XG4gICAgICAgIGxldCB2YWx1ZSA9IG5ld1N0cmluZy5zbGljZShuZXdQb3MsIG5ld1BvcyArIGNvbXBvbmVudC5jb3VudCk7XG4gICAgICAgIHZhbHVlID0gdmFsdWUubWFwKGZ1bmN0aW9uKHZhbHVlLCBpKSB7XG4gICAgICAgICAgbGV0IG9sZFZhbHVlID0gb2xkU3RyaW5nW29sZFBvcyArIGldO1xuICAgICAgICAgIHJldHVybiBvbGRWYWx1ZS5sZW5ndGggPiB2YWx1ZS5sZW5ndGggPyBvbGRWYWx1ZSA6IHZhbHVlO1xuICAgICAgICB9KTtcblxuICAgICAgICBjb21wb25lbnQudmFsdWUgPSBkaWZmLmpvaW4odmFsdWUpO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgY29tcG9uZW50LnZhbHVlID0gZGlmZi5qb2luKG5ld1N0cmluZy5zbGljZShuZXdQb3MsIG5ld1BvcyArIGNvbXBvbmVudC5jb3VudCkpO1xuICAgICAgfVxuICAgICAgbmV3UG9zICs9IGNvbXBvbmVudC5jb3VudDtcblxuICAgICAgLy8gQ29tbW9uIGNhc2VcbiAgICAgIGlmICghY29tcG9uZW50LmFkZGVkKSB7XG4gICAgICAgIG9sZFBvcyArPSBjb21wb25lbnQuY291bnQ7XG4gICAgICB9XG4gICAgfSBlbHNlIHtcbiAgICAgIGNvbXBvbmVudC52YWx1ZSA9IGRpZmYuam9pbihvbGRTdHJpbmcuc2xpY2Uob2xkUG9zLCBvbGRQb3MgKyBjb21wb25lbnQuY291bnQpKTtcbiAgICAgIG9sZFBvcyArPSBjb21wb25lbnQuY291bnQ7XG5cbiAgICAgIC8vIFJldmVyc2UgYWRkIGFuZCByZW1vdmUgc28gcmVtb3ZlcyBhcmUgb3V0cHV0IGZpcnN0IHRvIG1hdGNoIGNvbW1vbiBjb252ZW50aW9uXG4gICAgICAvLyBUaGUgZGlmZmluZyBhbGdvcml0aG0gaXMgdGllZCB0byBhZGQgdGhlbiByZW1vdmUgb3V0cHV0IGFuZCB0aGlzIGlzIHRoZSBzaW1wbGVzdFxuICAgICAgLy8gcm91dGUgdG8gZ2V0IHRoZSBkZXNpcmVkIG91dHB1dCB3aXRoIG1pbmltYWwgb3ZlcmhlYWQuXG4gICAgICBpZiAoY29tcG9uZW50UG9zICYmIGNvbXBvbmVudHNbY29tcG9uZW50UG9zIC0gMV0uYWRkZWQpIHtcbiAgICAgICAgbGV0IHRtcCA9IGNvbXBvbmVudHNbY29tcG9uZW50UG9zIC0gMV07XG4gICAgICAgIGNvbXBvbmVudHNbY29tcG9uZW50UG9zIC0gMV0gPSBjb21wb25lbnRzW2NvbXBvbmVudFBvc107XG4gICAgICAgIGNvbXBvbmVudHNbY29tcG9uZW50UG9zXSA9IHRtcDtcbiAgICAgIH1cbiAgICB9XG4gIH1cblxuICAvLyBTcGVjaWFsIGNhc2UgaGFuZGxlIGZvciB3aGVuIG9uZSB0ZXJtaW5hbCBpcyBpZ25vcmVkLiBGb3IgdGhpcyBjYXNlIHdlIG1lcmdlIHRoZVxuICAvLyB0ZXJtaW5hbCBpbnRvIHRoZSBwcmlvciBzdHJpbmcgYW5kIGRyb3AgdGhlIGNoYW5nZS5cbiAgbGV0IGxhc3RDb21wb25lbnQgPSBjb21wb25lbnRzW2NvbXBvbmVudExlbiAtIDFdO1xuICBpZiAoY29tcG9uZW50TGVuID4gMVxuICAgICAgJiYgKGxhc3RDb21wb25lbnQuYWRkZWQgfHwgbGFzdENvbXBvbmVudC5yZW1vdmVkKVxuICAgICAgJiYgZGlmZi5lcXVhbHMoJycsIGxhc3RDb21wb25lbnQudmFsdWUpKSB7XG4gICAgY29tcG9uZW50c1tjb21wb25lbnRMZW4gLSAyXS52YWx1ZSArPSBsYXN0Q29tcG9uZW50LnZhbHVlO1xuICAgIGNvbXBvbmVudHMucG9wKCk7XG4gIH1cblxuICByZXR1cm4gY29tcG9uZW50cztcbn1cblxuZnVuY3Rpb24gY2xvbmVQYXRoKHBhdGgpIHtcbiAgcmV0dXJuIHsgbmV3UG9zOiBwYXRoLm5ld1BvcywgY29tcG9uZW50czogcGF0aC5jb21wb25lbnRzLnNsaWNlKDApIH07XG59XG4iXX0=
+
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var deepEqual = __webpack_require__(17).use(match); // eslint-disable-line no-use-before-define
-var every = __webpack_require__(64);
-var functionName = __webpack_require__(22);
-var iterableToString = __webpack_require__(65);
-var typeOf = __webpack_require__(37);
-var valueToString = __webpack_require__(14);
+var deepEqual = __webpack_require__(21).use(match); // eslint-disable-line no-use-before-define
+var every = __webpack_require__(71);
+var functionName = __webpack_require__(25);
+var iterableToString = __webpack_require__(72);
+var typeOf = __webpack_require__(44);
+var valueToString = __webpack_require__(17);
 
 var indexOf = Array.prototype.indexOf;
 
@@ -579,7 +855,7 @@ module.exports = match;
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -662,7 +938,25 @@ module.exports = function extend(target /*, sources */) {
 
 
 /***/ }),
-/* 14 */
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function getPropertyDescriptor(object, property) {
+    var proto = object;
+    var descriptor;
+
+    while (proto && !(descriptor = Object.getOwnPropertyDescriptor(proto, property))) {
+        proto = Object.getPrototypeOf(proto);
+    }
+    return descriptor;
+};
+
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -677,283 +971,256 @@ module.exports = function (value) {
 
 
 /***/ }),
-/* 15 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/*istanbul ignore start*/
+/*!
+ * chai
+ * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
 
-exports.__esModule = true;
-exports['default'] = /*istanbul ignore end*/Diff;
-function Diff() {}
+var used = [];
 
-Diff.prototype = { /*istanbul ignore start*/
-  /*istanbul ignore end*/diff: function diff(oldString, newString) {
-    /*istanbul ignore start*/var /*istanbul ignore end*/options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+/*!
+ * Chai version
+ */
 
-    var callback = options.callback;
-    if (typeof options === 'function') {
-      callback = options;
-      options = {};
-    }
-    this.options = options;
+exports.version = '4.0.2';
 
-    var self = this;
+/*!
+ * Assertion Error
+ */
 
-    function done(value) {
-      if (callback) {
-        setTimeout(function () {
-          callback(undefined, value);
-        }, 0);
-        return true;
-      } else {
-        return value;
-      }
-    }
+exports.AssertionError = __webpack_require__(54);
 
-    // Allow subclasses to massage the input prior to running
-    oldString = this.castInput(oldString);
-    newString = this.castInput(newString);
+/*!
+ * Utils for plugins (not exported)
+ */
 
-    oldString = this.removeEmpty(this.tokenize(oldString));
-    newString = this.removeEmpty(this.tokenize(newString));
+var util = __webpack_require__(107);
 
-    var newLen = newString.length,
-        oldLen = oldString.length;
-    var editLength = 1;
-    var maxEditLength = newLen + oldLen;
-    var bestPath = [{ newPos: -1, components: [] }];
+/**
+ * # .use(function)
+ *
+ * Provides a way to extend the internals of Chai.
+ *
+ * @param {Function}
+ * @returns {this} for chaining
+ * @api public
+ */
 
-    // Seed editLength = 0, i.e. the content starts with the same values
-    var oldPos = this.extractCommon(bestPath[0], newString, oldString, 0);
-    if (bestPath[0].newPos + 1 >= newLen && oldPos + 1 >= oldLen) {
-      // Identity per the equality and tokenizer
-      return done([{ value: this.join(newString), count: newString.length }]);
-    }
-
-    // Main worker method. checks all permutations of a given edit length for acceptance.
-    function execEditLength() {
-      for (var diagonalPath = -1 * editLength; diagonalPath <= editLength; diagonalPath += 2) {
-        var basePath = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
-        var addPath = bestPath[diagonalPath - 1],
-            removePath = bestPath[diagonalPath + 1],
-            _oldPos = (removePath ? removePath.newPos : 0) - diagonalPath;
-        if (addPath) {
-          // No one else is going to attempt to use this value, clear it
-          bestPath[diagonalPath - 1] = undefined;
-        }
-
-        var canAdd = addPath && addPath.newPos + 1 < newLen,
-            canRemove = removePath && 0 <= _oldPos && _oldPos < oldLen;
-        if (!canAdd && !canRemove) {
-          // If this path is a terminal then prune
-          bestPath[diagonalPath] = undefined;
-          continue;
-        }
-
-        // Select the diagonal that we want to branch from. We select the prior
-        // path whose position in the new string is the farthest from the origin
-        // and does not pass the bounds of the diff graph
-        if (!canAdd || canRemove && addPath.newPos < removePath.newPos) {
-          basePath = clonePath(removePath);
-          self.pushComponent(basePath.components, undefined, true);
-        } else {
-          basePath = addPath; // No need to clone, we've pulled it from the list
-          basePath.newPos++;
-          self.pushComponent(basePath.components, true, undefined);
-        }
-
-        _oldPos = self.extractCommon(basePath, newString, oldString, diagonalPath);
-
-        // If we have hit the end of both strings, then we are done
-        if (basePath.newPos + 1 >= newLen && _oldPos + 1 >= oldLen) {
-          return done(buildValues(self, basePath.components, newString, oldString, self.useLongestToken));
-        } else {
-          // Otherwise track this path as a potential candidate and continue.
-          bestPath[diagonalPath] = basePath;
-        }
-      }
-
-      editLength++;
-    }
-
-    // Performs the length of edit iteration. Is a bit fugly as this has to support the
-    // sync and async mode which is never fun. Loops over execEditLength until a value
-    // is produced.
-    if (callback) {
-      (function exec() {
-        setTimeout(function () {
-          // This should not happen, but we want to be safe.
-          /* istanbul ignore next */
-          if (editLength > maxEditLength) {
-            return callback();
-          }
-
-          if (!execEditLength()) {
-            exec();
-          }
-        }, 0);
-      })();
-    } else {
-      while (editLength <= maxEditLength) {
-        var ret = execEditLength();
-        if (ret) {
-          return ret;
-        }
-      }
-    }
-  },
-  /*istanbul ignore start*/ /*istanbul ignore end*/pushComponent: function pushComponent(components, added, removed) {
-    var last = components[components.length - 1];
-    if (last && last.added === added && last.removed === removed) {
-      // We need to clone here as the component clone operation is just
-      // as shallow array clone
-      components[components.length - 1] = { count: last.count + 1, added: added, removed: removed };
-    } else {
-      components.push({ count: 1, added: added, removed: removed });
-    }
-  },
-  /*istanbul ignore start*/ /*istanbul ignore end*/extractCommon: function extractCommon(basePath, newString, oldString, diagonalPath) {
-    var newLen = newString.length,
-        oldLen = oldString.length,
-        newPos = basePath.newPos,
-        oldPos = newPos - diagonalPath,
-        commonCount = 0;
-    while (newPos + 1 < newLen && oldPos + 1 < oldLen && this.equals(newString[newPos + 1], oldString[oldPos + 1])) {
-      newPos++;
-      oldPos++;
-      commonCount++;
-    }
-
-    if (commonCount) {
-      basePath.components.push({ count: commonCount });
-    }
-
-    basePath.newPos = newPos;
-    return oldPos;
-  },
-  /*istanbul ignore start*/ /*istanbul ignore end*/equals: function equals(left, right) {
-    return left === right;
-  },
-  /*istanbul ignore start*/ /*istanbul ignore end*/removeEmpty: function removeEmpty(array) {
-    var ret = [];
-    for (var i = 0; i < array.length; i++) {
-      if (array[i]) {
-        ret.push(array[i]);
-      }
-    }
-    return ret;
-  },
-  /*istanbul ignore start*/ /*istanbul ignore end*/castInput: function castInput(value) {
-    return value;
-  },
-  /*istanbul ignore start*/ /*istanbul ignore end*/tokenize: function tokenize(value) {
-    return value.split('');
-  },
-  /*istanbul ignore start*/ /*istanbul ignore end*/join: function join(chars) {
-    return chars.join('');
+exports.use = function (fn) {
+  if (!~used.indexOf(fn)) {
+    fn(exports, util);
+    used.push(fn);
   }
+
+  return exports;
 };
 
-function buildValues(diff, components, newString, oldString, useLongestToken) {
-  var componentPos = 0,
-      componentLen = components.length,
-      newPos = 0,
-      oldPos = 0;
+/*!
+ * Utility Functions
+ */
 
-  for (; componentPos < componentLen; componentPos++) {
-    var component = components[componentPos];
-    if (!component.removed) {
-      if (!component.added && useLongestToken) {
-        var value = newString.slice(newPos, newPos + component.count);
-        value = value.map(function (value, i) {
-          var oldValue = oldString[oldPos + i];
-          return oldValue.length > value.length ? oldValue : value;
-        });
+exports.util = util;
 
-        component.value = diff.join(value);
-      } else {
-        component.value = diff.join(newString.slice(newPos, newPos + component.count));
-      }
-      newPos += component.count;
+/*!
+ * Configuration
+ */
 
-      // Common case
-      if (!component.added) {
-        oldPos += component.count;
-      }
-    } else {
-      component.value = diff.join(oldString.slice(oldPos, oldPos + component.count));
-      oldPos += component.count;
+var config = __webpack_require__(19);
+exports.config = config;
 
-      // Reverse add and remove so removes are output first to match common convention
-      // The diffing algorithm is tied to add then remove output and this is the simplest
-      // route to get the desired output with minimal overhead.
-      if (componentPos && components[componentPos - 1].added) {
-        var tmp = components[componentPos - 1];
-        components[componentPos - 1] = components[componentPos];
-        components[componentPos] = tmp;
-      }
-    }
-  }
+/*!
+ * Primary `Assertion` prototype
+ */
 
-  // Special case handle for when one terminal is ignored. For this case we merge the
-  // terminal into the prior string and drop the change.
-  var lastComponent = components[componentLen - 1];
-  if (componentLen > 1 && (lastComponent.added || lastComponent.removed) && diff.equals('', lastComponent.value)) {
-    components[componentLen - 2].value += lastComponent.value;
-    components.pop();
-  }
+var assertion = __webpack_require__(94);
+exports.use(assertion);
 
-  return components;
-}
+/*!
+ * Core Assertions
+ */
 
-function clonePath(path) {
-  return { newPos: path.newPos, components: path.components.slice(0) };
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL2Jhc2UuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OzRDQUF3QixJO0FBQVQsU0FBUyxJQUFULEdBQWdCLENBQUU7O0FBRWpDLEtBQUssU0FBTCxHQUFpQixFO3lCQUNmLElBRGUsZ0JBQ1YsU0FEVSxFQUNDLFNBREQsRUFDMEI7NkJBQUEsSSx1QkFBZCxPQUFjLHlEQUFKLEVBQUk7O0FBQ3ZDLFFBQUksV0FBVyxRQUFRLFFBQXZCO0FBQ0EsUUFBSSxPQUFPLE9BQVAsS0FBbUIsVUFBdkIsRUFBbUM7QUFDakMsaUJBQVcsT0FBWDtBQUNBLGdCQUFVLEVBQVY7QUFDRDtBQUNELFNBQUssT0FBTCxHQUFlLE9BQWY7O0FBRUEsUUFBSSxPQUFPLElBQVg7O0FBRUEsYUFBUyxJQUFULENBQWMsS0FBZCxFQUFxQjtBQUNuQixVQUFJLFFBQUosRUFBYztBQUNaLG1CQUFXLFlBQVc7QUFBRSxtQkFBUyxTQUFULEVBQW9CLEtBQXBCO0FBQTZCLFNBQXJELEVBQXVELENBQXZEO0FBQ0EsZUFBTyxJQUFQO0FBQ0QsT0FIRCxNQUdPO0FBQ0wsZUFBTyxLQUFQO0FBQ0Q7QUFDRjs7O0FBR0QsZ0JBQVksS0FBSyxTQUFMLENBQWUsU0FBZixDQUFaO0FBQ0EsZ0JBQVksS0FBSyxTQUFMLENBQWUsU0FBZixDQUFaOztBQUVBLGdCQUFZLEtBQUssV0FBTCxDQUFpQixLQUFLLFFBQUwsQ0FBYyxTQUFkLENBQWpCLENBQVo7QUFDQSxnQkFBWSxLQUFLLFdBQUwsQ0FBaUIsS0FBSyxRQUFMLENBQWMsU0FBZCxDQUFqQixDQUFaOztBQUVBLFFBQUksU0FBUyxVQUFVLE1BQXZCO0FBQUEsUUFBK0IsU0FBUyxVQUFVLE1BQWxEO0FBQ0EsUUFBSSxhQUFhLENBQWpCO0FBQ0EsUUFBSSxnQkFBZ0IsU0FBUyxNQUE3QjtBQUNBLFFBQUksV0FBVyxDQUFDLEVBQUUsUUFBUSxDQUFDLENBQVgsRUFBYyxZQUFZLEVBQTFCLEVBQUQsQ0FBZjs7O0FBR0EsUUFB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LFVBQUwsQ0FBZ0IsS0FBaEIsQ0FBc0IsQ0FBdEIsQ0FBbkMsRUFBUDtBQUNEIiwiZmlsZSI6ImJhc2UuanMiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBEaWZmKCkge31cblxuRGlmZi5wcm90b3R5cGUgPSB7XG4gIGRpZmYob2xkU3RyaW5nLCBuZXdTdHJpbmcsIG9wdGlvbnMgPSB7fSkge1xuICAgIGxldCBjYWxsYmFjayA9IG9wdGlvbnMuY2FsbGJhY2s7XG4gICAgaWYgKHR5cGVvZiBvcHRpb25zID09PSAnZnVuY3Rpb24nKSB7XG4gICAgICBjYWxsYmFjayA9IG9wdGlvbnM7XG4gICAgICBvcHRpb25zID0ge307XG4gICAgfVxuICAgIHRoaXMub3B0aW9ucyA9IG9wdGlvbnM7XG5cbiAgICBsZXQgc2VsZiA9IHRoaXM7XG5cbiAgICBmdW5jdGlvbiBkb25lKHZhbHVlKSB7XG4gICAgICBpZiAoY2FsbGJhY2spIHtcbiAgICAgICAgc2V0VGltZW91dChmdW5jdGlvbigpIHsgY2FsbGJhY2sodW5kZWZpbmVkLCB2YWx1ZSk7IH0sIDApO1xuICAgICAgICByZXR1cm4gdHJ1ZTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIHJldHVybiB2YWx1ZTtcbiAgICAgIH1cbiAgICB9XG5cbiAgICAvLyBBbGxvdyBzdWJjbGFzc2VzIHRvIG1hc3NhZ2UgdGhlIGlucHV0IHByaW9yIHRvIHJ1bm5pbmdcbiAgICBvbGRTdHJpbmcgPSB0aGlzLmNhc3RJbnB1dChvbGRTdHJpbmcpO1xuICAgIG5ld1N0cmluZyA9IHRoaXMuY2FzdElucHV0KG5ld1N0cmluZyk7XG5cbiAgICBvbGRTdHJpbmcgPSB0aGlzLnJlbW92ZUVtcHR5KHRoaXMudG9rZW5pemUob2xkU3RyaW5nKSk7XG4gICAgbmV3U3RyaW5nID0gdGhpcy5yZW1vdmVFbXB0eSh0aGlzLnRva2VuaXplKG5ld1N0cmluZykpO1xuXG4gICAgbGV0IG5ld0xlbiA9IG5ld1N0cmluZy5sZW5ndGgsIG9sZExlbiA9IG9sZFN0cmluZy5sZW5ndGg7XG4gICAgbGV0IGVkaXRMZW5ndGggPSAxO1xuICAgIGxldCBtYXhFZGl0TGVuZ3RoID0gbmV3TGVuICsgb2xkTGVuO1xuICAgIGxldCBiZXN0UGF0aCA9IFt7IG5ld1BvczogLTEsIGNvbXBvbmVudHM6IFtdIH1dO1xuXG4gICAgLy8gU2VlZCBlZGl0TGVuZ3RoID0gMCwgaS5lLiB0aGUgY29udGVudCBzdGFydHMgd2l0aCB0aGUgc2FtZSB2YWx1ZXNcbiAgICBsZXQgb2xkUG9zID0gdGhpcy5leHRyYWN0Q29tbW9uKGJlc3RQYXRoWzBdLCBuZXdTdHJpbmcsIG9sZFN0cmluZywgMCk7XG4gICAgaWYgKGJlc3RQYXRoWzBdLm5ld1BvcyArIDEgPj0gbmV3TGVuICYmIG9sZFBvcyArIDEgPj0gb2xkTGVuKSB7XG4gICAgICAvLyBJZGVudGl0eSBwZXIgdGhlIGVxdWFsaXR5IGFuZCB0b2tlbml6ZXJcbiAgICAgIHJldHVybiBkb25lKFt7dmFsdWU6IHRoaXMuam9pbihuZXdTdHJpbmcpLCBjb3VudDogbmV3U3RyaW5nLmxlbmd0aH1dKTtcbiAgICB9XG5cbiAgICAvLyBNYWluIHdvcmtlciBtZXRob2QuIGNoZWNrcyBhbGwgcGVybXV0YXRpb25zIG9mIGEgZ2l2ZW4gZWRpdCBsZW5ndGggZm9yIGFjY2VwdGFuY2UuXG4gICAgZnVuY3Rpb24gZXhlY0VkaXRMZW5ndGgoKSB7XG4gICAgICBmb3IgKGxldCBkaWFnb25hbFBhdGggPSAtMSAqIGVkaXRMZW5ndGg7IGRpYWdvbmFsUGF0aCA8PSBlZGl0TGVuZ3RoOyBkaWFnb25hbFBhdGggKz0gMikge1xuICAgICAgICBsZXQgYmFzZVBhdGg7XG4gICAgICAgIGxldCBhZGRQYXRoID0gYmVzdFBhdGhbZGlhZ29uYWxQYXRoIC0gMV0sXG4gICAgICAgICAgICByZW1vdmVQYXRoID0gYmVzdFBhdGhbZGlhZ29uYWxQYXRoICsgMV0sXG4gICAgICAgICAgICBvbGRQb3MgPSAocmVtb3ZlUGF0aCA/IHJlbW92ZVBhdGgubmV3UG9zIDogMCkgLSBkaWFnb25hbFBhdGg7XG4gICAgICAgIGlmIChhZGRQYXRoKSB7XG4gICAgICAgICAgLy8gTm8gb25lIGVsc2UgaXMgZ29pbmcgdG8gYXR0ZW1wdCB0byB1c2UgdGhpcyB2YWx1ZSwgY2xlYXIgaXRcbiAgICAgICAgICBiZXN0UGF0aFtkaWFnb25hbFBhdGggLSAxXSA9IHVuZGVmaW5lZDtcbiAgICAgICAgfVxuXG4gICAgICAgIGxldCBjYW5BZGQgPSBhZGRQYXRoICYmIGFkZFBhdGgubmV3UG9zICsgMSA8IG5ld0xlbixcbiAgICAgICAgICAgIGNhblJlbW92ZSA9IHJlbW92ZVBhdGggJiYgMCA8PSBvbGRQb3MgJiYgb2xkUG9zIDwgb2xkTGVuO1xuICAgICAgICBpZiAoIWNhbkFkZCAmJiAhY2FuUmVtb3ZlKSB7XG4gICAgICAgICAgLy8gSWYgdGhpcyBwYXRoIGlzIGEgdGVybWluYWwgdGhlbiBwcnVuZVxuICAgICAgICAgIGJlc3RQYXRoW2RpYWdvbmFsUGF0aF0gPSB1bmRlZmluZWQ7XG4gICAgICAgICAgY29udGludWU7XG4gICAgICAgIH1cblxuICAgICAgICAvLyBTZWxlY3QgdGhlIGRpYWdvbmFsIHRoYXQgd2Ugd2FudCB0byBicmFuY2ggZnJvbS4gV2Ugc2VsZWN0IHRoZSBwcmlvclxuICAgICAgICAvLyBwYXRoIHdob3NlIHBvc2l0aW9uIGluIHRoZSBuZXcgc3RyaW5nIGlzIHRoZSBmYXJ0aGVzdCBmcm9tIHRoZSBvcmlnaW5cbiAgICAgICAgLy8gYW5kIGRvZXMgbm90IHBhc3MgdGhlIGJvdW5kcyBvZiB0aGUgZGlmZiBncmFwaFxuICAgICAgICBpZiAoIWNhbkFkZCB8fCAoY2FuUmVtb3ZlICYmIGFkZFBhdGgubmV3UG9zIDwgcmVtb3ZlUGF0aC5uZXdQb3MpKSB7XG4gICAgICAgICAgYmFzZVBhdGggPSBjbG9uZVBhdGgocmVtb3ZlUGF0aCk7XG4gICAgICAgICAgc2VsZi5wdXNoQ29tcG9uZW50KGJhc2VQYXRoLmNvbXBvbmVudHMsIHVuZGVmaW5lZCwgdHJ1ZSk7XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgYmFzZVBhdGggPSBhZGRQYXRoOyAgIC8vIE5vIG5lZWQgdG8gY2xvbmUsIHdlJ3ZlIHB1bGxlZCBpdCBmcm9tIHRoZSBsaXN0XG4gICAgICAgICAgYmFzZVBhdGgubmV3UG9zKys7XG4gICAgICAgICAgc2VsZi5wdXNoQ29tcG9uZW50KGJhc2VQYXRoLmNvbXBvbmVudHMsIHRydWUsIHVuZGVmaW5lZCk7XG4gICAgICAgIH1cblxuICAgICAgICBvbGRQb3MgPSBzZWxmLmV4dHJhY3RDb21tb24oYmFzZVBhdGgsIG5ld1N0cmluZywgb2xkU3RyaW5nLCBkaWFnb25hbFBhdGgpO1xuXG4gICAgICAgIC8vIElmIHdlIGhhdmUgaGl0IHRoZSBlbmQgb2YgYm90aCBzdHJpbmdzLCB0aGVuIHdlIGFyZSBkb25lXG4gICAgICAgIGlmIChiYXNlUGF0aC5uZXdQb3MgKyAxID49IG5ld0xlbiAmJiBvbGRQb3MgKyAxID49IG9sZExlbikge1xuICAgICAgICAgIHJldHVybiBkb25lKGJ1aWxkVmFsdWVzKHNlbGYsIGJhc2VQYXRoLmNvbXBvbmVudHMsIG5ld1N0cmluZywgb2xkU3RyaW5nLCBzZWxmLnVzZUxvbmdlc3RUb2tlbikpO1xuICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgIC8vIE90aGVyd2lzZSB0cmFjayB0aGlzIHBhdGggYXMgYSBwb3RlbnRpYWwgY2FuZGlkYXRlIGFuZCBjb250aW51ZS5cbiAgICAgICAgICBiZXN0UGF0aFtkaWFnb25hbFBhdGhdID0gYmFzZVBhdGg7XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgZWRpdExlbmd0aCsrO1xuICAgIH1cblxuICAgIC8vIFBlcmZvcm1zIHRoZSBsZW5ndGggb2YgZWRpdCBpdGVyYXRpb24uIElzIGEgYml0IGZ1Z2x5IGFzIHRoaXMgaGFzIHRvIHN1cHBvcnQgdGhlXG4gICAgLy8gc3luYyBhbmQgYXN5bmMgbW9kZSB3aGljaCBpcyBuZXZlciBmdW4uIExvb3BzIG92ZXIgZXhlY0VkaXRMZW5ndGggdW50aWwgYSB2YWx1ZVxuICAgIC8vIGlzIHByb2R1Y2VkLlxuICAgIGlmIChjYWxsYmFjaykge1xuICAgICAgKGZ1bmN0aW9uIGV4ZWMoKSB7XG4gICAgICAgIHNldFRpbWVvdXQoZnVuY3Rpb24oKSB7XG4gICAgICAgICAgLy8gVGhpcyBzaG91bGQgbm90IGhhcHBlbiwgYnV0IHdlIHdhbnQgdG8gYmUgc2FmZS5cbiAgICAgICAgICAvKiBpc3RhbmJ1bCBpZ25vcmUgbmV4dCAqL1xuICAgICAgICAgIGlmIChlZGl0TGVuZ3RoID4gbWF4RWRpdExlbmd0aCkge1xuICAgICAgICAgICAgcmV0dXJuIGNhbGxiYWNrKCk7XG4gICAgICAgICAgfVxuXG4gICAgICAgICAgaWYgKCFleGVjRWRpdExlbmd0aCgpKSB7XG4gICAgICAgICAgICBleGVjKCk7XG4gICAgICAgICAgfVxuICAgICAgICB9LCAwKTtcbiAgICAgIH0oKSk7XG4gICAgfSBlbHNlIHtcbiAgICAgIHdoaWxlIChlZGl0TGVuZ3RoIDw9IG1heEVkaXRMZW5ndGgpIHtcbiAgICAgICAgbGV0IHJldCA9IGV4ZWNFZGl0TGVuZ3RoKCk7XG4gICAgICAgIGlmIChyZXQpIHtcbiAgICAgICAgICByZXR1cm4gcmV0O1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuICB9LFxuXG4gIHB1c2hDb21wb25lbnQoY29tcG9uZW50cywgYWRkZWQsIHJlbW92ZWQpIHtcbiAgICBsZXQgbGFzdCA9IGNvbXBvbmVudHNbY29tcG9uZW50cy5sZW5ndGggLSAxXTtcbiAgICBpZiAobGFzdCAmJiBsYXN0LmFkZGVkID09PSBhZGRlZCAmJiBsYXN0LnJlbW92ZWQgPT09IHJlbW92ZWQpIHtcbiAgICAgIC8vIFdlIG5lZWQgdG8gY2xvbmUgaGVyZSBhcyB0aGUgY29tcG9uZW50IGNsb25lIG9wZXJhdGlvbiBpcyBqdXN0XG4gICAgICAvLyBhcyBzaGFsbG93IGFycmF5IGNsb25lXG4gICAgICBjb21wb25lbnRzW2NvbXBvbmVudHMubGVuZ3RoIC0gMV0gPSB7Y291bnQ6IGxhc3QuY291bnQgKyAxLCBhZGRlZDogYWRkZWQsIHJlbW92ZWQ6IHJlbW92ZWQgfTtcbiAgICB9IGVsc2Uge1xuICAgICAgY29tcG9uZW50cy5wdXNoKHtjb3VudDogMSwgYWRkZWQ6IGFkZGVkLCByZW1vdmVkOiByZW1vdmVkIH0pO1xuICAgIH1cbiAgfSxcbiAgZXh0cmFjdENvbW1vbihiYXNlUGF0aCwgbmV3U3RyaW5nLCBvbGRTdHJpbmcsIGRpYWdvbmFsUGF0aCkge1xuICAgIGxldCBuZXdMZW4gPSBuZXdTdHJpbmcubGVuZ3RoLFxuICAgICAgICBvbGRMZW4gPSBvbGRTdHJpbmcubGVuZ3RoLFxuICAgICAgICBuZXdQb3MgPSBiYXNlUGF0aC5uZXdQb3MsXG4gICAgICAgIG9sZFBvcyA9IG5ld1BvcyAtIGRpYWdvbmFsUGF0aCxcblxuICAgICAgICBjb21tb25Db3VudCA9IDA7XG4gICAgd2hpbGUgKG5ld1BvcyArIDEgPCBuZXdMZW4gJiYgb2xkUG9zICsgMSA8IG9sZExlbiAmJiB0aGlzLmVxdWFscyhuZXdTdHJpbmdbbmV3UG9zICsgMV0sIG9sZFN0cmluZ1tvbGRQb3MgKyAxXSkpIHtcbiAgICAgIG5ld1BvcysrO1xuICAgICAgb2xkUG9zKys7XG4gICAgICBjb21tb25Db3VudCsrO1xuICAgIH1cblxuICAgIGlmIChjb21tb25Db3VudCkge1xuICAgICAgYmFzZVBhdGguY29tcG9uZW50cy5wdXNoKHtjb3VudDogY29tbW9uQ291bnR9KTtcbiAgICB9XG5cbiAgICBiYXNlUGF0aC5uZXdQb3MgPSBuZXdQb3M7XG4gICAgcmV0dXJuIG9sZFBvcztcbiAgfSxcblxuICBlcXVhbHMobGVmdCwgcmlnaHQpIHtcbiAgICByZXR1cm4gbGVmdCA9PT0gcmlnaHQ7XG4gIH0sXG4gIHJlbW92ZUVtcHR5KGFycmF5KSB7XG4gICAgbGV0IHJldCA9IFtdO1xuICAgIGZvciAobGV0IGkgPSAwOyBpIDwgYXJyYXkubGVuZ3RoOyBpKyspIHtcbiAgICAgIGlmIChhcnJheVtpXSkge1xuICAgICAgICByZXQucHVzaChhcnJheVtpXSk7XG4gICAgICB9XG4gICAgfVxuICAgIHJldHVybiByZXQ7XG4gIH0sXG4gIGNhc3RJbnB1dCh2YWx1ZSkge1xuICAgIHJldHVybiB2YWx1ZTtcbiAgfSxcbiAgdG9rZW5pemUodmFsdWUpIHtcbiAgICByZXR1cm4gdmFsdWUuc3BsaXQoJycpO1xuICB9LFxuICBqb2luKGNoYXJzKSB7XG4gICAgcmV0dXJuIGNoYXJzLmpvaW4oJycpO1xuICB9XG59O1xuXG5mdW5jdGlvbiBidWlsZFZhbHVlcyhkaWZmLCBjb21wb25lbnRzLCBuZXdTdHJpbmcsIG9sZFN0cmluZywgdXNlTG9uZ2VzdFRva2VuKSB7XG4gIGxldCBjb21wb25lbnRQb3MgPSAwLFxuICAgICAgY29tcG9uZW50TGVuID0gY29tcG9uZW50cy5sZW5ndGgsXG4gICAgICBuZXdQb3MgPSAwLFxuICAgICAgb2xkUG9zID0gMDtcblxuICBmb3IgKDsgY29tcG9uZW50UG9zIDwgY29tcG9uZW50TGVuOyBjb21wb25lbnRQb3MrKykge1xuICAgIGxldCBjb21wb25lbnQgPSBjb21wb25lbnRzW2NvbXBvbmVudFBvc107XG4gICAgaWYgKCFjb21wb25lbnQucmVtb3ZlZCkge1xuICAgICAgaWYgKCFjb21wb25lbnQuYWRkZWQgJiYgdXNlTG9uZ2VzdFRva2VuKSB7XG4gICAgICAgIGxldCB2YWx1ZSA9IG5ld1N0cmluZy5zbGljZShuZXdQb3MsIG5ld1BvcyArIGNvbXBvbmVudC5jb3VudCk7XG4gICAgICAgIHZhbHVlID0gdmFsdWUubWFwKGZ1bmN0aW9uKHZhbHVlLCBpKSB7XG4gICAgICAgICAgbGV0IG9sZFZhbHVlID0gb2xkU3RyaW5nW29sZFBvcyArIGldO1xuICAgICAgICAgIHJldHVybiBvbGRWYWx1ZS5sZW5ndGggPiB2YWx1ZS5sZW5ndGggPyBvbGRWYWx1ZSA6IHZhbHVlO1xuICAgICAgICB9KTtcblxuICAgICAgICBjb21wb25lbnQudmFsdWUgPSBkaWZmLmpvaW4odmFsdWUpO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgY29tcG9uZW50LnZhbHVlID0gZGlmZi5qb2luKG5ld1N0cmluZy5zbGljZShuZXdQb3MsIG5ld1BvcyArIGNvbXBvbmVudC5jb3VudCkpO1xuICAgICAgfVxuICAgICAgbmV3UG9zICs9IGNvbXBvbmVudC5jb3VudDtcblxuICAgICAgLy8gQ29tbW9uIGNhc2VcbiAgICAgIGlmICghY29tcG9uZW50LmFkZGVkKSB7XG4gICAgICAgIG9sZFBvcyArPSBjb21wb25lbnQuY291bnQ7XG4gICAgICB9XG4gICAgfSBlbHNlIHtcbiAgICAgIGNvbXBvbmVudC52YWx1ZSA9IGRpZmYuam9pbihvbGRTdHJpbmcuc2xpY2Uob2xkUG9zLCBvbGRQb3MgKyBjb21wb25lbnQuY291bnQpKTtcbiAgICAgIG9sZFBvcyArPSBjb21wb25lbnQuY291bnQ7XG5cbiAgICAgIC8vIFJldmVyc2UgYWRkIGFuZCByZW1vdmUgc28gcmVtb3ZlcyBhcmUgb3V0cHV0IGZpcnN0IHRvIG1hdGNoIGNvbW1vbiBjb252ZW50aW9uXG4gICAgICAvLyBUaGUgZGlmZmluZyBhbGdvcml0aG0gaXMgdGllZCB0byBhZGQgdGhlbiByZW1vdmUgb3V0cHV0IGFuZCB0aGlzIGlzIHRoZSBzaW1wbGVzdFxuICAgICAgLy8gcm91dGUgdG8gZ2V0IHRoZSBkZXNpcmVkIG91dHB1dCB3aXRoIG1pbmltYWwgb3ZlcmhlYWQuXG4gICAgICBpZiAoY29tcG9uZW50UG9zICYmIGNvbXBvbmVudHNbY29tcG9uZW50UG9zIC0gMV0uYWRkZWQpIHtcbiAgICAgICAgbGV0IHRtcCA9IGNvbXBvbmVudHNbY29tcG9uZW50UG9zIC0gMV07XG4gICAgICAgIGNvbXBvbmVudHNbY29tcG9uZW50UG9zIC0gMV0gPSBjb21wb25lbnRzW2NvbXBvbmVudFBvc107XG4gICAgICAgIGNvbXBvbmVudHNbY29tcG9uZW50UG9zXSA9IHRtcDtcbiAgICAgIH1cbiAgICB9XG4gIH1cblxuICAvLyBTcGVjaWFsIGNhc2UgaGFuZGxlIGZvciB3aGVuIG9uZSB0ZXJtaW5hbCBpcyBpZ25vcmVkLiBGb3IgdGhpcyBjYXNlIHdlIG1lcmdlIHRoZVxuICAvLyB0ZXJtaW5hbCBpbnRvIHRoZSBwcmlvciBzdHJpbmcgYW5kIGRyb3AgdGhlIGNoYW5nZS5cbiAgbGV0IGxhc3RDb21wb25lbnQgPSBjb21wb25lbnRzW2NvbXBvbmVudExlbiAtIDFdO1xuICBpZiAoY29tcG9uZW50TGVuID4gMVxuICAgICAgJiYgKGxhc3RDb21wb25lbnQuYWRkZWQgfHwgbGFzdENvbXBvbmVudC5yZW1vdmVkKVxuICAgICAgJiYgZGlmZi5lcXVhbHMoJycsIGxhc3RDb21wb25lbnQudmFsdWUpKSB7XG4gICAgY29tcG9uZW50c1tjb21wb25lbnRMZW4gLSAyXS52YWx1ZSArPSBsYXN0Q29tcG9uZW50LnZhbHVlO1xuICAgIGNvbXBvbmVudHMucG9wKCk7XG4gIH1cblxuICByZXR1cm4gY29tcG9uZW50cztcbn1cblxuZnVuY3Rpb24gY2xvbmVQYXRoKHBhdGgpIHtcbiAgcmV0dXJuIHsgbmV3UG9zOiBwYXRoLm5ld1BvcywgY29tcG9uZW50czogcGF0aC5jb21wb25lbnRzLnNsaWNlKDApIH07XG59XG4iXX0=
+var core = __webpack_require__(95);
+exports.use(core);
+
+/*!
+ * Expect interface
+ */
+
+var expect = __webpack_require__(97);
+exports.use(expect);
+
+/*!
+ * Should interface
+ */
+
+var should = __webpack_require__(98);
+exports.use(should);
+
+/*!
+ * Assert interface
+ */
+
+var assert = __webpack_require__(96);
+exports.use(assert);
 
 
 /***/ }),
-/* 16 */
+/* 19 */
+/***/ (function(module, exports) {
+
+module.exports = {
+
+  /**
+   * ### config.includeStack
+   *
+   * User configurable property, influences whether stack trace
+   * is included in Assertion error message. Default of false
+   * suppresses stack trace in the error message.
+   *
+   *     chai.config.includeStack = true;  // enable stack on error
+   *
+   * @param {Boolean}
+   * @api public
+   */
+
+  includeStack: false,
+
+  /**
+   * ### config.showDiff
+   *
+   * User configurable property, influences whether or not
+   * the `showDiff` flag should be included in the thrown
+   * AssertionErrors. `false` will always be `false`; `true`
+   * will be true when the assertion has requested a diff
+   * be shown.
+   *
+   * @param {Boolean}
+   * @api public
+   */
+
+  showDiff: true,
+
+  /**
+   * ### config.truncateThreshold
+   *
+   * User configurable property, sets length threshold for actual and
+   * expected values in assertion errors. If this threshold is exceeded, for
+   * example for large data structures, the value is replaced with something
+   * like `[ Array(3) ]` or `{ Object (prop1, prop2) }`.
+   *
+   * Set it to zero if you want to disable truncating altogether.
+   *
+   * This is especially userful when doing assertions on arrays: having this
+   * set to a reasonable large value makes the failure messages readily
+   * inspectable.
+   *
+   *     chai.config.truncateThreshold = 0;  // disable truncating
+   *
+   * @param {Number}
+   * @api public
+   */
+
+  truncateThreshold: 40,
+
+  /**
+   * ### config.useProxy
+   *
+   * User configurable property, defines if chai will use a Proxy to throw
+   * an error when a non-existent property is read, which protects users
+   * from typos when using property-based assertions.
+   *
+   * Set it to false if you want to disable this feature.
+   *
+   *     chai.config.useProxy = false;  // disable use of Proxy
+   *
+   * This feature is automatically disabled regardless of this config value
+   * in environments that don't support proxies.
+   *
+   * @param {Boolean}
+   * @api public
+   */
+
+  useProxy: true,
+
+  /**
+   * ### config.proxyExcludedKeys
+   *
+   * User configurable property, defines which properties should be ignored
+   * instead of throwing an error if they do not exist on the assertion.
+   * This is only applied if the environment Chai is running in supports proxies and
+   * if the `useProxy` configuration setting is enabled.
+   * By default, `then` and `inspect` will not throw an error if they do not exist on the
+   * assertion object because the `.inspect` property is read by `util.inspect` (for example, when
+   * using `console.log` on the assertion object) and `.then` is necessary for promise type-checking.
+   *
+   *     // By default these keys will not throw an error if they do not exist on the assertion object
+   *     chai.config.proxyExcludedKeys = ['then', 'inspect'];
+   *
+   * @param {Array}
+   * @api public
+   */
+
+  proxyExcludedKeys: ['then', 'inspect', 'toJSON']
+};
+
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports) {
 
 /*!
- * Chai - flag utility
+ * Chai - transferFlags utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
  * MIT Licensed
  */
 
 /**
- * ### flag(object, key, [value])
+ * ### .transferFlags(assertion, object, includeAll = true)
  *
- * Get or set a flag value on an object. If a
- * value is provided it will be set, else it will
- * return the currently set value or `undefined` if
- * the value is not set.
+ * Transfer all the flags for `assertion` to `object`. If
+ * `includeAll` is set to `false`, then the base Chai
+ * assertion flags (namely `object`, `ssfi`, `lockSsfi`,
+ * and `message`) will not be transferred.
  *
- *     utils.flag(this, 'foo', 'bar'); // setter
- *     utils.flag(this, 'foo'); // getter, returns `bar`
  *
- * @param {Object} object constructed Assertion
- * @param {String} key
- * @param {Mixed} value (optional)
+ *     var newAssertion = new Assertion();
+ *     utils.transferFlags(assertion, newAssertion);
+ *
+ *     var anotherAsseriton = new Assertion(myObj);
+ *     utils.transferFlags(assertion, anotherAssertion, false);
+ *
+ * @param {Assertion} assertion the assertion to transfer the flags from
+ * @param {Object} object the object to transfer the flags to; usually a new assertion
+ * @param {Boolean} includeAll
  * @namespace Utils
- * @name flag
+ * @name transferFlags
  * @api private
  */
 
-module.exports = function (obj, key, value) {
-  var flags = obj.__flags || (obj.__flags = Object.create(null));
-  if (arguments.length === 3) {
-    flags[key] = value;
-  } else {
-    return flags[key];
+module.exports = function transferFlags(assertion, object, includeAll) {
+  var flags = assertion.__flags || (assertion.__flags = Object.create(null));
+
+  if (!object.__flags) {
+    object.__flags = Object.create(null);
+  }
+
+  includeAll = arguments.length === 3 ? includeAll : true;
+
+  for (var flag in flags) {
+    if (includeAll ||
+        (flag !== 'object' && flag !== 'ssfi' && flag !== 'lockSsfi' && flag != 'message')) {
+      object.__flags[flag] = flags[flag];
+    }
   }
 };
 
 
 /***/ }),
-/* 17 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1073,13 +1340,13 @@ deepEqual.use = function (match) {
 
 
 /***/ }),
-/* 18 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var formatio = __webpack_require__(112);
+var formatio = __webpack_require__(128);
 
 var formatter = formatio.configure({
     quoteStrings: false,
@@ -1092,101 +1359,22 @@ module.exports = function format() {
 
 
 /***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-module.exports = {
-
-  /**
-   * ### config.includeStack
-   *
-   * User configurable property, influences whether stack trace
-   * is included in Assertion error message. Default of false
-   * suppresses stack trace in the error message.
-   *
-   *     chai.config.includeStack = true;  // enable stack on error
-   *
-   * @param {Boolean}
-   * @api public
-   */
-
-   includeStack: false,
-
-  /**
-   * ### config.showDiff
-   *
-   * User configurable property, influences whether or not
-   * the `showDiff` flag should be included in the thrown
-   * AssertionErrors. `false` will always be `false`; `true`
-   * will be true when the assertion has requested a diff
-   * be shown.
-   *
-   * @param {Boolean}
-   * @api public
-   */
-
-  showDiff: true,
-
-  /**
-   * ### config.truncateThreshold
-   *
-   * User configurable property, sets length threshold for actual and
-   * expected values in assertion errors. If this threshold is exceeded, for
-   * example for large data structures, the value is replaced with something
-   * like `[ Array(3) ]` or `{ Object (prop1, prop2) }`.
-   *
-   * Set it to zero if you want to disable truncating altogether.
-   *
-   * This is especially userful when doing assertions on arrays: having this
-   * set to a reasonable large value makes the failure messages readily
-   * inspectable.
-   *
-   *     chai.config.truncateThreshold = 0;  // disable truncating
-   *
-   * @param {Number}
-   * @api public
-   */
-
-  truncateThreshold: 40
-
-};
-
-
-/***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = function getPropertyDescriptor(object, property) {
-    var proto = object;
-    var descriptor;
-
-    while (proto && !(descriptor = Object.getOwnPropertyDescriptor(proto, property))) {
-        proto = Object.getPrototypeOf(proto);
-    }
-    return descriptor;
-};
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var extend = __webpack_require__(13);
-var functionName = __webpack_require__(22);
-var functionToString = __webpack_require__(35);
-var getPropertyDescriptor = __webpack_require__(20);
-var sinonMatch = __webpack_require__(12);
-var deepEqual = __webpack_require__(17).use(sinonMatch);
-var spyCall = __webpack_require__(26);
-var wrapMethod = __webpack_require__(23);
-var sinonFormat = __webpack_require__(18);
-var valueToString = __webpack_require__(14);
+var extend = __webpack_require__(15);
+var functionName = __webpack_require__(25);
+var functionToString = __webpack_require__(42);
+var getPropertyDescriptor = __webpack_require__(16);
+var sinonMatch = __webpack_require__(14);
+var deepEqual = __webpack_require__(21).use(sinonMatch);
+var spyCall = __webpack_require__(33);
+var wrapMethod = __webpack_require__(26);
+var sinonFormat = __webpack_require__(22);
+var valueToString = __webpack_require__(17);
 
 var push = Array.prototype.push;
 var slice = Array.prototype.slice;
@@ -1216,18 +1404,6 @@ function spy(object, property, types) {
     });
 
     return wrapMethod(object, property, descriptor);
-}
-
-function matchingFake(fakes, args, strict) {
-    if (!fakes) {
-        return undefined;
-    }
-
-    var matchingFakes = fakes.filter(function (fake) {
-        return fake.matches(args, strict);
-    });
-
-    return matchingFakes.pop();
 }
 
 function incrementCallCount() {
@@ -1282,7 +1458,7 @@ var uuid = 0;
 
 // Public API
 var spyApi = {
-    formatters: __webpack_require__(119),
+    formatters: __webpack_require__(136),
 
     reset: function () {
         if (this.invoking) {
@@ -1310,7 +1486,11 @@ var spyApi = {
         this.errorsWithCallStack = [];
         if (this.fakes) {
             this.fakes.forEach(function (fake) {
-                fake.reset();
+                if (fake.resetHistory) {
+                    fake.resetHistory();
+                } else {
+                    fake.reset();
+                }
             });
         }
 
@@ -1347,13 +1527,20 @@ var spyApi = {
     },
 
     invoke: function invoke(func, thisValue, args) {
-        var matching = matchingFake(this.fakes, args);
+        var matchings = this.matchingFakes(args);
+        var currentCallId = callId++;
         var exception, returnValue;
 
         incrementCallCount.call(this);
         push.call(this.thisValues, thisValue);
         push.call(this.args, args);
-        push.call(this.callIds, callId++);
+        push.call(this.callIds, currentCallId);
+        matchings.forEach(function (matching) {
+            incrementCallCount.call(matching);
+            push.call(matching.thisValues, thisValue);
+            push.call(matching.args, args);
+            push.call(matching.callIds, currentCallId);
+        });
 
         // Make call properties available from within the spied function:
         createCallProperties.call(this);
@@ -1361,11 +1548,7 @@ var spyApi = {
         try {
             this.invoking = true;
 
-            if (matching) {
-                returnValue = matching.invoke(func, thisValue, args);
-            } else {
-                returnValue = (this.func || func).apply(thisValue, args);
-            }
+            returnValue = (this.func || func).apply(thisValue, args);
 
             var thisCall = this.getCall(this.callCount - 1);
             if (thisCall.calledWithNew() && typeof returnValue !== "object") {
@@ -1379,14 +1562,22 @@ var spyApi = {
 
         push.call(this.exceptions, exception);
         push.call(this.returnValues, returnValue);
+        matchings.forEach(function (matching) {
+            push.call(matching.exceptions, exception);
+            push.call(matching.returnValues, returnValue);
+        });
+
         var err = new ErrorConstructor();
-        // 1. Please do not get stack at this point. It's may be so very slow, and not actually used
+        // 1. Please do not get stack at this point. It may be so very slow, and not actually used
         // 2. PhantomJS does not serialize the stack trace until the error has been thrown:
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/Stack
         try {
             throw err;
         } catch (e) {/* empty */}
         push.call(this.errorsWithCallStack, err);
+        matchings.forEach(function (matching) {
+            push.call(matching.errorsWithCallStack, err);
+        });
 
         // Make return value and exception available in the calls:
         createCallProperties.call(this);
@@ -1441,7 +1632,7 @@ var spyApi = {
             return false;
         }
 
-        return this.callIds[this.callCount - 1] > spyFn.callIds[spyFn.callCount - 1];
+        return this.callIds[this.callCount - 1] > spyFn.callIds[0];
     },
 
     calledImmediatelyBefore: function calledImmediatelyBefore(spyFn) {
@@ -1464,10 +1655,10 @@ var spyApi = {
         var args = slice.call(arguments);
 
         if (this.fakes) {
-            var match = matchingFake(this.fakes, args, true);
+            var matching = this.matchingFakes(args, true).pop();
 
-            if (match) {
-                return match;
+            if (matching) {
+                return matching;
             }
         } else {
             this.fakes = [];
@@ -1499,6 +1690,12 @@ var spyApi = {
         createCallProperties.call(fake);
 
         return fake;
+    },
+
+    matchingFakes: function (args, strict) {
+        return (this.fakes || []).filter(function (fake) {
+            return fake.matches(args, strict);
+        });
     },
 
     matches: function (args, strict) {
@@ -1587,6 +1784,9 @@ delegateToCalls("callArgOn", false, "callArgOnWith", function () {
     throw new Error(this.toString() + " cannot call arg since it was not yet invoked.");
 });
 spyApi.callArgOnWith = spyApi.callArgOn;
+delegateToCalls("throwArg", false, "throwArg", function () {
+    throw new Error(this.toString() + " cannot throw arg since it was not yet invoked.");
+});
 delegateToCalls("yield", false, "yield", function () {
     throw new Error(this.toString() + " cannot yield since it was not yet invoked.");
 });
@@ -1610,7 +1810,191 @@ module.exports = spy;
 
 
 /***/ }),
-/* 22 */
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var behavior = __webpack_require__(63);
+var behaviors = __webpack_require__(133);
+var spy = __webpack_require__(23);
+var extend = __webpack_require__(15);
+var functionToString = __webpack_require__(42);
+var getPropertyDescriptor = __webpack_require__(16);
+var wrapMethod = __webpack_require__(26);
+var stubEntireObject = __webpack_require__(138);
+var stubDescriptor = __webpack_require__(137);
+var throwOnFalsyObject = __webpack_require__(68);
+
+var slice = Array.prototype.slice;
+
+function stub(object, property, descriptor) {
+    throwOnFalsyObject.apply(null, arguments);
+
+    var actualDescriptor = getPropertyDescriptor(object, property);
+    var isStubbingEntireObject = typeof property === "undefined" && typeof object === "object";
+    var isCreatingNewStub = !object && typeof property === "undefined";
+    var isStubbingDescriptor = object && property && Boolean(descriptor);
+    var isStubbingNonFuncProperty = (typeof object === "object" || typeof object === "function")
+                                    && typeof property !== "undefined"
+                                    && (typeof actualDescriptor === "undefined"
+                                    || typeof actualDescriptor.value !== "function")
+                                    && typeof descriptor === "undefined";
+    var isStubbingExistingMethod = !isStubbingDescriptor
+                                    && typeof object === "object"
+                                    && typeof actualDescriptor !== "undefined"
+                                    && typeof actualDescriptor.value === "function";
+    var arity = isStubbingExistingMethod ? object[property].length : 0;
+
+    if (isStubbingEntireObject) {
+        return stubEntireObject(stub, object);
+    }
+
+    if (isStubbingDescriptor) {
+        return stubDescriptor.apply(null, arguments);
+    }
+
+    if (isCreatingNewStub) {
+        return stub.create();
+    }
+
+    var s = stub.create(arity);
+    s.rootObj = object;
+    s.propName = property;
+    s.restore = function restore() {
+        if (actualDescriptor !== undefined) {
+            Object.defineProperty(object, property, actualDescriptor);
+            return;
+        }
+
+        delete object[property];
+    };
+
+    return isStubbingNonFuncProperty ? s : wrapMethod(object, property, s);
+}
+
+stub.createStubInstance = function (constructor) {
+    if (typeof constructor !== "function") {
+        throw new TypeError("The constructor should be a function.");
+    }
+    return stub(Object.create(constructor.prototype));
+};
+
+/*eslint-disable no-use-before-define*/
+function getParentBehaviour(stubInstance) {
+    return (stubInstance.parent && getCurrentBehavior(stubInstance.parent));
+}
+
+function getDefaultBehavior(stubInstance) {
+    return stubInstance.defaultBehavior ||
+            getParentBehaviour(stubInstance) ||
+            behavior.create(stubInstance);
+}
+
+function getCurrentBehavior(stubInstance) {
+    var currentBehavior = stubInstance.behaviors[stubInstance.callCount - 1];
+    return currentBehavior && currentBehavior.isPresent() ? currentBehavior : getDefaultBehavior(stubInstance);
+}
+/*eslint-enable no-use-before-define*/
+
+var uuid = 0;
+
+var proto = {
+    create: function create(stubLength) {
+        var functionStub = function () {
+            var args = slice.call(arguments);
+            var matchings = functionStub.matchingFakes(args);
+
+            var fnStub = matchings.sort(function (a, b) {
+                return a.matchingArguments.length - b.matchingArguments.length;
+            }).pop() || functionStub;
+            return getCurrentBehavior(fnStub).invoke(this, arguments);
+        };
+
+        functionStub.id = "stub#" + uuid++;
+        var orig = functionStub;
+        functionStub = spy.create(functionStub, stubLength);
+        functionStub.func = orig;
+
+        extend(functionStub, stub);
+        functionStub.instantiateFake = stub.create;
+        functionStub.displayName = "stub";
+        functionStub.toString = functionToString;
+
+        functionStub.defaultBehavior = null;
+        functionStub.behaviors = [];
+
+        return functionStub;
+    },
+
+    resetBehavior: function () {
+        var fakes = this.fakes || [];
+
+        this.defaultBehavior = null;
+        this.behaviors = [];
+
+        delete this.returnValue;
+        delete this.returnArgAt;
+        delete this.throwArgAt;
+        delete this.fakeFn;
+        this.returnThis = false;
+
+        fakes.forEach(function (fake) {
+            fake.resetBehavior();
+        });
+    },
+
+    resetHistory: spy.reset,
+
+    reset: function () {
+        this.resetHistory();
+        this.resetBehavior();
+    },
+
+    onCall: function onCall(index) {
+        if (!this.behaviors[index]) {
+            this.behaviors[index] = behavior.create(this);
+        }
+
+        return this.behaviors[index];
+    },
+
+    onFirstCall: function onFirstCall() {
+        return this.onCall(0);
+    },
+
+    onSecondCall: function onSecondCall() {
+        return this.onCall(1);
+    },
+
+    onThirdCall: function onThirdCall() {
+        return this.onCall(2);
+    }
+};
+
+Object.keys(behavior).forEach(function (method) {
+    if (behavior.hasOwnProperty(method) &&
+        !proto.hasOwnProperty(method) &&
+        method !== "create" &&
+        method !== "withArgs" &&
+        method !== "invoke") {
+        proto[method] = behavior.createBehavior(method);
+    }
+});
+
+Object.keys(behaviors).forEach(function (method) {
+    if (behaviors.hasOwnProperty(method) && !proto.hasOwnProperty(method)) {
+        behavior.addBehavior(stub, method, behaviors[method]);
+    }
+});
+
+extend(stub, proto);
+module.exports = stub;
+
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1634,14 +2018,14 @@ module.exports = function functionName(func) {
 
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var getPropertyDescriptor = __webpack_require__(20);
-var valueToString = __webpack_require__(14);
+var getPropertyDescriptor = __webpack_require__(16);
+var valueToString = __webpack_require__(17);
 
 var hasOwn = Object.prototype.hasOwnProperty;
 
@@ -1792,7 +2176,7 @@ module.exports = function wrapMethod(object, property, method) {
 
 
 /***/ }),
-/* 24 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
@@ -1803,7 +2187,7 @@ module.exports = function forbidNewOperator(x, type) {
 };
 
 /***/ }),
-/* 25 */
+/* 28 */
 /***/ (function(module, exports) {
 
 module.exports = function getFunctionName(f) {
@@ -1811,17 +2195,635 @@ module.exports = function getFunctionName(f) {
 };
 
 /***/ }),
-/* 26 */
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var config = __webpack_require__(19);
+
+var fnLengthDesc = Object.getOwnPropertyDescriptor(function () {}, 'length');
+
+/*!
+ * Chai - addLengthGuard utility
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .addLengthGuard(fn, assertionName, isChainable)
+ *
+ * Define `length` as a getter on the given uninvoked method assertion. The
+ * getter acts as a guard against chaining `length` directly off of an uninvoked
+ * method assertion, which is a problem because it references `function`'s
+ * built-in `length` property instead of Chai's `length` assertion. When the
+ * getter catches the user making this mistake, it throws an error with a
+ * helpful message.
+ *
+ * There are two ways in which this mistake can be made. The first way is by
+ * chaining the `length` assertion directly off of an uninvoked chainable
+ * method. In this case, Chai suggests that the user use `lengthOf` instead. The
+ * second way is by chaining the `length` assertion directly off of an uninvoked
+ * non-chainable method. Non-chainable methods must be invoked prior to
+ * chaining. In this case, Chai suggests that the user consult the docs for the
+ * given assertion.
+ *
+ * If the `length` property of functions is unconfigurable, then return `fn`
+ * without modification.
+ *
+ * Note that in ES6, the function's `length` property is configurable, so once
+ * support for legacy environments is dropped, Chai's `length` property can
+ * replace the built-in function's `length` property, and this length guard will
+ * no longer be necessary. In the mean time, maintaining consistency across all
+ * environments is the priority.
+ *
+ * @param {Function} fn
+ * @param {String} assertionName
+ * @param {Boolean} isChainable
+ * @namespace Utils
+ * @name addLengthGuard
+ */
+
+module.exports = function addLengthGuard (fn, assertionName, isChainable) {
+  if (!fnLengthDesc.configurable) return fn;
+
+  Object.defineProperty(fn, 'length', {
+    get: function () {
+      if (isChainable) {
+        throw Error('Invalid Chai property: ' + assertionName + '.length. Due' +
+          ' to a compatibility issue, "length" cannot directly follow "' +
+          assertionName + '". Use "' + assertionName + '.lengthOf" instead.');
+      }
+
+      throw Error('Invalid Chai property: ' + assertionName + '.length. See' +
+        ' docs for proper usage of "' + assertionName + '".');
+    }
+  });
+
+  return fn;
+};
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// This is (almost) directly from Node.js utils
+// https://github.com/joyent/node/blob/f8c335d0caf47f16d31413f89aa28eda3878e3aa/lib/util.js
+
+var getName = __webpack_require__(61);
+var getProperties = __webpack_require__(57);
+var getEnumerableProperties = __webpack_require__(104);
+var config = __webpack_require__(19);
+
+module.exports = inspect;
+
+/**
+ * ### .inspect(obj, [showHidden], [depth], [colors])
+ *
+ * Echoes the value of a value. Tries to print the value out
+ * in the best way possible given the different types.
+ *
+ * @param {Object} obj The object to print out.
+ * @param {Boolean} showHidden Flag that shows hidden (not enumerable)
+ *    properties of objects. Default is false.
+ * @param {Number} depth Depth in which to descend in object. Default is 2.
+ * @param {Boolean} colors Flag to turn on ANSI escape codes to color the
+ *    output. Default is false (no coloring).
+ * @namespace Utils
+ * @name inspect
+ */
+function inspect(obj, showHidden, depth, colors) {
+  var ctx = {
+    showHidden: showHidden,
+    seen: [],
+    stylize: function (str) { return str; }
+  };
+  return formatValue(ctx, obj, (typeof depth === 'undefined' ? 2 : depth));
+}
+
+// Returns true if object is a DOM element.
+var isDOMElement = function (object) {
+  if (typeof HTMLElement === 'object') {
+    return object instanceof HTMLElement;
+  } else {
+    return object &&
+      typeof object === 'object' &&
+      'nodeType' in object &&
+      object.nodeType === 1 &&
+      typeof object.nodeName === 'string';
+  }
+};
+
+function formatValue(ctx, value, recurseTimes) {
+  // Provide a hook for user-specified inspect functions.
+  // Check that value is an object with an inspect function on it
+  if (value && typeof value.inspect === 'function' &&
+      // Filter out the util module, it's inspect function is special
+      value.inspect !== exports.inspect &&
+      // Also filter out any prototype objects using the circular check.
+      !(value.constructor && value.constructor.prototype === value)) {
+    var ret = value.inspect(recurseTimes, ctx);
+    if (typeof ret !== 'string') {
+      ret = formatValue(ctx, ret, recurseTimes);
+    }
+    return ret;
+  }
+
+  // Primitive types cannot have properties
+  var primitive = formatPrimitive(ctx, value);
+  if (primitive) {
+    return primitive;
+  }
+
+  // If this is a DOM element, try to get the outer HTML.
+  if (isDOMElement(value)) {
+    if ('outerHTML' in value) {
+      return value.outerHTML;
+      // This value does not have an outerHTML attribute,
+      //   it could still be an XML element
+    } else {
+      // Attempt to serialize it
+      try {
+        if (document.xmlVersion) {
+          var xmlSerializer = new XMLSerializer();
+          return xmlSerializer.serializeToString(value);
+        } else {
+          // Firefox 11- do not support outerHTML
+          //   It does, however, support innerHTML
+          //   Use the following to render the element
+          var ns = "http://www.w3.org/1999/xhtml";
+          var container = document.createElementNS(ns, '_');
+
+          container.appendChild(value.cloneNode(false));
+          html = container.innerHTML
+            .replace('><', '>' + value.innerHTML + '<');
+          container.innerHTML = '';
+          return html;
+        }
+      } catch (err) {
+        // This could be a non-native DOM implementation,
+        //   continue with the normal flow:
+        //   printing the element as if it is an object.
+      }
+    }
+  }
+
+  // Look up the keys of the object.
+  var visibleKeys = getEnumerableProperties(value);
+  var keys = ctx.showHidden ? getProperties(value) : visibleKeys;
+
+  var name, nameSuffix;
+
+  // Some type of object without properties can be shortcutted.
+  // In IE, errors have a single `stack` property, or if they are vanilla `Error`,
+  // a `stack` plus `description` property; ignore those for consistency.
+  if (keys.length === 0 || (isError(value) && (
+      (keys.length === 1 && keys[0] === 'stack') ||
+      (keys.length === 2 && keys[0] === 'description' && keys[1] === 'stack')
+     ))) {
+    if (typeof value === 'function') {
+      name = getName(value);
+      nameSuffix = name ? ': ' + name : '';
+      return ctx.stylize('[Function' + nameSuffix + ']', 'special');
+    }
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    }
+    if (isDate(value)) {
+      return ctx.stylize(Date.prototype.toUTCString.call(value), 'date');
+    }
+    if (isError(value)) {
+      return formatError(value);
+    }
+  }
+
+  var base = ''
+    , array = false
+    , typedArray = false
+    , braces = ['{', '}'];
+
+  if (isTypedArray(value)) {
+    typedArray = true;
+    braces = ['[', ']'];
+  }
+
+  // Make Array say that they are Array
+  if (isArray(value)) {
+    array = true;
+    braces = ['[', ']'];
+  }
+
+  // Make functions say that they are functions
+  if (typeof value === 'function') {
+    name = getName(value);
+    nameSuffix = name ? ': ' + name : '';
+    base = ' [Function' + nameSuffix + ']';
+  }
+
+  // Make RegExps say that they are RegExps
+  if (isRegExp(value)) {
+    base = ' ' + RegExp.prototype.toString.call(value);
+  }
+
+  // Make dates with properties first say the date
+  if (isDate(value)) {
+    base = ' ' + Date.prototype.toUTCString.call(value);
+  }
+
+  // Make error with message first say the error
+  if (isError(value)) {
+    return formatError(value);
+  }
+
+  if (keys.length === 0 && (!array || value.length == 0)) {
+    return braces[0] + base + braces[1];
+  }
+
+  if (recurseTimes < 0) {
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    } else {
+      return ctx.stylize('[Object]', 'special');
+    }
+  }
+
+  ctx.seen.push(value);
+
+  var output;
+  if (array) {
+    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+  } else if (typedArray) {
+    return formatTypedArray(value);
+  } else {
+    output = keys.map(function(key) {
+      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+    });
+  }
+
+  ctx.seen.pop();
+
+  return reduceToSingleString(output, base, braces);
+}
+
+
+function formatPrimitive(ctx, value) {
+  switch (typeof value) {
+    case 'undefined':
+      return ctx.stylize('undefined', 'undefined');
+
+    case 'string':
+      var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
+                                               .replace(/'/g, "\\'")
+                                               .replace(/\\"/g, '"') + '\'';
+      return ctx.stylize(simple, 'string');
+
+    case 'number':
+      if (value === 0 && (1/value) === -Infinity) {
+        return ctx.stylize('-0', 'number');
+      }
+      return ctx.stylize('' + value, 'number');
+
+    case 'boolean':
+      return ctx.stylize('' + value, 'boolean');
+
+    case 'symbol':
+      return ctx.stylize(value.toString(), 'symbol');
+  }
+  // For some reason typeof null is "object", so special case here.
+  if (value === null) {
+    return ctx.stylize('null', 'null');
+  }
+}
+
+
+function formatError(value) {
+  return '[' + Error.prototype.toString.call(value) + ']';
+}
+
+
+function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+  var output = [];
+  for (var i = 0, l = value.length; i < l; ++i) {
+    if (Object.prototype.hasOwnProperty.call(value, String(i))) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          String(i), true));
+    } else {
+      output.push('');
+    }
+  }
+
+  keys.forEach(function(key) {
+    if (!key.match(/^\d+$/)) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          key, true));
+    }
+  });
+  return output;
+}
+
+function formatTypedArray(value) {
+  var str = '[ ';
+
+  for (var i = 0; i < value.length; ++i) {
+    if (str.length >= config.truncateThreshold - 7) {
+      str += '...';
+      break;
+    }
+    str += value[i] + ', ';
+  }
+  str += ' ]';
+
+  // Removing trailing `, ` if the array was not truncated
+  if (str.indexOf(',  ]') !== -1) {
+    str = str.replace(',  ]', ' ]');
+  }
+
+  return str;
+}
+
+function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+  var name;
+  var propDescriptor = Object.getOwnPropertyDescriptor(value, key);
+  var str;
+
+  if (propDescriptor) {
+    if (propDescriptor.get) {
+      if (propDescriptor.set) {
+        str = ctx.stylize('[Getter/Setter]', 'special');
+      } else {
+        str = ctx.stylize('[Getter]', 'special');
+      }
+    } else {
+      if (propDescriptor.set) {
+        str = ctx.stylize('[Setter]', 'special');
+      }
+    }
+  }
+  if (visibleKeys.indexOf(key) < 0) {
+    name = '[' + key + ']';
+  }
+  if (!str) {
+    if (ctx.seen.indexOf(value[key]) < 0) {
+      if (recurseTimes === null) {
+        str = formatValue(ctx, value[key], null);
+      } else {
+        str = formatValue(ctx, value[key], recurseTimes - 1);
+      }
+      if (str.indexOf('\n') > -1) {
+        if (array) {
+          str = str.split('\n').map(function(line) {
+            return '  ' + line;
+          }).join('\n').substr(2);
+        } else {
+          str = '\n' + str.split('\n').map(function(line) {
+            return '   ' + line;
+          }).join('\n');
+        }
+      }
+    } else {
+      str = ctx.stylize('[Circular]', 'special');
+    }
+  }
+  if (typeof name === 'undefined') {
+    if (array && key.match(/^\d+$/)) {
+      return str;
+    }
+    name = JSON.stringify('' + key);
+    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
+      name = name.substr(1, name.length - 2);
+      name = ctx.stylize(name, 'name');
+    } else {
+      name = name.replace(/'/g, "\\'")
+                 .replace(/\\"/g, '"')
+                 .replace(/(^"|"$)/g, "'");
+      name = ctx.stylize(name, 'string');
+    }
+  }
+
+  return name + ': ' + str;
+}
+
+
+function reduceToSingleString(output, base, braces) {
+  var numLinesEst = 0;
+  var length = output.reduce(function(prev, cur) {
+    numLinesEst++;
+    if (cur.indexOf('\n') >= 0) numLinesEst++;
+    return prev + cur.length + 1;
+  }, 0);
+
+  if (length > 60) {
+    return braces[0] +
+           (base === '' ? '' : base + '\n ') +
+           ' ' +
+           output.join(',\n  ') +
+           ' ' +
+           braces[1];
+  }
+
+  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
+}
+
+function isTypedArray(ar) {
+  // Unfortunately there's no way to check if an object is a TypedArray
+  // We have to check if it's one of these types
+  return (typeof ar === 'object' && /\w+Array]$/.test(objectToString(ar)));
+}
+
+function isArray(ar) {
+  return Array.isArray(ar) ||
+         (typeof ar === 'object' && objectToString(ar) === '[object Array]');
+}
+
+function isRegExp(re) {
+  return typeof re === 'object' && objectToString(re) === '[object RegExp]';
+}
+
+function isDate(d) {
+  return typeof d === 'object' && objectToString(d) === '[object Date]';
+}
+
+function isError(e) {
+  return typeof e === 'object' && objectToString(e) === '[object Error]';
+}
+
+function objectToString(o) {
+  return Object.prototype.toString.call(o);
+}
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var config = __webpack_require__(19);
+
+/*!
+ * Chai - isProxyEnabled helper
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .isProxyEnabled()
+ *
+ * Helper function to check if Chai's proxy protection feature is enabled. If
+ * proxies are unsupported or disabled via the user's Chai config, then return
+ * false. Otherwise, return true.
+ *
+ * @namespace Utils
+ * @name isProxyEnabled
+ */
+
+module.exports = function isProxyEnabled() {
+  return config.useProxy && 
+    typeof Proxy !== 'undefined' &&
+    typeof Reflect !== 'undefined';
+};
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var config = __webpack_require__(19);
+var flag = __webpack_require__(6);
+var getProperties = __webpack_require__(57);
+var isProxyEnabled = __webpack_require__(31);
+
+/*!
+ * Chai - proxify utility
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .proxify(object)
+ *
+ * Return a proxy of given object that throws an error when a non-existent
+ * property is read. By default, the root cause is assumed to be a misspelled
+ * property, and thus an attempt is made to offer a reasonable suggestion from
+ * the list of existing properties. However, if a nonChainableMethodName is
+ * provided, then the root cause is instead a failure to invoke a non-chainable
+ * method prior to reading the non-existent property.
+ * 
+ * If proxies are unsupported or disabled via the user's Chai config, then
+ * return object without modification.
+ *
+ * @param {Object} obj
+ * @param {String} nonChainableMethodName
+ * @namespace Utils
+ * @name proxify
+ */
+
+var builtins = ['__flags', '__methods', '_obj', 'assert'];
+
+module.exports = function proxify(obj, nonChainableMethodName) {
+  if (!isProxyEnabled()) return obj;
+
+  return new Proxy(obj, {
+    get: function proxyGetter(target, property) {
+      // This check is here because we should not throw errors on Symbol properties
+      // such as `Symbol.toStringTag`.
+      // The values for which an error should be thrown can be configured using
+      // the `config.proxyExcludedKeys` setting.
+      if (typeof property === 'string' &&
+          config.proxyExcludedKeys.indexOf(property) === -1 &&
+          !Reflect.has(target, property)) {
+        // Special message for invalid property access of non-chainable methods.
+        if (nonChainableMethodName) {
+          throw Error('Invalid Chai property: ' + nonChainableMethodName + '.' +
+            property + '. See docs for proper usage of "' +
+            nonChainableMethodName + '".');
+        }
+
+        var orderedProperties = getProperties(target).filter(function(property) {
+          return !Object.prototype.hasOwnProperty(property) &&
+            builtins.indexOf(property) === -1;
+        }).sort(function(a, b) {
+          return stringDistance(property, a) - stringDistance(property, b);
+        });
+
+        if (orderedProperties.length &&
+            stringDistance(orderedProperties[0], property) < 4) {
+          // If the property is reasonably close to an existing Chai property,
+          // suggest that property to the user.
+          throw Error('Invalid Chai property: ' + property +
+            '. Did you mean "' + orderedProperties[0] + '"?');
+        } else {
+          throw Error('Invalid Chai property: ' + property);
+        }
+      }
+
+      // Use this proxy getter as the starting point for removing implementation
+      // frames from the stack trace of a failed assertion. For property
+      // assertions, this prevents the proxy getter from showing up in the stack
+      // trace since it's invoked before the property getter. For method and
+      // chainable method assertions, this flag will end up getting changed to
+      // the method wrapper, which is good since this frame will no longer be in
+      // the stack once the method is invoked. Note that Chai builtin assertion
+      // properties such as `__flags` are skipped since this is only meant to
+      // capture the starting point of an assertion. This step is also skipped
+      // if the `lockSsfi` flag is set, thus indicating that this assertion is
+      // being called from within another assertion. In that case, the `ssfi`
+      // flag is already set to the outer assertion's starting point.
+      if (builtins.indexOf(property) === -1 && !flag(target, 'lockSsfi')) {
+        flag(target, 'ssfi', proxyGetter);
+      }
+
+      return Reflect.get(target, property);
+    }
+  });
+};
+
+/**
+ * # stringDistance(strA, strB)
+ * Return the Levenshtein distance between two strings.
+ * @param {string} strA
+ * @param {string} strB
+ * @return {number} the string distance between strA and strB
+ * @api private
+ */
+
+function stringDistance(strA, strB, memo) {
+  if (!memo) {
+    // `memo` is a two-dimensional array containing a cache of distances
+    // memo[i][j] is the distance between strA.slice(0, i) and
+    // strB.slice(0, j).
+    memo = [];
+    for (var i = 0; i <= strA.length; i++) {
+      memo[i] = [];
+    }
+  }
+
+  if (!memo[strA.length] || !memo[strA.length][strB.length]) {
+    if (strA.length === 0 || strB.length === 0) {
+      memo[strA.length][strB.length] = Math.max(strA.length, strB.length);
+    } else {
+      memo[strA.length][strB.length] = Math.min(
+        stringDistance(strA.slice(0, -1), strB, memo) + 1,
+        stringDistance(strA, strB.slice(0, -1), memo) + 1,
+        stringDistance(strA.slice(0, -1), strB.slice(0, -1), memo) +
+          (strA.slice(-1) === strB.slice(-1) ? 0 : 1)
+      );
+    }
+  }
+
+  return memo[strA.length][strB.length];
+}
+
+
+/***/ }),
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var sinonMatch = __webpack_require__(12);
-var deepEqual = __webpack_require__(17).use(sinonMatch);
-var functionName = __webpack_require__(22);
-var sinonFormat = __webpack_require__(18);
-var valueToString = __webpack_require__(14);
+var sinonMatch = __webpack_require__(14);
+var deepEqual = __webpack_require__(21).use(sinonMatch);
+var functionName = __webpack_require__(25);
+var sinonFormat = __webpack_require__(22);
+var valueToString = __webpack_require__(17);
 var slice = Array.prototype.slice;
 
 function throwYieldError(proxy, text, args) {
@@ -1930,6 +2932,18 @@ var callProto = {
         this.args[pos].apply(thisValue, args);
     },
 
+    throwArg: function (pos) {
+        if (pos > this.args.length) {
+            throw new TypeError(
+                "Not enough arguments: " + pos
+                + " required but only " + this.args.length
+                + " present"
+            );
+        }
+
+        throw this.args[pos];
+    },
+
     "yield": function () {
         this.yieldOn.apply(this, [null].concat(slice.call(arguments, 0)));
     },
@@ -1993,7 +3007,7 @@ var callProto = {
         }
         if (this.stack) {
             // Omit the error message and the two top stack frames in sinon itself:
-            callStr += this.stack.split("\n")[3].replace(/^\s*(?:at\s+|@)?/, " at ");
+            callStr += ( this.stack.split("\n")[3] || "unknown" ).replace(/^\s*(?:at\s+|@)?/, " at ");
         }
 
         return callStr;
@@ -2030,177 +3044,7 @@ module.exports = createSpyCall;
 
 
 /***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var behavior = __webpack_require__(56);
-var behaviors = __webpack_require__(117);
-var spy = __webpack_require__(21);
-var extend = __webpack_require__(13);
-var functionToString = __webpack_require__(35);
-var getPropertyDescriptor = __webpack_require__(20);
-var wrapMethod = __webpack_require__(23);
-var stubEntireObject = __webpack_require__(121);
-var stubDescriptor = __webpack_require__(120);
-var throwOnFalsyObject = __webpack_require__(60);
-
-function stub(object, property, descriptor) {
-    throwOnFalsyObject.apply(null, arguments);
-
-    var actualDescriptor = getPropertyDescriptor(object, property);
-    var isStubbingEntireObject = typeof property === "undefined" && typeof object === "object";
-    var isCreatingNewStub = !object && typeof property === "undefined";
-    var isStubbingDescriptor = object && property && Boolean(descriptor);
-    var isStubbingNonFuncProperty = typeof object === "object"
-                                    && typeof property !== "undefined"
-                                    && (typeof actualDescriptor === "undefined"
-                                    || typeof actualDescriptor.value !== "function")
-                                    && typeof descriptor === "undefined";
-    var isStubbingExistingMethod = !isStubbingDescriptor
-                                    && typeof object === "object"
-                                    && typeof actualDescriptor !== "undefined"
-                                    && typeof actualDescriptor.value === "function";
-    var arity = isStubbingExistingMethod ? object[property].length : 0;
-
-    if (isStubbingEntireObject) {
-        return stubEntireObject(stub, object);
-    }
-
-    if (isStubbingDescriptor) {
-        return stubDescriptor.apply(null, arguments);
-    }
-
-    if (isCreatingNewStub) {
-        return stub.create();
-    }
-
-    var s = stub.create(arity);
-    s.rootObj = object;
-    s.propName = property;
-    s.restore = function restore() {
-        Object.defineProperty(object, property, actualDescriptor);
-    };
-
-    return isStubbingNonFuncProperty ? s : wrapMethod(object, property, s);
-}
-
-stub.createStubInstance = function (constructor) {
-    if (typeof constructor !== "function") {
-        throw new TypeError("The constructor should be a function.");
-    }
-    return stub(Object.create(constructor.prototype));
-};
-
-/*eslint-disable no-use-before-define*/
-function getParentBehaviour(stubInstance) {
-    return (stubInstance.parent && getCurrentBehavior(stubInstance.parent));
-}
-
-function getDefaultBehavior(stubInstance) {
-    return stubInstance.defaultBehavior ||
-            getParentBehaviour(stubInstance) ||
-            behavior.create(stubInstance);
-}
-
-function getCurrentBehavior(stubInstance) {
-    var currentBehavior = stubInstance.behaviors[stubInstance.callCount - 1];
-    return currentBehavior && currentBehavior.isPresent() ? currentBehavior : getDefaultBehavior(stubInstance);
-}
-/*eslint-enable no-use-before-define*/
-
-var uuid = 0;
-
-var proto = {
-    create: function create(stubLength) {
-        var functionStub = function () {
-            return getCurrentBehavior(functionStub).invoke(this, arguments);
-        };
-
-        functionStub.id = "stub#" + uuid++;
-        var orig = functionStub;
-        functionStub = spy.create(functionStub, stubLength);
-        functionStub.func = orig;
-
-        extend(functionStub, stub);
-        functionStub.instantiateFake = stub.create;
-        functionStub.displayName = "stub";
-        functionStub.toString = functionToString;
-
-        functionStub.defaultBehavior = null;
-        functionStub.behaviors = [];
-
-        return functionStub;
-    },
-
-    resetBehavior: function () {
-        var fakes = this.fakes || [];
-
-        this.defaultBehavior = null;
-        this.behaviors = [];
-
-        delete this.returnValue;
-        delete this.returnArgAt;
-        delete this.fakeFn;
-        this.returnThis = false;
-
-        fakes.forEach(function (fake) {
-            fake.resetBehavior();
-        });
-    },
-
-    resetHistory: spy.reset,
-
-    reset: function () {
-        this.resetHistory();
-        this.resetBehavior();
-    },
-
-    onCall: function onCall(index) {
-        if (!this.behaviors[index]) {
-            this.behaviors[index] = behavior.create(this);
-        }
-
-        return this.behaviors[index];
-    },
-
-    onFirstCall: function onFirstCall() {
-        return this.onCall(0);
-    },
-
-    onSecondCall: function onSecondCall() {
-        return this.onCall(1);
-    },
-
-    onThirdCall: function onThirdCall() {
-        return this.onCall(2);
-    }
-};
-
-Object.keys(behavior).forEach(function (method) {
-    if (behavior.hasOwnProperty(method) &&
-        !proto.hasOwnProperty(method) &&
-        method !== "create" &&
-        method !== "withArgs" &&
-        method !== "invoke") {
-        proto[method] = behavior.createBehavior(method);
-    }
-});
-
-Object.keys(behaviors).forEach(function (method) {
-    if (behaviors.hasOwnProperty(method) && !proto.hasOwnProperty(method)) {
-        behavior.addBehavior(stub, method, behaviors[method]);
-    }
-});
-
-extend(stub, proto);
-module.exports = stub;
-
-
-/***/ }),
-/* 28 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2214,7 +3058,7 @@ module.exports = function timesInWords(count) {
 
 
 /***/ }),
-/* 29 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2266,7 +3110,7 @@ module.exports = function walk(obj, iterator, context) {
 
 
 /***/ }),
-/* 30 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var irreducible = __webpack_require__(4);
@@ -2276,7 +3120,7 @@ module.exports = irreducible('Function', isFunction);
 
 
 /***/ }),
-/* 31 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports = function isBoolean(x) {
@@ -2284,7 +3128,7 @@ module.exports = function isBoolean(x) {
 };
 
 /***/ }),
-/* 32 */
+/* 38 */
 /***/ (function(module, exports) {
 
 module.exports = function isString(x) {
@@ -2292,358 +3136,77 @@ module.exports = function isString(x) {
 };
 
 /***/ }),
-/* 33 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// This is (almost) directly from Node.js utils
-// https://github.com/joyent/node/blob/f8c335d0caf47f16d31413f89aa28eda3878e3aa/lib/util.js
+"use strict";
+/*istanbul ignore start*/
 
-var getName = __webpack_require__(50);
-var getProperties = __webpack_require__(102);
-var getEnumerableProperties = __webpack_require__(99);
+exports.__esModule = true;
+exports.lineDiff = undefined;
+exports. /*istanbul ignore end*/diffLines = diffLines;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffTrimmedLines = diffTrimmedLines;
 
-module.exports = inspect;
+var /*istanbul ignore start*/_base = __webpack_require__(13) /*istanbul ignore end*/;
 
-/**
- * Echos the value of a value. Trys to print the value out
- * in the best way possible given the different types.
- *
- * @param {Object} obj The object to print out.
- * @param {Boolean} showHidden Flag that shows hidden (not enumerable)
- *    properties of objects.
- * @param {Number} depth Depth in which to descend in object. Default is 2.
- * @param {Boolean} colors Flag to turn on ANSI escape codes to color the
- *    output. Default is false (no coloring).
- * @namespace Utils
- * @name inspect
- */
-function inspect(obj, showHidden, depth, colors) {
-  var ctx = {
-    showHidden: showHidden,
-    seen: [],
-    stylize: function (str) { return str; }
-  };
-  return formatValue(ctx, obj, (typeof depth === 'undefined' ? 2 : depth));
-}
+/*istanbul ignore start*/
+var _base2 = _interopRequireDefault(_base);
 
-// Returns true if object is a DOM element.
-var isDOMElement = function (object) {
-  if (typeof HTMLElement === 'object') {
-    return object instanceof HTMLElement;
-  } else {
-    return object &&
-      typeof object === 'object' &&
-      object.nodeType === 1 &&
-      typeof object.nodeName === 'string';
+/*istanbul ignore end*/
+var /*istanbul ignore start*/_params = __webpack_require__(60) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/*istanbul ignore end*/var lineDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/lineDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
+lineDiff.tokenize = function (value) {
+  var retLines = [],
+      linesAndNewlines = value.split(/(\n|\r\n)/);
+
+  // Ignore the final empty token that occurs if the string ends with a new line
+  if (!linesAndNewlines[linesAndNewlines.length - 1]) {
+    linesAndNewlines.pop();
   }
+
+  // Merge the content and line separators into single tokens
+  for (var i = 0; i < linesAndNewlines.length; i++) {
+    var line = linesAndNewlines[i];
+
+    if (i % 2 && !this.options.newlineIsToken) {
+      retLines[retLines.length - 1] += line;
+    } else {
+      if (this.options.ignoreWhitespace) {
+        line = line.trim();
+      }
+      retLines.push(line);
+    }
+  }
+
+  return retLines;
 };
 
-function formatValue(ctx, value, recurseTimes) {
-  // Provide a hook for user-specified inspect functions.
-  // Check that value is an object with an inspect function on it
-  if (value && typeof value.inspect === 'function' &&
-      // Filter out the util module, it's inspect function is special
-      value.inspect !== exports.inspect &&
-      // Also filter out any prototype objects using the circular check.
-      !(value.constructor && value.constructor.prototype === value)) {
-    var ret = value.inspect(recurseTimes);
-    if (typeof ret !== 'string') {
-      ret = formatValue(ctx, ret, recurseTimes);
-    }
-    return ret;
-  }
-
-  // Primitive types cannot have properties
-  var primitive = formatPrimitive(ctx, value);
-  if (primitive) {
-    return primitive;
-  }
-
-  // If this is a DOM element, try to get the outer HTML.
-  if (isDOMElement(value)) {
-    if ('outerHTML' in value) {
-      return value.outerHTML;
-      // This value does not have an outerHTML attribute,
-      //   it could still be an XML element
-    } else {
-      // Attempt to serialize it
-      try {
-        if (document.xmlVersion) {
-          var xmlSerializer = new XMLSerializer();
-          return xmlSerializer.serializeToString(value);
-        } else {
-          // Firefox 11- do not support outerHTML
-          //   It does, however, support innerHTML
-          //   Use the following to render the element
-          var ns = "http://www.w3.org/1999/xhtml";
-          var container = document.createElementNS(ns, '_');
-
-          container.appendChild(value.cloneNode(false));
-          html = container.innerHTML
-            .replace('><', '>' + value.innerHTML + '<');
-          container.innerHTML = '';
-          return html;
-        }
-      } catch (err) {
-        // This could be a non-native DOM implementation,
-        //   continue with the normal flow:
-        //   printing the element as if it is an object.
-      }
-    }
-  }
-
-  // Look up the keys of the object.
-  var visibleKeys = getEnumerableProperties(value);
-  var keys = ctx.showHidden ? getProperties(value) : visibleKeys;
-
-  // Some type of object without properties can be shortcutted.
-  // In IE, errors have a single `stack` property, or if they are vanilla `Error`,
-  // a `stack` plus `description` property; ignore those for consistency.
-  if (keys.length === 0 || (isError(value) && (
-      (keys.length === 1 && keys[0] === 'stack') ||
-      (keys.length === 2 && keys[0] === 'description' && keys[1] === 'stack')
-     ))) {
-    if (typeof value === 'function') {
-      var name = getName(value);
-      var nameSuffix = name ? ': ' + name : '';
-      return ctx.stylize('[Function' + nameSuffix + ']', 'special');
-    }
-    if (isRegExp(value)) {
-      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-    }
-    if (isDate(value)) {
-      return ctx.stylize(Date.prototype.toUTCString.call(value), 'date');
-    }
-    if (isError(value)) {
-      return formatError(value);
-    }
-  }
-
-  var base = '', array = false, braces = ['{', '}'];
-
-  // Make Array say that they are Array
-  if (isArray(value)) {
-    array = true;
-    braces = ['[', ']'];
-  }
-
-  // Make functions say that they are functions
-  if (typeof value === 'function') {
-    var name = getName(value);
-    var nameSuffix = name ? ': ' + name : '';
-    base = ' [Function' + nameSuffix + ']';
-  }
-
-  // Make RegExps say that they are RegExps
-  if (isRegExp(value)) {
-    base = ' ' + RegExp.prototype.toString.call(value);
-  }
-
-  // Make dates with properties first say the date
-  if (isDate(value)) {
-    base = ' ' + Date.prototype.toUTCString.call(value);
-  }
-
-  // Make error with message first say the error
-  if (isError(value)) {
-    return formatError(value);
-  }
-
-  if (keys.length === 0 && (!array || value.length == 0)) {
-    return braces[0] + base + braces[1];
-  }
-
-  if (recurseTimes < 0) {
-    if (isRegExp(value)) {
-      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-    } else {
-      return ctx.stylize('[Object]', 'special');
-    }
-  }
-
-  ctx.seen.push(value);
-
-  var output;
-  if (array) {
-    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
-  } else {
-    output = keys.map(function(key) {
-      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
-    });
-  }
-
-  ctx.seen.pop();
-
-  return reduceToSingleString(output, base, braces);
+function diffLines(oldStr, newStr, callback) {
+  return lineDiff.diff(oldStr, newStr, callback);
 }
-
-
-function formatPrimitive(ctx, value) {
-  switch (typeof value) {
-    case 'undefined':
-      return ctx.stylize('undefined', 'undefined');
-
-    case 'string':
-      var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
-                                               .replace(/'/g, "\\'")
-                                               .replace(/\\"/g, '"') + '\'';
-      return ctx.stylize(simple, 'string');
-
-    case 'number':
-      if (value === 0 && (1/value) === -Infinity) {
-        return ctx.stylize('-0', 'number');
-      }
-      return ctx.stylize('' + value, 'number');
-
-    case 'boolean':
-      return ctx.stylize('' + value, 'boolean');
-  }
-  // For some reason typeof null is "object", so special case here.
-  if (value === null) {
-    return ctx.stylize('null', 'null');
-  }
+function diffTrimmedLines(oldStr, newStr, callback) {
+  var options = /*istanbul ignore start*/(0, _params.generateOptions) /*istanbul ignore end*/(callback, { ignoreWhitespace: true });
+  return lineDiff.diff(oldStr, newStr, options);
 }
-
-
-function formatError(value) {
-  return '[' + Error.prototype.toString.call(value) + ']';
-}
-
-
-function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
-  var output = [];
-  for (var i = 0, l = value.length; i < l; ++i) {
-    if (Object.prototype.hasOwnProperty.call(value, String(i))) {
-      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          String(i), true));
-    } else {
-      output.push('');
-    }
-  }
-  keys.forEach(function(key) {
-    if (!key.match(/^\d+$/)) {
-      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          key, true));
-    }
-  });
-  return output;
-}
-
-
-function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
-  var name, str;
-  if (value.__lookupGetter__) {
-    if (value.__lookupGetter__(key)) {
-      if (value.__lookupSetter__(key)) {
-        str = ctx.stylize('[Getter/Setter]', 'special');
-      } else {
-        str = ctx.stylize('[Getter]', 'special');
-      }
-    } else {
-      if (value.__lookupSetter__(key)) {
-        str = ctx.stylize('[Setter]', 'special');
-      }
-    }
-  }
-  if (visibleKeys.indexOf(key) < 0) {
-    name = '[' + key + ']';
-  }
-  if (!str) {
-    if (ctx.seen.indexOf(value[key]) < 0) {
-      if (recurseTimes === null) {
-        str = formatValue(ctx, value[key], null);
-      } else {
-        str = formatValue(ctx, value[key], recurseTimes - 1);
-      }
-      if (str.indexOf('\n') > -1) {
-        if (array) {
-          str = str.split('\n').map(function(line) {
-            return '  ' + line;
-          }).join('\n').substr(2);
-        } else {
-          str = '\n' + str.split('\n').map(function(line) {
-            return '   ' + line;
-          }).join('\n');
-        }
-      }
-    } else {
-      str = ctx.stylize('[Circular]', 'special');
-    }
-  }
-  if (typeof name === 'undefined') {
-    if (array && key.match(/^\d+$/)) {
-      return str;
-    }
-    name = JSON.stringify('' + key);
-    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.substr(1, name.length - 2);
-      name = ctx.stylize(name, 'name');
-    } else {
-      name = name.replace(/'/g, "\\'")
-                 .replace(/\\"/g, '"')
-                 .replace(/(^"|"$)/g, "'");
-      name = ctx.stylize(name, 'string');
-    }
-  }
-
-  return name + ': ' + str;
-}
-
-
-function reduceToSingleString(output, base, braces) {
-  var numLinesEst = 0;
-  var length = output.reduce(function(prev, cur) {
-    numLinesEst++;
-    if (cur.indexOf('\n') >= 0) numLinesEst++;
-    return prev + cur.length + 1;
-  }, 0);
-
-  if (length > 60) {
-    return braces[0] +
-           (base === '' ? '' : base + '\n ') +
-           ' ' +
-           output.join(',\n  ') +
-           ' ' +
-           braces[1];
-  }
-
-  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
-}
-
-function isArray(ar) {
-  return Array.isArray(ar) ||
-         (typeof ar === 'object' && objectToString(ar) === '[object Array]');
-}
-
-function isRegExp(re) {
-  return typeof re === 'object' && objectToString(re) === '[object RegExp]';
-}
-
-function isDate(d) {
-  return typeof d === 'object' && objectToString(d) === '[object Date]';
-}
-
-function isError(e) {
-  return typeof e === 'object' && objectToString(e) === '[object Error]';
-}
-
-function objectToString(o) {
-  return Object.prototype.toString.call(o);
-}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL2xpbmUuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztnQ0E4QmdCLFMsR0FBQSxTO3lEQUNBLGdCLEdBQUEsZ0I7O0FBL0JoQixJLHlCQUFBLHlCLHdCQUFBOzs7Ozs7QUFDQSxJLHlCQUFBLG1DLHdCQUFBOzs7Ozt1QkFFTyxJQUFNLFcseUJBQUEsUSx3QkFBQSxXQUFXLEkseUJBQUEsbUIsd0JBQWpCO0FBQ1AsU0FBUyxRQUFULEdBQW9CLFVBQVMsS0FBVCxFQUFnQjtBQUNsQyxNQUFJLFdBQVcsRUFBZjtBQUFBLE1BQ0ksbUJBQW1CLE1BQU0sS0FBTixDQUFZLFdBQVosQ0FEdkI7OztBQUlBLE1BQUksQ0FBQyxpQkFBaUIsaUJBQWlCLE1BQWpCLEdBQTBCLENBQTNDLENBQUwsRUFBb0Q7QUFDbEQscUJBQWlCLEdBQWpCO0FBQ0Q7OztBQUdELE9BQUssSUFBSSxJQUFJLENBQWIsRUFBZ0IsSUFBSSxpQkFBaUIsTUFBckMsRUFBNkMsR0FBN0MsRUFBa0Q7QUFDaEQsUUFBSSxPQUFPLGlCQUFpQixDQUFqQixDQUFYOztBQUVBLFFBQUksSUFBSSxDQUFKLElBQVMsQ0FBQyxLQUFLLE9BQUwsQ0FBYSxjQUEzQixFQUEyQztBQUN6QyxlQUFTLFNBQVMsTUFBVCxHQUFrQixDQUEzQixLQUFpQyxJQUFqQztBQUNELEtBRkQsTUFFTztBQUNMLFVBQUksS0FBSyxPQUFMLENBQWEsZ0JBQWpCLEVBQW1DO0FBQ2pDLGVBQU8sS0FBSyxJQUFMLEVBQVA7QUFDRDtBQUNELGVBQVMsSUFBVCxDQUFjLElBQWQ7QUFDRDtBQUNGOztBQUVELFNBQU8sUUFBUDtBQUNELENBeEJEOztBQTBCTyxTQUFTLFNBQVQsQ0FBbUIsTUFBbkIsRUFBMkIsTUFBM0IsRUFBbUMsUUFBbkMsRUFBNkM7QUFBRSxTQUFPLFNBQVMsSUFBVCxDQUFjLE1BQWQsRUFBc0IsTUFBdEIsRUFBOEIsUUFBOUIsQ0FBUDtBQUFpRDtBQUNoRyxTQUFTLGdCQUFULENBQTBCLE1BQTFCLEVBQWtDLE1BQWxDLEVBQTBDLFFBQTFDLEVBQW9EO0FBQ3pELE1BQUksVSx5QkFBVSw0Qix3QkFBQSxDQUFnQixRQUFoQixFQUEwQixFQUFDLGtCQUFrQixJQUFuQixFQUExQixDQUFkO0FBQ0EsU0FBTyxTQUFTLElBQVQsQ0FBYyxNQUFkLEVBQXNCLE1BQXRCLEVBQThCLE9BQTlCLENBQVA7QUFDRCIsImZpbGUiOiJsaW5lLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IERpZmYgZnJvbSAnLi9iYXNlJztcbmltcG9ydCB7Z2VuZXJhdGVPcHRpb25zfSBmcm9tICcuLi91dGlsL3BhcmFtcyc7XG5cbmV4cG9ydCBjb25zdCBsaW5lRGlmZiA9IG5ldyBEaWZmKCk7XG5saW5lRGlmZi50b2tlbml6ZSA9IGZ1bmN0aW9uKHZhbHVlKSB7XG4gIGxldCByZXRMaW5lcyA9IFtdLFxuICAgICAgbGluZXNBbmROZXdsaW5lcyA9IHZhbHVlLnNwbGl0KC8oXFxufFxcclxcbikvKTtcblxuICAvLyBJZ25vcmUgdGhlIGZpbmFsIGVtcHR5IHRva2VuIHRoYXQgb2NjdXJzIGlmIHRoZSBzdHJpbmcgZW5kcyB3aXRoIGEgbmV3IGxpbmVcbiAgaWYgKCFsaW5lc0FuZE5ld2xpbmVzW2xpbmVzQW5kTmV3bGluZXMubGVuZ3RoIC0gMV0pIHtcbiAgICBsaW5lc0FuZE5ld2xpbmVzLnBvcCgpO1xuICB9XG5cbiAgLy8gTWVyZ2UgdGhlIGNvbnRlbnQgYW5kIGxpbmUgc2VwYXJhdG9ycyBpbnRvIHNpbmdsZSB0b2tlbnNcbiAgZm9yIChsZXQgaSA9IDA7IGkgPCBsaW5lc0FuZE5ld2xpbmVzLmxlbmd0aDsgaSsrKSB7XG4gICAgbGV0IGxpbmUgPSBsaW5lc0FuZE5ld2xpbmVzW2ldO1xuXG4gICAgaWYgKGkgJSAyICYmICF0aGlzLm9wdGlvbnMubmV3bGluZUlzVG9rZW4pIHtcbiAgICAgIHJldExpbmVzW3JldExpbmVzLmxlbmd0aCAtIDFdICs9IGxpbmU7XG4gICAgfSBlbHNlIHtcbiAgICAgIGlmICh0aGlzLm9wdGlvbnMuaWdub3JlV2hpdGVzcGFjZSkge1xuICAgICAgICBsaW5lID0gbGluZS50cmltKCk7XG4gICAgICB9XG4gICAgICByZXRMaW5lcy5wdXNoKGxpbmUpO1xuICAgIH1cbiAgfVxuXG4gIHJldHVybiByZXRMaW5lcztcbn07XG5cbmV4cG9ydCBmdW5jdGlvbiBkaWZmTGluZXMob2xkU3RyLCBuZXdTdHIsIGNhbGxiYWNrKSB7IHJldHVybiBsaW5lRGlmZi5kaWZmKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjayk7IH1cbmV4cG9ydCBmdW5jdGlvbiBkaWZmVHJpbW1lZExpbmVzKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjaykge1xuICBsZXQgb3B0aW9ucyA9IGdlbmVyYXRlT3B0aW9ucyhjYWxsYmFjaywge2lnbm9yZVdoaXRlc3BhY2U6IHRydWV9KTtcbiAgcmV0dXJuIGxpbmVEaWZmLmRpZmYob2xkU3RyLCBuZXdTdHIsIG9wdGlvbnMpO1xufVxuIl19
 
 
 /***/ }),
-/* 34 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var calledInOrder = __webpack_require__(61);
-var orderByFirstCall = __webpack_require__(66);
-var timesInWords = __webpack_require__(28);
-var format = __webpack_require__(18);
-var sinonMatch = __webpack_require__(12);
+var calledInOrder = __webpack_require__(69);
+var orderByFirstCall = __webpack_require__(73);
+var timesInWords = __webpack_require__(34);
+var format = __webpack_require__(22);
+var sinonMatch = __webpack_require__(14);
 
 var slice = Array.prototype.slice;
 
@@ -2843,7 +3406,46 @@ module.exports = assert;
 
 
 /***/ }),
-/* 35 */
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*eslint no-console: 0 */
+
+
+// wrap returns a function that will invoke the supplied function and print a deprecation warning to the console each
+// time it is called.
+exports.wrap = function (func, msg) {
+    var wrapped = function () {
+        exports.printWarning(msg);
+        return func.apply(this, arguments);
+    };
+    if (func.prototype) {
+        wrapped.prototype = func.prototype;
+    }
+    return wrapped;
+};
+
+// defaultMsg returns a string which can be supplied to `wrap()` to notify the user that a particular part of the
+// sinon API has been deprecated.
+exports.defaultMsg = function (funcName) {
+    return "sinon." + funcName + " is deprecated and will be removed from the public API in a future version of sinon.";
+};
+
+exports.printWarning = function (msg) {
+    // Watch out for IE7 and below! :(
+    if (typeof console !== "undefined") {
+        if (console.info) {
+            console.info(msg);
+        } else {
+            console.log(msg);
+        }
+    }
+};
+
+
+/***/ }),
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2870,7 +3472,7 @@ module.exports = function toString() {
 
 
 /***/ }),
-/* 36 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2924,13 +3526,13 @@ module.exports = configure;
 
 
 /***/ }),
-/* 37 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var type = __webpack_require__(140);
+var type = __webpack_require__(53);
 
 module.exports = function typeOf(value) {
     return type(value).toLowerCase();
@@ -2938,17 +3540,17 @@ module.exports = function typeOf(value) {
 
 
 /***/ }),
-/* 38 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var fakeXhr = __webpack_require__(40);
+var fakeXhr = __webpack_require__(47);
 var push = [].push;
-var format = __webpack_require__(18);
-var configureLogError = __webpack_require__(36);
-var pathToRegexp = __webpack_require__(139);
+var format = __webpack_require__(22);
+var configureLogError = __webpack_require__(43);
+var pathToRegexp = __webpack_require__(144);
 
 function responseArray(handler) {
     var response = handler;
@@ -2965,7 +3567,31 @@ function responseArray(handler) {
     return response;
 }
 
-var wloc = typeof window !== "undefined" ? window.location : { "host": "localhost", "protocol": "http"};
+function getDefaultWindowLocation() {
+    return { "host": "localhost", "protocol": "http" };
+}
+
+function getWindowLocation() {
+    if (typeof window === "undefined") {
+        // Fallback
+        return getDefaultWindowLocation();
+    }
+
+    if (typeof window.location !== "undefined") {
+        // Browsers place location on window
+        return window.location;
+    }
+
+    if ((typeof window.window !== "undefined") && (typeof window.window.location !== "undefined")) {
+        // React Native on Android places location on window.window
+        return window.window.location;
+    }
+
+    return getDefaultWindowLocation();
+}
+
+var wloc = getWindowLocation();
+
 var rCurrLoc = new RegExp("^" + wloc.protocol + "//" + wloc.host);
 
 function matchOne(response, reqMethod, reqUrl) {
@@ -3020,6 +3646,9 @@ var fakeServer = {
         this.xhr = fakeXhr.useFakeXMLHttpRequest();
         server.requests = [];
         server.requestCount = 0;
+        server.queue = [];
+        server.responses = [];
+
 
         this.xhr.onCreate = function (xhrObj) {
             xhrObj.unsafeHeadersEnabled = function () {
@@ -3086,10 +3715,6 @@ var fakeServer = {
 
     handleRequest: function handleRequest(xhr) {
         if (xhr.async) {
-            if (!this.queue) {
-                this.queue = [];
-            }
-
             push.call(this.queue, xhr);
         } else {
             this.processRequest(xhr);
@@ -3117,10 +3742,6 @@ var fakeServer = {
         if (arguments.length === 1 && typeof method !== "function") {
             this.response = responseArray(method);
             return;
-        }
-
-        if (!this.responses) {
-            this.responses = [];
         }
 
         if (arguments.length === 1) {
@@ -3212,13 +3833,13 @@ module.exports = fakeServer;
 
 
 /***/ }),
-/* 39 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var llx = __webpack_require__(113);
+var llx = __webpack_require__(129);
 
 exports.useFakeTimers = function () {
     var now;
@@ -3253,17 +3874,17 @@ exports.timers = {
 
 
 /***/ }),
-/* 40 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var TextEncoder = __webpack_require__(163).TextEncoder;
+var TextEncoder = __webpack_require__(167).TextEncoder;
 
-var configureLogError = __webpack_require__(36);
-var sinonEvent = __webpack_require__(67);
-var extend = __webpack_require__(13);
+var configureLogError = __webpack_require__(43);
+var sinonEvent = __webpack_require__(74);
+var extend = __webpack_require__(15);
 
 function getWorkingXHR(globalScope) {
     var supportsXHR = typeof globalScope.XMLHttpRequest !== "undefined";
@@ -3285,7 +3906,7 @@ var supportsProgress = typeof ProgressEvent !== "undefined";
 var supportsCustomEvent = typeof CustomEvent !== "undefined";
 var supportsFormData = typeof FormData !== "undefined";
 var supportsArrayBuffer = typeof ArrayBuffer !== "undefined";
-var supportsBlob = __webpack_require__(114).isSupported;
+var supportsBlob = __webpack_require__(131).isSupported;
 var isReactNative = global.navigator && global.navigator.product === "ReactNative";
 var sinonXhr = { XMLHttpRequest: global.XMLHttpRequest };
 sinonXhr.GlobalXMLHttpRequest = global.XMLHttpRequest;
@@ -3905,67 +4526,7 @@ module.exports = {
 
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports.lineDiff = undefined;
-exports. /*istanbul ignore end*/diffLines = diffLines;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffTrimmedLines = diffTrimmedLines;
-
-var /*istanbul ignore start*/_base = __webpack_require__(15) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-var _base2 = _interopRequireDefault(_base);
-
-/*istanbul ignore end*/
-var /*istanbul ignore start*/_params = __webpack_require__(70) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-/*istanbul ignore end*/var lineDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/lineDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
-lineDiff.tokenize = function (value) {
-  var retLines = [],
-      linesAndNewlines = value.split(/(\n|\r\n)/);
-
-  // Ignore the final empty token that occurs if the string ends with a new line
-  if (!linesAndNewlines[linesAndNewlines.length - 1]) {
-    linesAndNewlines.pop();
-  }
-
-  // Merge the content and line separators into single tokens
-  for (var i = 0; i < linesAndNewlines.length; i++) {
-    var line = linesAndNewlines[i];
-
-    if (i % 2 && !this.options.newlineIsToken) {
-      retLines[retLines.length - 1] += line;
-    } else {
-      if (this.options.ignoreWhitespace) {
-        line = line.trim();
-      }
-      retLines.push(line);
-    }
-  }
-
-  return retLines;
-};
-
-function diffLines(oldStr, newStr, callback) {
-  return lineDiff.diff(oldStr, newStr, callback);
-}
-function diffTrimmedLines(oldStr, newStr, callback) {
-  var options = /*istanbul ignore start*/(0, _params.generateOptions) /*istanbul ignore end*/(callback, { ignoreWhitespace: true });
-  return lineDiff.diff(oldStr, newStr, options);
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL2xpbmUuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztnQ0E4QmdCLFMsR0FBQSxTO3lEQUNBLGdCLEdBQUEsZ0I7O0FBL0JoQixJLHlCQUFBLHlCLHdCQUFBOzs7Ozs7QUFDQSxJLHlCQUFBLG1DLHdCQUFBOzs7Ozt1QkFFTyxJQUFNLFcseUJBQUEsUSx3QkFBQSxXQUFXLEkseUJBQUEsbUIsd0JBQWpCO0FBQ1AsU0FBUyxRQUFULEdBQW9CLFVBQVMsS0FBVCxFQUFnQjtBQUNsQyxNQUFJLFdBQVcsRUFBZjtBQUFBLE1BQ0ksbUJBQW1CLE1BQU0sS0FBTixDQUFZLFdBQVosQ0FEdkI7OztBQUlBLE1BQUksQ0FBQyxpQkFBaUIsaUJBQWlCLE1BQWpCLEdBQTBCLENBQTNDLENBQUwsRUFBb0Q7QUFDbEQscUJBQWlCLEdBQWpCO0FBQ0Q7OztBQUdELE9BQUssSUFBSSxJQUFJLENBQWIsRUFBZ0IsSUFBSSxpQkFBaUIsTUFBckMsRUFBNkMsR0FBN0MsRUFBa0Q7QUFDaEQsUUFBSSxPQUFPLGlCQUFpQixDQUFqQixDQUFYOztBQUVBLFFBQUksSUFBSSxDQUFKLElBQVMsQ0FBQyxLQUFLLE9BQUwsQ0FBYSxjQUEzQixFQUEyQztBQUN6QyxlQUFTLFNBQVMsTUFBVCxHQUFrQixDQUEzQixLQUFpQyxJQUFqQztBQUNELEtBRkQsTUFFTztBQUNMLFVBQUksS0FBSyxPQUFMLENBQWEsZ0JBQWpCLEVBQW1DO0FBQ2pDLGVBQU8sS0FBSyxJQUFMLEVBQVA7QUFDRDtBQUNELGVBQVMsSUFBVCxDQUFjLElBQWQ7QUFDRDtBQUNGOztBQUVELFNBQU8sUUFBUDtBQUNELENBeEJEOztBQTBCTyxTQUFTLFNBQVQsQ0FBbUIsTUFBbkIsRUFBMkIsTUFBM0IsRUFBbUMsUUFBbkMsRUFBNkM7QUFBRSxTQUFPLFNBQVMsSUFBVCxDQUFjLE1BQWQsRUFBc0IsTUFBdEIsRUFBOEIsUUFBOUIsQ0FBUDtBQUFpRDtBQUNoRyxTQUFTLGdCQUFULENBQTBCLE1BQTFCLEVBQWtDLE1BQWxDLEVBQTBDLFFBQTFDLEVBQW9EO0FBQ3pELE1BQUksVSx5QkFBVSw0Qix3QkFBQSxDQUFnQixRQUFoQixFQUEwQixFQUFDLGtCQUFrQixJQUFuQixFQUExQixDQUFkO0FBQ0EsU0FBTyxTQUFTLElBQVQsQ0FBYyxNQUFkLEVBQXNCLE1BQXRCLEVBQThCLE9BQTlCLENBQVA7QUFDRCIsImZpbGUiOiJsaW5lLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IERpZmYgZnJvbSAnLi9iYXNlJztcbmltcG9ydCB7Z2VuZXJhdGVPcHRpb25zfSBmcm9tICcuLi91dGlsL3BhcmFtcyc7XG5cbmV4cG9ydCBjb25zdCBsaW5lRGlmZiA9IG5ldyBEaWZmKCk7XG5saW5lRGlmZi50b2tlbml6ZSA9IGZ1bmN0aW9uKHZhbHVlKSB7XG4gIGxldCByZXRMaW5lcyA9IFtdLFxuICAgICAgbGluZXNBbmROZXdsaW5lcyA9IHZhbHVlLnNwbGl0KC8oXFxufFxcclxcbikvKTtcblxuICAvLyBJZ25vcmUgdGhlIGZpbmFsIGVtcHR5IHRva2VuIHRoYXQgb2NjdXJzIGlmIHRoZSBzdHJpbmcgZW5kcyB3aXRoIGEgbmV3IGxpbmVcbiAgaWYgKCFsaW5lc0FuZE5ld2xpbmVzW2xpbmVzQW5kTmV3bGluZXMubGVuZ3RoIC0gMV0pIHtcbiAgICBsaW5lc0FuZE5ld2xpbmVzLnBvcCgpO1xuICB9XG5cbiAgLy8gTWVyZ2UgdGhlIGNvbnRlbnQgYW5kIGxpbmUgc2VwYXJhdG9ycyBpbnRvIHNpbmdsZSB0b2tlbnNcbiAgZm9yIChsZXQgaSA9IDA7IGkgPCBsaW5lc0FuZE5ld2xpbmVzLmxlbmd0aDsgaSsrKSB7XG4gICAgbGV0IGxpbmUgPSBsaW5lc0FuZE5ld2xpbmVzW2ldO1xuXG4gICAgaWYgKGkgJSAyICYmICF0aGlzLm9wdGlvbnMubmV3bGluZUlzVG9rZW4pIHtcbiAgICAgIHJldExpbmVzW3JldExpbmVzLmxlbmd0aCAtIDFdICs9IGxpbmU7XG4gICAgfSBlbHNlIHtcbiAgICAgIGlmICh0aGlzLm9wdGlvbnMuaWdub3JlV2hpdGVzcGFjZSkge1xuICAgICAgICBsaW5lID0gbGluZS50cmltKCk7XG4gICAgICB9XG4gICAgICByZXRMaW5lcy5wdXNoKGxpbmUpO1xuICAgIH1cbiAgfVxuXG4gIHJldHVybiByZXRMaW5lcztcbn07XG5cbmV4cG9ydCBmdW5jdGlvbiBkaWZmTGluZXMob2xkU3RyLCBuZXdTdHIsIGNhbGxiYWNrKSB7IHJldHVybiBsaW5lRGlmZi5kaWZmKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjayk7IH1cbmV4cG9ydCBmdW5jdGlvbiBkaWZmVHJpbW1lZExpbmVzKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjaykge1xuICBsZXQgb3B0aW9ucyA9IGdlbmVyYXRlT3B0aW9ucyhjYWxsYmFjaywge2lnbm9yZVdoaXRlc3BhY2U6IHRydWV9KTtcbiAgcmV0dXJuIGxpbmVEaWZmLmRpZmYob2xkU3RyLCBuZXdTdHIsIG9wdGlvbnMpO1xufVxuIl19
-
-
-/***/ }),
-/* 42 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var irreducible = __webpack_require__(4);
@@ -3974,27 +4535,27 @@ module.exports = irreducible('Any', function () { return true; });
 
 
 /***/ }),
-/* 43 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var irreducible = __webpack_require__(4);
-var isString = __webpack_require__(32);
+var isString = __webpack_require__(38);
 
 module.exports = irreducible('String', isString);
 
 
 /***/ }),
-/* 44 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
 var isFunction = __webpack_require__(2);
 var getTypeName = __webpack_require__(1);
-var isIdentity = __webpack_require__(10);
-var isObject = __webpack_require__(11);
-var create = __webpack_require__(7);
-var is = __webpack_require__(8);
+var isIdentity = __webpack_require__(11);
+var isObject = __webpack_require__(12);
+var create = __webpack_require__(8);
+var is = __webpack_require__(9);
 
 function getDefaultName(domain, codomain) {
   return '{[key: ' + getTypeName(domain) + ']: ' + getTypeName(codomain) + '}';
@@ -4085,10 +4646,10 @@ module.exports = dict;
 
 
 /***/ }),
-/* 45 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isNil = __webpack_require__(6);
+var isNil = __webpack_require__(7);
 var assert = __webpack_require__(0);
 
 // safe mixin, cannot override props unless specified
@@ -4108,18 +4669,18 @@ module.exports = function mixin(target, source, overwrite) {
 };
 
 /***/ }),
-/* 46 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
 var isFunction = __webpack_require__(2);
-var forbidNewOperator = __webpack_require__(24);
-var isIdentity = __webpack_require__(10);
-var create = __webpack_require__(7);
-var is = __webpack_require__(8);
+var forbidNewOperator = __webpack_require__(27);
+var isIdentity = __webpack_require__(11);
+var create = __webpack_require__(8);
+var is = __webpack_require__(9);
 var getTypeName = __webpack_require__(1);
-var getFunctionName = __webpack_require__(25);
+var getFunctionName = __webpack_require__(28);
 
 function getDefaultName(type, predicate) {
   return '{' + getTypeName(type) + ' | ' + getFunctionName(predicate) + '}';
@@ -4180,14 +4741,384 @@ module.exports = refinement;
 
 
 /***/ }),
-/* 47 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(166);
+"use strict";
+
+
+/* !
+ * type-detect
+ * Copyright(c) 2013 jake luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+var promiseExists = typeof Promise === 'function';
+var globalObject = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : self; // eslint-disable-line
+var isDom = 'location' in globalObject && 'document' in globalObject;
+var symbolExists = typeof Symbol !== 'undefined';
+var mapExists = typeof Map !== 'undefined';
+var setExists = typeof Set !== 'undefined';
+var weakMapExists = typeof WeakMap !== 'undefined';
+var weakSetExists = typeof WeakSet !== 'undefined';
+var dataViewExists = typeof DataView !== 'undefined';
+var symbolIteratorExists = symbolExists && typeof Symbol.iterator !== 'undefined';
+var symbolToStringTagExists = symbolExists && typeof Symbol.toStringTag !== 'undefined';
+var setEntriesExists = setExists && typeof Set.prototype.entries === 'function';
+var mapEntriesExists = mapExists && typeof Map.prototype.entries === 'function';
+var setIteratorPrototype = setEntriesExists && Object.getPrototypeOf(new Set().entries());
+var mapIteratorPrototype = mapEntriesExists && Object.getPrototypeOf(new Map().entries());
+var arrayIteratorExists = symbolIteratorExists && typeof Array.prototype[Symbol.iterator] === 'function';
+var arrayIteratorPrototype = arrayIteratorExists && Object.getPrototypeOf([][Symbol.iterator]());
+var stringIteratorExists = symbolIteratorExists && typeof String.prototype[Symbol.iterator] === 'function';
+var stringIteratorPrototype = stringIteratorExists && Object.getPrototypeOf(''[Symbol.iterator]());
+var toStringLeftSliceLength = 8;
+var toStringRightSliceLength = -1;
+/**
+ * ### typeOf (obj)
+ *
+ * Uses `Object.prototype.toString` to determine the type of an object,
+ * normalising behaviour across engine versions & well optimised.
+ *
+ * @param {Mixed} object
+ * @return {String} object type
+ * @api public
+ */
+module.exports = function typeDetect(obj) {
+  /* ! Speed optimisation
+   * Pre:
+   *   string literal     x 3,039,035 ops/sec ±1.62% (78 runs sampled)
+   *   boolean literal    x 1,424,138 ops/sec ±4.54% (75 runs sampled)
+   *   number literal     x 1,653,153 ops/sec ±1.91% (82 runs sampled)
+   *   undefined          x 9,978,660 ops/sec ±1.92% (75 runs sampled)
+   *   function           x 2,556,769 ops/sec ±1.73% (77 runs sampled)
+   * Post:
+   *   string literal     x 38,564,796 ops/sec ±1.15% (79 runs sampled)
+   *   boolean literal    x 31,148,940 ops/sec ±1.10% (79 runs sampled)
+   *   number literal     x 32,679,330 ops/sec ±1.90% (78 runs sampled)
+   *   undefined          x 32,363,368 ops/sec ±1.07% (82 runs sampled)
+   *   function           x 31,296,870 ops/sec ±0.96% (83 runs sampled)
+   */
+  var typeofObj = typeof obj;
+  if (typeofObj !== 'object') {
+    return typeofObj;
+  }
+
+  /* ! Speed optimisation
+   * Pre:
+   *   null               x 28,645,765 ops/sec ±1.17% (82 runs sampled)
+   * Post:
+   *   null               x 36,428,962 ops/sec ±1.37% (84 runs sampled)
+   */
+  if (obj === null) {
+    return 'null';
+  }
+
+  /* ! Spec Conformance
+   * Test: `Object.prototype.toString.call(window)``
+   *  - Node === "[object global]"
+   *  - Chrome === "[object global]"
+   *  - Firefox === "[object Window]"
+   *  - PhantomJS === "[object Window]"
+   *  - Safari === "[object Window]"
+   *  - IE 11 === "[object Window]"
+   *  - IE Edge === "[object Window]"
+   * Test: `Object.prototype.toString.call(this)``
+   *  - Chrome Worker === "[object global]"
+   *  - Firefox Worker === "[object DedicatedWorkerGlobalScope]"
+   *  - Safari Worker === "[object DedicatedWorkerGlobalScope]"
+   *  - IE 11 Worker === "[object WorkerGlobalScope]"
+   *  - IE Edge Worker === "[object WorkerGlobalScope]"
+   */
+  if (obj === globalObject) {
+    return 'global';
+  }
+
+  /* ! Speed optimisation
+   * Pre:
+   *   array literal      x 2,888,352 ops/sec ±0.67% (82 runs sampled)
+   * Post:
+   *   array literal      x 22,479,650 ops/sec ±0.96% (81 runs sampled)
+   */
+  if (
+    Array.isArray(obj) &&
+    (symbolToStringTagExists === false || !(Symbol.toStringTag in obj))
+  ) {
+    return 'Array';
+  }
+
+  if (isDom) {
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/multipage/browsers.html#location)
+     * WhatWG HTML$7.7.3 - The `Location` interface
+     * Test: `Object.prototype.toString.call(window.location)``
+     *  - IE <=11 === "[object Object]"
+     *  - IE Edge <=13 === "[object Object]"
+     */
+    if (obj === globalObject.location) {
+      return 'Location';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/#document)
+     * WhatWG HTML$3.1.1 - The `Document` object
+     * Note: Most browsers currently adher to the W3C DOM Level 2 spec
+     *       (https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-26809268)
+     *       which suggests that browsers should use HTMLTableCellElement for
+     *       both TD and TH elements. WhatWG separates these.
+     *       WhatWG HTML states:
+     *         > For historical reasons, Window objects must also have a
+     *         > writable, configurable, non-enumerable property named
+     *         > HTMLDocument whose value is the Document interface object.
+     * Test: `Object.prototype.toString.call(document)``
+     *  - Chrome === "[object HTMLDocument]"
+     *  - Firefox === "[object HTMLDocument]"
+     *  - Safari === "[object HTMLDocument]"
+     *  - IE <=10 === "[object Document]"
+     *  - IE 11 === "[object HTMLDocument]"
+     *  - IE Edge <=13 === "[object HTMLDocument]"
+     */
+    if (obj === globalObject.document) {
+      return 'Document';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/multipage/webappapis.html#mimetypearray)
+     * WhatWG HTML$8.6.1.5 - Plugins - Interface MimeTypeArray
+     * Test: `Object.prototype.toString.call(navigator.mimeTypes)``
+     *  - IE <=10 === "[object MSMimeTypesCollection]"
+     */
+    if (obj === (globalObject.navigator || {}).mimeTypes) {
+      return 'MimeTypeArray';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/multipage/webappapis.html#pluginarray)
+     * WhatWG HTML$8.6.1.5 - Plugins - Interface PluginArray
+     * Test: `Object.prototype.toString.call(navigator.plugins)``
+     *  - IE <=10 === "[object MSPluginsCollection]"
+     */
+    if (obj === (globalObject.navigator || {}).plugins) {
+      return 'PluginArray';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/multipage/webappapis.html#pluginarray)
+     * WhatWG HTML$4.4.4 - The `blockquote` element - Interface `HTMLQuoteElement`
+     * Test: `Object.prototype.toString.call(document.createElement('blockquote'))``
+     *  - IE <=10 === "[object HTMLBlockElement]"
+     */
+    if (obj instanceof HTMLElement && obj.tagName === 'BLOCKQUOTE') {
+      return 'HTMLQuoteElement';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/#htmltabledatacellelement)
+     * WhatWG HTML$4.9.9 - The `td` element - Interface `HTMLTableDataCellElement`
+     * Note: Most browsers currently adher to the W3C DOM Level 2 spec
+     *       (https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-82915075)
+     *       which suggests that browsers should use HTMLTableCellElement for
+     *       both TD and TH elements. WhatWG separates these.
+     * Test: Object.prototype.toString.call(document.createElement('td'))
+     *  - Chrome === "[object HTMLTableCellElement]"
+     *  - Firefox === "[object HTMLTableCellElement]"
+     *  - Safari === "[object HTMLTableCellElement]"
+     */
+    if (obj instanceof HTMLElement && obj.tagName === 'TD') {
+      return 'HTMLTableDataCellElement';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/#htmltableheadercellelement)
+     * WhatWG HTML$4.9.9 - The `td` element - Interface `HTMLTableHeaderCellElement`
+     * Note: Most browsers currently adher to the W3C DOM Level 2 spec
+     *       (https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-82915075)
+     *       which suggests that browsers should use HTMLTableCellElement for
+     *       both TD and TH elements. WhatWG separates these.
+     * Test: Object.prototype.toString.call(document.createElement('th'))
+     *  - Chrome === "[object HTMLTableCellElement]"
+     *  - Firefox === "[object HTMLTableCellElement]"
+     *  - Safari === "[object HTMLTableCellElement]"
+     */
+    if (obj instanceof HTMLElement && obj.tagName === 'TH') {
+      return 'HTMLTableHeaderCellElement';
+    }
+  }
+
+  /* ! Speed optimisation
+  * Pre:
+  *   Float64Array       x 625,644 ops/sec ±1.58% (80 runs sampled)
+  *   Float32Array       x 1,279,852 ops/sec ±2.91% (77 runs sampled)
+  *   Uint32Array        x 1,178,185 ops/sec ±1.95% (83 runs sampled)
+  *   Uint16Array        x 1,008,380 ops/sec ±2.25% (80 runs sampled)
+  *   Uint8Array         x 1,128,040 ops/sec ±2.11% (81 runs sampled)
+  *   Int32Array         x 1,170,119 ops/sec ±2.88% (80 runs sampled)
+  *   Int16Array         x 1,176,348 ops/sec ±5.79% (86 runs sampled)
+  *   Int8Array          x 1,058,707 ops/sec ±4.94% (77 runs sampled)
+  *   Uint8ClampedArray  x 1,110,633 ops/sec ±4.20% (80 runs sampled)
+  * Post:
+  *   Float64Array       x 7,105,671 ops/sec ±13.47% (64 runs sampled)
+  *   Float32Array       x 5,887,912 ops/sec ±1.46% (82 runs sampled)
+  *   Uint32Array        x 6,491,661 ops/sec ±1.76% (79 runs sampled)
+  *   Uint16Array        x 6,559,795 ops/sec ±1.67% (82 runs sampled)
+  *   Uint8Array         x 6,463,966 ops/sec ±1.43% (85 runs sampled)
+  *   Int32Array         x 5,641,841 ops/sec ±3.49% (81 runs sampled)
+  *   Int16Array         x 6,583,511 ops/sec ±1.98% (80 runs sampled)
+  *   Int8Array          x 6,606,078 ops/sec ±1.74% (81 runs sampled)
+  *   Uint8ClampedArray  x 6,602,224 ops/sec ±1.77% (83 runs sampled)
+  */
+  var stringTag = (symbolToStringTagExists && obj[Symbol.toStringTag]);
+  if (typeof stringTag === 'string') {
+    return stringTag;
+  }
+
+  var objPrototype = Object.getPrototypeOf(obj);
+  /* ! Speed optimisation
+  * Pre:
+  *   regex literal      x 1,772,385 ops/sec ±1.85% (77 runs sampled)
+  *   regex constructor  x 2,143,634 ops/sec ±2.46% (78 runs sampled)
+  * Post:
+  *   regex literal      x 3,928,009 ops/sec ±0.65% (78 runs sampled)
+  *   regex constructor  x 3,931,108 ops/sec ±0.58% (84 runs sampled)
+  */
+  if (objPrototype === RegExp.prototype) {
+    return 'RegExp';
+  }
+
+  /* ! Speed optimisation
+  * Pre:
+  *   date               x 2,130,074 ops/sec ±4.42% (68 runs sampled)
+  * Post:
+  *   date               x 3,953,779 ops/sec ±1.35% (77 runs sampled)
+  */
+  if (objPrototype === Date.prototype) {
+    return 'Date';
+  }
+
+  /* ! Spec Conformance
+   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-promise.prototype-@@tostringtag)
+   * ES6$25.4.5.4 - Promise.prototype[@@toStringTag] should be "Promise":
+   * Test: `Object.prototype.toString.call(Promise.resolve())``
+   *  - Chrome <=47 === "[object Object]"
+   *  - Edge <=20 === "[object Object]"
+   *  - Firefox 29-Latest === "[object Promise]"
+   *  - Safari 7.1-Latest === "[object Promise]"
+   */
+  if (promiseExists && objPrototype === Promise.prototype) {
+    return 'Promise';
+  }
+
+  /* ! Speed optimisation
+  * Pre:
+  *   set                x 2,222,186 ops/sec ±1.31% (82 runs sampled)
+  * Post:
+  *   set                x 4,545,879 ops/sec ±1.13% (83 runs sampled)
+  */
+  if (setExists && objPrototype === Set.prototype) {
+    return 'Set';
+  }
+
+  /* ! Speed optimisation
+  * Pre:
+  *   map                x 2,396,842 ops/sec ±1.59% (81 runs sampled)
+  * Post:
+  *   map                x 4,183,945 ops/sec ±6.59% (82 runs sampled)
+  */
+  if (mapExists && objPrototype === Map.prototype) {
+    return 'Map';
+  }
+
+  /* ! Speed optimisation
+  * Pre:
+  *   weakset            x 1,323,220 ops/sec ±2.17% (76 runs sampled)
+  * Post:
+  *   weakset            x 4,237,510 ops/sec ±2.01% (77 runs sampled)
+  */
+  if (weakSetExists && objPrototype === WeakSet.prototype) {
+    return 'WeakSet';
+  }
+
+  /* ! Speed optimisation
+  * Pre:
+  *   weakmap            x 1,500,260 ops/sec ±2.02% (78 runs sampled)
+  * Post:
+  *   weakmap            x 3,881,384 ops/sec ±1.45% (82 runs sampled)
+  */
+  if (weakMapExists && objPrototype === WeakMap.prototype) {
+    return 'WeakMap';
+  }
+
+  /* ! Spec Conformance
+   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-dataview.prototype-@@tostringtag)
+   * ES6$24.2.4.21 - DataView.prototype[@@toStringTag] should be "DataView":
+   * Test: `Object.prototype.toString.call(new DataView(new ArrayBuffer(1)))``
+   *  - Edge <=13 === "[object Object]"
+   */
+  if (dataViewExists && objPrototype === DataView.prototype) {
+    return 'DataView';
+  }
+
+  /* ! Spec Conformance
+   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%mapiteratorprototype%-@@tostringtag)
+   * ES6$23.1.5.2.2 - %MapIteratorPrototype%[@@toStringTag] should be "Map Iterator":
+   * Test: `Object.prototype.toString.call(new Map().entries())``
+   *  - Edge <=13 === "[object Object]"
+   */
+  if (mapExists && objPrototype === mapIteratorPrototype) {
+    return 'Map Iterator';
+  }
+
+  /* ! Spec Conformance
+   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%setiteratorprototype%-@@tostringtag)
+   * ES6$23.2.5.2.2 - %SetIteratorPrototype%[@@toStringTag] should be "Set Iterator":
+   * Test: `Object.prototype.toString.call(new Set().entries())``
+   *  - Edge <=13 === "[object Object]"
+   */
+  if (setExists && objPrototype === setIteratorPrototype) {
+    return 'Set Iterator';
+  }
+
+  /* ! Spec Conformance
+   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%arrayiteratorprototype%-@@tostringtag)
+   * ES6$22.1.5.2.2 - %ArrayIteratorPrototype%[@@toStringTag] should be "Array Iterator":
+   * Test: `Object.prototype.toString.call([][Symbol.iterator]())``
+   *  - Edge <=13 === "[object Object]"
+   */
+  if (arrayIteratorExists && objPrototype === arrayIteratorPrototype) {
+    return 'Array Iterator';
+  }
+
+  /* ! Spec Conformance
+   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%stringiteratorprototype%-@@tostringtag)
+   * ES6$21.1.5.2.2 - %StringIteratorPrototype%[@@toStringTag] should be "String Iterator":
+   * Test: `Object.prototype.toString.call(''[Symbol.iterator]())``
+   *  - Edge <=13 === "[object Object]"
+   */
+  if (stringIteratorExists && objPrototype === stringIteratorPrototype) {
+    return 'String Iterator';
+  }
+
+  /* ! Speed optimisation
+  * Pre:
+  *   object from null   x 2,424,320 ops/sec ±1.67% (76 runs sampled)
+  * Post:
+  *   object from null   x 5,838,000 ops/sec ±0.99% (84 runs sampled)
+  */
+  if (objPrototype === null) {
+    return 'Object';
+  }
+
+  return Object
+    .prototype
+    .toString
+    .call(obj)
+    .slice(toStringLeftSliceLength, toStringRightSliceLength);
+};
+
+module.exports.typeDetect = module.exports;
 
 
 /***/ }),
-/* 48 */
+/* 54 */
 /***/ (function(module, exports) {
 
 /*!
@@ -4309,7 +5240,7 @@ AssertionError.prototype.toJSON = function (stack) {
 
 
 /***/ }),
-/* 49 */
+/* 55 */
 /***/ (function(module, exports) {
 
 /*!
@@ -4319,9 +5250,9 @@ AssertionError.prototype.toJSON = function (stack) {
  */
 
 /**
- * # getActual(object, [actual])
+ * ### .getActual(object, [actual])
  *
- * Returns the `actual` value for an Assertion
+ * Returns the `actual` value for an Assertion.
  *
  * @param {Object} object (constructed Assertion)
  * @param {Arguments} chai.Assertion.prototype.assert arguments
@@ -4329,228 +5260,88 @@ AssertionError.prototype.toJSON = function (stack) {
  * @name getActual
  */
 
-module.exports = function (obj, args) {
+module.exports = function getActual(obj, args) {
   return args.length > 4 ? args[4] : obj._obj;
 };
 
 
 /***/ }),
-/* 50 */
+/* 56 */
 /***/ (function(module, exports) {
 
 /*!
- * Chai - getName utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * Chai - getOwnEnumerablePropertySymbols utility
+ * Copyright(c) 2011-2016 Jake Luer <jake@alogicalparadox.com>
  * MIT Licensed
  */
 
 /**
- * # getName(func)
+ * ### .getOwnEnumerablePropertySymbols(object)
  *
- * Gets the name of a function, in a cross-browser way.
+ * This allows the retrieval of directly-owned enumerable property symbols of an
+ * object. This function is necessary because Object.getOwnPropertySymbols
+ * returns both enumerable and non-enumerable property symbols.
  *
- * @param {Function} a function (usually a constructor)
+ * @param {Object} object
+ * @returns {Array}
  * @namespace Utils
- * @name getName
+ * @name getOwnEnumerablePropertySymbols
+ * @api public
  */
 
-module.exports = function (func) {
-  if (func.name) return func.name;
+module.exports = function getOwnEnumerablePropertySymbols(obj) {
+  if (typeof Object.getOwnPropertySymbols !== 'function') return [];
 
-  var match = /^\s?function ([^(]*)\(/.exec(func);
-  return match && match[1] ? match[1] : "";
+  return Object.getOwnPropertySymbols(obj).filter(function (sym) {
+    return Object.getOwnPropertyDescriptor(obj, sym).enumerable;
+  });
 };
 
 
 /***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 57 */
+/***/ (function(module, exports) {
 
 /*!
- * Chai - getPathInfo utility
+ * Chai - getProperties utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
  * MIT Licensed
  */
 
-var hasProperty = __webpack_require__(52);
-
 /**
- * ### .getPathInfo(path, object)
+ * ### .getProperties(object)
  *
- * This allows the retrieval of property info in an
- * object given a string path.
+ * This allows the retrieval of property names of an object, enumerable or not,
+ * inherited or not.
  *
- * The path info consists of an object with the
- * following properties:
- *
- * * parent - The parent object of the property referenced by `path`
- * * name - The name of the final property, a number if it was an array indexer
- * * value - The value of the property, if it exists, otherwise `undefined`
- * * exists - Whether the property exists or not
- *
- * @param {String} path
  * @param {Object} object
- * @returns {Object} info
+ * @returns {Array}
  * @namespace Utils
- * @name getPathInfo
+ * @name getProperties
  * @api public
  */
 
-module.exports = function getPathInfo(path, obj) {
-  var parsed = parsePath(path),
-      last = parsed[parsed.length - 1];
+module.exports = function getProperties(object) {
+  var result = Object.getOwnPropertyNames(object);
 
-  var info = {
-    parent: parsed.length > 1 ? _getPathValue(parsed, obj, parsed.length - 1) : obj,
-    name: last.p || last.i,
-    value: _getPathValue(parsed, obj)
-  };
-  info.exists = hasProperty(info.name, info.parent);
-
-  return info;
-};
-
-
-/*!
- * ## parsePath(path)
- *
- * Helper function used to parse string object
- * paths. Use in conjunction with `_getPathValue`.
- *
- *      var parsed = parsePath('myobject.property.subprop');
- *
- * ### Paths:
- *
- * * Can be as near infinitely deep and nested
- * * Arrays are also valid using the formal `myobject.document[3].property`.
- * * Literal dots and brackets (not delimiter) must be backslash-escaped.
- *
- * @param {String} path
- * @returns {Object} parsed
- * @api private
- */
-
-function parsePath (path) {
-  var str = path.replace(/([^\\])\[/g, '$1.[')
-    , parts = str.match(/(\\\.|[^.]+?)+/g);
-  return parts.map(function (value) {
-    var re = /^\[(\d+)\]$/
-      , mArr = re.exec(value);
-    if (mArr) return { i: parseFloat(mArr[1]) };
-    else return { p: value.replace(/\\([.\[\]])/g, '$1') };
-  });
-}
-
-
-/*!
- * ## _getPathValue(parsed, obj)
- *
- * Helper companion function for `.parsePath` that returns
- * the value located at the parsed address.
- *
- *      var value = getPathValue(parsed, obj);
- *
- * @param {Object} parsed definition from `parsePath`.
- * @param {Object} object to search against
- * @param {Number} object to search against
- * @returns {Object|Undefined} value
- * @api private
- */
-
-function _getPathValue (parsed, obj, index) {
-  var tmp = obj
-    , res;
-
-  index = (index === undefined ? parsed.length : index);
-
-  for (var i = 0, l = index; i < l; i++) {
-    var part = parsed[i];
-    if (tmp) {
-      if ('undefined' !== typeof part.p)
-        tmp = tmp[part.p];
-      else if ('undefined' !== typeof part.i)
-        tmp = tmp[part.i];
-      if (i == (l - 1)) res = tmp;
-    } else {
-      res = undefined;
+  function addProperty(property) {
+    if (result.indexOf(property) === -1) {
+      result.push(property);
     }
   }
-  return res;
-}
 
+  var proto = Object.getPrototypeOf(object);
+  while (proto !== null) {
+    Object.getOwnPropertyNames(proto).forEach(addProperty);
+    proto = Object.getPrototypeOf(proto);
+  }
 
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*!
- * Chai - hasProperty utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-
-var type = __webpack_require__(47);
-
-/**
- * ### .hasProperty(object, name)
- *
- * This allows checking whether an object has
- * named property or numeric array index.
- *
- * Basically does the same thing as the `in`
- * operator but works properly with natives
- * and null/undefined values.
- *
- *     var obj = {
- *         arr: ['a', 'b', 'c']
- *       , str: 'Hello'
- *     }
- *
- * The following would be the results.
- *
- *     hasProperty('str', obj);  // true
- *     hasProperty('constructor', obj);  // true
- *     hasProperty('bar', obj);  // false
- *
- *     hasProperty('length', obj.str); // true
- *     hasProperty(1, obj.str);  // true
- *     hasProperty(5, obj.str);  // false
- *
- *     hasProperty('length', obj.arr);  // true
- *     hasProperty(2, obj.arr);  // true
- *     hasProperty(3, obj.arr);  // false
- *
- * @param {Objuect} object
- * @param {String|Number} name
- * @returns {Boolean} whether it exists
- * @namespace Utils
- * @name getPathInfo
- * @api public
- */
-
-var literals = {
-    'number': Number
-  , 'string': String
-};
-
-module.exports = function hasProperty(name, obj) {
-  var ot = type(obj);
-
-  // Bad Object, obviously no props at all
-  if(ot === 'null' || ot === 'undefined')
-    return false;
-
-  // The `in` operator does not work with certain literals
-  // box these before the check
-  if(literals[ot] && typeof obj !== 'object')
-    obj = new literals[ot](obj);
-
-  return name in obj;
+  return result;
 };
 
 
 /***/ }),
-/* 53 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -4563,11 +5354,11 @@ module.exports = function hasProperty(name, obj) {
  * Module dependancies
  */
 
-var inspect = __webpack_require__(33);
+var inspect = __webpack_require__(30);
 var config = __webpack_require__(19);
 
 /**
- * ### .objDisplay (object)
+ * ### .objDisplay(object)
  *
  * Determines if an object or an array matches
  * criteria to be inspected in-line for error
@@ -4579,7 +5370,7 @@ var config = __webpack_require__(19);
  * @api public
  */
 
-module.exports = function (obj) {
+module.exports = function objDisplay(obj) {
   var str = inspect(obj)
     , type = Object.prototype.toString.call(obj);
 
@@ -4606,61 +5397,236 @@ module.exports = function (obj) {
 
 
 /***/ }),
-/* 54 */
-/***/ (function(module, exports) {
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/*!
- * Chai - transferFlags utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports. /*istanbul ignore end*/parsePatch = parsePatch;
+function parsePatch(uniDiff) {
+  /*istanbul ignore start*/var /*istanbul ignore end*/options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  var diffstr = uniDiff.split(/\r\n|[\n\v\f\r\x85]/),
+      delimiters = uniDiff.match(/\r\n|[\n\v\f\r\x85]/g) || [],
+      list = [],
+      i = 0;
+
+  function parseIndex() {
+    var index = {};
+    list.push(index);
+
+    // Parse diff metadata
+    while (i < diffstr.length) {
+      var line = diffstr[i];
+
+      // File header found, end parsing diff metadata
+      if (/^(\-\-\-|\+\+\+|@@)\s/.test(line)) {
+        break;
+      }
+
+      // Diff index
+      var header = /^(?:Index:|diff(?: -r \w+)+)\s+(.+?)\s*$/.exec(line);
+      if (header) {
+        index.index = header[1];
+      }
+
+      i++;
+    }
+
+    // Parse file headers if they are defined. Unified diff requires them, but
+    // there's no technical issues to have an isolated hunk without file header
+    parseFileHeader(index);
+    parseFileHeader(index);
+
+    // Parse hunks
+    index.hunks = [];
+
+    while (i < diffstr.length) {
+      var _line = diffstr[i];
+
+      if (/^(Index:|diff|\-\-\-|\+\+\+)\s/.test(_line)) {
+        break;
+      } else if (/^@@/.test(_line)) {
+        index.hunks.push(parseHunk());
+      } else if (_line && options.strict) {
+        // Ignore unexpected content unless in strict mode
+        throw new Error('Unknown line ' + (i + 1) + ' ' + JSON.stringify(_line));
+      } else {
+        i++;
+      }
+    }
+  }
+
+  // Parses the --- and +++ headers, if none are found, no lines
+  // are consumed.
+  function parseFileHeader(index) {
+    var headerPattern = /^(---|\+\+\+)\s+([\S ]*)(?:\t(.*?)\s*)?$/;
+    var fileHeader = headerPattern.exec(diffstr[i]);
+    if (fileHeader) {
+      var keyPrefix = fileHeader[1] === '---' ? 'old' : 'new';
+      index[keyPrefix + 'FileName'] = fileHeader[2];
+      index[keyPrefix + 'Header'] = fileHeader[3];
+
+      i++;
+    }
+  }
+
+  // Parses a hunk
+  // This assumes that we are at the start of a hunk.
+  function parseHunk() {
+    var chunkHeaderIndex = i,
+        chunkHeaderLine = diffstr[i++],
+        chunkHeader = chunkHeaderLine.split(/@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@/);
+
+    var hunk = {
+      oldStart: +chunkHeader[1],
+      oldLines: +chunkHeader[2] || 1,
+      newStart: +chunkHeader[3],
+      newLines: +chunkHeader[4] || 1,
+      lines: [],
+      linedelimiters: []
+    };
+
+    var addCount = 0,
+        removeCount = 0;
+    for (; i < diffstr.length; i++) {
+      // Lines starting with '---' could be mistaken for the "remove line" operation
+      // But they could be the header for the next file. Therefore prune such cases out.
+      if (diffstr[i].indexOf('--- ') === 0 && i + 2 < diffstr.length && diffstr[i + 1].indexOf('+++ ') === 0 && diffstr[i + 2].indexOf('@@') === 0) {
+        break;
+      }
+      var operation = diffstr[i][0];
+
+      if (operation === '+' || operation === '-' || operation === ' ' || operation === '\\') {
+        hunk.lines.push(diffstr[i]);
+        hunk.linedelimiters.push(delimiters[i] || '\n');
+
+        if (operation === '+') {
+          addCount++;
+        } else if (operation === '-') {
+          removeCount++;
+        } else if (operation === ' ') {
+          addCount++;
+          removeCount++;
+        }
+      } else {
+        break;
+      }
+    }
+
+    // Handle the empty block count case
+    if (!addCount && hunk.newLines === 1) {
+      hunk.newLines = 0;
+    }
+    if (!removeCount && hunk.oldLines === 1) {
+      hunk.oldLines = 0;
+    }
+
+    // Perform optional sanity checking
+    if (options.strict) {
+      if (addCount !== hunk.newLines) {
+        throw new Error('Added line count did not match for hunk at line ' + (chunkHeaderIndex + 1));
+      }
+      if (removeCount !== hunk.oldLines) {
+        throw new Error('Removed line count did not match for hunk at line ' + (chunkHeaderIndex + 1));
+      }
+    }
+
+    return hunk;
+  }
+
+  while (i < diffstr.length) {
+    parseIndex();
+  }
+
+  return list;
+}
+//# sourceMappingURL=data:application/json;base64,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LEtBQUosQ0FBVSx3REFBd0QsbUJBQW1CLENBQTNFLENBQVYsQ0FBTjtBQUNEO0FBQ0Y7O0FBRUQsV0FBTyxJQUFQO0FBQ0Q7O0FBRUQsU0FBTyxJQUFJLFFBQVEsTUFBbkIsRUFBMkI7QUFDekI7QUFDRDs7QUFFRCxTQUFPLElBQVA7QUFDRCIsImZpbGUiOiJwYXJzZS5qcyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBwYXJzZVBhdGNoKHVuaURpZmYsIG9wdGlvbnMgPSB7fSkge1xuICBsZXQgZGlmZnN0ciA9IHVuaURpZmYuc3BsaXQoL1xcclxcbnxbXFxuXFx2XFxmXFxyXFx4ODVdLyksXG4gICAgICBkZWxpbWl0ZXJzID0gdW5pRGlmZi5tYXRjaCgvXFxyXFxufFtcXG5cXHZcXGZcXHJcXHg4NV0vZykgfHwgW10sXG4gICAgICBsaXN0ID0gW10sXG4gICAgICBpID0gMDtcblxuICBmdW5jdGlvbiBwYXJzZUluZGV4KCkge1xuICAgIGxldCBpbmRleCA9IHt9O1xuICAgIGxpc3QucHVzaChpbmRleCk7XG5cbiAgICAvLyBQYXJzZSBkaWZmIG1ldGFkYXRhXG4gICAgd2hpbGUgKGkgPCBkaWZmc3RyLmxlbmd0aCkge1xuICAgICAgbGV0IGxpbmUgPSBkaWZmc3RyW2ldO1xuXG4gICAgICAvLyBGaWxlIGhlYWRlciBmb3VuZCwgZW5kIHBhcnNpbmcgZGlmZiBtZXRhZGF0YVxuICAgICAgaWYgKC9eKFxcLVxcLVxcLXxcXCtcXCtcXCt8QEApXFxzLy50ZXN0KGxpbmUpKSB7XG4gICAgICAgIGJyZWFrO1xuICAgICAgfVxuXG4gICAgICAvLyBEaWZmIGluZGV4XG4gICAgICBsZXQgaGVhZGVyID0gKC9eKD86SW5kZXg6fGRpZmYoPzogLXIgXFx3KykrKVxccysoLis/KVxccyokLykuZXhlYyhsaW5lKTtcbiAgICAgIGlmIChoZWFkZXIpIHtcbiAgICAgICAgaW5kZXguaW5kZXggPSBoZWFkZXJbMV07XG4gICAgICB9XG5cbiAgICAgIGkrKztcbiAgICB9XG5cbiAgICAvLyBQYXJzZSBmaWxlIGhlYWRlcnMgaWYgdGhleSBhcmUgZGVmaW5lZC4gVW5pZmllZCBkaWZmIHJlcXVpcmVzIHRoZW0sIGJ1dFxuICAgIC8vIHRoZXJlJ3Mgbm8gdGVjaG5pY2FsIGlzc3VlcyB0byBoYXZlIGFuIGlzb2xhdGVkIGh1bmsgd2l0aG91dCBmaWxlIGhlYWRlclxuICAgIHBhcnNlRmlsZUhlYWRlcihpbmRleCk7XG4gICAgcGFyc2VGaWxlSGVhZGVyKGluZGV4KTtcblxuICAgIC8vIFBhcnNlIGh1bmtzXG4gICAgaW5kZXguaHVua3MgPSBbXTtcblxuICAgIHdoaWxlIChpIDwgZGlmZnN0ci5sZW5ndGgpIHtcbiAgICAgIGxldCBsaW5lID0gZGlmZnN0cltpXTtcblxuICAgICAgaWYgKC9eKEluZGV4OnxkaWZmfFxcLVxcLVxcLXxcXCtcXCtcXCspXFxzLy50ZXN0KGxpbmUpKSB7XG4gICAgICAgIGJyZWFrO1xuICAgICAgfSBlbHNlIGlmICgvXkBALy50ZXN0KGxpbmUpKSB7XG4gICAgICAgIGluZGV4Lmh1bmtzLnB1c2gocGFyc2VIdW5rKCkpO1xuICAgICAgfSBlbHNlIGlmIChsaW5lICYmIG9wdGlvbnMuc3RyaWN0KSB7XG4gICAgICAgIC8vIElnbm9yZSB1bmV4cGVjdGVkIGNvbnRlbnQgdW5sZXNzIGluIHN0cmljdCBtb2RlXG4gICAgICAgIHRocm93IG5ldyBFcnJvcignVW5rbm93biBsaW5lICcgKyAoaSArIDEpICsgJyAnICsgSlNPTi5zdHJpbmdpZnkobGluZSkpO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgaSsrO1xuICAgICAgfVxuICAgIH1cbiAgfVxuXG4gIC8vIFBhcnNlcyB0aGUgLS0tIGFuZCArKysgaGVhZGVycywgaWYgbm9uZSBhcmUgZm91bmQsIG5vIGxpbmVzXG4gIC8vIGFyZSBjb25zdW1lZC5cbiAgZnVuY3Rpb24gcGFyc2VGaWxlSGVhZGVyKGluZGV4KSB7XG4gICAgY29uc3QgaGVhZGVyUGF0dGVybiA9IC9eKC0tLXxcXCtcXCtcXCspXFxzKyhbXFxTIF0qKSg/OlxcdCguKj8pXFxzKik/JC87XG4gICAgY29uc3QgZmlsZUhlYWRlciA9IGhlYWRlclBhdHRlcm4uZXhlYyhkaWZmc3RyW2ldKTtcbiAgICBpZiAoZmlsZUhlYWRlcikge1xuICAgICAgbGV0IGtleVByZWZpeCA9IGZpbGVIZWFkZXJbMV0gPT09ICctLS0nID8gJ29sZCcgOiAnbmV3JztcbiAgICAgIGluZGV4W2tleVByZWZpeCArICdGaWxlTmFtZSddID0gZmlsZUhlYWRlclsyXTtcbiAgICAgIGluZGV4W2tleVByZWZpeCArICdIZWFkZXInXSA9IGZpbGVIZWFkZXJbM107XG5cbiAgICAgIGkrKztcbiAgICB9XG4gIH1cblxuICAvLyBQYXJzZXMgYSBodW5rXG4gIC8vIFRoaXMgYXNzdW1lcyB0aGF0IHdlIGFyZSBhdCB0aGUgc3RhcnQgb2YgYSBodW5rLlxuICBmdW5jdGlvbiBwYXJzZUh1bmsoKSB7XG4gICAgbGV0IGNodW5rSGVhZGVySW5kZXggPSBpLFxuICAgICAgICBjaHVua0hlYWRlckxpbmUgPSBkaWZmc3RyW2krK10sXG4gICAgICAgIGNodW5rSGVhZGVyID0gY2h1bmtIZWFkZXJMaW5lLnNwbGl0KC9AQCAtKFxcZCspKD86LChcXGQrKSk/IFxcKyhcXGQrKSg/OiwoXFxkKykpPyBAQC8pO1xuXG4gICAgbGV0IGh1bmsgPSB7XG4gICAgICBvbGRTdGFydDogK2NodW5rSGVhZGVyWzFdLFxuICAgICAgb2xkTGluZXM6ICtjaHVua0hlYWRlclsyXSB8fCAxLFxuICAgICAgbmV3U3RhcnQ6ICtjaHVua0hlYWRlclszXSxcbiAgICAgIG5ld0xpbmVzOiArY2h1bmtIZWFkZXJbNF0gfHwgMSxcbiAgICAgIGxpbmVzOiBbXSxcbiAgICAgIGxpbmVkZWxpbWl0ZXJzOiBbXVxuICAgIH07XG5cbiAgICBsZXQgYWRkQ291bnQgPSAwLFxuICAgICAgICByZW1vdmVDb3VudCA9IDA7XG4gICAgZm9yICg7IGkgPCBkaWZmc3RyLmxlbmd0aDsgaSsrKSB7XG4gICAgICAvLyBMaW5lcyBzdGFydGluZyB3aXRoICctLS0nIGNvdWxkIGJlIG1pc3Rha2VuIGZvciB0aGUgXCJyZW1vdmUgbGluZVwiIG9wZXJhdGlvblxuICAgICAgLy8gQnV0IHRoZXkgY291bGQgYmUgdGhlIGhlYWRlciBmb3IgdGhlIG5leHQgZmlsZS4gVGhlcmVmb3JlIHBydW5lIHN1Y2ggY2FzZXMgb3V0LlxuICAgICAgaWYgKGRpZmZzdHJbaV0uaW5kZXhPZignLS0tICcpID09PSAwXG4gICAgICAgICAgICAmJiAoaSArIDIgPCBkaWZmc3RyLmxlbmd0aClcbiAgICAgICAgICAgICYmIGRpZmZzdHJbaSArIDFdLmluZGV4T2YoJysrKyAnKSA9PT0gMFxuICAgICAgICAgICAgJiYgZGlmZnN0cltpICsgMl0uaW5kZXhPZignQEAnKSA9PT0gMCkge1xuICAgICAgICAgIGJyZWFrO1xuICAgICAgfVxuICAgICAgbGV0IG9wZXJhdGlvbiA9IGRpZmZzdHJbaV1bMF07XG5cbiAgICAgIGlmIChvcGVyYXRpb24gPT09ICcrJyB8fCBvcGVyYXRpb24gPT09ICctJyB8fCBvcGVyYXRpb24gPT09ICcgJyB8fCBvcGVyYXRpb24gPT09ICdcXFxcJykge1xuICAgICAgICBodW5rLmxpbmVzLnB1c2goZGlmZnN0cltpXSk7XG4gICAgICAgIGh1bmsubGluZWRlbGltaXRlcnMucHVzaChkZWxpbWl0ZXJzW2ldIHx8ICdcXG4nKTtcblxuICAgICAgICBpZiAob3BlcmF0aW9uID09PSAnKycpIHtcbiAgICAgICAgICBhZGRDb3VudCsrO1xuICAgICAgICB9IGVsc2UgaWYgKG9wZXJhdGlvbiA9PT0gJy0nKSB7XG4gICAgICAgICAgcmVtb3ZlQ291bnQrKztcbiAgICAgICAgfSBlbHNlIGlmIChvcGVyYXRpb24gPT09ICcgJykge1xuICAgICAgICAgIGFkZENvdW50Kys7XG4gICAgICAgICAgcmVtb3ZlQ291bnQrKztcbiAgICAgICAgfVxuICAgICAgfSBlbHNlIHtcbiAgICAgICAgYnJlYWs7XG4gICAgICB9XG4gICAgfVxuXG4gICAgLy8gSGFuZGxlIHRoZSBlbXB0eSBibG9jayBjb3VudCBjYXNlXG4gICAgaWYgKCFhZGRDb3VudCAmJiBodW5rLm5ld0xpbmVzID09PSAxKSB7XG4gICAgICBodW5rLm5ld0xpbmVzID0gMDtcbiAgICB9XG4gICAgaWYgKCFyZW1vdmVDb3VudCAmJiBodW5rLm9sZExpbmVzID09PSAxKSB7XG4gICAgICBodW5rLm9sZExpbmVzID0gMDtcbiAgICB9XG5cbiAgICAvLyBQZXJmb3JtIG9wdGlvbmFsIHNhbml0eSBjaGVja2luZ1xuICAgIGlmIChvcHRpb25zLnN0cmljdCkge1xuICAgICAgaWYgKGFkZENvdW50ICE9PSBodW5rLm5ld0xpbmVzKSB7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcignQWRkZWQgbGluZSBjb3VudCBkaWQgbm90IG1hdGNoIGZvciBodW5rIGF0IGxpbmUgJyArIChjaHVua0hlYWRlckluZGV4ICsgMSkpO1xuICAgICAgfVxuICAgICAgaWYgKHJlbW92ZUNvdW50ICE9PSBodW5rLm9sZExpbmVzKSB7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcignUmVtb3ZlZCBsaW5lIGNvdW50IGRpZCBub3QgbWF0Y2ggZm9yIGh1bmsgYXQgbGluZSAnICsgKGNodW5rSGVhZGVySW5kZXggKyAxKSk7XG4gICAgICB9XG4gICAgfVxuXG4gICAgcmV0dXJuIGh1bms7XG4gIH1cblxuICB3aGlsZSAoaSA8IGRpZmZzdHIubGVuZ3RoKSB7XG4gICAgcGFyc2VJbmRleCgpO1xuICB9XG5cbiAgcmV0dXJuIGxpc3Q7XG59XG4iXX0=
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports. /*istanbul ignore end*/generateOptions = generateOptions;
+function generateOptions(options, defaults) {
+  if (typeof options === 'function') {
+    defaults.callback = options;
+  } else if (options) {
+    for (var name in options) {
+      /* istanbul ignore else */
+      if (options.hasOwnProperty(name)) {
+        defaults[name] = options[name];
+      }
+    }
+  }
+  return defaults;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy91dGlsL3BhcmFtcy5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Z0NBQWdCLGUsR0FBQSxlO0FBQVQsU0FBUyxlQUFULENBQXlCLE9BQXpCLEVBQWtDLFFBQWxDLEVBQTRDO0FBQ2pELE1BQUksT0FBTyxPQUFQLEtBQW1CLFVBQXZCLEVBQW1DO0FBQ2pDLGFBQVMsUUFBVCxHQUFvQixPQUFwQjtBQUNELEdBRkQsTUFFTyxJQUFJLE9BQUosRUFBYTtBQUNsQixTQUFLLElBQUksSUFBVCxJQUFpQixPQUFqQixFQUEwQjs7QUFFeEIsVUFBSSxRQUFRLGNBQVIsQ0FBdUIsSUFBdkIsQ0FBSixFQUFrQztBQUNoQyxpQkFBUyxJQUFULElBQWlCLFFBQVEsSUFBUixDQUFqQjtBQUNEO0FBQ0Y7QUFDRjtBQUNELFNBQU8sUUFBUDtBQUNEIiwiZmlsZSI6InBhcmFtcy5qcyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBnZW5lcmF0ZU9wdGlvbnMob3B0aW9ucywgZGVmYXVsdHMpIHtcbiAgaWYgKHR5cGVvZiBvcHRpb25zID09PSAnZnVuY3Rpb24nKSB7XG4gICAgZGVmYXVsdHMuY2FsbGJhY2sgPSBvcHRpb25zO1xuICB9IGVsc2UgaWYgKG9wdGlvbnMpIHtcbiAgICBmb3IgKGxldCBuYW1lIGluIG9wdGlvbnMpIHtcbiAgICAgIC8qIGlzdGFuYnVsIGlnbm9yZSBlbHNlICovXG4gICAgICBpZiAob3B0aW9ucy5oYXNPd25Qcm9wZXJ0eShuYW1lKSkge1xuICAgICAgICBkZWZhdWx0c1tuYW1lXSA9IG9wdGlvbnNbbmFtZV07XG4gICAgICB9XG4gICAgfVxuICB9XG4gIHJldHVybiBkZWZhdWx0cztcbn1cbiJdfQ==
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/* !
+ * Chai - getFuncName utility
+ * Copyright(c) 2012-2016 Jake Luer <jake@alogicalparadox.com>
  * MIT Licensed
  */
 
 /**
- * ### transferFlags(assertion, object, includeAll = true)
+ * ### .getFuncName(constructorFn)
  *
- * Transfer all the flags for `assertion` to `object`. If
- * `includeAll` is set to `false`, then the base Chai
- * assertion flags (namely `object`, `ssfi`, and `message`)
- * will not be transferred.
+ * Returns the name of a function.
+ * When a non-function instance is passed, returns `null`.
+ * This also includes a polyfill function if `aFunc.name` is not defined.
  *
- *
- *     var newAssertion = new Assertion();
- *     utils.transferFlags(assertion, newAssertion);
- *
- *     var anotherAsseriton = new Assertion(myObj);
- *     utils.transferFlags(assertion, anotherAssertion, false);
- *
- * @param {Assertion} assertion the assertion to transfer the flags from
- * @param {Object} object the object to transfer the flags to; usually a new assertion
- * @param {Boolean} includeAll
+ * @name getFuncName
+ * @param {Function} funct
  * @namespace Utils
- * @name transferFlags
- * @api private
+ * @api public
  */
 
-module.exports = function (assertion, object, includeAll) {
-  var flags = assertion.__flags || (assertion.__flags = Object.create(null));
-
-  if (!object.__flags) {
-    object.__flags = Object.create(null);
+var toString = Function.prototype.toString;
+var functionNameMatch = /\s*function(?:\s|\s*\/\*[^(?:*\/)]+\*\/\s*)*([^\s\(\/]+)/;
+function getFuncName(aFunc) {
+  if (typeof aFunc !== 'function') {
+    return null;
   }
 
-  includeAll = arguments.length === 3 ? includeAll : true;
-
-  for (var flag in flags) {
-    if (includeAll ||
-        (flag !== 'object' && flag !== 'ssfi' && flag != 'message')) {
-      object.__flags[flag] = flags[flag];
+  var name = '';
+  if (typeof Function.prototype.name === 'undefined' && typeof aFunc.name === 'undefined') {
+    // Here we run a polyfill if Function does not support the `name` property and if aFunc.name is not defined
+    var match = toString.call(aFunc).match(functionNameMatch);
+    if (match) {
+      name = match[1];
     }
+  } else {
+    // If we've got a `name` property we just use it
+    name = aFunc.name;
   }
-};
+
+  return name;
+}
+
+module.exports = getFuncName;
 
 
 /***/ }),
-/* 55 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(("function" === "function" && __webpack_require__(82) && function (m) { !(__WEBPACK_AMD_DEFINE_FACTORY__ = (m),
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(("function" === "function" && __webpack_require__(87) && function (m) { !(__WEBPACK_AMD_DEFINE_FACTORY__ = (m),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
 				__WEBPACK_AMD_DEFINE_FACTORY__),
@@ -5104,15 +6070,15 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(("function" =
 
 
 /***/ }),
-/* 56 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var extend = __webpack_require__(13);
-var functionName = __webpack_require__(22);
-var valueToString = __webpack_require__(14);
+var extend = __webpack_require__(15);
+var functionName = __webpack_require__(25);
+var valueToString = __webpack_require__(17);
 
 var slice = Array.prototype.slice;
 var join = Array.prototype.join;
@@ -5223,6 +6189,7 @@ var proto = {
                 this.exception ||
                 typeof this.returnArgAt === "number" ||
                 this.returnThis ||
+                typeof this.throwArgAt === "number" ||
                 this.fakeFn ||
                 this.returnValueDefined);
     },
@@ -5236,12 +6203,21 @@ var proto = {
             return args[this.returnArgAt];
         } else if (this.returnThis) {
             return context;
+        } else if (typeof this.throwArgAt === "number") {
+            if (args.length < this.throwArgAt) {
+                throw new TypeError(
+                    "throwArgs failed: " + this.throwArgAt
+                    + " arguments required but only " + args.length
+                    + " present"
+                );
+            }
+            throw args[this.throwArgAt];
         } else if (this.fakeFn) {
             return this.fakeFn.apply(context, args);
         } else if (this.resolve) {
-            return Promise.resolve(this.returnValue);
+            return (this.promiseLibrary || Promise).resolve(this.returnValue);
         } else if (this.reject) {
-            return Promise.reject(this.returnValue);
+            return (this.promiseLibrary || Promise).reject(this.returnValue);
         } else if (this.callsThrough) {
             return this.stub.wrappedMethod.apply(context, args);
         }
@@ -5312,18 +6288,48 @@ module.exports = proto;
 
 
 /***/ }),
-/* 57 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var sinonSpy = __webpack_require__(21);
-var sinonStub = __webpack_require__(27);
-var sinonMock = __webpack_require__(59);
-var throwOnFalsyObject = __webpack_require__(60);
-var collectOwnMethods = __webpack_require__(115);
-var stubNonFunctionProperty = __webpack_require__(122);
+var walk = __webpack_require__(35);
+var getPropertyDescriptor = __webpack_require__(16);
+
+function collectMethod(methods, object, prop, propOwner) {
+    if (
+        typeof getPropertyDescriptor(propOwner, prop).value === "function" &&
+        object.hasOwnProperty(prop)
+    ) {
+        methods.push(object[prop]);
+    }
+}
+
+// This function returns an array of all the own methods on the passed object
+function collectOwnMethods(object) {
+    var methods = [];
+
+    walk(object, collectMethod.bind(null, methods, object));
+
+    return methods;
+}
+
+module.exports = collectOwnMethods;
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var sinonSpy = __webpack_require__(23);
+var sinonStub = __webpack_require__(24);
+var sinonMock = __webpack_require__(67);
+var sandboxStub = __webpack_require__(134);
+var collectOwnMethods = __webpack_require__(64);
 
 var push = [].push;
 
@@ -5365,7 +6371,13 @@ var collection = {
     },
 
     resetHistory: function resetHistory() {
-        each(this, "resetHistory");
+        getFakes(this).forEach(function (fake) {
+            var method = fake.resetHistory || fake.reset;
+
+            if (method) {
+                method.call(fake);
+            }
+        });
     },
 
     verifyAndRestore: function verifyAndRestore() {
@@ -5389,23 +6401,34 @@ var collection = {
         return fake;
     },
 
+    addUsingPromise: function (fake) {
+        fake.usingPromise(this.promiseLibrary);
+        return fake;
+    },
+
     spy: function spy() {
         return this.add(sinonSpy.apply(sinonSpy, arguments));
     },
 
     stub: function stub(object, property/*, value*/) {
-        throwOnFalsyObject.apply(null, arguments);
+        if (arguments.length > 2) {
+            return sandboxStub.apply(this, arguments);
+        }
 
+        var stubbed = sinonStub.apply(null, arguments);
         var isStubbingEntireObject = typeof property === "undefined" && typeof object === "object";
-        var isStubbingNonFunctionProperty = property && typeof object[property] !== "function";
-        var stubbed = isStubbingNonFunctionProperty ?
-                        stubNonFunctionProperty.apply(null, arguments) :
-                        sinonStub.apply(null, arguments);
 
         if (isStubbingEntireObject) {
-            collectOwnMethods(stubbed).forEach(this.add.bind(this));
+            var ownMethods = collectOwnMethods(stubbed);
+            ownMethods.forEach(this.add.bind(this));
+            if (this.promiseLibrary) {
+                ownMethods.forEach(this.addUsingPromise.bind(this));
+            }
         } else {
             this.add(stubbed);
+            if (this.promiseLibrary) {
+                stubbed.usingPromise(this.promiseLibrary);
+            }
         }
 
         return stubbed;
@@ -5438,22 +6461,22 @@ module.exports = collection;
 
 
 /***/ }),
-/* 58 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var spyInvoke = __webpack_require__(21).invoke;
-var spyCallToString = __webpack_require__(26).toString;
-var timesInWords = __webpack_require__(28);
-var extend = __webpack_require__(13);
-var match = __webpack_require__(12);
-var stub = __webpack_require__(27);
-var assert = __webpack_require__(34);
-var deepEqual = __webpack_require__(17).use(match);
-var format = __webpack_require__(18);
-var valueToString = __webpack_require__(14);
+var spyInvoke = __webpack_require__(23).invoke;
+var spyCallToString = __webpack_require__(33).toString;
+var timesInWords = __webpack_require__(34);
+var extend = __webpack_require__(15);
+var match = __webpack_require__(14);
+var stub = __webpack_require__(24);
+var assert = __webpack_require__(40);
+var deepEqual = __webpack_require__(21).use(match);
+var format = __webpack_require__(22);
+var valueToString = __webpack_require__(17);
 
 var slice = Array.prototype.slice;
 var push = Array.prototype.push;
@@ -5626,7 +6649,7 @@ var mockExpectation = {
                 mockExpectation.fail(this.method + " received wrong arguments " + format(args) +
                     ", expected " + format(expectedArguments));
             }
-        });
+        }, this);
     },
 
     allowsCall: function allowsCall(thisValue, args) {
@@ -5733,18 +6756,18 @@ module.exports = mockExpectation;
 
 
 /***/ }),
-/* 59 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var mockExpectation = __webpack_require__(58);
-var spyCallToString = __webpack_require__(26).toString;
-var extend = __webpack_require__(13);
-var match = __webpack_require__(12);
-var deepEqual = __webpack_require__(17).use(match);
-var wrapMethod = __webpack_require__(23);
+var mockExpectation = __webpack_require__(66);
+var spyCallToString = __webpack_require__(33).toString;
+var extend = __webpack_require__(15);
+var match = __webpack_require__(14);
+var deepEqual = __webpack_require__(21).use(match);
+var wrapMethod = __webpack_require__(26);
 
 var push = Array.prototype.push;
 
@@ -5916,12 +6939,12 @@ module.exports = mock;
 
 
 /***/ }),
-/* 60 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var valueToString = __webpack_require__(14);
+var valueToString = __webpack_require__(17);
 
 function throwOnFalsyObject(object, property) {
     if (property && !object) {
@@ -5934,29 +6957,48 @@ module.exports = throwOnFalsyObject;
 
 
 /***/ }),
-/* 61 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+var every = Array.prototype.every;
+
 module.exports = function calledInOrder(spies) {
+    var callMap = {};
+
+    function hasCallsLeft(spy) {
+        if (callMap[spy.id] === undefined) {
+            callMap[spy.id] = 0;
+        }
+
+        return callMap[spy.id] < spy.callCount;
+    }
+
     if (arguments.length > 1) {
         spies = arguments;
     }
 
-    for (var i = 1, l = spies.length; i < l; i++) {
-        if (!spies[i - 1].calledBefore(spies[i]) || !spies[i].called) {
-            return false;
-        }
-    }
+    return every.call(spies, function checkAdjacentCalls(spy, i) {
+        var calledBeforeNext = true;
 
-    return true;
+        if (i !== spies.length - 1) {
+            calledBeforeNext = spy.calledBefore(spies[i + 1]);
+        }
+
+        if (hasCallsLeft(spy) && calledBeforeNext) {
+            callMap[spy.id] += 1;
+            return true;
+        }
+
+        return false;
+    });
 };
 
 
 /***/ }),
-/* 62 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5972,46 +7014,7 @@ module.exports = {
 
 
 /***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*eslint no-console: 0 */
-
-
-// wrap returns a function that will invoke the supplied function and print a deprecation warning to the console each
-// time it is called.
-exports.wrap = function (func, msg) {
-    var wrapped = function () {
-        exports.printWarning(msg);
-        return func.apply(this, arguments);
-    };
-    if (func.prototype) {
-        wrapped.prototype = func.prototype;
-    }
-    return wrapped;
-};
-
-// defaultMsg returns a string which can be supplied to `wrap()` to notify the user that a particular part of the
-// sinon API has been deprecated.
-exports.defaultMsg = function (funcName) {
-    return "sinon." + funcName + " is deprecated and will be removed from the public API in a future version of sinon.";
-};
-
-exports.printWarning = function (msg) {
-    // Watch out for IE7 and below! :(
-    if (typeof console !== "undefined") {
-        if (console.info) {
-            console.info(msg);
-        } else {
-            console.log(msg);
-        }
-    }
-};
-
-
-/***/ }),
-/* 64 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6037,12 +7040,12 @@ module.exports = function every(obj, fn) {
 
 
 /***/ }),
-/* 65 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var typeOf = __webpack_require__(37);
+var typeOf = __webpack_require__(44);
 
 module.exports = function iterableToString(obj) {
     var representation = "";
@@ -6078,7 +7081,7 @@ module.exports = function iterableToString(obj) {
 
 
 /***/ }),
-/* 66 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6098,7 +7101,7 @@ module.exports = function orderByFirstCall(spies) {
 
 
 /***/ }),
-/* 67 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6189,14 +7192,14 @@ module.exports = {
 
 
 /***/ }),
-/* 68 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var fakeServer = __webpack_require__(38);
-var fakeTimers = __webpack_require__(39);
+var fakeServer = __webpack_require__(45);
+var fakeTimers = __webpack_require__(46);
 
 function Server() {}
 Server.prototype = fakeServer;
@@ -6262,212 +7265,37 @@ module.exports = fakeServerWithClock;
 
 
 /***/ }),
-/* 69 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports. /*istanbul ignore end*/parsePatch = parsePatch;
-function parsePatch(uniDiff) {
-  /*istanbul ignore start*/var /*istanbul ignore end*/options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-  var diffstr = uniDiff.split(/\r\n|[\n\v\f\r\x85]/),
-      delimiters = uniDiff.match(/\r\n|[\n\v\f\r\x85]/g) || [],
-      list = [],
-      i = 0;
-
-  function parseIndex() {
-    var index = {};
-    list.push(index);
-
-    // Parse diff metadata
-    while (i < diffstr.length) {
-      var line = diffstr[i];
-
-      // File header found, end parsing diff metadata
-      if (/^(\-\-\-|\+\+\+|@@)\s/.test(line)) {
-        break;
-      }
-
-      // Diff index
-      var header = /^(?:Index:|diff(?: -r \w+)+)\s+(.+?)\s*$/.exec(line);
-      if (header) {
-        index.index = header[1];
-      }
-
-      i++;
-    }
-
-    // Parse file headers if they are defined. Unified diff requires them, but
-    // there's no technical issues to have an isolated hunk without file header
-    parseFileHeader(index);
-    parseFileHeader(index);
-
-    // Parse hunks
-    index.hunks = [];
-
-    while (i < diffstr.length) {
-      var _line = diffstr[i];
-
-      if (/^(Index:|diff|\-\-\-|\+\+\+)\s/.test(_line)) {
-        break;
-      } else if (/^@@/.test(_line)) {
-        index.hunks.push(parseHunk());
-      } else if (_line && options.strict) {
-        // Ignore unexpected content unless in strict mode
-        throw new Error('Unknown line ' + (i + 1) + ' ' + JSON.stringify(_line));
-      } else {
-        i++;
-      }
-    }
-  }
-
-  // Parses the --- and +++ headers, if none are found, no lines
-  // are consumed.
-  function parseFileHeader(index) {
-    var headerPattern = /^(---|\+\+\+)\s+([\S ]*)(?:\t(.*?)\s*)?$/;
-    var fileHeader = headerPattern.exec(diffstr[i]);
-    if (fileHeader) {
-      var keyPrefix = fileHeader[1] === '---' ? 'old' : 'new';
-      index[keyPrefix + 'FileName'] = fileHeader[2];
-      index[keyPrefix + 'Header'] = fileHeader[3];
-
-      i++;
-    }
-  }
-
-  // Parses a hunk
-  // This assumes that we are at the start of a hunk.
-  function parseHunk() {
-    var chunkHeaderIndex = i,
-        chunkHeaderLine = diffstr[i++],
-        chunkHeader = chunkHeaderLine.split(/@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@/);
-
-    var hunk = {
-      oldStart: +chunkHeader[1],
-      oldLines: +chunkHeader[2] || 1,
-      newStart: +chunkHeader[3],
-      newLines: +chunkHeader[4] || 1,
-      lines: [],
-      linedelimiters: []
-    };
-
-    var addCount = 0,
-        removeCount = 0;
-    for (; i < diffstr.length; i++) {
-      // Lines starting with '---' could be mistaken for the "remove line" operation
-      // But they could be the header for the next file. Therefore prune such cases out.
-      if (diffstr[i].indexOf('--- ') === 0 && i + 2 < diffstr.length && diffstr[i + 1].indexOf('+++ ') === 0 && diffstr[i + 2].indexOf('@@') === 0) {
-        break;
-      }
-      var operation = diffstr[i][0];
-
-      if (operation === '+' || operation === '-' || operation === ' ' || operation === '\\') {
-        hunk.lines.push(diffstr[i]);
-        hunk.linedelimiters.push(delimiters[i] || '\n');
-
-        if (operation === '+') {
-          addCount++;
-        } else if (operation === '-') {
-          removeCount++;
-        } else if (operation === ' ') {
-          addCount++;
-          removeCount++;
-        }
-      } else {
-        break;
-      }
-    }
-
-    // Handle the empty block count case
-    if (!addCount && hunk.newLines === 1) {
-      hunk.newLines = 0;
-    }
-    if (!removeCount && hunk.oldLines === 1) {
-      hunk.oldLines = 0;
-    }
-
-    // Perform optional sanity checking
-    if (options.strict) {
-      if (addCount !== hunk.newLines) {
-        throw new Error('Added line count did not match for hunk at line ' + (chunkHeaderIndex + 1));
-      }
-      if (removeCount !== hunk.oldLines) {
-        throw new Error('Removed line count did not match for hunk at line ' + (chunkHeaderIndex + 1));
-      }
-    }
-
-    return hunk;
-  }
-
-  while (i < diffstr.length) {
-    parseIndex();
-  }
-
-  return list;
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9wYXRjaC9wYXJzZS5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Z0NBQWdCLFUsR0FBQSxVO0FBQVQsU0FBUyxVQUFULENBQW9CLE9BQXBCLEVBQTJDOzJCQUFBLEksdUJBQWQsT0FBYyx5REFBSixFQUFJOztBQUNoRCxNQUFJLFVBQVUsUUFBUSxLQUFSLENBQWMscUJBQWQsQ0FBZDtBQUFBLE1BQ0ksYUFBYSxRQUFRLEtBQVIsQ0FBYyxzQkFBZCxLQUF5QyxFQUQxRDtBQUFBLE1BRUksT0FBTyxFQUZYO0FBQUEsTUFHSSxJQUFJLENBSFI7O0FBS0EsV0FBUyxVQUFULEdBQXNCO0FBQ3BCLFFBQUksUUFBUSxFQUFaO0FBQ0EsU0FBSyxJQUFMLENBQVUsS0FBVjs7O0FBR0EsV0FBTyxJQUFJLFFBQVEsTUFBbkIsRUFBMkI7QUFDekIsVUFBSSxPQUFPLFFBQVEsQ0FBUixDQUFYOzs7QUFHQSxVQUFJLHdCQUF3QixJQUF4QixDQUE2QixJQUE3QixDQUFKLEVBQXdDO0FBQ3RDO0FBQ0Q7OztBQUdELFVBQUksU0FBVSwwQ0FBRCxDQUE2QyxJQUE3QyxDQUFrRCxJQUFsRCxDQUFiO0FBQ0EsVUFBSSxNQUFKLEVBQVk7QUFDVixjQUFNLEtBQU4sR0FBYyxPQUFPLENBQVAsQ0FBZDtBQUNEOztBQUVEO0FBQ0Q7Ozs7QUFJRCxvQkFBZ0IsS0FBaEI7QUFDQSxvQkFBZ0IsS0FBaEI7OztBQUdBLFVBQU0sS0FBTixHQUFjLEVBQWQ7O0FBRUEsV0FBTyxJQUFJLFFBQVEsTUFBbkIsRUFBMkI7QUFDekIsVUFBSSxRQUFPLFFBQVEsQ0FBUixDQUFYOztBQUVBLFVBQUksaUNBQWlDLElBQWpDLENBQXNDLEtBQXRDLENBQUosRUFBaUQ7QUFDL0M7QUFDRCxPQUZELE1BRU8sSUFBSSxNQUFNLElBQU4sQ0FBVyxLQUFYLENBQUosRUFBc0I7QUFDM0IsY0FBTSxLQUFOLENBQVksSUFBWixDQUFpQixXQUFqQjtBQUNELE9BRk0sTUFFQSxJQUFJLFNBQVEsUUFBUSxNQUFwQixFQUE0Qjs7QUFFakMsY0FBTSxJQUFJLEtBQUosQ0FBVSxtQkFBbUIsSUFBSSxDQUF2QixJQUE0QixHQUE1QixHQUFrQyxLQUFLLFNBQUwsQ0FBZSxLQUFmLENBQTVDLENBQU47QUFDRCxPQUhNLE1BR0E7QUFDTDtBQUNEO0FBQ0Y7QUFDRjs7OztBQUlELFdBQVMsZUFBVCxDQUF5QixLQUF6QixFQUFnQztBQUM5QixRQUFNLGdCQUFnQiwwQ0FBdEI7QUFDQSxRQUFNLGFBQWEsY0FBYyxJQUFkLENBQW1CLFFBQVEsQ0FBUixDQUFuQixDQUFuQjtBQUNBLFFBQUksVUFBSixFQUFnQjtBQUNkLFVBQUksWUFBWSxXQUFXLENBQVgsTUFBa0IsS0FBbEIsR0FBMEIsS0FBMUIsR0FBa0MsS0FBbEQ7QUFDQSxZQUFNLFlBQVksVUFBbEIsSUFBZ0MsV0FBVyxDQUFYLENBQWhDO0FBQ0EsWUFBTSxZQUFZLFFBQWxCLElBQThCLFdBQVcsQ0FBWCxDQUE5Qjs7QUFFQTtBQUNEO0FBQ0Y7Ozs7QUFJRCxXQUFTLFNBQVQsR0FBcUI7QUFDbkIsUUFBSSxtQkFBbUIsQ0FBdkI7QUFBQSxRQUNJLGtCQUFrQixRQUFRLEdBQVIsQ0FEdEI7QUFBQSxRQUVJLGNBQWMsZ0JBQWdCLEtBQWhCLENBQXNCLDRDQUF0QixDQUZsQjs7QUFJQSxRQUFJLE9BQU87QUFDVCxnQkFBVSxDQUFDLFlBQVksQ0FBWixDQURGO0FBRVQsZ0JBQVUsQ0FBQyxZQUFZLENBQVosQ0FBRCxJQUFtQixDQUZwQjtBQUdULGdCQUFVLENBQUMsWUFBWSxDQUFaLENBSEY7QUFJVCxnQkFBVSxDQUFDLFlBQVksQ0FBWixDQUFELElBQW1CLENBSnBCO0FBS1QsYUFBTyxFQUxFO0FBTVQsc0JBQWdCO0FBTlAsS0FBWDs7QUFTQSxRQUFJLFdBQVcsQ0FBZjtBQUFBLFFBQ0ksY0FBYyxDQURsQjtBQUVBLFdBQU8sSUFBSSxRQUFRLE1BQW5CLEVBQTJCLEdBQTNCLEVBQWdDOzs7QUFHOUIsVUFBSSxRQUFRLENBQVIsRUFBVyxPQUFYLENBQW1CLE1BQW5CLE1BQStCLENBQS9CLElBQ00sSUFBSSxDQUFKLEdBQVEsUUFBUSxNQUR0QixJQUVLLFFBQVEsSUFBSSxDQUFaLEVBQWUsT0FBZixDQUF1QixNQUF2QixNQUFtQyxDQUZ4QyxJQUdLLFFBQVEsSUFBSSxDQUFaLEVBQWUsT0FBZixDQUF1QixJQUF2QixNQUFpQyxDQUgxQyxFQUc2QztBQUN6QztBQUNIO0FBQ0QsVUFBSSxZQUFZLFFBQVEsQ0FBUixFQUFXLENBQVgsQ0FBaEI7O0FBRUEsVUFBSSxjQUFjLEdBQWQsSUFBcUIsY0FBYyxHQUFuQyxJQUEwQyxjQUFjLEdBQXhELElBQStELGNBQWMsSUFBakYsRUFBdUY7QUFDckYsYUFBSyxLQUFMLENBQVcsSUFBWCxDQUFnQixRQUFRLENBQVIsQ0FBaEI7QUFDQSxhQUFLLGNBQUwsQ0FBb0IsSUFBcEIsQ0FBeUIsV0FBVyxDQUFYLEtBQWlCLElBQTFDOztBQUVBLFlBQUksY0FBYyxHQUFsQixFQUF1QjtBQUNyQjtBQUNELFNBRkQsTUFFTyxJQUFJLGNBQWMsR0FBbEIsRUFBdUI7QUFDNUI7QUFDRCxTQUZNLE1BRUEsSUFBSSxjQUFjLEdBQWxCLEVBQXVCO0FBQzVCO0FBQ0E7QUFDRDtBQUNGLE9BWkQsTUFZTztBQUNMO0FBQ0Q7QUFDRjs7O0FBR0QsUUFBSSxDQUFDLFFBQUQsSUFBYSxLQUFLLFFBQUwsS0FBa0IsQ0FBbkMsRUFBc0M7QUFDcEMsV0FBSyxRQUFMLEdBQWdCLENBQWhCO0FBQ0Q7QUFDRCxRQUFJLENBQUMsV0FBRCxJQUFnQixLQUFLLFFBQUwsS0FBa0IsQ0FBdEMsRUFBeUM7QUFDdkMsV0FBSyxRQUFMLEdBQWdCLENBQWhCO0FBQ0Q7OztBQUdELFFBQUksUUFBUSxNQUFaLEVBQW9CO0FBQ2xCLFVBQUksYUFBYSxLQUFLLFFBQXRCLEVBQWdDO0FBQzlCLGNBQU0sSUFBSSxLQUFKLENBQVUsc0RBQXNELG1CQUFtQixDQUF6RSxDQUFWLENBQU47QUFDRDtBQUNELFVBQUksZ0JBQWdCLEtBQUssUUFBekIsRUFBbUM7QUFDakMsY0FBTSxJQUFJLEtBQUosQ0FBVSx3REFBd0QsbUJBQW1CLENBQTNFLENBQVYsQ0FBTjtBQUNEO0FBQ0Y7O0FBRUQsV0FBTyxJQUFQO0FBQ0Q7O0FBRUQsU0FBTyxJQUFJLFFBQVEsTUFBbkIsRUFBMkI7QUFDekI7QUFDRDs7QUFFRCxTQUFPLElBQVA7QUFDRCIsImZpbGUiOiJwYXJzZS5qcyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBwYXJzZVBhdGNoKHVuaURpZmYsIG9wdGlvbnMgPSB7fSkge1xuICBsZXQgZGlmZnN0ciA9IHVuaURpZmYuc3BsaXQoL1xcclxcbnxbXFxuXFx2XFxmXFxyXFx4ODVdLyksXG4gICAgICBkZWxpbWl0ZXJzID0gdW5pRGlmZi5tYXRjaCgvXFxyXFxufFtcXG5cXHZcXGZcXHJcXHg4NV0vZykgfHwgW10sXG4gICAgICBsaXN0ID0gW10sXG4gICAgICBpID0gMDtcblxuICBmdW5jdGlvbiBwYXJzZUluZGV4KCkge1xuICAgIGxldCBpbmRleCA9IHt9O1xuICAgIGxpc3QucHVzaChpbmRleCk7XG5cbiAgICAvLyBQYXJzZSBkaWZmIG1ldGFkYXRhXG4gICAgd2hpbGUgKGkgPCBkaWZmc3RyLmxlbmd0aCkge1xuICAgICAgbGV0IGxpbmUgPSBkaWZmc3RyW2ldO1xuXG4gICAgICAvLyBGaWxlIGhlYWRlciBmb3VuZCwgZW5kIHBhcnNpbmcgZGlmZiBtZXRhZGF0YVxuICAgICAgaWYgKC9eKFxcLVxcLVxcLXxcXCtcXCtcXCt8QEApXFxzLy50ZXN0KGxpbmUpKSB7XG4gICAgICAgIGJyZWFrO1xuICAgICAgfVxuXG4gICAgICAvLyBEaWZmIGluZGV4XG4gICAgICBsZXQgaGVhZGVyID0gKC9eKD86SW5kZXg6fGRpZmYoPzogLXIgXFx3KykrKVxccysoLis/KVxccyokLykuZXhlYyhsaW5lKTtcbiAgICAgIGlmIChoZWFkZXIpIHtcbiAgICAgICAgaW5kZXguaW5kZXggPSBoZWFkZXJbMV07XG4gICAgICB9XG5cbiAgICAgIGkrKztcbiAgICB9XG5cbiAgICAvLyBQYXJzZSBmaWxlIGhlYWRlcnMgaWYgdGhleSBhcmUgZGVmaW5lZC4gVW5pZmllZCBkaWZmIHJlcXVpcmVzIHRoZW0sIGJ1dFxuICAgIC8vIHRoZXJlJ3Mgbm8gdGVjaG5pY2FsIGlzc3VlcyB0byBoYXZlIGFuIGlzb2xhdGVkIGh1bmsgd2l0aG91dCBmaWxlIGhlYWRlclxuICAgIHBhcnNlRmlsZUhlYWRlcihpbmRleCk7XG4gICAgcGFyc2VGaWxlSGVhZGVyKGluZGV4KTtcblxuICAgIC8vIFBhcnNlIGh1bmtzXG4gICAgaW5kZXguaHVua3MgPSBbXTtcblxuICAgIHdoaWxlIChpIDwgZGlmZnN0ci5sZW5ndGgpIHtcbiAgICAgIGxldCBsaW5lID0gZGlmZnN0cltpXTtcblxuICAgICAgaWYgKC9eKEluZGV4OnxkaWZmfFxcLVxcLVxcLXxcXCtcXCtcXCspXFxzLy50ZXN0KGxpbmUpKSB7XG4gICAgICAgIGJyZWFrO1xuICAgICAgfSBlbHNlIGlmICgvXkBALy50ZXN0KGxpbmUpKSB7XG4gICAgICAgIGluZGV4Lmh1bmtzLnB1c2gocGFyc2VIdW5rKCkpO1xuICAgICAgfSBlbHNlIGlmIChsaW5lICYmIG9wdGlvbnMuc3RyaWN0KSB7XG4gICAgICAgIC8vIElnbm9yZSB1bmV4cGVjdGVkIGNvbnRlbnQgdW5sZXNzIGluIHN0cmljdCBtb2RlXG4gICAgICAgIHRocm93IG5ldyBFcnJvcignVW5rbm93biBsaW5lICcgKyAoaSArIDEpICsgJyAnICsgSlNPTi5zdHJpbmdpZnkobGluZSkpO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgaSsrO1xuICAgICAgfVxuICAgIH1cbiAgfVxuXG4gIC8vIFBhcnNlcyB0aGUgLS0tIGFuZCArKysgaGVhZGVycywgaWYgbm9uZSBhcmUgZm91bmQsIG5vIGxpbmVzXG4gIC8vIGFyZSBjb25zdW1lZC5cbiAgZnVuY3Rpb24gcGFyc2VGaWxlSGVhZGVyKGluZGV4KSB7XG4gICAgY29uc3QgaGVhZGVyUGF0dGVybiA9IC9eKC0tLXxcXCtcXCtcXCspXFxzKyhbXFxTIF0qKSg/OlxcdCguKj8pXFxzKik/JC87XG4gICAgY29uc3QgZmlsZUhlYWRlciA9IGhlYWRlclBhdHRlcm4uZXhlYyhkaWZmc3RyW2ldKTtcbiAgICBpZiAoZmlsZUhlYWRlcikge1xuICAgICAgbGV0IGtleVByZWZpeCA9IGZpbGVIZWFkZXJbMV0gPT09ICctLS0nID8gJ29sZCcgOiAnbmV3JztcbiAgICAgIGluZGV4W2tleVByZWZpeCArICdGaWxlTmFtZSddID0gZmlsZUhlYWRlclsyXTtcbiAgICAgIGluZGV4W2tleVByZWZpeCArICdIZWFkZXInXSA9IGZpbGVIZWFkZXJbM107XG5cbiAgICAgIGkrKztcbiAgICB9XG4gIH1cblxuICAvLyBQYXJzZXMgYSBodW5rXG4gIC8vIFRoaXMgYXNzdW1lcyB0aGF0IHdlIGFyZSBhdCB0aGUgc3RhcnQgb2YgYSBodW5rLlxuICBmdW5jdGlvbiBwYXJzZUh1bmsoKSB7XG4gICAgbGV0IGNodW5rSGVhZGVySW5kZXggPSBpLFxuICAgICAgICBjaHVua0hlYWRlckxpbmUgPSBkaWZmc3RyW2krK10sXG4gICAgICAgIGNodW5rSGVhZGVyID0gY2h1bmtIZWFkZXJMaW5lLnNwbGl0KC9AQCAtKFxcZCspKD86LChcXGQrKSk/IFxcKyhcXGQrKSg/OiwoXFxkKykpPyBAQC8pO1xuXG4gICAgbGV0IGh1bmsgPSB7XG4gICAgICBvbGRTdGFydDogK2NodW5rSGVhZGVyWzFdLFxuICAgICAgb2xkTGluZXM6ICtjaHVua0hlYWRlclsyXSB8fCAxLFxuICAgICAgbmV3U3RhcnQ6ICtjaHVua0hlYWRlclszXSxcbiAgICAgIG5ld0xpbmVzOiArY2h1bmtIZWFkZXJbNF0gfHwgMSxcbiAgICAgIGxpbmVzOiBbXSxcbiAgICAgIGxpbmVkZWxpbWl0ZXJzOiBbXVxuICAgIH07XG5cbiAgICBsZXQgYWRkQ291bnQgPSAwLFxuICAgICAgICByZW1vdmVDb3VudCA9IDA7XG4gICAgZm9yICg7IGkgPCBkaWZmc3RyLmxlbmd0aDsgaSsrKSB7XG4gICAgICAvLyBMaW5lcyBzdGFydGluZyB3aXRoICctLS0nIGNvdWxkIGJlIG1pc3Rha2VuIGZvciB0aGUgXCJyZW1vdmUgbGluZVwiIG9wZXJhdGlvblxuICAgICAgLy8gQnV0IHRoZXkgY291bGQgYmUgdGhlIGhlYWRlciBmb3IgdGhlIG5leHQgZmlsZS4gVGhlcmVmb3JlIHBydW5lIHN1Y2ggY2FzZXMgb3V0LlxuICAgICAgaWYgKGRpZmZzdHJbaV0uaW5kZXhPZignLS0tICcpID09PSAwXG4gICAgICAgICAgICAmJiAoaSArIDIgPCBkaWZmc3RyLmxlbmd0aClcbiAgICAgICAgICAgICYmIGRpZmZzdHJbaSArIDFdLmluZGV4T2YoJysrKyAnKSA9PT0gMFxuICAgICAgICAgICAgJiYgZGlmZnN0cltpICsgMl0uaW5kZXhPZignQEAnKSA9PT0gMCkge1xuICAgICAgICAgIGJyZWFrO1xuICAgICAgfVxuICAgICAgbGV0IG9wZXJhdGlvbiA9IGRpZmZzdHJbaV1bMF07XG5cbiAgICAgIGlmIChvcGVyYXRpb24gPT09ICcrJyB8fCBvcGVyYXRpb24gPT09ICctJyB8fCBvcGVyYXRpb24gPT09ICcgJyB8fCBvcGVyYXRpb24gPT09ICdcXFxcJykge1xuICAgICAgICBodW5rLmxpbmVzLnB1c2goZGlmZnN0cltpXSk7XG4gICAgICAgIGh1bmsubGluZWRlbGltaXRlcnMucHVzaChkZWxpbWl0ZXJzW2ldIHx8ICdcXG4nKTtcblxuICAgICAgICBpZiAob3BlcmF0aW9uID09PSAnKycpIHtcbiAgICAgICAgICBhZGRDb3VudCsrO1xuICAgICAgICB9IGVsc2UgaWYgKG9wZXJhdGlvbiA9PT0gJy0nKSB7XG4gICAgICAgICAgcmVtb3ZlQ291bnQrKztcbiAgICAgICAgfSBlbHNlIGlmIChvcGVyYXRpb24gPT09ICcgJykge1xuICAgICAgICAgIGFkZENvdW50Kys7XG4gICAgICAgICAgcmVtb3ZlQ291bnQrKztcbiAgICAgICAgfVxuICAgICAgfSBlbHNlIHtcbiAgICAgICAgYnJlYWs7XG4gICAgICB9XG4gICAgfVxuXG4gICAgLy8gSGFuZGxlIHRoZSBlbXB0eSBibG9jayBjb3VudCBjYXNlXG4gICAgaWYgKCFhZGRDb3VudCAmJiBodW5rLm5ld0xpbmVzID09PSAxKSB7XG4gICAgICBodW5rLm5ld0xpbmVzID0gMDtcbiAgICB9XG4gICAgaWYgKCFyZW1vdmVDb3VudCAmJiBodW5rLm9sZExpbmVzID09PSAxKSB7XG4gICAgICBodW5rLm9sZExpbmVzID0gMDtcbiAgICB9XG5cbiAgICAvLyBQZXJmb3JtIG9wdGlvbmFsIHNhbml0eSBjaGVja2luZ1xuICAgIGlmIChvcHRpb25zLnN0cmljdCkge1xuICAgICAgaWYgKGFkZENvdW50ICE9PSBodW5rLm5ld0xpbmVzKSB7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcignQWRkZWQgbGluZSBjb3VudCBkaWQgbm90IG1hdGNoIGZvciBodW5rIGF0IGxpbmUgJyArIChjaHVua0hlYWRlckluZGV4ICsgMSkpO1xuICAgICAgfVxuICAgICAgaWYgKHJlbW92ZUNvdW50ICE9PSBodW5rLm9sZExpbmVzKSB7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcignUmVtb3ZlZCBsaW5lIGNvdW50IGRpZCBub3QgbWF0Y2ggZm9yIGh1bmsgYXQgbGluZSAnICsgKGNodW5rSGVhZGVySW5kZXggKyAxKSk7XG4gICAgICB9XG4gICAgfVxuXG4gICAgcmV0dXJuIGh1bms7XG4gIH1cblxuICB3aGlsZSAoaSA8IGRpZmZzdHIubGVuZ3RoKSB7XG4gICAgcGFyc2VJbmRleCgpO1xuICB9XG5cbiAgcmV0dXJuIGxpc3Q7XG59XG4iXX0=
-
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports. /*istanbul ignore end*/generateOptions = generateOptions;
-function generateOptions(options, defaults) {
-  if (typeof options === 'function') {
-    defaults.callback = options;
-  } else if (options) {
-    for (var name in options) {
-      /* istanbul ignore else */
-      if (options.hasOwnProperty(name)) {
-        defaults[name] = options[name];
-      }
-    }
-  }
-  return defaults;
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy91dGlsL3BhcmFtcy5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Z0NBQWdCLGUsR0FBQSxlO0FBQVQsU0FBUyxlQUFULENBQXlCLE9BQXpCLEVBQWtDLFFBQWxDLEVBQTRDO0FBQ2pELE1BQUksT0FBTyxPQUFQLEtBQW1CLFVBQXZCLEVBQW1DO0FBQ2pDLGFBQVMsUUFBVCxHQUFvQixPQUFwQjtBQUNELEdBRkQsTUFFTyxJQUFJLE9BQUosRUFBYTtBQUNsQixTQUFLLElBQUksSUFBVCxJQUFpQixPQUFqQixFQUEwQjs7QUFFeEIsVUFBSSxRQUFRLGNBQVIsQ0FBdUIsSUFBdkIsQ0FBSixFQUFrQztBQUNoQyxpQkFBUyxJQUFULElBQWlCLFFBQVEsSUFBUixDQUFqQjtBQUNEO0FBQ0Y7QUFDRjtBQUNELFNBQU8sUUFBUDtBQUNEIiwiZmlsZSI6InBhcmFtcy5qcyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBnZW5lcmF0ZU9wdGlvbnMob3B0aW9ucywgZGVmYXVsdHMpIHtcbiAgaWYgKHR5cGVvZiBvcHRpb25zID09PSAnZnVuY3Rpb24nKSB7XG4gICAgZGVmYXVsdHMuY2FsbGJhY2sgPSBvcHRpb25zO1xuICB9IGVsc2UgaWYgKG9wdGlvbnMpIHtcbiAgICBmb3IgKGxldCBuYW1lIGluIG9wdGlvbnMpIHtcbiAgICAgIC8qIGlzdGFuYnVsIGlnbm9yZSBlbHNlICovXG4gICAgICBpZiAob3B0aW9ucy5oYXNPd25Qcm9wZXJ0eShuYW1lKSkge1xuICAgICAgICBkZWZhdWx0c1tuYW1lXSA9IG9wdGlvbnNbbmFtZV07XG4gICAgICB9XG4gICAgfVxuICB9XG4gIHJldHVybiBkZWZhdWx0cztcbn1cbiJdfQ==
-
-
-/***/ }),
-/* 71 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var irreducible = __webpack_require__(4);
-var isBoolean = __webpack_require__(31);
+var isBoolean = __webpack_require__(37);
 
 module.exports = irreducible('Boolean', isBoolean);
 
 
 /***/ }),
-/* 72 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var irreducible = __webpack_require__(4);
-var isNil = __webpack_require__(6);
+var isNil = __webpack_require__(7);
 
 module.exports = irreducible('Nil', isNil);
 
 
 /***/ }),
-/* 73 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var irreducible = __webpack_require__(4);
-var isNumber = __webpack_require__(77);
+var isNumber = __webpack_require__(82);
 
 module.exports = irreducible('Number', isNumber);
 
 
 /***/ }),
-/* 74 */
+/* 79 */
 /***/ (function(module, exports) {
 
 function assign(x, y) {
@@ -6483,18 +7311,18 @@ module.exports = assign;
 
 
 /***/ }),
-/* 75 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isFunction = __webpack_require__(2);
-var isArray = __webpack_require__(9);
-var mixin = __webpack_require__(45);
-var isStruct = __webpack_require__(157);
-var isInterface = __webpack_require__(155);
-var isObject = __webpack_require__(11);
-var refinement = __webpack_require__(46);
-var decompose = __webpack_require__(149);
+var isArray = __webpack_require__(10);
+var mixin = __webpack_require__(51);
+var isStruct = __webpack_require__(161);
+var isInterface = __webpack_require__(159);
+var isObject = __webpack_require__(12);
+var refinement = __webpack_require__(52);
+var decompose = __webpack_require__(153);
 
 function compose(predicates, unrefinedType) {
   return predicates.reduce(function (type, predicate) {
@@ -6544,7 +7372,7 @@ function extend(combinator, mixins, options) {
 module.exports = extend;
 
 /***/ }),
-/* 76 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getTypeName = __webpack_require__(1);
@@ -6559,7 +7387,7 @@ module.exports = getDefaultInterfaceName;
 
 
 /***/ }),
-/* 77 */
+/* 82 */
 /***/ (function(module, exports) {
 
 module.exports = function isNumber(x) {
@@ -6567,7 +7395,7 @@ module.exports = function isNumber(x) {
 };
 
 /***/ }),
-/* 78 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isType = __webpack_require__(3);
@@ -6577,17 +7405,17 @@ module.exports = function isUnion(x) {
 };
 
 /***/ }),
-/* 79 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
 var isFunction = __webpack_require__(2);
 var getTypeName = __webpack_require__(1);
-var isIdentity = __webpack_require__(10);
-var create = __webpack_require__(7);
-var is = __webpack_require__(8);
-var isArray = __webpack_require__(9);
+var isIdentity = __webpack_require__(11);
+var create = __webpack_require__(8);
+var is = __webpack_require__(9);
+var isArray = __webpack_require__(10);
 
 function getDefaultName(type) {
   return 'Array<' + getTypeName(type) + '>';
@@ -6664,10 +7492,10 @@ module.exports = list;
 
 
 /***/ }),
-/* 80 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getFunctionName = __webpack_require__(25);
+var getFunctionName = __webpack_require__(28);
 
 function replacer(key, value) {
   if (typeof value === 'function') {
@@ -6686,17 +7514,17 @@ module.exports = function stringify(x) {
 };
 
 /***/ }),
-/* 81 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
 var isFunction = __webpack_require__(2);
 var getTypeName = __webpack_require__(1);
-var isIdentity = __webpack_require__(10);
-var isArray = __webpack_require__(9);
-var create = __webpack_require__(7);
-var is = __webpack_require__(8);
+var isIdentity = __webpack_require__(11);
+var isArray = __webpack_require__(10);
+var create = __webpack_require__(8);
+var is = __webpack_require__(9);
 
 function getDefaultName(types) {
   return '[' + types.map(getTypeName).join(', ') + ']';
@@ -6774,7 +7602,7 @@ tuple.getDefaultName = getDefaultName;
 module.exports = tuple;
 
 /***/ }),
-/* 82 */
+/* 87 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -6783,12 +7611,13 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 83 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = mix;
-/* harmony export (immutable) */ __webpack_exports__["b"] = is;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mix; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return is; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return like; });
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -6797,31 +7626,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var baseclass = function Object() {
-	_classCallCheck(this, Object);
-},
-    derive = function derive(superclass) {
-	return {}[superclass.name || 'Object'] = function (_superclass) {
-		_inherits(_class, _superclass);
 
-		function _class() {
-			_classCallCheck(this, _class);
-
-			return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
-		}
-
-		return _class;
-	}(superclass);
-};
 
 function mix() {
 	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 		args[_key] = arguments[_key];
 	}
 
-	var superclass = !is(args[0]).a('factory') && args.shift() || baseclass;
-	var factory = is(args[args.length - 1]).a('factory') && args.pop() || derive;
-	superclass = is(superclass).a('mixin') ? superclass.class : derive(superclass);
+	var superclass = !is(args[0], 'factory') && args.shift() || baseclass;
+	var factory = is(args[args.length - 1], 'factory') && args.pop() || derive;
+	superclass = is(superclass, 'mixin') ? superclass.class : derive(superclass);
 	if (args.length) factory = function (org) {
 		return function (superclass) {
 			return org(args.reduce(function (s, m) {
@@ -6830,7 +7644,7 @@ function mix() {
 		};
 	}(factory);
 	function mixin(superclass) {
-		var result = is(superclass).a(mixin) ? superclass : factory(superclass);
+		var result = is(superclass, mixin) ? superclass : factory(superclass);
 		if (mixin.classes.indexOf(result) === -1) mixin.classes.push(result);
 		return result;
 	}
@@ -6860,45 +7674,44 @@ function mix() {
 	});
 }
 
-/* unused harmony default export */ var _unused_webpack_default_export = (mix);
-
 function is(x, type) {
-	function a(type) {
-		if (typeof type == 'string') {
-			return type == 'class' ? is(x).a('function') && function (s) {
-				return (/^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, ''))
-				);
-			}(x.toString()) : type == 'mixin' ? is(x).a('function') && !!x.mixin : type == 'factory' ? is(x).a('function') && !is(x).a('mixin') && !is(x).a('class') && x.length == 1 : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
-		}
-		if ((typeof x === 'undefined' ? 'undefined' : _typeof(x)) == 'object') {
-			if (x instanceof type) return true;
-			if (type.class && x instanceof type.class) return true;
-			if (type.mixin && type.mixin.classes) return type.mixin.classes.reduce(function (f, c) {
-				return f || a(c);
-			}, false);
-		} else if (typeof x == 'function') {
-			if (x.mixin && x.mixin.mixins.indexOf(type) !== -1) return true;
-			var c = x;
-			while (c !== Object) {
-				if (c === type || c === type.class) return true;
-				if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true;
-				c = c.prototype.__proto__.constructor;
-			}
-		}
-		return false;
+	if (typeof type == 'string') {
+		return type == 'class' ? is(x, 'function') && function (s) {
+			return (/^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, ''))
+			);
+		}(x.toString()) : type == 'mixin' ? is(x, 'function') && !!x.mixin : type == 'factory' ? is(x, 'function') && !is(x, 'mixin') && !is(x, 'class') && x.length == 1 : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
 	}
-
-	function as(type) {
-		if (a(type)) return true;
-		var itf = type.interface || is(type, 'function') && getInterface(type.prototype);
-		var subject = is(x, 'function') ? x.interface || getInterface(x.prototype) : x;
-		return itf && Object.keys(itf).reduce(function (f, k) {
-			return f && (is(itf[k], 'function') ? is(subject[k], 'function') : k in subject);
-		}, true);
+	if ((typeof x === 'undefined' ? 'undefined' : _typeof(x)) == 'object') {
+		if (x instanceof type) return true;
+		if (type.class && x instanceof type.class) return true;
+		if (type.mixin && type.mixin.classes) return type.mixin.classes.reduce(function (f, c) {
+			return f || is(x, c);
+		}, false);
+	} else if (typeof x == 'function') {
+		if (x.mixin && x.mixin.mixins.indexOf(type) !== -1) return true;
+		var c = x;
+		while (c !== Object) {
+			if (c === type || c === type.class) return true;
+			if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true;
+			c = c.prototype.__proto__.constructor;
+		}
 	}
+	return false;
+}
 
-	var str = x && x.toString() || '';
-	return type !== undefined ? a(type) : { a: a, an: a, as: as };
+function like(x, type) {
+	if (is(x, type)) return true;
+	var itf = type.interface || is(type, 'function') && getInterface(type.prototype);
+	var subject = is(x, 'function') ? x.interface || getInterface(x.prototype) : x;
+	return itf && Object.keys(itf).reduce(function (f, k) {
+		return f && (is(itf[k], 'function') ? is(subject[k], 'function') : k in subject);
+	}, true);
+}
+
+function getInterface(proto) {
+	return getPropertyNames(proto).reduce(function (o, k) {
+		o[k] = proto[k];return o;
+	}, {});
 }
 
 function getPropertyNames(proto) {
@@ -6912,29 +7725,40 @@ function getPropertyNames(proto) {
 	return results;
 }
 
-function getInterface(proto) {
-	return getPropertyNames(proto).reduce(function (o, k) {
-		o[k] = proto[k];return o;
-	}, {});
-}
+var baseclass = function Object() {
+	_classCallCheck(this, Object);
+},
+    derive = function derive(superclass) {
+	return {}[superclass.name || 'Object'] = function (_superclass) {
+		_inherits(_class, _superclass);
+
+		function _class() {
+			_classCallCheck(this, _class);
+
+			return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+		}
+
+		return _class;
+	}(superclass);
+};
 
 /***/ }),
-/* 84 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(89);
+module.exports = __webpack_require__(18);
 
 
 /***/ }),
-/* 85 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var match = __webpack_require__(12);
-var deepEqual = __webpack_require__(17);
-var deprecated = __webpack_require__(63);
+var match = __webpack_require__(14);
+var deepEqual = __webpack_require__(21);
+var deprecated = __webpack_require__(41);
 
 function exposeCoreUtils(target, utils) {
     var keys = Object.keys(utils);
@@ -6963,40 +7787,40 @@ function exposeEventTarget(target, eventTarget) {
 }
 
 // Expose internal utilities on `sinon` global for backwards compatibility.
-exposeCoreUtils(exports, __webpack_require__(124));
+exposeCoreUtils(exports, __webpack_require__(141));
 
-exports.assert = __webpack_require__(34);
-exports.collection = __webpack_require__(57);
+exports.assert = __webpack_require__(40);
+exports.collection = __webpack_require__(65);
 exports.match = match;
-exports.spy = __webpack_require__(21);
-exports.spyCall = __webpack_require__(26);
-exports.stub = __webpack_require__(27);
-exports.mock = __webpack_require__(59);
-exports.sandbox = __webpack_require__(118);
-exports.expectation = __webpack_require__(58);
-exports.createStubInstance = __webpack_require__(27).createStubInstance;
+exports.spy = __webpack_require__(23);
+exports.spyCall = __webpack_require__(33);
+exports.stub = __webpack_require__(24);
+exports.mock = __webpack_require__(67);
+exports.sandbox = __webpack_require__(135);
+exports.expectation = __webpack_require__(66);
+exports.createStubInstance = __webpack_require__(24).createStubInstance;
 
-var fakeTimers = __webpack_require__(39);
+var fakeTimers = __webpack_require__(46);
 exports.useFakeTimers = fakeTimers.useFakeTimers;
 exports.clock = fakeTimers.clock;
 exports.timers = fakeTimers.timers;
 
-var event = __webpack_require__(67);
+var event = __webpack_require__(74);
 exports.Event = deprecated.wrap(event.Event, deprecated.defaultMsg("Event"));
 exports.CustomEvent = deprecated.wrap(event.CustomEvent, deprecated.defaultMsg("CustomEvent"));
 exports.ProgressEvent = deprecated.wrap(event.ProgressEvent, deprecated.defaultMsg("ProgressEvent"));
 exports.EventTarget = {};
 exposeEventTarget(exports.EventTarget, event.EventTarget);
 
-var fakeXhr = __webpack_require__(40);
+var fakeXhr = __webpack_require__(47);
 exports.xhr = fakeXhr.xhr;
 exports.FakeXMLHttpRequest = fakeXhr.FakeXMLHttpRequest;
 exports.useFakeXMLHttpRequest = fakeXhr.useFakeXMLHttpRequest;
 
-exports.fakeServer = __webpack_require__(38);
-exports.fakeServerWithClock = __webpack_require__(68);
+exports.fakeServer = __webpack_require__(45);
+exports.fakeServerWithClock = __webpack_require__(75);
 
-var behavior = __webpack_require__(56);
+var behavior = __webpack_require__(63);
 
 exports.addBehavior = function (name, fn) {
     behavior.addBehavior(exports.stub, name, fn);
@@ -7004,7 +7828,7 @@ exports.addBehavior = function (name, fn) {
 
 
 /***/ }),
-/* 86 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*! @preserve
@@ -7021,20 +7845,20 @@ exports.addBehavior = function (name, fn) {
 var t = __webpack_require__(0);
 
 // types
-t.Any = __webpack_require__(42);
-t.Array = __webpack_require__(141);
-t.Boolean = __webpack_require__(71);
-t.Date = __webpack_require__(142);
-t.Error = __webpack_require__(143);
-t.Function = __webpack_require__(30);
-t.Nil = __webpack_require__(72);
-t.Number = __webpack_require__(73);
-t.Integer = __webpack_require__(144);
+t.Any = __webpack_require__(48);
+t.Array = __webpack_require__(145);
+t.Boolean = __webpack_require__(76);
+t.Date = __webpack_require__(146);
+t.Error = __webpack_require__(147);
+t.Function = __webpack_require__(36);
+t.Nil = __webpack_require__(77);
+t.Number = __webpack_require__(78);
+t.Integer = __webpack_require__(148);
 t.IntegerT = t.Integer;
-t.Object = __webpack_require__(145);
-t.RegExp = __webpack_require__(146);
-t.String = __webpack_require__(43);
-t.Type = __webpack_require__(147);
+t.Object = __webpack_require__(149);
+t.RegExp = __webpack_require__(150);
+t.String = __webpack_require__(49);
+t.Type = __webpack_require__(151);
 t.TypeT = t.Type;
 
 // short alias are deprecated
@@ -7049,39 +7873,39 @@ t.Re = t.RegExp;
 t.Str = t.String;
 
 // combinators
-t.dict = __webpack_require__(44);
-t.declare = __webpack_require__(148);
-t.enums = __webpack_require__(150);
+t.dict = __webpack_require__(50);
+t.declare = __webpack_require__(152);
+t.enums = __webpack_require__(154);
 t.irreducible = __webpack_require__(4);
-t.list = __webpack_require__(79);
-t.maybe = __webpack_require__(159);
-t.refinement = __webpack_require__(46);
-t.struct = __webpack_require__(160);
-t.tuple = __webpack_require__(81);
-t.union = __webpack_require__(161);
-t.func = __webpack_require__(152);
-t.intersection = __webpack_require__(154);
+t.list = __webpack_require__(84);
+t.maybe = __webpack_require__(163);
+t.refinement = __webpack_require__(52);
+t.struct = __webpack_require__(164);
+t.tuple = __webpack_require__(86);
+t.union = __webpack_require__(165);
+t.func = __webpack_require__(156);
+t.intersection = __webpack_require__(158);
 t.subtype = t.refinement;
-t.inter = __webpack_require__(153); // IE8 alias
+t.inter = __webpack_require__(157); // IE8 alias
 t['interface'] = t.inter;
 
 // functions
 t.assert = t;
-t.update = __webpack_require__(162);
-t.mixin = __webpack_require__(45);
+t.update = __webpack_require__(166);
+t.mixin = __webpack_require__(51);
 t.isType = __webpack_require__(3);
-t.is = __webpack_require__(8);
+t.is = __webpack_require__(9);
 t.getTypeName = __webpack_require__(1);
-t.match = __webpack_require__(158);
+t.match = __webpack_require__(162);
 
 module.exports = t;
 
 
 /***/ }),
-/* 87 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var log = __webpack_require__(167)
+var log = __webpack_require__(170)
 
 var level, debug
 
@@ -7091,7 +7915,7 @@ if (process.env.DEBUG) {debug = process.env.DEBUG}
 var fd = process.env.DEBUG_FD && parseInt(process.env.DEBUG_FD, 10),
 	c = console;
 if (typeof fd == 'number') {
-	var util = __webpack_require__(171),
+	var util = __webpack_require__(173),
 		stream = createWritableStdioStream(fd),
 		logger = function(){stream.write(util.format.apply(this, arguments) + '\n')}
 	c = {error:logger, warn:logger, info:logger, log:logger, trace:logger}
@@ -7120,14 +7944,14 @@ function createWritableStdioStream (fd) {
       break;
 
     case 'FILE':
-      var fs = __webpack_require__(169);
+      var fs = __webpack_require__(171);
       stream = new fs.SyncWriteStream(fd, { autoClose: false });
       stream._type = 'fs';
       break;
 
     case 'PIPE':
     case 'TCP':
-      var net = __webpack_require__(170);
+      var net = __webpack_require__(172);
       stream = new net.Socket({
         fd: fd,
         readable: false,
@@ -7164,20 +7988,20 @@ function createWritableStdioStream (fd) {
 
 
 /***/ }),
-/* 88 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ulog__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ulog__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ulog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_ulog__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_chai__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_chai__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_chai___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_chai__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_sinon__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_sinon__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_sinon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_sinon__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_tcomb__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_tcomb__ = __webpack_require__(91);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_tcomb___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_tcomb__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4____ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4____ = __webpack_require__(88);
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -7290,7 +8114,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 			}(superclass);
 		});
 		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(X, Y);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M).a('mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M, 'mixin')).to.eq(true);
 	});
 
 	it('creates a mix from a superclass', function () {
@@ -7298,7 +8122,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 			_classCallCheck(this, Base);
 		});
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(C).to.be.a('function');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C).a('mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
 		// special case: class with one-arg constructor looks like a factory
 
 		var Base = function Base(arg) {
@@ -7307,7 +8131,7 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 
 		C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Base);
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(C).to.be.a('function');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C).a('mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(new C() instanceof Base).to.eq(true);
 	});
 
@@ -7315,9 +8139,9 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 		var C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function Base() {
 			_classCallCheck(this, Base);
 		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C).a('mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
 		var D = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(C);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(D).a('mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(D, 'mixin')).to.eq(true);
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(new D() instanceof D).to.eq(true);
 	});
 
@@ -7539,10 +8363,10 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 			_classCallCheck(this, Test);
 		};
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test).a('mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
 		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Test);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M).a('mixin')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test).a('mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M, 'mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
 		var N = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Test, function (superclass) {
 			return function (_superclass16) {
 				_inherits(N, _superclass16);
@@ -7556,12 +8380,12 @@ describe('mix([superclass] [, ...mixins] [, factory])', function () {
 				return N;
 			}(superclass);
 		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(N).a('mixin')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test).a('mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(N, 'mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
 	});
 });
 
-describe('is(x [, type])', function () {
+describe('is(x , type)', function () {
 	it('is a function', function () {
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */]).to.be.a('function');
 	});
@@ -7570,7 +8394,7 @@ describe('is(x [, type])', function () {
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */].length).to.eq(2);
 	});
 
-	it('when passed two arguments, acts as an alias for is(x).a(type)', function () {
+	it('tests whether object `x` implements `type`', function () {
 		var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
 			return function (_superclass17) {
 				_inherits(X, _superclass17);
@@ -7585,284 +8409,245 @@ describe('is(x [, type])', function () {
 			}(superclass);
 		});
 		var x = new X();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x).a(X)).to.eq(true);
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x, X)).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x).a(Date)).to.eq(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x, Date));
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x, Date)).to.eq(false);
+	});
+	it('tests whether class `x` implements `type`', function () {
+		var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass18) {
+				_inherits(Y, _superclass18);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		});
+		var X = function (_mix) {
+			_inherits(X, _mix);
+
+			function X() {
+				_classCallCheck(this, X);
+
+				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+			}
+
+			return X;
+		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y));
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X, Y)).to.eq(true);
+	});
+	it('tests whether mixin `x` implements `type`', function () {
+		var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass19) {
+				_inherits(Y, _superclass19);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		});
+		var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y, function (superclass) {
+			return function (_superclass20) {
+				_inherits(X, _superclass20);
+
+				function X() {
+					_classCallCheck(this, X);
+
+					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+				}
+
+				return X;
+			}(superclass);
+		});
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X, Y)).to.eq(true);
+	});
+	it('for type == "mixin", tests whether `x` is a mixin', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+			_classCallCheck(this, X);
+		}, 'mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass21) {
+				_inherits(Y, _superclass21);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		}), 'mixin')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'mixin')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'mixin')).to.eq(false);
+	});
+	it('for type == "factory", tests whether `x` is a class factory', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+			_classCallCheck(this, X);
+		}, 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+			_classCallCheck(this, X);
+		}), 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix2) {
+			_inherits(X, _mix2);
+
+			function X() {
+				_classCallCheck(this, X);
+
+				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+			}
+
+			return X;
+		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass22) {
+				_inherits(Y, _superclass22);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		}), 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'factory')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'factory')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'factory')).to.eq(false);
+	});
+	it('for type == "function", tests whether `x` is a function', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+			_classCallCheck(this, X);
+		}, 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+			_classCallCheck(this, X);
+		}), 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix3) {
+			_inherits(X, _mix3);
+
+			function X() {
+				_classCallCheck(this, X);
+
+				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+			}
+
+			return X;
+		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass23) {
+				_inherits(Y, _superclass23);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		}), 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'function')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'function')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'function')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'function')).to.eq(true);
+	});
+	it('for type == "object", tests whether `x` is an object', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+			_classCallCheck(this, X);
+		}, 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+			_classCallCheck(this, X);
+		}), 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix4) {
+			_inherits(X, _mix4);
+
+			function X() {
+				_classCallCheck(this, X);
+
+				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+			}
+
+			return X;
+		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass24) {
+				_inherits(Y, _superclass24);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		}), 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'object')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'object')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'object')).to.eq(false);
+	});
+	it('for type == "string", tests whether `x` is a string', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+			_classCallCheck(this, X);
+		}, 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+			_classCallCheck(this, X);
+		}), 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix5) {
+			_inherits(X, _mix5);
+
+			function X() {
+				_classCallCheck(this, X);
+
+				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+			}
+
+			return X;
+		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass25) {
+				_inherits(Y, _superclass25);
+
+				function Y() {
+					_classCallCheck(this, Y);
+
+					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+				}
+
+				return Y;
+			}(superclass);
+		}), 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'string')).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'string')).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'string')).to.eq(false);
 	});
 
-	it('when passed a single argument, returns an object with sub-methods', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({})).to.be.an('object');
-	});
-
-	describe('a(type)', function () {
+	describe('like(type)', function () {
 		it('is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a).to.be.a('function');
-		});
-		it('tests whether object `x` implements `type`', function () {
-			var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass18) {
-					_inherits(X, _superclass18);
-
-					function X() {
-						_classCallCheck(this, X);
-
-						return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-					}
-
-					return X;
-				}(superclass);
-			});
-			var x = new X();
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x).a(X)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x).a(Date)).to.eq(false);
-		});
-		it('tests whether class `x` implements `type`', function () {
-			var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass19) {
-					_inherits(Y, _superclass19);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			});
-			var X = function (_mix) {
-				_inherits(X, _mix);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y));
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X).a(Y)).to.eq(true);
-		});
-		it('tests whether mixin `x` implements `type`', function () {
-			var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass20) {
-					_inherits(Y, _superclass20);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			});
-			var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y, function (superclass) {
-				return function (_superclass21) {
-					_inherits(X, _superclass21);
-
-					function X() {
-						_classCallCheck(this, X);
-
-						return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-					}
-
-					return X;
-				}(superclass);
-			});
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X).a(Y)).to.eq(true);
-		});
-		it('for type == "mixin", tests whether `x` is a mixin', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-				_classCallCheck(this, X);
-			}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass22) {
-					_inherits(Y, _superclass22);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			})).a('mixin')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}).a('mixin')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}).a('mixin')).to.eq(false);
-		});
-		it('for type == "factory", tests whether `x` is a class factory', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-				_classCallCheck(this, X);
-			}).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-				_classCallCheck(this, X);
-			})).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix2) {
-				_inherits(X, _mix2);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])())).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass23) {
-					_inherits(Y, _superclass23);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			})).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}).a('factory')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}).a('factory')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}).a('factory')).to.eq(false);
-		});
-		it('for type == "function", tests whether `x` is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-				_classCallCheck(this, X);
-			}).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-				_classCallCheck(this, X);
-			})).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix3) {
-				_inherits(X, _mix3);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])())).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass24) {
-					_inherits(Y, _superclass24);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			})).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a('function')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').a('function')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}).a('function')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}).a('function')).to.eq(true);
-		});
-		it('for type == "object", tests whether `x` is an object', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-				_classCallCheck(this, X);
-			}).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-				_classCallCheck(this, X);
-			})).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix4) {
-				_inherits(X, _mix4);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])())).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass25) {
-					_inherits(Y, _superclass25);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			})).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a('object')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}).a('object')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}).a('object')).to.eq(false);
-		});
-		it('for type == "string", tests whether `x` is a string', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-				_classCallCheck(this, X);
-			}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-				_classCallCheck(this, X);
-			})).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix5) {
-				_inherits(X, _mix5);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])())).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass26) {
-					_inherits(Y, _superclass26);
-
-					function Y() {
-						_classCallCheck(this, Y);
-
-						return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-					}
-
-					return Y;
-				}(superclass);
-			})).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').a('string')).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}).a('string')).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}).a('string')).to.eq(false);
-		});
-	});
-
-	describe('an(type)', function () {
-		it('is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).a).to.be.a('function');
-		});
-		it('is an alias for `a(type)`', function () {
-			var x = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({});
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(x.a).to.eq(x.an);
-		});
-	});
-
-	describe('as(type)', function () {
-		it('is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).as).to.be.a('function');
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */]).to.be.a('function');
 		});
 		it('tests whether `x` can be treated as `type` (has the same interface)', function () {
 			var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass27) {
-					_inherits(Looker, _superclass27);
+				return function (_superclass26) {
+					_inherits(Looker, _superclass26);
 
 					function Looker() {
 						_classCallCheck(this, Looker);
@@ -7878,16 +8663,16 @@ describe('is(x [, type])', function () {
 					return Looker;
 				}(superclass);
 			});
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi').as(Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(8).as(Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}).as(Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(new Looker()).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])('Hi', Looker)).to.eq(false);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(8, Looker)).to.eq(false);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({}, Looker)).to.eq(false);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Looker(), Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
 				look: function look() {}
-			}).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({
+			}, Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
 				walk: function walk() {}
-			}).as(Looker)).to.eq(false);
+			}, Looker)).to.eq(false);
 
 			var Base = function () {
 				function Base() {
@@ -7902,8 +8687,8 @@ describe('is(x [, type])', function () {
 				return Base;
 			}();
 
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Base).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(new Base()).as(Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Base, Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Base(), Looker)).to.eq(true);
 
 			var Derived = function (_Base) {
 				_inherits(Derived, _Base);
@@ -7917,15 +8702,15 @@ describe('is(x [, type])', function () {
 				return Derived;
 			}(Base);
 
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Derived).as(Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(new Derived()).as(Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Derived, Looker)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Derived(), Looker)).to.eq(true);
 		});
 
 		it('allows mixins to be used as interfaces', function (done) {
 			var expected = 'Hello, World!';
 			var Thenable = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass28) {
-					_inherits(Thenable, _superclass28);
+				return function (_superclass27) {
+					_inherits(Thenable, _superclass27);
 
 					function Thenable() {
 						_classCallCheck(this, Thenable);
@@ -7958,7 +8743,7 @@ describe('is(x [, type])', function () {
 			}();
 
 			var promise = new MyPromise();
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(promise).as(Thenable)).to.eq(true);
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(promise, Thenable)).to.eq(true);
 			Promise.resolve(promise).then(function (result) {
 				__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(result).to.eq(expected);
 				done();
@@ -7973,17 +8758,17 @@ describe('mix example', function () {
 		    _look = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
 
 		var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass29) {
-				_inherits(Looker, _superclass29);
+			return function (_superclass28) {
+				_inherits(Looker, _superclass28);
 
 				function Looker() {
 					_classCallCheck(this, Looker);
 
-					var _this35 = _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).call(this));
+					var _this34 = _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).call(this));
 
 					log.log('A looker is born!');
 					constr();
-					return _this35;
+					return _this34;
 				}
 
 				_createClass(Looker, [{
@@ -8018,8 +8803,8 @@ describe('mix example', function () {
 		    _walk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
 		    _talk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
 		var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass30) {
-				_inherits(Looker, _superclass30);
+			return function (_superclass29) {
+				_inherits(Looker, _superclass29);
 
 				function Looker() {
 					_classCallCheck(this, Looker);
@@ -8040,8 +8825,8 @@ describe('mix example', function () {
 		});
 
 		var Walker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass31) {
-				_inherits(Walker, _superclass31);
+			return function (_superclass30) {
+				_inherits(Walker, _superclass30);
 
 				function Walker() {
 					_classCallCheck(this, Walker);
@@ -8062,8 +8847,8 @@ describe('mix example', function () {
 		});
 
 		var Talker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass32) {
-				_inherits(Talker, _superclass32);
+			return function (_superclass31) {
+				_inherits(Talker, _superclass31);
 
 				function Talker() {
 					_classCallCheck(this, Talker);
@@ -8086,8 +8871,8 @@ describe('mix example', function () {
 		var duckTalk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
 
 		var Duck = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Looker, Walker, Talker, function (superclass) {
-			return function (_superclass33) {
-				_inherits(Duck, _superclass33);
+			return function (_superclass32) {
+				_inherits(Duck, _superclass32);
 
 				function Duck() {
 					_classCallCheck(this, Duck);
@@ -8141,8 +8926,8 @@ describe('type checked mixins with tcomb', function () {
 		var a = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
 		    b = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
 		var Person = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass34) {
-				_inherits(Person, _superclass34);
+			return function (_superclass33) {
+				_inherits(Person, _superclass33);
 
 				_createClass(Person, null, [{
 					key: 'testA',
@@ -8188,10 +8973,10 @@ describe('type checked mixins with tcomb', function () {
 						args[_key5] = arguments[_key5];
 					}
 
-					var _this40 = _possibleConstructorReturn(this, (_ref = Person.__proto__ || Object.getPrototypeOf(Person)).call.apply(_ref, [this].concat(args)));
+					var _this39 = _possibleConstructorReturn(this, (_ref = Person.__proto__ || Object.getPrototypeOf(Person)).call.apply(_ref, [this].concat(args)));
 
-					Object.assign.apply(Object, [_this40].concat(args));
-					return _this40;
+					Object.assign.apply(Object, [_this39].concat(args));
+					return _this39;
 				}
 
 				return Person;
@@ -8230,106 +9015,7 @@ describe('type checked mixins with tcomb', function () {
 });
 
 /***/ }),
-/* 89 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*!
- * chai
- * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-
-var used = []
-  , exports = module.exports = {};
-
-/*!
- * Chai version
- */
-
-exports.version = '3.5.0';
-
-/*!
- * Assertion Error
- */
-
-exports.AssertionError = __webpack_require__(48);
-
-/*!
- * Utils for plugins (not exported)
- */
-
-var util = __webpack_require__(103);
-
-/**
- * # .use(function)
- *
- * Provides a way to extend the internals of Chai
- *
- * @param {Function}
- * @returns {this} for chaining
- * @api public
- */
-
-exports.use = function (fn) {
-  if (!~used.indexOf(fn)) {
-    fn(this, util);
-    used.push(fn);
-  }
-
-  return this;
-};
-
-/*!
- * Utility Functions
- */
-
-exports.util = util;
-
-/*!
- * Configuration
- */
-
-var config = __webpack_require__(19);
-exports.config = config;
-
-/*!
- * Primary `Assertion` prototype
- */
-
-var assertion = __webpack_require__(90);
-exports.use(assertion);
-
-/*!
- * Core Assertions
- */
-
-var core = __webpack_require__(91);
-exports.use(core);
-
-/*!
- * Expect interface
- */
-
-var expect = __webpack_require__(93);
-exports.use(expect);
-
-/*!
- * Should interface
- */
-
-var should = __webpack_require__(94);
-exports.use(should);
-
-/*!
- * Assert interface
- */
-
-var assert = __webpack_require__(92);
-exports.use(assert);
-
-
-/***/ }),
-/* 90 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -8360,13 +9046,46 @@ module.exports = function (_chai, util) {
    *
    * Creates object for chaining.
    *
+   * `Assertion` objects contain metadata in the form of flags. Three flags can
+   * be assigned during instantiation by passing arguments to this constructor:
+   *
+   * - `object`: This flag contains the target of the assertion. For example, in
+   *   the assertion `expect(numKittens).to.equal(7);`, the `object` flag will
+   *   contain `numKittens` so that the `equal` assertion can reference it when
+   *   needed.
+   *
+   * - `message`: This flag contains an optional custom error message to be
+   *   prepended to the error message that's generated by the assertion when it
+   *   fails.
+   *
+   * - `ssfi`: This flag stands for "start stack function indicator". It
+   *   contains a function reference that serves as the starting point for
+   *   removing frames from the stack trace of the error that's created by the
+   *   assertion when it fails. The goal is to provide a cleaner stack trace to
+   *   end users by removing Chai's internal functions. Note that it only works
+   *   in environments that support `Error.captureStackTrace`, and only when
+   *   `Chai.config.includeStack` hasn't been set to `false`.
+   *
+   * - `lockSsfi`: This flag controls whether or not the given `ssfi` flag
+   *   should retain its current value, even as assertions are chained off of
+   *   this object. This is usually set to `true` when creating a new assertion
+   *   from within another assertion. It's also temporarily set to `true` before
+   *   an overwritten assertion gets called by the overwriting assertion.
+   *
+   * @param {Mixed} obj target of the assertion
+   * @param {String} msg (optional) custom error message
+   * @param {Function} ssfi (optional) starting point for removing stack frames
+   * @param {Boolean} lockSsfi (optional) whether or not the ssfi flag is locked
    * @api private
    */
 
-  function Assertion (obj, msg, stack) {
-    flag(this, 'ssfi', stack || arguments.callee);
+  function Assertion (obj, msg, ssfi, lockSsfi) {
+    flag(this, 'ssfi', ssfi || Assertion);
+    flag(this, 'lockSsfi', lockSsfi);
     flag(this, 'object', obj);
     flag(this, 'message', msg);
+
+    return util.proxify(this);
   }
 
   Object.defineProperty(Assertion, 'includeStack', {
@@ -8432,12 +9151,13 @@ module.exports = function (_chai, util) {
 
   Assertion.prototype.assert = function (expr, msg, negateMsg, expected, _actual, showDiff) {
     var ok = util.test(this, arguments);
-    if (true !== showDiff) showDiff = false;
+    if (false !== showDiff) showDiff = true;
+    if (undefined === expected && undefined === _actual) showDiff = false;
     if (true !== config.showDiff) showDiff = false;
 
     if (!ok) {
-      var msg = util.getMessage(this, arguments)
-        , actual = util.getActual(this, arguments);
+      msg = util.getMessage(this, arguments);
+      var actual = util.getActual(this, arguments);
       throw new AssertionError(msg, {
           actual: actual
         , expected: expected
@@ -8466,7 +9186,7 @@ module.exports = function (_chai, util) {
 
 
 /***/ }),
-/* 91 */
+/* 95 */
 /***/ (function(module, exports) {
 
 /*!
@@ -8478,16 +9198,14 @@ module.exports = function (_chai, util) {
 
 module.exports = function (chai, _) {
   var Assertion = chai.Assertion
-    , toString = Object.prototype.toString
+    , AssertionError = chai.AssertionError
     , flag = _.flag;
 
   /**
    * ### Language Chains
    *
-   * The following are provided as chainable getters to
-   * improve the readability of your assertions. They
-   * do not provide testing capabilities unless they
-   * have been overwritten by a plugin.
+   * The following are provided as chainable getters to improve the readability
+   * of your assertions.
    *
    * **Chains**
    *
@@ -8504,6 +9222,8 @@ module.exports = function (chai, _) {
    * - at
    * - of
    * - same
+   * - but
+   * - does
    *
    * @name language chains
    * @namespace BDD
@@ -8513,21 +9233,27 @@ module.exports = function (chai, _) {
   [ 'to', 'be', 'been'
   , 'is', 'and', 'has', 'have'
   , 'with', 'that', 'which', 'at'
-  , 'of', 'same' ].forEach(function (chain) {
-    Assertion.addProperty(chain, function () {
-      return this;
-    });
+  , 'of', 'same', 'but', 'does' ].forEach(function (chain) {
+    Assertion.addProperty(chain);
   });
 
   /**
    * ### .not
    *
-   * Negates any of assertions following in the chain.
+   * Negates all assertions that follow in the chain.
    *
-   *     expect(foo).to.not.equal('bar');
-   *     expect(goodFn).to.not.throw(Error);
-   *     expect({ foo: 'baz' }).to.have.property('foo')
-   *       .and.not.equal('bar');
+   *     expect(function () {}).to.not.throw();
+   *     expect({a: 1}).to.not.have.property('b');
+   *     expect([1, 2]).to.be.an('array').that.does.not.include(3);
+   *
+   * Just because you can negate any assertion with `.not` doesn't mean you
+   * should. With great power comes great responsibility. It's often best to
+   * assert that the one expected output was produced, rather than asserting
+   * that one of countless unexpected outputs wasn't produced. See individual
+   * assertions for specific guidance.
+   *
+   *     expect(2).to.equal(2); // Recommended
+   *     expect(2).to.not.equal(1); // Not recommended
    *
    * @name not
    * @namespace BDD
@@ -8541,18 +9267,34 @@ module.exports = function (chai, _) {
   /**
    * ### .deep
    *
-   * Sets the `deep` flag, later used by the `equal` and
-   * `property` assertions.
+   * Causes all `.equal`, `.include`, `.members`, `.keys`, and `.property`
+   * assertions that follow in the chain to use deep equality instead of strict
+   * (`===`) equality. See the `deep-eql` project page for info on the deep
+   * equality algorithm: https://github.com/chaijs/deep-eql.
    *
-   *     expect(foo).to.deep.equal({ bar: 'baz' });
-   *     expect({ foo: { bar: { baz: 'quux' } } })
-   *       .to.have.deep.property('foo.bar.baz', 'quux');
+   *     // Target object deeply (but not strictly) equals `{a: 1}`
+   *     expect({a: 1}).to.deep.equal({a: 1});
+   *     expect({a: 1}).to.not.equal({a: 1});
    *
-   * `.deep.property` special characters can be escaped
-   * by adding two slashes before the `.` or `[]`.
+   *     // Target array deeply (but not strictly) includes `{a: 1}`
+   *     expect([{a: 1}]).to.deep.include({a: 1});
+   *     expect([{a: 1}]).to.not.include({a: 1});
    *
-   *     var deepCss = { '.link': { '[target]': 42 }};
-   *     expect(deepCss).to.have.deep.property('\\.link.\\[target\\]', 42);
+   *     // Target object deeply (but not strictly) includes `x: {a: 1}`
+   *     expect({x: {a: 1}}).to.deep.include({x: {a: 1}});
+   *     expect({x: {a: 1}}).to.not.include({x: {a: 1}});
+   *
+   *     // Target array deeply (but not strictly) has member `{a: 1}`
+   *     expect([{a: 1}]).to.have.deep.members([{a: 1}]);
+   *     expect([{a: 1}]).to.not.have.members([{a: 1}]);
+   *
+   *     // Target set deeply (but not strictly) has key `{a: 1}`
+   *     expect(new Set([{a: 1}])).to.have.deep.keys([{a: 1}]);
+   *     expect(new Set([{a: 1}])).to.not.have.keys([{a: 1}]);
+   *
+   *     // Target object deeply (but not strictly) has property `x: {a: 1}`
+   *     expect({x: {a: 1}}).to.have.deep.property('x', {a: 1});
+   *     expect({x: {a: 1}}).to.not.have.property('x', {a: 1});
    *
    * @name deep
    * @namespace BDD
@@ -8564,12 +9306,90 @@ module.exports = function (chai, _) {
   });
 
   /**
+   * ### .nested
+   *
+   * Enables dot- and bracket-notation in all `.property` and `.include`
+   * assertions that follow in the chain.
+   *
+   *     expect({a: {b: ['x', 'y']}}).to.have.nested.property('a.b[1]');
+   *     expect({a: {b: ['x', 'y']}}).to.nested.include({'a.b[1]': 'y'});
+   *
+   * If `.` or `[]` are part of an actual property name, they can be escaped by
+   * adding two backslashes before them.
+   *
+   *     expect({'.a': {'[b]': 'x'}}).to.have.nested.property('\\.a.\\[b\\]');
+   *     expect({'.a': {'[b]': 'x'}}).to.nested.include({'\\.a.\\[b\\]': 'x'});
+   *
+   * `.nested` cannot be combined with `.own`.
+   *
+   * @name nested
+   * @namespace BDD
+   * @api public
+   */
+
+  Assertion.addProperty('nested', function () {
+    flag(this, 'nested', true);
+  });
+
+  /**
+   * ### .own
+   *
+   * Causes all `.property` and `.include` assertions that follow in the chain
+   * to ignore inherited properties.
+   *
+   *     Object.prototype.b = 2;
+   *
+   *     expect({a: 1}).to.have.own.property('a');
+   *     expect({a: 1}).to.have.property('b').but.not.own.property('b'); 
+   *
+   *     expect({a: 1}).to.own.include({a: 1});
+   *     expect({a: 1}).to.include({b: 2}).but.not.own.include({b: 2});
+   *
+   * `.own` cannot be combined with `.nested`.
+   *
+   * @name own
+   * @namespace BDD
+   * @api public
+   */
+
+  Assertion.addProperty('own', function () {
+    flag(this, 'own', true);
+  });
+
+  /**
+   * ### .ordered
+   *
+   * Causes all `.members` assertions that follow in the chain to require that
+   * members be in the same order.
+   *
+   *     expect([1, 2]).to.have.ordered.members([1, 2])
+   *       .but.not.have.ordered.members([2, 1]);
+   *
+   * When `.include` and `.ordered` are combined, the ordering begins at the
+   * start of both arrays.
+   *
+   *     expect([1, 2, 3]).to.include.ordered.members([1, 2])
+   *       .but.not.include.ordered.members([2, 3]);
+   *
+   * @name ordered
+   * @namespace BDD
+   * @api public
+   */
+
+  Assertion.addProperty('ordered', function () {
+    flag(this, 'ordered', true);
+  });
+
+  /**
    * ### .any
    *
-   * Sets the `any` flag, (opposite of the `all` flag)
-   * later used in the `keys` assertion.
+   * Causes all `.keys` assertions that follow in the chain to only require that
+   * the target have at least one of the given keys. This is the opposite of
+   * `.all`, which requires that the target have all of the given keys.
    *
-   *     expect(foo).to.have.any.keys('bar', 'baz');
+   *     expect({a: 1, b: 2}).to.not.have.any.keys('c', 'd');
+   *
+   * See the `.keys` doc for guidance on when to use `.any` or `.all`.
    *
    * @name any
    * @namespace BDD
@@ -8578,17 +9398,24 @@ module.exports = function (chai, _) {
 
   Assertion.addProperty('any', function () {
     flag(this, 'any', true);
-    flag(this, 'all', false)
+    flag(this, 'all', false);
   });
 
 
   /**
    * ### .all
    *
-   * Sets the `all` flag (opposite of the `any` flag)
-   * later used by the `keys` assertion.
+   * Causes all `.keys` assertions that follow in the chain to require that the
+   * target have all of the given keys. This is the opposite of `.any`, which
+   * only requires that the target have at least one of the given keys.
    *
-   *     expect(foo).to.have.all.keys('bar', 'baz');
+   *     expect({a: 1, b: 2}).to.have.all.keys('a', 'b');
+   *
+   * Note that `.all` is used by default when neither `.all` nor `.any` are
+   * added earlier in the chain. However, it's often best to add `.all` anyway
+   * because it improves readability.
+   *
+   * See the `.keys` doc for guidance on when to use `.any` or `.all`.
    *
    * @name all
    * @namespace BDD
@@ -8601,32 +9428,61 @@ module.exports = function (chai, _) {
   });
 
   /**
-   * ### .a(type)
+   * ### .a(type[, msg])
    *
-   * The `a` and `an` assertions are aliases that can be
-   * used either as language chains or to assert a value's
-   * type.
+   * Asserts that the target's type is equal to the given string `type`. Types
+   * are case insensitive. See the `type-detect` project page for info on the
+   * type detection algorithm: https://github.com/chaijs/type-detect.
    *
-   *     // typeof
-   *     expect('test').to.be.a('string');
-   *     expect({ foo: 'bar' }).to.be.an('object');
+   *     expect('foo').to.be.a('string');
+   *     expect({a: 1}).to.be.an('object');
    *     expect(null).to.be.a('null');
    *     expect(undefined).to.be.an('undefined');
    *     expect(new Error).to.be.an('error');
-   *     expect(new Promise).to.be.a('promise');
-   *     expect(new Float32Array()).to.be.a('float32array');
+   *     expect(Promise.resolve()).to.be.a('promise');
+   *     expect(new Float32Array).to.be.a('float32array');
    *     expect(Symbol()).to.be.a('symbol');
    *
-   *     // es6 overrides
-   *     expect({[Symbol.toStringTag]:()=>'foo'}).to.be.a('foo');
+   * `.a` supports objects that have a custom type set via `Symbol.toStringTag`.
    *
-   *     // language chain
-   *     expect(foo).to.be.an.instanceof(Foo);
+   *     var myObj = {
+   *       [Symbol.toStringTag]: 'myCustomType'
+   *     };
+   *
+   *     expect(myObj).to.be.a('myCustomType').but.not.an('object');
+   *
+   * It's often best to use `.a` to check a target's type before making more
+   * assertions on the same target. That way, you avoid unexpected behavior from
+   * any assertion that does different things based on the target's type.
+   *
+   *     expect([1, 2, 3]).to.be.an('array').that.includes(2);
+   *     expect([]).to.be.an('array').that.is.empty;
+   *
+   * Add `.not` earlier in the chain to negate `.a`. However, it's often best to
+   * assert that the target is the expected type, rather than asserting that it
+   * isn't one of many unexpected types.
+   *
+   *     expect('foo').to.be.a('string'); // Recommended
+   *     expect('foo').to.not.be.an('array'); // Not recommended
+   *
+   * `.a` accepts an optional `msg` argument which is a custom error message to
+   * show when the assertion fails. The message can also be given as the second
+   * argument to `expect`.
+   *
+   *     expect(1).to.be.a('string', 'nooo why fail??');
+   *     expect(1, 'nooo why fail??').to.be.a('string');
+   *
+   * `.a` can also be used as a language chain to improve the readability of
+   * your assertions. 
+   *
+   *     expect({b: 2}).to.have.a.property('b');
+   *
+   * The alias `.an` can be used interchangeably with `.a`.
    *
    * @name a
    * @alias an
    * @param {String} type
-   * @param {String} message _optional_
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
@@ -8638,7 +9494,7 @@ module.exports = function (chai, _) {
       , article = ~[ 'a', 'e', 'i', 'o', 'u' ].indexOf(type.charAt(0)) ? 'an ' : 'a ';
 
     this.assert(
-        type === _.type(obj)
+        type === _.type(obj).toLowerCase()
       , 'expected #{this} to be ' + article + type
       , 'expected #{this} not to be ' + article + type
     );
@@ -8648,23 +9504,138 @@ module.exports = function (chai, _) {
   Assertion.addChainableMethod('a', an);
 
   /**
-   * ### .include(value)
+   * ### .include(val[, msg])
    *
-   * The `include` and `contain` assertions can be used as either property
-   * based language chains or as methods to assert the inclusion of an object
-   * in an array or a substring in a string. When used as language chains,
-   * they toggle the `contains` flag for the `keys` assertion.
+   * When the target is a string, `.include` asserts that the given string `val`
+   * is a substring of the target.
    *
-   *     expect([1,2,3]).to.include(2);
-   *     expect('foobar').to.contain('foo');
-   *     expect({ foo: 'bar', hello: 'universe' }).to.include.keys('foo');
+   *     expect('foobar').to.include('foo');
+   *
+   * When the target is an array, `.include` asserts that the given `val` is a
+   * member of the target.
+   *
+   *     expect([1, 2, 3]).to.include(2);
+   *
+   * When the target is an object, `.include` asserts that the given object
+   * `val`'s properties are a subset of the target's properties.
+   *
+   *     expect({a: 1, b: 2, c: 3}).to.include({a: 1, b: 2});
+   *
+   * Because `.include` does different things based on the target's type, it's
+   * important to check the target's type before using `.include`. See the `.a`
+   * doc for info on testing a target's type.
+   *
+   *     expect([1, 2, 3]).to.be.an('array').that.includes(2);
+   *
+   * By default, strict (`===`) equality is used to compare array members and
+   * object properties. Add `.deep` earlier in the chain to use deep equality
+   * instead. See the `deep-eql` project page for info on the deep equality
+   * algorithm: https://github.com/chaijs/deep-eql.
+   *
+   *     // Target array deeply (but not strictly) includes `{a: 1}`
+   *     expect([{a: 1}]).to.deep.include({a: 1});
+   *     expect([{a: 1}]).to.not.include({a: 1});
+   *
+   *     // Target object deeply (but not strictly) includes `x: {a: 1}`
+   *     expect({x: {a: 1}}).to.deep.include({x: {a: 1}});
+   *     expect({x: {a: 1}}).to.not.include({x: {a: 1}});
+   *
+   * By default, all of the target's properties are searched when working with
+   * objects. This includes properties that are inherited and/or non-enumerable.
+   * Add `.own` earlier in the chain to exclude the target's inherited
+   * properties from the search.
+   *
+   *     Object.prototype.b = 2;
+   *
+   *     expect({a: 1}).to.own.include({a: 1});
+   *     expect({a: 1}).to.include({b: 2}).but.not.own.include({b: 2});
+   *
+   * Note that a target object is always only searched for `val`'s own
+   * enumerable properties.
+   *
+   * `.deep` and `.own` can be combined.
+   *
+   *     expect({a: {b: 2}}).to.deep.own.include({a: {b: 2}});
+   *
+   * Add `.nested` earlier in the chain to enable dot- and bracket-notation when
+   * referencing nested properties.
+   *
+   *     expect({a: {b: ['x', 'y']}}).to.nested.include({'a.b[1]': 'y'});
+   *
+   * If `.` or `[]` are part of an actual property name, they can be escaped by
+   * adding two backslashes before them.
+   *
+   *     expect({'.a': {'[b]': 2}}).to.nested.include({'\\.a.\\[b\\]': 2});
+   *
+   * `.deep` and `.nested` can be combined.
+   *
+   *     expect({a: {b: [{c: 3}]}}).to.deep.nested.include({'a.b[0]': {c: 3}});
+   *
+   * `.own` and `.nested` cannot be combined.
+   *
+   * Add `.not` earlier in the chain to negate `.include`.
+   *
+   *     expect('foobar').to.not.include('taco');
+   *     expect([1, 2, 3]).to.not.include(4);
+   * 
+   * However, it's dangerous to negate `.include` when the target is an object.
+   * The problem is that it creates uncertain expectations by asserting that the
+   * target object doesn't have all of `val`'s key/value pairs but may or may
+   * not have some of them. It's often best to identify the exact output that's
+   * expected, and then write an assertion that only accepts that exact output.
+   *
+   * When the target object isn't even expected to have `val`'s keys, it's
+   * often best to assert exactly that.
+   *
+   *     expect({c: 3}).to.not.have.any.keys('a', 'b'); // Recommended
+   *     expect({c: 3}).to.not.include({a: 1, b: 2}); // Not recommended
+   *
+   * When the target object is expected to have `val`'s keys, it's often best to
+   * assert that each of the properties has its expected value, rather than
+   * asserting that each property doesn't have one of many unexpected values.
+   *
+   *     expect({a: 3, b: 4}).to.include({a: 3, b: 4}); // Recommended
+   *     expect({a: 3, b: 4}).to.not.include({a: 1, b: 2}); // Not recommended
+   *
+   * `.include` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`.
+   *
+   *     expect([1, 2, 3]).to.include(4, 'nooo why fail??');
+   *     expect([1, 2, 3], 'nooo why fail??').to.include(4);
+   *
+   * `.include` can also be used as a language chain, causing all `.members` and
+   * `.keys` assertions that follow in the chain to require the target to be a
+   * superset of the expected set, rather than an identical set. Note that
+   * `.members` ignores duplicates in the subset when `.include` is added.
+   *
+   *     // Target object's keys are a superset of ['a', 'b'] but not identical
+   *     expect({a: 1, b: 2, c: 3}).to.include.all.keys('a', 'b');
+   *     expect({a: 1, b: 2, c: 3}).to.not.have.all.keys('a', 'b');
+   *
+   *     // Target array is a superset of [1, 2] but not identical
+   *     expect([1, 2, 3]).to.include.members([1, 2]);
+   *     expect([1, 2, 3]).to.not.have.members([1, 2]);
+   *
+   *     // Duplicates in the subset are ignored
+   *     expect([1, 2, 3]).to.include.members([1, 2, 2, 2]);
+   *
+   * Note that adding `.any` earlier in the chain causes the `.keys` assertion
+   * to ignore `.include`.
+   *
+   *     // Both assertions are identical
+   *     expect({a: 1}).to.include.any.keys('a', 'b');
+   *     expect({a: 1}).to.have.any.keys('a', 'b');
+   *
+   * The aliases `.includes`, `.contain`, and `.contains` can be used
+   * interchangeably with `.include`.
    *
    * @name include
    * @alias contain
    * @alias includes
    * @alias contains
-   * @param {Object|String|Number} obj
-   * @param {String} message _optional_
+   * @param {Mixed} val
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
@@ -8673,35 +9644,63 @@ module.exports = function (chai, _) {
     flag(this, 'contains', true);
   }
 
+  function isDeepIncluded (arr, val) {
+    return arr.some(function (arrVal) {
+      return _.eql(arrVal, val);
+    });
+  }
+
   function include (val, msg) {
-    _.expectTypes(this, ['array', 'object', 'string']);
-
     if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
-    var expected = false;
 
-    if (_.type(obj) === 'array' && _.type(val) === 'object') {
-      for (var i in obj) {
-        if (_.eql(obj[i], val)) {
-          expected = true;
-          break;
+    _.expectTypes(this, ['array', 'object', 'string'], flag(this, 'ssfi'));
+
+    var obj = flag(this, 'object')
+      , objType = _.type(obj).toLowerCase()
+      , isDeep = flag(this, 'deep')
+      , descriptor = isDeep ? 'deep ' : '';
+
+    // This block is for asserting a subset of properties in an object.
+    if (objType === 'object') {
+      var props = Object.keys(val)
+        , negate = flag(this, 'negate')
+        , firstErr = null
+        , numErrs = 0;
+
+      props.forEach(function (prop) {
+        var propAssertion = new Assertion(obj);
+        _.transferFlags(this, propAssertion, true);
+        flag(propAssertion, 'lockSsfi', true);
+
+        if (!negate || props.length === 1) {
+          propAssertion.property(prop, val[prop]);
+          return;
         }
-      }
-    } else if (_.type(val) === 'object') {
-      if (!flag(this, 'negate')) {
-        for (var k in val) new Assertion(obj).property(k, val[k]);
-        return;
-      }
-      var subset = {};
-      for (var k in val) subset[k] = obj[k];
-      expected = _.eql(subset, val);
-    } else {
-      expected = (obj != undefined) && ~obj.indexOf(val);
+
+        try {
+          propAssertion.property(prop, val[prop]);
+        } catch (err) {
+          if (!_.checkError.compatibleConstructor(err, AssertionError)) throw err;
+          if (firstErr === null) firstErr = err;
+          numErrs++;
+        }
+      }, this);
+
+      // When validating .not.include with multiple properties, we only want
+      // to throw an assertion error if all of the properties are included,
+      // in which case we throw the first property assertion error that we
+      // encountered.
+      if (negate && props.length > 1 && numErrs === props.length) throw firstErr;
+
+      return;
     }
+
+    // Assert inclusion in an array or substring in a string.
     this.assert(
-        expected
-      , 'expected #{this} to include ' + _.inspect(val)
-      , 'expected #{this} to not include ' + _.inspect(val));
+        objType === 'string' || !isDeep ? ~obj.indexOf(val)
+                                        : isDeepIncluded(obj, val)
+      , 'expected #{this} to ' + descriptor + 'include ' + _.inspect(val)
+      , 'expected #{this} to not ' + descriptor + 'include ' + _.inspect(val));
   }
 
   Assertion.addChainableMethod('include', include, includeChainingBehavior);
@@ -8712,13 +9711,33 @@ module.exports = function (chai, _) {
   /**
    * ### .ok
    *
-   * Asserts that the target is truthy.
+   * Asserts that the target is loosely (`==`) equal to `true`. However, it's
+   * often best to assert that the target is strictly (`===`) or deeply equal to
+   * its expected value.
    *
-   *     expect('everything').to.be.ok;
-   *     expect(1).to.be.ok;
-   *     expect(false).to.not.be.ok;
-   *     expect(undefined).to.not.be.ok;
-   *     expect(null).to.not.be.ok;
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.be.ok; // Not recommended
+   *
+   *     expect(true).to.be.true; // Recommended
+   *     expect(true).to.be.ok; // Not recommended
+   *
+   * Add `.not` earlier in the chain to negate `.ok`.
+   *
+   *     expect(0).to.equal(0); // Recommended
+   *     expect(0).to.not.be.ok; // Not recommended
+   *
+   *     expect(false).to.be.false; // Recommended
+   *     expect(false).to.not.be.ok; // Not recommended
+   *
+   *     expect(null).to.be.null; // Recommended
+   *     expect(null).to.not.be.ok; // Not recommended
+   *
+   *     expect(undefined).to.be.undefined; // Recommended
+   *     expect(undefined).to.not.be.ok; // Not recommended
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect(false, 'nooo why fail??').to.be.ok;
    *
    * @name ok
    * @namespace BDD
@@ -8735,10 +9754,23 @@ module.exports = function (chai, _) {
   /**
    * ### .true
    *
-   * Asserts that the target is `true`.
+   * Asserts that the target is strictly (`===`) equal to `true`.
    *
    *     expect(true).to.be.true;
-   *     expect(1).to.not.be.true;
+   *
+   * Add `.not` earlier in the chain to negate `.true`. However, it's often best
+   * to assert that the target is equal to its expected value, rather than not
+   * equal to `true`.
+   *
+   *     expect(false).to.be.false; // Recommended
+   *     expect(false).to.not.be.true; // Not recommended
+   *
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.not.be.true; // Not recommended
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect(false, 'nooo why fail??').to.be.true;
    *
    * @name true
    * @namespace BDD
@@ -8750,17 +9782,30 @@ module.exports = function (chai, _) {
         true === flag(this, 'object')
       , 'expected #{this} to be true'
       , 'expected #{this} to be false'
-      , this.negate ? false : true
+      , flag(this, 'negate') ? false : true
     );
   });
 
   /**
    * ### .false
    *
-   * Asserts that the target is `false`.
+   * Asserts that the target is strictly (`===`) equal to `false`.
    *
    *     expect(false).to.be.false;
-   *     expect(0).to.not.be.false;
+   *
+   * Add `.not` earlier in the chain to negate `.false`. However, it's often
+   * best to assert that the target is equal to its expected value, rather than
+   * not equal to `false`.
+   *
+   *     expect(true).to.be.true; // Recommended
+   *     expect(true).to.not.be.false; // Not recommended
+   *
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.not.be.false; // Not recommended
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect(true, 'nooo why fail??').to.be.false;
    *
    * @name false
    * @namespace BDD
@@ -8772,17 +9817,27 @@ module.exports = function (chai, _) {
         false === flag(this, 'object')
       , 'expected #{this} to be false'
       , 'expected #{this} to be true'
-      , this.negate ? true : false
+      , flag(this, 'negate') ? true : false
     );
   });
 
   /**
    * ### .null
    *
-   * Asserts that the target is `null`.
+   * Asserts that the target is strictly (`===`) equal to `null`.
    *
    *     expect(null).to.be.null;
-   *     expect(undefined).to.not.be.null;
+   *
+   * Add `.not` earlier in the chain to negate `.null`. However, it's often best
+   * to assert that the target is equal to its expected value, rather than not
+   * equal to `null`.
+   *
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.not.be.null; // Not recommended
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect(42, 'nooo why fail??').to.be.null;
    *
    * @name null
    * @namespace BDD
@@ -8800,10 +9855,20 @@ module.exports = function (chai, _) {
   /**
    * ### .undefined
    *
-   * Asserts that the target is `undefined`.
+   * Asserts that the target is strictly (`===`) equal to `undefined`.
    *
    *     expect(undefined).to.be.undefined;
-   *     expect(null).to.not.be.undefined;
+   *
+   * Add `.not` earlier in the chain to negate `.undefined`. However, it's often
+   * best to assert that the target is equal to its expected value, rather than
+   * not equal to `undefined`.
+   *
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.not.be.undefined; // Not recommended
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect(42, 'nooo why fail??').to.be.undefined;
    *
    * @name undefined
    * @namespace BDD
@@ -8820,10 +9885,21 @@ module.exports = function (chai, _) {
 
   /**
    * ### .NaN
-   * Asserts that the target is `NaN`.
    *
-   *     expect('foo').to.be.NaN;
-   *     expect(4).not.to.be.NaN;
+   * Asserts that the target is exactly `NaN`.
+   *
+   *     expect(NaN).to.be.NaN;
+   *
+   * Add `.not` earlier in the chain to negate `.NaN`. However, it's often best
+   * to assert that the target is equal to its expected value, rather than not
+   * equal to `NaN`.
+   *
+   *     expect('foo').to.equal('foo'); // Recommended
+   *     expect('foo').to.not.be.NaN; // Not recommended
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect(42, 'nooo why fail??').to.be.NaN;
    *
    * @name NaN
    * @namespace BDD
@@ -8832,7 +9908,7 @@ module.exports = function (chai, _) {
 
   Assertion.addProperty('NaN', function () {
     this.assert(
-        isNaN(flag(this, 'object'))
+        _.isNaN(flag(this, 'object'))
         , 'expected #{this} to be NaN'
         , 'expected #{this} not to be NaN'
     );
@@ -8841,15 +9917,27 @@ module.exports = function (chai, _) {
   /**
    * ### .exist
    *
-   * Asserts that the target is neither `null` nor `undefined`.
+   * Asserts that the target is not strictly (`===`) equal to either `null` or
+   * `undefined`. However, it's often best to assert that the target is equal to
+   * its expected value.
    *
-   *     var foo = 'hi'
-   *       , bar = null
-   *       , baz;
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.exist; // Not recommended
    *
-   *     expect(foo).to.exist;
-   *     expect(bar).to.not.exist;
-   *     expect(baz).to.not.exist;
+   *     expect(0).to.equal(0); // Recommended
+   *     expect(0).to.exist; // Not recommended
+   *
+   * Add `.not` earlier in the chain to negate `.exist`.
+   *
+   *     expect(null).to.be.null; // Recommended
+   *     expect(null).to.not.exist; // Not recommended
+   *
+   *     expect(undefined).to.be.undefined; // Recommended
+   *     expect(undefined).to.not.exist; // Not recommended
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect(null, 'nooo why fail??').to.exist;
    *
    * @name exist
    * @namespace BDD
@@ -8857,24 +9945,57 @@ module.exports = function (chai, _) {
    */
 
   Assertion.addProperty('exist', function () {
+    var val = flag(this, 'object');
     this.assert(
-        null != flag(this, 'object')
+        val !== null && val !== undefined
       , 'expected #{this} to exist'
       , 'expected #{this} to not exist'
     );
   });
 
-
   /**
    * ### .empty
    *
-   * Asserts that the target's length is `0`. For arrays and strings, it checks
-   * the `length` property. For objects, it gets the count of
-   * enumerable keys.
+   * When the target is a string or array, `.empty` asserts that the target's
+   * `length` property is strictly (`===`) equal to `0`.
    *
    *     expect([]).to.be.empty;
    *     expect('').to.be.empty;
+   *
+   * When the target is a map or set, `.empty` asserts that the target's `size`
+   * property is strictly equal to `0`.
+   *
+   *     expect(new Set()).to.be.empty;
+   *     expect(new Map()).to.be.empty;
+   *
+   * When the target is a non-function object, `.empty` asserts that the target
+   * doesn't have any own enumerable properties. Properties with Symbol-based
+   * keys are excluded from the count.
+   *
    *     expect({}).to.be.empty;
+   *
+   * Because `.empty` does different things based on the target's type, it's
+   * important to check the target's type before using `.empty`. See the `.a`
+   * doc for info on testing a target's type.
+   *
+   *     expect([]).to.be.an('array').that.is.empty;
+   *
+   * Add `.not` earlier in the chain to negate `.empty`. However, it's often
+   * best to assert that the target contains its expected number of values,
+   * rather than asserting that it's not empty.
+   *
+   *     expect([1, 2, 3]).to.have.lengthOf(3); // Recommended
+   *     expect([1, 2, 3]).to.not.be.empty; // Not recommended
+   *
+   *     expect(new Set([1, 2, 3])).to.have.property('size', 3); // Recommended
+   *     expect(new Set([1, 2, 3])).to.not.be.empty; // Not recommended
+   *
+   *     expect(Object.keys({a: 1})).to.have.lengthOf(1); // Recommended
+   *     expect({a: 1}).to.not.be.empty; // Not recommended
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect([1, 2, 3], 'nooo why fail??').to.be.empty;
    *
    * @name empty
    * @namespace BDD
@@ -8882,17 +10003,45 @@ module.exports = function (chai, _) {
    */
 
   Assertion.addProperty('empty', function () {
-    var obj = flag(this, 'object')
-      , expected = obj;
+    var val = flag(this, 'object')
+      , ssfi = flag(this, 'ssfi')
+      , flagMsg = flag(this, 'message')
+      , itemsCount;
 
-    if (Array.isArray(obj) || 'string' === typeof object) {
-      expected = obj.length;
-    } else if (typeof obj === 'object') {
-      expected = Object.keys(obj).length;
+    flagMsg = flagMsg ? flagMsg + ': ' : '';
+
+    switch (_.type(val).toLowerCase()) {
+      case 'array':
+      case 'string':
+        itemsCount = val.length;
+        break;
+      case 'map':
+      case 'set':
+        itemsCount = val.size;
+        break;
+      case 'weakmap':
+      case 'weakset':
+        throw new AssertionError(
+          flagMsg + '.empty was passed a weak collection',
+          undefined,
+          ssfi
+        );
+      case 'function':
+        var msg = flagMsg + '.empty was passed a function ' + _.getName(val);
+        throw new AssertionError(msg.trim(), undefined, ssfi);
+      default:
+        if (val !== Object(val)) {
+          throw new AssertionError(
+            flagMsg + '.empty was passed non-string primitive ' + _.inspect(val),
+            undefined,
+            ssfi
+          );
+        }
+        itemsCount = Object.keys(val).length;
     }
 
     this.assert(
-        !expected
+        0 === itemsCount
       , 'expected #{this} to be empty'
       , 'expected #{this} not to be empty'
     );
@@ -8901,11 +10050,26 @@ module.exports = function (chai, _) {
   /**
    * ### .arguments
    *
-   * Asserts that the target is an arguments object.
+   * Asserts that the target is an `arguments` object.
    *
    *     function test () {
    *       expect(arguments).to.be.arguments;
    *     }
+   *
+   *     test();
+   *
+   * Add `.not` earlier in the chain to negate `.arguments`. However, it's often
+   * best to assert which type the target is expected to be, rather than
+   * asserting that its not an `arguments` object.
+   *
+   *     expect('foo').to.be.a('string'); // Recommended
+   *     expect('foo').to.not.be.arguments; // Not recommended
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect({}, 'nooo why fail??').to.be.arguments;
+   *
+   * The alias `.Arguments` can be used interchangeably with `.arguments`.
    *
    * @name arguments
    * @alias Arguments
@@ -8915,9 +10079,9 @@ module.exports = function (chai, _) {
 
   function checkArguments () {
     var obj = flag(this, 'object')
-      , type = Object.prototype.toString.call(obj);
+      , type = _.type(obj);
     this.assert(
-        '[object Arguments]' === type
+        'Arguments' === type
       , 'expected #{this} to be arguments but got ' + type
       , 'expected #{this} to not be arguments'
     );
@@ -8927,24 +10091,46 @@ module.exports = function (chai, _) {
   Assertion.addProperty('Arguments', checkArguments);
 
   /**
-   * ### .equal(value)
+   * ### .equal(val[, msg])
    *
-   * Asserts that the target is strictly equal (`===`) to `value`.
-   * Alternately, if the `deep` flag is set, asserts that
-   * the target is deeply equal to `value`.
+   * Asserts that the target is strictly (`===`) equal to the given `val`.
    *
-   *     expect('hello').to.equal('hello');
-   *     expect(42).to.equal(42);
-   *     expect(1).to.not.equal(true);
-   *     expect({ foo: 'bar' }).to.not.equal({ foo: 'bar' });
-   *     expect({ foo: 'bar' }).to.deep.equal({ foo: 'bar' });
+   *     expect(1).to.equal(1);
+   *     expect('foo').to.equal('foo');
+   * 
+   * Add `.deep` earlier in the chain to use deep equality instead. See the
+   * `deep-eql` project page for info on the deep equality algorithm:
+   * https://github.com/chaijs/deep-eql.
+   *
+   *     // Target object deeply (but not strictly) equals `{a: 1}`
+   *     expect({a: 1}).to.deep.equal({a: 1});
+   *     expect({a: 1}).to.not.equal({a: 1});
+   *
+   *     // Target array deeply (but not strictly) equals `[1, 2]`
+   *     expect([1, 2]).to.deep.equal([1, 2]);
+   *     expect([1, 2]).to.not.equal([1, 2]);
+   *
+   * Add `.not` earlier in the chain to negate `.equal`. However, it's often
+   * best to assert that the target is equal to its expected value, rather than
+   * not equal to one of countless unexpected values.
+   *
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.not.equal(2); // Not recommended
+   *
+   * `.equal` accepts an optional `msg` argument which is a custom error message
+   * to show when the assertion fails. The message can also be given as the
+   * second argument to `expect`.
+   *
+   *     expect(1).to.equal(2, 'nooo why fail??');
+   *     expect(1, 'nooo why fail??').to.equal(2);
+   *
+   * The aliases `.equals` and `eq` can be used interchangeably with `.equal`.
    *
    * @name equal
    * @alias equals
    * @alias eq
-   * @alias deep.equal
-   * @param {Mixed} value
-   * @param {String} message _optional_
+   * @param {Mixed} val
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
@@ -8971,17 +10157,42 @@ module.exports = function (chai, _) {
   Assertion.addMethod('eq', assertEqual);
 
   /**
-   * ### .eql(value)
+   * ### .eql(obj[, msg])
    *
-   * Asserts that the target is deeply equal to `value`.
+   * Asserts that the target is deeply equal to the given `obj`. See the
+   * `deep-eql` project page for info on the deep equality algorithm:
+   * https://github.com/chaijs/deep-eql.
    *
-   *     expect({ foo: 'bar' }).to.eql({ foo: 'bar' });
-   *     expect([ 1, 2, 3 ]).to.eql([ 1, 2, 3 ]);
+   *     // Target object is deeply (but not strictly) equal to {a: 1}
+   *     expect({a: 1}).to.eql({a: 1}).but.not.equal({a: 1});
+   *
+   *     // Target array is deeply (but not strictly) equal to [1, 2]
+   *     expect([1, 2]).to.eql([1, 2]).but.not.equal([1, 2]);
+   *
+   * Add `.not` earlier in the chain to negate `.eql`. However, it's often best
+   * to assert that the target is deeply equal to its expected value, rather
+   * than not deeply equal to one of countless unexpected values.
+   *
+   *     expect({a: 1}).to.eql({a: 1}); // Recommended
+   *     expect({a: 1}).to.not.eql({b: 2}); // Not recommended
+   *
+   * `.eql` accepts an optional `msg` argument which is a custom error message
+   * to show when the assertion fails. The message can also be given as the
+   * second argument to `expect`.
+   *
+   *     expect({a: 1}).to.eql({b: 2}, 'nooo why fail??');
+   *     expect({a: 1}, 'nooo why fail??').to.eql({b: 2});
+   *
+   * The alias `.eqls` can be used interchangeably with `.eql`.
+   *
+   * The `.deep.equal` assertion is almost identical to `.eql` but with one
+   * difference: `.deep.equal` causes deep equality comparisons to also be used
+   * for any other assertions that follow in the chain.
    *
    * @name eql
    * @alias eqls
-   * @param {Mixed} value
-   * @param {String} message _optional_
+   * @param {Mixed} obj
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
@@ -9002,34 +10213,71 @@ module.exports = function (chai, _) {
   Assertion.addMethod('eqls', assertEql);
 
   /**
-   * ### .above(value)
+   * ### .above(n[, msg])
    *
-   * Asserts that the target is greater than `value`.
+   * Asserts that the target is a number greater than the given number `n`.
+   * However, it's often best to assert that the target is equal to its expected
+   * value.
    *
-   *     expect(10).to.be.above(5);
+   *     expect(2).to.equal(2); // Recommended
+   *     expect(2).to.be.above(1); // Not recommended
    *
-   * Can also be used in conjunction with `length` to
-   * assert a minimum length. The benefit being a
-   * more informative error message than if the length
-   * was supplied directly.
+   * Add `.lengthOf` earlier in the chain to assert that the value of the
+   * target's `length` property is greater than the given number `n`.
    *
-   *     expect('foo').to.have.length.above(2);
-   *     expect([ 1, 2, 3 ]).to.have.length.above(2);
+   *     expect('foo').to.have.lengthOf(3); // Recommended
+   *     expect('foo').to.have.lengthOf.above(2); // Not recommended
+   *
+   *     expect([1, 2, 3]).to.have.lengthOf(3); // Recommended
+   *     expect([1, 2, 3]).to.have.lengthOf.above(2); // Not recommended
+   *
+   * Add `.not` earlier in the chain to negate `.above`.
+   *
+   *     expect(2).to.equal(2); // Recommended
+   *     expect(1).to.not.be.above(2); // Not recommended
+   *
+   * `.above` accepts an optional `msg` argument which is a custom error message
+   * to show when the assertion fails. The message can also be given as the
+   * second argument to `expect`.
+   *
+   *     expect(1).to.be.above(2, 'nooo why fail??');
+   *     expect(1, 'nooo why fail??').to.be.above(2);
+   *
+   * The aliases `.gt` and `.greaterThan` can be used interchangeably with
+   * `.above`.
    *
    * @name above
    * @alias gt
    * @alias greaterThan
-   * @param {Number} value
-   * @param {String} message _optional_
+   * @param {Number} n
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
   function assertAbove (n, msg) {
     if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
-    if (flag(this, 'doLength')) {
-      new Assertion(obj, msg).to.have.property('length');
+    var obj = flag(this, 'object')
+      , doLength = flag(this, 'doLength')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+
+    if (doLength) {
+      new Assertion(obj, flagMsg, ssfi, true).to.have.property('length');
+    } else {
+      new Assertion(obj, flagMsg, ssfi, true).is.a('number');
+    }
+
+    if (typeof n !== 'number') {
+      flagMsg = flagMsg ? flagMsg + ': ' : '';
+      throw new AssertionError(
+        flagMsg + 'the argument to above must be a number',
+        undefined,
+        ssfi
+      );
+    }
+
+    if (doLength) {
       var len = obj.length;
       this.assert(
           len > n
@@ -9052,33 +10300,71 @@ module.exports = function (chai, _) {
   Assertion.addMethod('greaterThan', assertAbove);
 
   /**
-   * ### .least(value)
+   * ### .least(n[, msg])
    *
-   * Asserts that the target is greater than or equal to `value`.
+   * Asserts that the target is a number greater than or equal to the given
+   * number `n`. However, it's often best to assert that the target is equal to
+   * its expected value.
    *
-   *     expect(10).to.be.at.least(10);
+   *     expect(2).to.equal(2); // Recommended
+   *     expect(2).to.be.at.least(1); // Not recommended
+   *     expect(2).to.be.at.least(2); // Not recommended
    *
-   * Can also be used in conjunction with `length` to
-   * assert a minimum length. The benefit being a
-   * more informative error message than if the length
-   * was supplied directly.
+   * Add `.lengthOf` earlier in the chain to assert that the value of the
+   * target's `length` property is greater than or equal to the given number
+   * `n`.
    *
-   *     expect('foo').to.have.length.of.at.least(2);
-   *     expect([ 1, 2, 3 ]).to.have.length.of.at.least(3);
+   *     expect('foo').to.have.lengthOf(3); // Recommended
+   *     expect('foo').to.have.lengthOf.at.least(2); // Not recommended
+   *
+   *     expect([1, 2, 3]).to.have.lengthOf(3); // Recommended
+   *     expect([1, 2, 3]).to.have.lengthOf.at.least(2); // Not recommended
+   *
+   * Add `.not` earlier in the chain to negate `.least`.
+   *
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.not.be.at.least(2); // Not recommended
+   *
+   * `.least` accepts an optional `msg` argument which is a custom error message
+   * to show when the assertion fails. The message can also be given as the
+   * second argument to `expect`.
+   *
+   *     expect(1).to.be.at.least(2, 'nooo why fail??');
+   *     expect(1, 'nooo why fail??').to.be.at.least(2);
+   *
+   * The alias `.gte` can be used interchangeably with `.least`.
    *
    * @name least
    * @alias gte
-   * @param {Number} value
-   * @param {String} message _optional_
+   * @param {Number} n
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
   function assertLeast (n, msg) {
     if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
-    if (flag(this, 'doLength')) {
-      new Assertion(obj, msg).to.have.property('length');
+    var obj = flag(this, 'object')
+      , doLength = flag(this, 'doLength')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+
+    if (doLength) {
+      new Assertion(obj, flagMsg, ssfi, true).to.have.property('length');
+    } else {
+      new Assertion(obj, flagMsg, ssfi, true).is.a('number');
+    }
+
+    if (typeof n !== 'number') {
+      flagMsg = flagMsg ? flagMsg + ': ' : '';
+      throw new AssertionError(
+        flagMsg + 'the argument to least must be a number',
+        undefined,
+        ssfi
+      );
+    }
+
+    if (doLength) {
       var len = obj.length;
       this.assert(
           len >= n
@@ -9100,34 +10386,71 @@ module.exports = function (chai, _) {
   Assertion.addMethod('gte', assertLeast);
 
   /**
-   * ### .below(value)
+   * ### .below(n[, msg])
    *
-   * Asserts that the target is less than `value`.
+   * Asserts that the target is a number less than the given number `n`.
+   * However, it's often best to assert that the target is equal to its expected
+   * value.
    *
-   *     expect(5).to.be.below(10);
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.be.below(2); // Not recommended
    *
-   * Can also be used in conjunction with `length` to
-   * assert a maximum length. The benefit being a
-   * more informative error message than if the length
-   * was supplied directly.
+   * Add `.lengthOf` earlier in the chain to assert that the value of the
+   * target's `length` property is less than the given number `n`.
    *
-   *     expect('foo').to.have.length.below(4);
-   *     expect([ 1, 2, 3 ]).to.have.length.below(4);
+   *     expect('foo').to.have.lengthOf(3); // Recommended
+   *     expect('foo').to.have.lengthOf.below(4); // Not recommended
+   *
+   *     expect([1, 2, 3]).to.have.length(3); // Recommended
+   *     expect([1, 2, 3]).to.have.lengthOf.below(4); // Not recommended
+   *
+   * Add `.not` earlier in the chain to negate `.below`.
+   *
+   *     expect(2).to.equal(2); // Recommended
+   *     expect(2).to.not.be.below(1); // Not recommended
+   *
+   * `.below` accepts an optional `msg` argument which is a custom error message
+   * to show when the assertion fails. The message can also be given as the
+   * second argument to `expect`.
+   *
+   *     expect(2).to.be.below(1, 'nooo why fail??');
+   *     expect(2, 'nooo why fail??').to.be.below(1);
+   *
+   * The aliases `.lt` and `.lessThan` can be used interchangeably with
+   * `.below`.
    *
    * @name below
    * @alias lt
    * @alias lessThan
-   * @param {Number} value
-   * @param {String} message _optional_
+   * @param {Number} n
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
   function assertBelow (n, msg) {
     if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
-    if (flag(this, 'doLength')) {
-      new Assertion(obj, msg).to.have.property('length');
+    var obj = flag(this, 'object')
+      , doLength = flag(this, 'doLength')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+
+    if (doLength) {
+      new Assertion(obj, flagMsg, ssfi, true).to.have.property('length');
+    } else {
+      new Assertion(obj, flagMsg, ssfi, true).is.a('number');
+    }
+
+    if (typeof n !== 'number') {
+      flagMsg = flagMsg ? flagMsg + ': ' : '';
+      throw new AssertionError(
+        flagMsg + 'the argument to below must be a number',
+        undefined,
+        ssfi
+      );
+    }
+
+    if (doLength) {
       var len = obj.length;
       this.assert(
           len < n
@@ -9150,33 +10473,70 @@ module.exports = function (chai, _) {
   Assertion.addMethod('lessThan', assertBelow);
 
   /**
-   * ### .most(value)
+   * ### .most(n[, msg])
    *
-   * Asserts that the target is less than or equal to `value`.
+   * Asserts that the target is a number less than or equal to the given number
+   * `n`. However, it's often best to assert that the target is equal to its
+   * expected value.
    *
-   *     expect(5).to.be.at.most(5);
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.be.at.most(2); // Not recommended
+   *     expect(1).to.be.at.most(1); // Not recommended
    *
-   * Can also be used in conjunction with `length` to
-   * assert a maximum length. The benefit being a
-   * more informative error message than if the length
-   * was supplied directly.
+   * Add `.lengthOf` earlier in the chain to assert that the value of the
+   * target's `length` property is less than or equal to the given number `n`.
    *
-   *     expect('foo').to.have.length.of.at.most(4);
-   *     expect([ 1, 2, 3 ]).to.have.length.of.at.most(3);
+   *     expect('foo').to.have.lengthOf(3); // Recommended
+   *     expect('foo').to.have.lengthOf.at.most(4); // Not recommended
+   *
+   *     expect([1, 2, 3]).to.have.lengthOf(3); // Recommended
+   *     expect([1, 2, 3]).to.have.lengthOf.at.most(4); // Not recommended
+   *
+   * Add `.not` earlier in the chain to negate `.most`.
+   *
+   *     expect(2).to.equal(2); // Recommended
+   *     expect(2).to.not.be.at.most(1); // Not recommended
+   *
+   * `.most` accepts an optional `msg` argument which is a custom error message
+   * to show when the assertion fails. The message can also be given as the
+   * second argument to `expect`.
+   *
+   *     expect(2).to.be.at.most(1, 'nooo why fail??');
+   *     expect(2, 'nooo why fail??').to.be.at.most(1);
+   *
+   * The alias `.lte` can be used interchangeably with `.most`.
    *
    * @name most
    * @alias lte
-   * @param {Number} value
-   * @param {String} message _optional_
+   * @param {Number} n
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
   function assertMost (n, msg) {
     if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
-    if (flag(this, 'doLength')) {
-      new Assertion(obj, msg).to.have.property('length');
+    var obj = flag(this, 'object')
+      , doLength = flag(this, 'doLength')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+
+    if (doLength) {
+      new Assertion(obj, flagMsg, ssfi, true).to.have.property('length');
+    } else {
+      new Assertion(obj, flagMsg, ssfi, true).is.a('number');
+    }
+
+    if (typeof n !== 'number') {
+      flagMsg = flagMsg ? flagMsg + ': ' : '';
+      throw new AssertionError(
+        flagMsg + 'the argument to most must be a number',
+        undefined,
+        ssfi
+      );
+    }
+
+    if (doLength) {
       var len = obj.length;
       this.assert(
           len <= n
@@ -9198,24 +10558,44 @@ module.exports = function (chai, _) {
   Assertion.addMethod('lte', assertMost);
 
   /**
-   * ### .within(start, finish)
+   * ### .within(start, finish[, msg])
    *
-   * Asserts that the target is within a range.
+   * Asserts that the target is a number greater than or equal to the given
+   * number `start`, and less than or equal to the given number `finish`.
+   * However, it's often best to assert that the target is equal to its expected
+   * value.
    *
-   *     expect(7).to.be.within(5,10);
+   *     expect(2).to.equal(2); // Recommended
+   *     expect(2).to.be.within(1, 3); // Not recommended
+   *     expect(2).to.be.within(2, 3); // Not recommended
+   *     expect(2).to.be.within(1, 2); // Not recommended
    *
-   * Can also be used in conjunction with `length` to
-   * assert a length range. The benefit being a
-   * more informative error message than if the length
-   * was supplied directly.
+   * Add `.lengthOf` earlier in the chain to assert that the value of the
+   * target's `length` property is greater than or equal to the given number
+   * `start`, and less than or equal to the given number `finish`.
    *
-   *     expect('foo').to.have.length.within(2,4);
-   *     expect([ 1, 2, 3 ]).to.have.length.within(2,4);
+   *     expect('foo').to.have.lengthOf(3); // Recommended
+   *     expect('foo').to.have.lengthOf.within(2, 4); // Not recommended
+   *
+   *     expect([1, 2, 3]).to.have.lengthOf(3); // Recommended
+   *     expect([1, 2, 3]).to.have.lengthOf.within(2, 4); // Not recommended
+   *
+   * Add `.not` earlier in the chain to negate `.within`.
+   *
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.not.be.within(2, 4); // Not recommended
+   *
+   * `.within` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`.
+   *
+   *     expect(4).to.be.within(1, 3, 'nooo why fail??');
+   *     expect(4, 'nooo why fail??').to.be.within(1, 3);
    *
    * @name within
-   * @param {Number} start lowerbound inclusive
-   * @param {Number} finish upperbound inclusive
-   * @param {String} message _optional_
+   * @param {Number} start lower bound inclusive
+   * @param {Number} finish upper bound inclusive
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
@@ -9223,9 +10603,27 @@ module.exports = function (chai, _) {
   Assertion.addMethod('within', function (start, finish, msg) {
     if (msg) flag(this, 'message', msg);
     var obj = flag(this, 'object')
-      , range = start + '..' + finish;
-    if (flag(this, 'doLength')) {
-      new Assertion(obj, msg).to.have.property('length');
+      , range  = start + '..' + finish
+      , doLength = flag(this, 'doLength')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+
+    if (doLength) {
+      new Assertion(obj, flagMsg, ssfi, true).to.have.property('length');
+    } else {
+      new Assertion(obj, flagMsg, ssfi, true).is.a('number');
+    }
+
+    if (typeof start !== 'number' || typeof finish !== 'number') {
+      flagMsg = flagMsg ? flagMsg + ': ' : '';
+      throw new AssertionError(
+        flagMsg + 'the arguments to within must be numbers',
+        undefined,
+        ssfi
+      );
+    }
+
+    if (doLength) {
       var len = obj.length;
       this.assert(
           len >= start && len <= finish
@@ -9242,19 +10640,39 @@ module.exports = function (chai, _) {
   });
 
   /**
-   * ### .instanceof(constructor)
+   * ### .instanceof(constructor[, msg])
    *
-   * Asserts that the target is an instance of `constructor`.
+   * Asserts that the target is an instance of the given `constructor`.
    *
-   *     var Tea = function (name) { this.name = name; }
-   *       , Chai = new Tea('chai');
+   *     function Cat () { }
    *
-   *     expect(Chai).to.be.an.instanceof(Tea);
-   *     expect([ 1, 2, 3 ]).to.be.instanceof(Array);
+   *     expect(new Cat()).to.be.an.instanceof(Cat);
+   *     expect([1, 2]).to.be.an.instanceof(Array);
+   *
+   * Add `.not` earlier in the chain to negate `.instanceof`.
+   *
+   *     expect({a: 1}).to.not.be.an.instanceof(Array);
+   *
+   * `.instanceof` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`.
+   *
+   *     expect(1).to.be.an.instanceof(Array, 'nooo why fail??');
+   *     expect(1, 'nooo why fail??').to.be.an.instanceof(Array);
+   *
+   * Due to limitations in ES5, `.instanceof` may not always work as expected
+   * when using a transpiler such as Babel or TypeScript. In particular, it may
+   * produce unexpected results when subclassing built-in object such as
+   * `Array`, `Error`, and `Map`. See your transpiler's docs for details:
+   *
+   * - ([Babel](https://babeljs.io/docs/usage/caveats/#classes))
+   * - ([TypeScript](https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work))
+   *
+   * The alias `.instanceOf` can be used interchangeably with `.instanceof`.
    *
    * @name instanceof
    * @param {Constructor} constructor
-   * @param {String} message _optional_
+   * @param {String} msg _optional_
    * @alias instanceOf
    * @namespace BDD
    * @api public
@@ -9262,9 +10680,36 @@ module.exports = function (chai, _) {
 
   function assertInstanceOf (constructor, msg) {
     if (msg) flag(this, 'message', msg);
+
+    var target = flag(this, 'object')
+    var ssfi = flag(this, 'ssfi');
+    var flagMsg = flag(this, 'message');
+    var validInstanceOfTarget = constructor === Object(constructor) && (
+        typeof constructor === 'function' ||
+        (typeof Symbol !== 'undefined' &&
+         typeof Symbol.hasInstance !== 'undefined' &&
+         Symbol.hasInstance in constructor)
+    );
+
+    if (!validInstanceOfTarget) {
+      flagMsg = flagMsg ? flagMsg + ': ' : '';
+      var constructorType = constructor === null ? 'null' : typeof constructor;
+      throw new AssertionError(
+        flagMsg + 'The instanceof assertion needs a constructor but ' + constructorType + ' was given.',
+        undefined,
+        ssfi
+      );
+    }
+
+    var isInstanceOf = target instanceof constructor
+
     var name = _.getName(constructor);
+    if (name === null) {
+        name = 'an unnamed constructor';
+    }
+
     this.assert(
-        flag(this, 'object') instanceof constructor
+        isInstanceOf
       , 'expected #{this} to be an instance of ' + name
       , 'expected #{this} to not be an instance of ' + name
     );
@@ -9274,162 +10719,300 @@ module.exports = function (chai, _) {
   Assertion.addMethod('instanceOf', assertInstanceOf);
 
   /**
-   * ### .property(name, [value])
+   * ### .property(name[, val[, msg]])
    *
-   * Asserts that the target has a property `name`, optionally asserting that
-   * the value of that property is strictly equal to  `value`.
-   * If the `deep` flag is set, you can use dot- and bracket-notation for deep
-   * references into objects and arrays.
+   * Asserts that the target has a property with the given key `name`.
    *
-   *     // simple referencing
-   *     var obj = { foo: 'bar' };
-   *     expect(obj).to.have.property('foo');
-   *     expect(obj).to.have.property('foo', 'bar');
+   *     expect({a: 1}).to.have.property('a');
    *
-   *     // deep referencing
-   *     var deepObj = {
-   *         green: { tea: 'matcha' }
-   *       , teas: [ 'chai', 'matcha', { tea: 'konacha' } ]
-   *     };
+   * When `val` is provided, `.property` also asserts that the property's value
+   * is equal to the given `val`.
    *
-   *     expect(deepObj).to.have.deep.property('green.tea', 'matcha');
-   *     expect(deepObj).to.have.deep.property('teas[1]', 'matcha');
-   *     expect(deepObj).to.have.deep.property('teas[2].tea', 'konacha');
+   *     expect({a: 1}).to.have.property('a', 1);
    *
-   * You can also use an array as the starting point of a `deep.property`
-   * assertion, or traverse nested arrays.
+   * By default, strict (`===`) equality is used. Add `.deep` earlier in the
+   * chain to use deep equality instead. See the `deep-eql` project page for
+   * info on the deep equality algorithm: https://github.com/chaijs/deep-eql.
    *
-   *     var arr = [
-   *         [ 'chai', 'matcha', 'konacha' ]
-   *       , [ { tea: 'chai' }
-   *         , { tea: 'matcha' }
-   *         , { tea: 'konacha' } ]
-   *     ];
+   *     // Target object deeply (but not strictly) has property `x: {a: 1}`
+   *     expect({x: {a: 1}}).to.have.deep.property('x', {a: 1});
+   *     expect({x: {a: 1}}).to.not.have.property('x', {a: 1});
    *
-   *     expect(arr).to.have.deep.property('[0][1]', 'matcha');
-   *     expect(arr).to.have.deep.property('[1][2].tea', 'konacha');
+   * The target's enumerable and non-enumerable properties are always included
+   * in the search. By default, both own and inherited properties are included.
+   * Add `.own` earlier in the chain to exclude inherited properties from the
+   * search.
    *
-   * Furthermore, `property` changes the subject of the assertion
-   * to be the value of that property from the original object. This
-   * permits for further chainable assertions on that property.
+   *     Object.prototype.b = 2;
    *
-   *     expect(obj).to.have.property('foo')
-   *       .that.is.a('string');
-   *     expect(deepObj).to.have.property('green')
-   *       .that.is.an('object')
-   *       .that.deep.equals({ tea: 'matcha' });
-   *     expect(deepObj).to.have.property('teas')
-   *       .that.is.an('array')
-   *       .with.deep.property('[2]')
-   *         .that.deep.equals({ tea: 'konacha' });
+   *     expect({a: 1}).to.have.own.property('a');
+   *     expect({a: 1}).to.have.own.property('a', 1);
+   *     expect({a: 1}).to.have.property('b').but.not.own.property('b'); 
    *
-   * Note that dots and bracket in `name` must be backslash-escaped when
-   * the `deep` flag is set, while they must NOT be escaped when the `deep`
-   * flag is not set.
+   * `.deep` and `.own` can be combined.
    *
-   *     // simple referencing
-   *     var css = { '.link[target]': 42 };
-   *     expect(css).to.have.property('.link[target]', 42);
+   *     expect({x: {a: 1}}).to.have.deep.own.property('x', {a: 1});
    *
-   *     // deep referencing
-   *     var deepCss = { '.link': { '[target]': 42 }};
-   *     expect(deepCss).to.have.deep.property('\\.link.\\[target\\]', 42);
+   * Add `.nested` earlier in the chain to enable dot- and bracket-notation when
+   * referencing nested properties.
+   *
+   *     expect({a: {b: ['x', 'y']}}).to.have.nested.property('a.b[1]');
+   *     expect({a: {b: ['x', 'y']}}).to.have.nested.property('a.b[1]', 'y');
+   *
+   * If `.` or `[]` are part of an actual property name, they can be escaped by
+   * adding two backslashes before them.
+   *
+   *     expect({'.a': {'[b]': 'x'}}).to.have.nested.property('\\.a.\\[b\\]');
+   *
+   * `.deep` and `.nested` can be combined.
+   *
+   *     expect({a: {b: [{c: 3}]}})
+   *       .to.have.deep.nested.property('a.b[0]', {c: 3});
+   *
+   * `.own` and `.nested` cannot be combined.
+   *
+   * Add `.not` earlier in the chain to negate `.property`.
+   *
+   *     expect({a: 1}).to.not.have.property('b');
+   * 
+   * However, it's dangerous to negate `.property` when providing `val`. The
+   * problem is that it creates uncertain expectations by asserting that the
+   * target either doesn't have a property with the given key `name`, or that it
+   * does have a property with the given key `name` but its value isn't equal to
+   * the given `val`. It's often best to identify the exact output that's
+   * expected, and then write an assertion that only accepts that exact output.
+   *
+   * When the target isn't expected to have a property with the given key
+   * `name`, it's often best to assert exactly that.
+   *
+   *     expect({b: 2}).to.not.have.property('a'); // Recommended
+   *     expect({b: 2}).to.not.have.property('a', 1); // Not recommended
+   *
+   * When the target is expected to have a property with the given key `name`,
+   * it's often best to assert that the property has its expected value, rather
+   * than asserting that it doesn't have one of many unexpected values.
+   *
+   *     expect({a: 3}).to.have.property('a', 3); // Recommended
+   *     expect({a: 3}).to.not.have.property('a', 1); // Not recommended
+   *
+   * `.property` changes the target of any assertions that follow in the chain
+   * to be the value of the property from the original target object.
+   *
+   *     expect({a: 1}).to.have.property('a').that.is.a('number');
+   *
+   * `.property` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`. When not providing `val`, only use the
+   * second form.
+   *
+   *     // Recommended
+   *     expect({a: 1}).to.have.property('a', 2, 'nooo why fail??');
+   *     expect({a: 1}, 'nooo why fail??').to.have.property('a', 2);
+   *     expect({a: 1}, 'nooo why fail??').to.have.property('b');
+   *
+   *     // Not recommended
+   *     expect({a: 1}).to.have.property('b', undefined, 'nooo why fail??');
+   * 
+   * The above assertion isn't the same thing as not providing `val`. Instead,
+   * it's asserting that the target object has a `b` property that's equal to
+   * `undefined`.
+   *
+   * The assertions `.ownProperty` and `.haveOwnProperty` can be used
+   * interchangeably with `.own.property`.
    *
    * @name property
-   * @alias deep.property
    * @param {String} name
-   * @param {Mixed} value (optional)
-   * @param {String} message _optional_
+   * @param {Mixed} val (optional)
+   * @param {String} msg _optional_
    * @returns value of property for chaining
    * @namespace BDD
    * @api public
    */
 
-  Assertion.addMethod('property', function (name, val, msg) {
+  function assertProperty (name, val, msg) {
     if (msg) flag(this, 'message', msg);
 
-    var isDeep = !!flag(this, 'deep')
-      , descriptor = isDeep ? 'deep property ' : 'property '
+    var isNested = flag(this, 'nested')
+      , isOwn = flag(this, 'own')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+
+    if (isNested && isOwn) {
+      flagMsg = flagMsg ? flagMsg + ': ' : '';
+      throw new AssertionError(
+        flagMsg + 'The "nested" and "own" flags cannot be combined.',
+        undefined,
+        ssfi
+      );
+    }
+
+    var isDeep = flag(this, 'deep')
       , negate = flag(this, 'negate')
       , obj = flag(this, 'object')
-      , pathInfo = isDeep ? _.getPathInfo(name, obj) : null
-      , hasProperty = isDeep
-        ? pathInfo.exists
-        : _.hasProperty(name, obj)
-      , value = isDeep
-        ? pathInfo.value
-        : obj[name];
+      , pathInfo = isNested ? _.getPathInfo(obj, name) : null
+      , value = isNested ? pathInfo.value : obj[name];
 
-    if (negate && arguments.length > 1) {
-      if (undefined === value) {
-        msg = (msg != null) ? msg + ': ' : '';
-        throw new Error(msg + _.inspect(obj) + ' has no ' + descriptor + _.inspect(name));
-      }
-    } else {
+    var descriptor = '';
+    if (isDeep) descriptor += 'deep ';
+    if (isOwn) descriptor += 'own ';
+    if (isNested) descriptor += 'nested ';
+    descriptor += 'property ';
+
+    var hasProperty;
+    if (isOwn) hasProperty = Object.prototype.hasOwnProperty.call(obj, name);
+    else if (isNested) hasProperty = pathInfo.exists;
+    else hasProperty = _.hasProperty(obj, name);
+
+    // When performing a negated assertion for both name and val, merely having
+    // a property with the given name isn't enough to cause the assertion to
+    // fail. It must both have a property with the given name, and the value of
+    // that property must equal the given val. Therefore, skip this assertion in
+    // favor of the next.
+    if (!negate || arguments.length === 1) {
       this.assert(
           hasProperty
-        , 'expected #{this} to have a ' + descriptor + _.inspect(name)
+        , 'expected #{this} to have ' + descriptor + _.inspect(name)
         , 'expected #{this} to not have ' + descriptor + _.inspect(name));
     }
 
     if (arguments.length > 1) {
       this.assert(
-          val === value
-        , 'expected #{this} to have a ' + descriptor + _.inspect(name) + ' of #{exp}, but got #{act}'
-        , 'expected #{this} to not have a ' + descriptor + _.inspect(name) + ' of #{act}'
+          hasProperty && (isDeep ? _.eql(val, value) : val === value)
+        , 'expected #{this} to have ' + descriptor + _.inspect(name) + ' of #{exp}, but got #{act}'
+        , 'expected #{this} to not have ' + descriptor + _.inspect(name) + ' of #{act}'
         , val
         , value
       );
     }
 
     flag(this, 'object', value);
-  });
+  }
 
+  Assertion.addMethod('property', assertProperty);
 
-  /**
-   * ### .ownProperty(name)
-   *
-   * Asserts that the target has an own property `name`.
-   *
-   *     expect('test').to.have.ownProperty('length');
-   *
-   * @name ownProperty
-   * @alias haveOwnProperty
-   * @param {String} name
-   * @param {String} message _optional_
-   * @namespace BDD
-   * @api public
-   */
-
-  function assertOwnProperty (name, msg) {
-    if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
-    this.assert(
-        obj.hasOwnProperty(name)
-      , 'expected #{this} to have own property ' + _.inspect(name)
-      , 'expected #{this} to not have own property ' + _.inspect(name)
-    );
+  function assertOwnProperty (name, value, msg) {
+    flag(this, 'own', true);
+    assertProperty.apply(this, arguments);
   }
 
   Assertion.addMethod('ownProperty', assertOwnProperty);
   Assertion.addMethod('haveOwnProperty', assertOwnProperty);
 
   /**
-   * ### .ownPropertyDescriptor(name[, descriptor[, message]])
+   * ### .ownPropertyDescriptor(name[, descriptor[, msg]])
    *
-   * Asserts that the target has an own property descriptor `name`, that optionally matches `descriptor`.
+   * Asserts that the target has its own property descriptor with the given key
+   * `name`. Enumerable and non-enumerable properties are included in the
+   * search.
    *
-   *     expect('test').to.have.ownPropertyDescriptor('length');
-   *     expect('test').to.have.ownPropertyDescriptor('length', { enumerable: false, configurable: false, writable: false, value: 4 });
-   *     expect('test').not.to.have.ownPropertyDescriptor('length', { enumerable: false, configurable: false, writable: false, value: 3 });
-   *     expect('test').ownPropertyDescriptor('length').to.have.property('enumerable', false);
-   *     expect('test').ownPropertyDescriptor('length').to.have.keys('value');
+   *     expect({a: 1}).to.have.ownPropertyDescriptor('a');
+   *
+   * When `descriptor` is provided, `.ownPropertyDescriptor` also asserts that
+   * the property's descriptor is deeply equal to the given `descriptor`. See
+   * the `deep-eql` project page for info on the deep equality algorithm:
+   * https://github.com/chaijs/deep-eql.
+   *
+   *     expect({a: 1}).to.have.ownPropertyDescriptor('a', {
+   *       configurable: true,
+   *       enumerable: true,
+   *       writable: true,
+   *       value: 1,
+   *     });
+   *
+   * Add `.not` earlier in the chain to negate `.ownPropertyDescriptor`.
+   *
+   *     expect({a: 1}).to.not.have.ownPropertyDescriptor('b');
+   * 
+   * However, it's dangerous to negate `.ownPropertyDescriptor` when providing
+   * a `descriptor`. The problem is that it creates uncertain expectations by
+   * asserting that the target either doesn't have a property descriptor with
+   * the given key `name`, or that it does have a property descriptor with the
+   * given key `name` but its not deeply equal to the given `descriptor`. It's
+   * often best to identify the exact output that's expected, and then write an
+   * assertion that only accepts that exact output.
+   *
+   * When the target isn't expected to have a property descriptor with the given
+   * key `name`, it's often best to assert exactly that.
+   *
+   *     // Recommended
+   *     expect({b: 2}).to.not.have.ownPropertyDescriptor('a');
+   *
+   *     // Not recommended
+   *     expect({b: 2}).to.not.have.ownPropertyDescriptor('a', {
+   *       configurable: true,
+   *       enumerable: true,
+   *       writable: true,
+   *       value: 1,
+   *     });
+   *
+   * When the target is expected to have a property descriptor with the given
+   * key `name`, it's often best to assert that the property has its expected
+   * descriptor, rather than asserting that it doesn't have one of many
+   * unexpected descriptors.
+   *
+   *     // Recommended
+   *     expect({a: 3}).to.have.ownPropertyDescriptor('a', {
+   *       configurable: true,
+   *       enumerable: true,
+   *       writable: true,
+   *       value: 3,
+   *     });
+   *
+   *     // Not recommended
+   *     expect({a: 3}).to.not.have.ownPropertyDescriptor('a', {
+   *       configurable: true,
+   *       enumerable: true,
+   *       writable: true,
+   *       value: 1,
+   *     });
+   *
+   * `.ownPropertyDescriptor` changes the target of any assertions that follow
+   * in the chain to be the value of the property descriptor from the original
+   * target object.
+   *
+   *     expect({a: 1}).to.have.ownPropertyDescriptor('a')
+   *       .that.has.property('enumerable', true);
+   *
+   * `.ownPropertyDescriptor` accepts an optional `msg` argument which is a
+   * custom error message to show when the assertion fails. The message can also
+   * be given as the second argument to `expect`. When not providing
+   * `descriptor`, only use the second form.
+   *
+   *     // Recommended
+   *     expect({a: 1}).to.have.ownPropertyDescriptor('a', {
+   *       configurable: true,
+   *       enumerable: true,
+   *       writable: true,
+   *       value: 2,
+   *     }, 'nooo why fail??');
+   *
+   *     // Recommended
+   *     expect({a: 1}, 'nooo why fail??').to.have.ownPropertyDescriptor('a', {
+   *       configurable: true,
+   *       enumerable: true,
+   *       writable: true,
+   *       value: 2,
+   *     });
+   * 
+   *     // Recommended
+   *     expect({a: 1}, 'nooo why fail??').to.have.ownPropertyDescriptor('b');
+   *
+   *     // Not recommended
+   *     expect({a: 1})
+   *       .to.have.ownPropertyDescriptor('b', undefined, 'nooo why fail??');
+   *
+   * The above assertion isn't the same thing as not providing `descriptor`.
+   * Instead, it's asserting that the target object has a `b` property
+   * descriptor that's deeply equal to `undefined`.
+   *
+   * The alias `.haveOwnPropertyDescriptor` can be used interchangeably with
+   * `.ownPropertyDescriptor`.
    *
    * @name ownPropertyDescriptor
    * @alias haveOwnPropertyDescriptor
    * @param {String} name
    * @param {Object} descriptor _optional_
-   * @param {String} message _optional_
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
@@ -9465,40 +11048,57 @@ module.exports = function (chai, _) {
   Assertion.addMethod('haveOwnPropertyDescriptor', assertOwnPropertyDescriptor);
 
   /**
-   * ### .length
+   * ### .lengthOf(n[, msg])
    *
-   * Sets the `doLength` flag later used as a chain precursor to a value
-   * comparison for the `length` property.
+   * Asserts that the target's `length` property is equal to the given number
+   * `n`.
    *
-   *     expect('foo').to.have.length.above(2);
-   *     expect([ 1, 2, 3 ]).to.have.length.above(2);
-   *     expect('foo').to.have.length.below(4);
-   *     expect([ 1, 2, 3 ]).to.have.length.below(4);
-   *     expect('foo').to.have.length.within(2,4);
-   *     expect([ 1, 2, 3 ]).to.have.length.within(2,4);
+   *     expect([1, 2, 3]).to.have.lengthOf(3);
+   *     expect('foo').to.have.lengthOf(3);
    *
-   * *Deprecation notice:* Using `length` as an assertion will be deprecated
-   * in version 2.4.0 and removed in 3.0.0. Code using the old style of
-   * asserting for `length` property value using `length(value)` should be
-   * switched to use `lengthOf(value)` instead.
+   * Add `.not` earlier in the chain to negate `.lengthOf`. However, it's often
+   * best to assert that the target's `length` property is equal to its expected
+   * value, rather than not equal to one of many unexpected values.
    *
-   * @name length
-   * @namespace BDD
-   * @api public
-   */
-
-  /**
-   * ### .lengthOf(value[, message])
+   *     expect('foo').to.have.lengthOf(3); // Recommended
+   *     expect('foo').to.not.have.lengthOf(4); // Not recommended
    *
-   * Asserts that the target's `length` property has
-   * the expected value.
+   * `.lengthOf` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`.
    *
-   *     expect([ 1, 2, 3]).to.have.lengthOf(3);
-   *     expect('foobar').to.have.lengthOf(6);
+   *     expect([1, 2, 3]).to.have.lengthOf(2, 'nooo why fail??');
+   *     expect([1, 2, 3], 'nooo why fail??').to.have.lengthOf(2);
+   *
+   * `.lengthOf` can also be used as a language chain, causing all `.above`,
+   * `.below`, `.least`, `.most`, and `.within` assertions that follow in the
+   * chain to use the target's `length` property as the target. However, it's
+   * often best to assert that the target's `length` property is equal to its
+   * expected length, rather than asserting that its `length` property falls
+   * within some range of values.
+   *
+   *     // Recommended
+   *     expect([1, 2, 3]).to.have.lengthOf(3);
+   *
+   *     // Not recommended
+   *     expect([1, 2, 3]).to.have.lengthOf.above(2);
+   *     expect([1, 2, 3]).to.have.lengthOf.below(4);
+   *     expect([1, 2, 3]).to.have.lengthOf.at.least(3);
+   *     expect([1, 2, 3]).to.have.lengthOf.at.most(3);
+   *     expect([1, 2, 3]).to.have.lengthOf.within(2,4);
+   *
+   * Due to a compatibility issue, the alias `.length` can't be chained directly
+   * off of an uninvoked method such as `.a`. Therefore, `.length` can't be used
+   * interchangeably with `.lengthOf` in every situation. It's recommended to
+   * always use `.lengthOf` instead of `.length`.
+   *
+   *     expect([1, 2, 3]).to.have.a.length(3); // incompatible; throws error
+   *     expect([1, 2, 3]).to.have.a.lengthOf(3);  // passes as expected
    *
    * @name lengthOf
-   * @param {Number} length
-   * @param {String} message _optional_
+   * @alias length
+   * @param {Number} n
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
@@ -9509,8 +11109,10 @@ module.exports = function (chai, _) {
 
   function assertLength (n, msg) {
     if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
-    new Assertion(obj, msg).to.have.property('length');
+    var obj = flag(this, 'object')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+    new Assertion(obj, flagMsg, ssfi, true).to.have.property('length');
     var len = obj.length;
 
     this.assert(
@@ -9523,19 +11125,32 @@ module.exports = function (chai, _) {
   }
 
   Assertion.addChainableMethod('length', assertLength, assertLengthChain);
-  Assertion.addMethod('lengthOf', assertLength);
+  Assertion.addChainableMethod('lengthOf', assertLength, assertLengthChain);
 
   /**
-   * ### .match(regexp)
+   * ### .match(re[, msg])
    *
-   * Asserts that the target matches a regular expression.
+   * Asserts that the target matches the given regular expression `re`.
    *
    *     expect('foobar').to.match(/^foo/);
    *
+   * Add `.not` earlier in the chain to negate `.match`.
+   *
+   *     expect('foobar').to.not.match(/taco/);
+   *
+   * `.match` accepts an optional `msg` argument which is a custom error message
+   * to show when the assertion fails. The message can also be given as the
+   * second argument to `expect`.
+   *
+   *     expect('foobar').to.match(/taco/, 'nooo why fail??');
+   *     expect('foobar', 'nooo why fail??').to.match(/taco/);
+   *
+   * The alias `.matches` can be used interchangeably with `.match`.
+   *
    * @name match
    * @alias matches
-   * @param {RegExp} RegularExpression
-   * @param {String} message _optional_
+   * @param {RegExp} re
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
@@ -9553,23 +11168,36 @@ module.exports = function (chai, _) {
   Assertion.addMethod('matches', assertMatch);
 
   /**
-   * ### .string(string)
+   * ### .string(str[, msg])
    *
-   * Asserts that the string target contains another string.
+   * Asserts that the target string contains the given substring `str`.
    *
    *     expect('foobar').to.have.string('bar');
    *
+   * Add `.not` earlier in the chain to negate `.string`.
+   *
+   *     expect('foobar').to.not.have.string('taco');
+   *
+   * `.string` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`.
+   *
+   *     expect('foobar').to.have.string(/taco/, 'nooo why fail??');
+   *     expect('foobar', 'nooo why fail??').to.have.string(/taco/);
+   *
    * @name string
-   * @param {String} string
-   * @param {String} message _optional_
+   * @param {String} str
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
   Assertion.addMethod('string', function (str, msg) {
     if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
-    new Assertion(obj, msg).is.a('string');
+    var obj = flag(this, 'object')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+    new Assertion(obj, flagMsg, ssfi, true).is.a('string');
 
     this.assert(
         ~obj.indexOf(str)
@@ -9578,38 +11206,102 @@ module.exports = function (chai, _) {
     );
   });
 
-
   /**
-   * ### .keys(key1, [key2], [...])
+   * ### .keys(key1[, key2[, ...]])
    *
-   * Asserts that the target contains any or all of the passed-in keys.
-   * Use in combination with `any`, `all`, `contains`, or `have` will affect
-   * what will pass.
+   * Asserts that the target object, array, map, or set has the given keys. Only
+   * the target's own inherited properties are included in the search. 
    *
-   * When used in conjunction with `any`, at least one key that is passed
-   * in must exist in the target object. This is regardless whether or not
-   * the `have` or `contain` qualifiers are used. Note, either `any` or `all`
-   * should be used in the assertion. If neither are used, the assertion is
-   * defaulted to `all`.
+   * When the target is an object or array, keys can be provided as one or more
+   * string arguments, a single array argument, or a single object argument. In
+   * the latter case, only the keys in the given object matter; the values are
+   * ignored.
    *
-   * When both `all` and `contain` are used, the target object must have at
-   * least all of the passed-in keys but may have more keys not listed.
+   *     expect({a: 1, b: 2}).to.have.all.keys('a', 'b');
+   *     expect(['x', 'y']).to.have.all.keys(0, 1);
    *
-   * When both `all` and `have` are used, the target object must both contain
-   * all of the passed-in keys AND the number of keys in the target object must
-   * match the number of keys passed in (in other words, a target object must
-   * have all and only all of the passed-in keys).
+   *     expect({a: 1, b: 2}).to.have.all.keys(['a', 'b']);
+   *     expect(['x', 'y']).to.have.all.keys([0, 1]);
    *
-   *     expect({ foo: 1, bar: 2 }).to.have.any.keys('foo', 'baz');
-   *     expect({ foo: 1, bar: 2 }).to.have.any.keys('foo');
-   *     expect({ foo: 1, bar: 2 }).to.contain.any.keys('bar', 'baz');
-   *     expect({ foo: 1, bar: 2 }).to.contain.any.keys(['foo']);
-   *     expect({ foo: 1, bar: 2 }).to.contain.any.keys({'foo': 6});
-   *     expect({ foo: 1, bar: 2 }).to.have.all.keys(['bar', 'foo']);
-   *     expect({ foo: 1, bar: 2 }).to.have.all.keys({'bar': 6, 'foo': 7});
-   *     expect({ foo: 1, bar: 2, baz: 3 }).to.contain.all.keys(['bar', 'foo']);
-   *     expect({ foo: 1, bar: 2, baz: 3 }).to.contain.all.keys({'bar': 6});
+   *     expect({a: 1, b: 2}).to.have.all.keys({a: 4, b: 5}); // ignore 4 and 5
+   *     expect(['x', 'y']).to.have.all.keys({0: 4, 1: 5}); // ignore 4 and 5
    *
+   * When the target is a map or set, each key must be provided as a separate
+   * argument.
+   *
+   *     expect(new Map([['a', 1], ['b', 2]])).to.have.all.keys('a', 'b');
+   *     expect(new Set(['a', 'b'])).to.have.all.keys('a', 'b');
+   *
+   * Because `.keys` does different things based on the target's type, it's
+   * important to check the target's type before using `.keys`. See the `.a` doc
+   * for info on testing a target's type.
+   *
+   *     expect({a: 1, b: 2}).to.be.an('object').that.has.all.keys('a', 'b');
+   *
+   * By default, strict (`===`) equality is used to compare keys of maps and
+   * sets. Add `.deep` earlier in the chain to use deep equality instead. See
+   * the `deep-eql` project page for info on the deep equality algorithm:
+   * https://github.com/chaijs/deep-eql.
+   *
+   *     // Target set deeply (but not strictly) has key `{a: 1}`
+   *     expect(new Set([{a: 1}])).to.have.all.deep.keys([{a: 1}]);
+   *     expect(new Set([{a: 1}])).to.not.have.all.keys([{a: 1}]);
+   *
+   * By default, the target must have all of the given keys and no more. Add
+   * `.any` earlier in the chain to only require that the target have at least
+   * one of the given keys. Also, add `.not` earlier in the chain to negate
+   * `.keys`. It's often best to add `.any` when negating `.keys`, and to use
+   * `.all` when asserting `.keys` without negation.
+   *
+   * When negating `.keys`, `.any` is preferred because `.not.any.keys` asserts
+   * exactly what's expected of the output, whereas `.not.all.keys` creates
+   * uncertain expectations.
+   *
+   *     // Recommended; asserts that target doesn't have any of the given keys
+   *     expect({a: 1, b: 2}).to.not.have.any.keys('c', 'd');
+   *
+   *     // Not recommended; asserts that target doesn't have all of the given
+   *     // keys but may or may not have some of them
+   *     expect({a: 1, b: 2}).to.not.have.all.keys('c', 'd');
+   *
+   * When asserting `.keys` without negation, `.all` is preferred because
+   * `.all.keys` asserts exactly what's expected of the output, whereas
+   * `.any.keys` creates uncertain expectations.
+   *
+   *     // Recommended; asserts that target has all the given keys
+   *     expect({a: 1, b: 2}).to.have.all.keys('a', 'b');
+   *
+   *     // Not recommended; asserts that target has at least one of the given
+   *     // keys but may or may not have more of them
+   *     expect({a: 1, b: 2}).to.have.any.keys('a', 'b');
+   *
+   * Note that `.all` is used by default when neither `.all` nor `.any` appear
+   * earlier in the chain. However, it's often best to add `.all` anyway because
+   * it improves readability.
+   *
+   *     // Both assertions are identical
+   *     expect({a: 1, b: 2}).to.have.all.keys('a', 'b'); // Recommended
+   *     expect({a: 1, b: 2}).to.have.keys('a', 'b'); // Not recommended
+   *
+   * Add `.include` earlier in the chain to require that the target's keys be a
+   * superset of the expected keys, rather than identical sets.
+   *
+   *     // Target object's keys are a superset of ['a', 'b'] but not identical
+   *     expect({a: 1, b: 2, c: 3}).to.include.all.keys('a', 'b');
+   *     expect({a: 1, b: 2, c: 3}).to.not.have.all.keys('a', 'b');
+   *
+   * However, if `.any` and `.include` are combined, only the `.any` takes
+   * effect. The `.include` is ignored in this case.
+   *
+   *     // Both assertions are identical
+   *     expect({a: 1}).to.have.any.keys('a', 'b');
+   *     expect({a: 1}).to.include.any.keys('a', 'b');
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect({a: 1}, 'nooo why fail??').to.have.key('b');
+   *
+   * The alias `.key` can be used interchangeably with `.keys`.
    *
    * @name keys
    * @alias key
@@ -9620,29 +11312,63 @@ module.exports = function (chai, _) {
 
   function assertKeys (keys) {
     var obj = flag(this, 'object')
+      , objType = _.type(obj)
+      , keysType = _.type(keys)
+      , ssfi = flag(this, 'ssfi')
+      , isDeep = flag(this, 'deep')
       , str
+      , deepStr = ''
       , ok = true
-      , mixedArgsMsg = 'keys must be given single argument of Array|Object|String, or multiple String arguments';
+      , flagMsg = flag(this, 'message');
 
-    switch (_.type(keys)) {
-      case "array":
-        if (arguments.length > 1) throw (new Error(mixedArgsMsg));
-        break;
-      case "object":
-        if (arguments.length > 1) throw (new Error(mixedArgsMsg));
-        keys = Object.keys(keys);
-        break;
-      default:
+    flagMsg = flagMsg ? flagMsg + ': ' : '';
+    var mixedArgsMsg = flagMsg + 'when testing keys against an object or an array you must give a single Array|Object|String argument or multiple String arguments';
+
+    if (objType === 'Map' || objType === 'Set') {
+      deepStr = isDeep ? 'deeply ' : '';
+      actual = [];
+
+      // Map and Set '.keys' aren't supported in IE 11. Therefore, use .forEach.
+      obj.forEach(function (val, key) { actual.push(key) });
+
+      if (keysType !== 'Array') {
         keys = Array.prototype.slice.call(arguments);
+      }
+
+    } else {
+      actual = _.getOwnEnumerableProperties(obj);
+
+      switch (keysType) {
+        case 'Array':
+          if (arguments.length > 1) {
+            throw new AssertionError(mixedArgsMsg, undefined, ssfi);
+          }
+          break;
+        case 'Object':
+          if (arguments.length > 1) {
+            throw new AssertionError(mixedArgsMsg, undefined, ssfi);
+          }
+          keys = Object.keys(keys);
+          break;
+        default:
+          keys = Array.prototype.slice.call(arguments);
+      }
+
+      // Only stringify non-Symbols because Symbols would become "Symbol()"
+      keys = keys.map(function (val) {
+        return typeof val === 'symbol' ? val : String(val);
+      });
     }
 
-    if (!keys.length) throw new Error('keys required');
+    if (!keys.length) {
+      throw new AssertionError(flagMsg + 'keys required', undefined, ssfi);
+    }
 
-    var actual = Object.keys(obj)
-      , expected = keys
-      , len = keys.length
+    var len = keys.length
       , any = flag(this, 'any')
-      , all = flag(this, 'all');
+      , all = flag(this, 'all')
+      , expected = keys
+      , actual;
 
     if (!any && !all) {
       all = true;
@@ -9650,25 +11376,37 @@ module.exports = function (chai, _) {
 
     // Has any
     if (any) {
-      var intersection = expected.filter(function(key) {
-        return ~actual.indexOf(key);
+      ok = expected.some(function(expectedKey) {
+        return actual.some(function(actualKey) {
+          if (isDeep) {
+            return _.eql(expectedKey, actualKey);
+          } else {
+            return expectedKey === actualKey;
+          }
+        });
       });
-      ok = intersection.length > 0;
     }
 
     // Has all
     if (all) {
-      ok = keys.every(function(key){
-        return ~actual.indexOf(key);
+      ok = expected.every(function(expectedKey) {
+        return actual.some(function(actualKey) {
+          if (isDeep) {
+            return _.eql(expectedKey, actualKey);
+          } else {
+            return expectedKey === actualKey;
+          }
+        });
       });
-      if (!flag(this, 'negate') && !flag(this, 'contains')) {
+
+      if (!flag(this, 'contains')) {
         ok = ok && keys.length == actual.length;
       }
     }
 
     // Key string
     if (len > 1) {
-      keys = keys.map(function(key){
+      keys = keys.map(function(key) {
         return _.inspect(key);
       });
       var last = keys.pop();
@@ -9691,10 +11429,10 @@ module.exports = function (chai, _) {
     // Assertion
     this.assert(
         ok
-      , 'expected #{this} to ' + str
-      , 'expected #{this} to not ' + str
-      , expected.slice(0).sort()
-      , actual.sort()
+      , 'expected #{this} to ' + deepStr + str
+      , 'expected #{this} to not ' + deepStr + str
+      , expected.slice(0).sort(_.compareByInspect)
+      , actual.sort(_.compareByInspect)
       , true
     );
   }
@@ -9703,156 +11441,294 @@ module.exports = function (chai, _) {
   Assertion.addMethod('key', assertKeys);
 
   /**
-   * ### .throw(constructor)
+   * ### .throw([errorLike], [errMsgMatcher], [msg])
    *
-   * Asserts that the function target will throw a specific error, or specific type of error
-   * (as determined using `instanceof`), optionally with a RegExp or string inclusion test
-   * for the error's message.
+   * When no arguments are provided, `.throw` invokes the target function and
+   * asserts that an error is thrown.
+   * 
+   *     var badFn = function () { throw new TypeError('Illegal salmon!'); };
    *
-   *     var err = new ReferenceError('This is a bad function.');
-   *     var fn = function () { throw err; }
-   *     expect(fn).to.throw(ReferenceError);
-   *     expect(fn).to.throw(Error);
-   *     expect(fn).to.throw(/bad function/);
-   *     expect(fn).to.not.throw('good function');
-   *     expect(fn).to.throw(ReferenceError, /bad function/);
-   *     expect(fn).to.throw(err);
+   *     expect(badFn).to.throw();
    *
-   * Please note that when a throw expectation is negated, it will check each
-   * parameter independently, starting with error constructor type. The appropriate way
-   * to check for the existence of a type of error but for a message that does not match
-   * is to use `and`.
+   * When one argument is provided, and it's an error constructor, `.throw`
+   * invokes the target function and asserts that an error is thrown that's an
+   * instance of that error constructor.
    *
-   *     expect(fn).to.throw(ReferenceError)
-   *        .and.not.throw(/good function/);
+   *     var badFn = function () { throw new TypeError('Illegal salmon!'); };
+   *
+   *     expect(badFn).to.throw(TypeError);
+   *
+   * When one argument is provided, and it's an error instance, `.throw` invokes
+   * the target function and asserts that an error is thrown that's strictly
+   * (`===`) equal to that error instance.
+   *
+   *     var err = new TypeError('Illegal salmon!');
+   *     var badFn = function () { throw err; };
+   *
+   *     expect(badFn).to.throw(err);
+   *
+   * When one argument is provided, and it's a string, `.throw` invokes the
+   * target function and asserts that an error is thrown with a message that
+   * contains that string.
+   *
+   *     var badFn = function () { throw new TypeError('Illegal salmon!'); };
+   *
+   *     expect(badFn).to.throw('salmon');
+   *
+   * When one argument is provided, and it's a regular expression, `.throw`
+   * invokes the target function and asserts that an error is thrown with a
+   * message that matches that regular expression.
+   *
+   *     var badFn = function () { throw new TypeError('Illegal salmon!'); };
+   *
+   *     expect(badFn).to.throw(/salmon/);
+   *
+   * When two arguments are provided, and the first is an error instance or
+   * constructor, and the second is a string or regular expression, `.throw`
+   * invokes the function and asserts that an error is thrown that fulfills both
+   * conditions as described above.
+   *
+   *     var err = new TypeError('Illegal salmon!');
+   *     var badFn = function () { throw err; };
+   *
+   *     expect(badFn).to.throw(TypeError, 'salmon');
+   *     expect(badFn).to.throw(TypeError, /salmon/);
+   *     expect(badFn).to.throw(err, 'salmon');
+   *     expect(badFn).to.throw(err, /salmon/);
+   *
+   * Add `.not` earlier in the chain to negate `.throw`.
+   *     
+   *     var goodFn = function () {};
+   *
+   *     expect(goodFn).to.not.throw();
+   * 
+   * However, it's dangerous to negate `.throw` when providing any arguments.
+   * The problem is that it creates uncertain expectations by asserting that the
+   * target either doesn't throw an error, or that it throws an error but of a
+   * different type than the given type, or that it throws an error of the given
+   * type but with a message that doesn't include the given string. It's often
+   * best to identify the exact output that's expected, and then write an
+   * assertion that only accepts that exact output.
+   *
+   * When the target isn't expected to throw an error, it's often best to assert
+   * exactly that.
+   *
+   *     var goodFn = function () {};
+   *
+   *     expect(goodFn).to.not.throw(); // Recommended
+   *     expect(goodFn).to.not.throw(ReferenceError, 'x'); // Not recommended
+   *
+   * When the target is expected to throw an error, it's often best to assert
+   * that the error is of its expected type, and has a message that includes an
+   * expected string, rather than asserting that it doesn't have one of many
+   * unexpected types, and doesn't have a message that includes some string.
+   *
+   *     var badFn = function () { throw new TypeError('Illegal salmon!'); };
+   *
+   *     expect(badFn).to.throw(TypeError, 'salmon'); // Recommended
+   *     expect(badFn).to.not.throw(ReferenceError, 'x'); // Not recommended
+   *
+   * `.throw` changes the target of any assertions that follow in the chain to
+   * be the error object that's thrown.
+   *
+   *     var err = new TypeError('Illegal salmon!');
+   *     err.code = 42;
+   *     var badFn = function () { throw err; };
+   *
+   *     expect(badFn).to.throw(TypeError).with.property('code', 42);
+   *
+   * `.throw` accepts an optional `msg` argument which is a custom error message
+   * to show when the assertion fails. The message can also be given as the
+   * second argument to `expect`. When not providing two arguments, always use
+   * the second form.
+   *
+   *     var goodFn = function () {};
+   *
+   *     expect(goodFn).to.throw(TypeError, 'x', 'nooo why fail??');
+   *     expect(goodFn, 'nooo why fail??').to.throw();
+   *
+   * Due to limitations in ES5, `.throw` may not always work as expected when
+   * using a transpiler such as Babel or TypeScript. In particular, it may
+   * produce unexpected results when subclassing the built-in `Error` object and
+   * then passing the subclassed constructor to `.throw`. See your transpiler's
+   * docs for details:
+   *
+   * - ([Babel](https://babeljs.io/docs/usage/caveats/#classes))
+   * - ([TypeScript](https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work))
+   *
+   * Beware of some common mistakes when using the `throw` assertion. One common
+   * mistake is to accidentally invoke the function yourself instead of letting
+   * the `throw` assertion invoke the function for you. For example, when
+   * testing if a function named `fn` throws, provide `fn` instead of `fn()` as
+   * the target for the assertion.
+   *
+   *     expect(fn).to.throw();     // Good! Tests `fn` as desired
+   *     expect(fn()).to.throw();   // Bad! Tests result of `fn()`, not `fn`
+   *
+   * If you need to assert that your function `fn` throws when passed certain
+   * arguments, then wrap a call to `fn` inside of another function.
+   *
+   *     expect(function () { fn(42); }).to.throw();  // Function expression
+   *     expect(() => fn(42)).to.throw();             // ES6 arrow function
+   *
+   * Another common mistake is to provide an object method (or any stand-alone
+   * function that relies on `this`) as the target of the assertion. Doing so is
+   * problematic because the `this` context will be lost when the function is
+   * invoked by `.throw`; there's no way for it to know what `this` is supposed
+   * to be. There are two ways around this problem. One solution is to wrap the
+   * method or function call inside of another function. Another solution is to
+   * use `bind`.
+   *
+   *     expect(function () { cat.meow(); }).to.throw();  // Function expression
+   *     expect(() => cat.meow()).to.throw();             // ES6 arrow function
+   *     expect(cat.meow.bind(cat)).to.throw();           // Bind
+   *
+   * Finally, it's worth mentioning that it's a best practice in JavaScript to
+   * only throw `Error` and derivatives of `Error` such as `ReferenceError`,
+   * `TypeError`, and user-defined objects that extend `Error`. No other type of
+   * value will generate a stack trace when initialized. With that said, the
+   * `throw` assertion does technically support any type of value being thrown,
+   * not just `Error` and its derivatives.
+   *
+   * The aliases `.throws` and `.Throw` can be used interchangeably with
+   * `.throw`.
    *
    * @name throw
    * @alias throws
    * @alias Throw
-   * @param {ErrorConstructor} constructor
-   * @param {String|RegExp} expected error message
-   * @param {String} message _optional_
+   * @param {Error|ErrorConstructor} errorLike
+   * @param {String|RegExp} errMsgMatcher error message
+   * @param {String} msg _optional_
    * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error#Error_types
    * @returns error for chaining (null if no error)
    * @namespace BDD
    * @api public
    */
 
-  function assertThrows (constructor, errMsg, msg) {
+  function assertThrows (errorLike, errMsgMatcher, msg) {
     if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
-    new Assertion(obj, msg).is.a('function');
+    var obj = flag(this, 'object')
+      , ssfi = flag(this, 'ssfi')
+      , flagMsg = flag(this, 'message')
+      , negate = flag(this, 'negate') || false;
+    new Assertion(obj, flagMsg, ssfi, true).is.a('function');
 
-    var thrown = false
-      , desiredError = null
-      , name = null
-      , thrownError = null;
-
-    if (arguments.length === 0) {
-      errMsg = null;
-      constructor = null;
-    } else if (constructor && (constructor instanceof RegExp || 'string' === typeof constructor)) {
-      errMsg = constructor;
-      constructor = null;
-    } else if (constructor && constructor instanceof Error) {
-      desiredError = constructor;
-      constructor = null;
-      errMsg = null;
-    } else if (typeof constructor === 'function') {
-      name = constructor.prototype.name;
-      if (!name || (name === 'Error' && constructor !== Error)) {
-        name = constructor.name || (new constructor()).name;
-      }
-    } else {
-      constructor = null;
+    if (errorLike instanceof RegExp || typeof errorLike === 'string') {
+      errMsgMatcher = errorLike;
+      errorLike = null;
     }
 
+    var caughtErr;
     try {
       obj();
     } catch (err) {
-      // first, check desired error
-      if (desiredError) {
-        this.assert(
-            err === desiredError
-          , 'expected #{this} to throw #{exp} but #{act} was thrown'
-          , 'expected #{this} to not throw #{exp}'
-          , (desiredError instanceof Error ? desiredError.toString() : desiredError)
-          , (err instanceof Error ? err.toString() : err)
-        );
+      caughtErr = err;
+    }
 
-        flag(this, 'object', err);
-        return this;
+    // If we have the negate flag enabled and at least one valid argument it means we do expect an error
+    // but we want it to match a given set of criteria
+    var everyArgIsUndefined = errorLike === undefined && errMsgMatcher === undefined;
+
+    // If we've got the negate flag enabled and both args, we should only fail if both aren't compatible
+    // See Issue #551 and PR #683@GitHub
+    var everyArgIsDefined = Boolean(errorLike && errMsgMatcher);
+    var errorLikeFail = false;
+    var errMsgMatcherFail = false;
+
+    // Checking if error was thrown
+    if (everyArgIsUndefined || !everyArgIsUndefined && !negate) {
+      // We need this to display results correctly according to their types
+      var errorLikeString = 'an error';
+      if (errorLike instanceof Error) {
+        errorLikeString = '#{exp}';
+      } else if (errorLike) {
+        errorLikeString = _.checkError.getConstructorName(errorLike);
       }
 
-      // next, check constructor
-      if (constructor) {
-        this.assert(
-            err instanceof constructor
-          , 'expected #{this} to throw #{exp} but #{act} was thrown'
-          , 'expected #{this} to not throw #{exp} but #{act} was thrown'
-          , name
-          , (err instanceof Error ? err.toString() : err)
-        );
+      this.assert(
+          caughtErr
+        , 'expected #{this} to throw ' + errorLikeString
+        , 'expected #{this} to not throw an error but #{act} was thrown'
+        , errorLike && errorLike.toString()
+        , (caughtErr instanceof Error ?
+            caughtErr.toString() : (typeof caughtErr === 'string' ? caughtErr : caughtErr &&
+                                    _.checkError.getConstructorName(caughtErr)))
+      );
+    }
 
-        if (!errMsg) {
-          flag(this, 'object', err);
-          return this;
+    if (errorLike && caughtErr) {
+      // We should compare instances only if `errorLike` is an instance of `Error`
+      if (errorLike instanceof Error) {
+        var isCompatibleInstance = _.checkError.compatibleInstance(caughtErr, errorLike);
+
+        if (isCompatibleInstance === negate) {
+          // These checks were created to ensure we won't fail too soon when we've got both args and a negate
+          // See Issue #551 and PR #683@GitHub
+          if (everyArgIsDefined && negate) {
+            errorLikeFail = true;
+          } else {
+            this.assert(
+                negate
+              , 'expected #{this} to throw #{exp} but #{act} was thrown'
+              , 'expected #{this} to not throw #{exp}' + (caughtErr && !negate ? ' but #{act} was thrown' : '')
+              , errorLike.toString()
+              , caughtErr.toString()
+            );
+          }
         }
       }
 
-      // next, check message
-      var message = 'error' === _.type(err) && "message" in err
-        ? err.message
-        : '' + err;
-
-      if ((message != null) && errMsg && errMsg instanceof RegExp) {
-        this.assert(
-            errMsg.exec(message)
-          , 'expected #{this} to throw error matching #{exp} but got #{act}'
-          , 'expected #{this} to throw error not matching #{exp}'
-          , errMsg
-          , message
-        );
-
-        flag(this, 'object', err);
-        return this;
-      } else if ((message != null) && errMsg && 'string' === typeof errMsg) {
-        this.assert(
-            ~message.indexOf(errMsg)
-          , 'expected #{this} to throw error including #{exp} but got #{act}'
-          , 'expected #{this} to throw error not including #{act}'
-          , errMsg
-          , message
-        );
-
-        flag(this, 'object', err);
-        return this;
-      } else {
-        thrown = true;
-        thrownError = err;
+      var isCompatibleConstructor = _.checkError.compatibleConstructor(caughtErr, errorLike);
+      if (isCompatibleConstructor === negate) {
+        if (everyArgIsDefined && negate) {
+            errorLikeFail = true;
+        } else {
+          this.assert(
+              negate
+            , 'expected #{this} to throw #{exp} but #{act} was thrown'
+            , 'expected #{this} to not throw #{exp}' + (caughtErr ? ' but #{act} was thrown' : '')
+            , (errorLike instanceof Error ? errorLike.toString() : errorLike && _.checkError.getConstructorName(errorLike))
+            , (caughtErr instanceof Error ? caughtErr.toString() : caughtErr && _.checkError.getConstructorName(caughtErr))
+          );
+        }
       }
     }
 
-    var actuallyGot = ''
-      , expectedThrown = name !== null
-        ? name
-        : desiredError
-          ? '#{exp}' //_.inspect(desiredError)
-          : 'an error';
+    if (caughtErr && errMsgMatcher !== undefined && errMsgMatcher !== null) {
+      // Here we check compatible messages
+      var placeholder = 'including';
+      if (errMsgMatcher instanceof RegExp) {
+        placeholder = 'matching'
+      }
 
-    if (thrown) {
-      actuallyGot = ' but #{act} was thrown'
+      var isCompatibleMessage = _.checkError.compatibleMessage(caughtErr, errMsgMatcher);
+      if (isCompatibleMessage === negate) {
+        if (everyArgIsDefined && negate) {
+            errMsgMatcherFail = true;
+        } else {
+          this.assert(
+            negate
+            , 'expected #{this} to throw error ' + placeholder + ' #{exp} but got #{act}'
+            , 'expected #{this} to throw error not ' + placeholder + ' #{exp}'
+            ,  errMsgMatcher
+            ,  _.checkError.getMessage(caughtErr)
+          );
+        }
+      }
     }
 
-    this.assert(
-        thrown === true
-      , 'expected #{this} to throw ' + expectedThrown + actuallyGot
-      , 'expected #{this} to not throw ' + expectedThrown + actuallyGot
-      , (desiredError instanceof Error ? desiredError.toString() : desiredError)
-      , (thrownError instanceof Error ? thrownError.toString() : thrownError)
-    );
+    // If both assertions failed and both should've matched we throw an error
+    if (errorLikeFail && errMsgMatcherFail) {
+      this.assert(
+        negate
+        , 'expected #{this} to throw #{exp} but #{act} was thrown'
+        , 'expected #{this} to not throw #{exp}' + (caughtErr ? ' but #{act} was thrown' : '')
+        , (errorLike instanceof Error ? errorLike.toString() : errorLike && _.checkError.getConstructorName(errorLike))
+        , (caughtErr instanceof Error ? caughtErr.toString() : caughtErr && _.checkError.getConstructorName(caughtErr))
+      );
+    }
 
-    flag(this, 'object', thrownError);
+    flag(this, 'object', caughtErr);
   };
 
   Assertion.addMethod('throw', assertThrows);
@@ -9860,24 +11736,66 @@ module.exports = function (chai, _) {
   Assertion.addMethod('Throw', assertThrows);
 
   /**
-   * ### .respondTo(method)
+   * ### .respondTo(method[, msg])
    *
-   * Asserts that the object or class target will respond to a method.
+   * When the target is a non-function object, `.respondTo` asserts that the
+   * target has a method with the given name `method`. The method can be own or
+   * inherited, and it can be enumerable or non-enumerable.
    *
-   *     Klass.prototype.bar = function(){};
-   *     expect(Klass).to.respondTo('bar');
-   *     expect(obj).to.respondTo('bar');
+   *     function Cat () {}
+   *     Cat.prototype.meow = function () {};
    *
-   * To check if a constructor will respond to a static function,
-   * set the `itself` flag.
+   *     expect(new Cat()).to.respondTo('meow');
    *
-   *     Klass.baz = function(){};
-   *     expect(Klass).itself.to.respondTo('baz');
+   * When the target is a function, `.respondTo` asserts that the target's
+   * `prototype` property has a method with the given name `method`. Again, the
+   * method can be own or inherited, and it can be enumerable or non-enumerable.
+   *
+   *     function Cat () {}
+   *     Cat.prototype.meow = function () {};
+   *
+   *     expect(Cat).to.respondTo('meow');
+   *
+   * Add `.itself` earlier in the chain to force `.respondTo` to treat the
+   * target as a non-function object, even if it's a function. Thus, it asserts
+   * that the target has a method with the given name `method`, rather than
+   * asserting that the target's `prototype` property has a method with the
+   * given name `method`.
+   *
+   *     function Cat () {}
+   *     Cat.prototype.meow = function () {};
+   *     Cat.hiss = function () {};
+   *
+   *     expect(Cat).itself.to.respondTo('hiss').but.not.respondTo('meow');
+   *
+   * When not adding `.itself`, it's important to check the target's type before
+   * using `.respondTo`. See the `.a` doc for info on checking a target's type.
+   *
+   *     function Cat () {}
+   *     Cat.prototype.meow = function () {};
+   *
+   *     expect(new Cat()).to.be.an('object').that.respondsTo('meow');
+   *
+   * Add `.not` earlier in the chain to negate `.respondTo`.
+   *
+   *     function Dog () {}
+   *     Dog.prototype.bark = function () {};
+   *
+   *     expect(new Dog()).to.not.respondTo('meow');
+   *
+   * `.respondTo` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`.
+   *
+   *     expect({}).to.respondTo('meow', 'nooo why fail??');
+   *     expect({}, 'nooo why fail??').to.respondTo('meow');
+   *
+   * The alias `.respondsTo` can be used interchangeably with `.respondTo`.
    *
    * @name respondTo
    * @alias respondsTo
    * @param {String} method
-   * @param {String} message _optional_
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
@@ -9886,7 +11804,7 @@ module.exports = function (chai, _) {
     if (msg) flag(this, 'message', msg);
     var obj = flag(this, 'object')
       , itself = flag(this, 'itself')
-      , context = ('function' === _.type(obj) && !itself)
+      , context = ('function' === typeof obj && !itself)
         ? obj.prototype[method]
         : obj[method];
 
@@ -9903,14 +11821,17 @@ module.exports = function (chai, _) {
   /**
    * ### .itself
    *
-   * Sets the `itself` flag, later used by the `respondTo` assertion.
+   * Forces all `.respondTo` assertions that follow in the chain to behave as if
+   * the target is a non-function object, even if it's a function. Thus, it
+   * causes `.respondTo` to assert that the target has a method with the given
+   * name, rather than asserting that the target's `prototype` property has a
+   * method with the given name.
    *
-   *     function Foo() {}
-   *     Foo.bar = function() {}
-   *     Foo.prototype.baz = function() {}
+   *     function Cat () {}
+   *     Cat.prototype.meow = function () {};
+   *     Cat.hiss = function () {};
    *
-   *     expect(Foo).itself.to.respondTo('bar');
-   *     expect(Foo).itself.not.to.respondTo('baz');
+   *     expect(Cat).itself.to.respondTo('hiss').but.not.respondTo('meow');
    *
    * @name itself
    * @namespace BDD
@@ -9922,16 +11843,39 @@ module.exports = function (chai, _) {
   });
 
   /**
-   * ### .satisfy(method)
+   * ### .satisfy(matcher[, msg])
    *
-   * Asserts that the target passes a given truth test.
+   * Invokes the given `matcher` function with the target being passed as the
+   * first argument, and asserts that the value returned is truthy.
    *
-   *     expect(1).to.satisfy(function(num) { return num > 0; });
+   *     expect(1).to.satisfy(function(num) {
+   *       return num > 0; 
+   *     });
+   *
+   * Add `.not` earlier in the chain to negate `.satisfy`.
+   *
+   *     expect(1).to.not.satisfy(function(num) {
+   *       return num > 2;
+   *     });
+   *
+   * `.satisfy` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`.
+   *
+   *     expect(1).to.satisfy(function(num) {
+   *       return num > 2;
+   *     }, 'nooo why fail??');
+   *
+   *     expect(1, 'nooo why fail??').to.satisfy(function(num) {
+   *       return num > 2;
+   *     });
+   *
+   * The alias `.satisfies` can be used interchangeably with `.satisfy`.
    *
    * @name satisfy
    * @alias satisfies
    * @param {Function} matcher
-   * @param {String} message _optional_
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
@@ -9944,7 +11888,7 @@ module.exports = function (chai, _) {
         result
       , 'expected #{this} to satisfy ' + _.objDisplay(matcher)
       , 'expected #{this} to not satisfy' + _.objDisplay(matcher)
-      , this.negate ? false : true
+      , flag(this, 'negate') ? false : true
       , result
     );
   }
@@ -9953,28 +11897,57 @@ module.exports = function (chai, _) {
   Assertion.addMethod('satisfies', satisfy);
 
   /**
-   * ### .closeTo(expected, delta)
+   * ### .closeTo(expected, delta[, msg])
    *
-   * Asserts that the target is equal `expected`, to within a +/- `delta` range.
+   * Asserts that the target is a number that's within a given +/- `delta` range
+   * of the given number `expected`. However, it's often best to assert that the
+   * target is equal to its expected value.
    *
+   *     // Recommended
+   *     expect(1.5).to.equal(1.5);
+   *
+   *     // Not recommended
    *     expect(1.5).to.be.closeTo(1, 0.5);
+   *     expect(1.5).to.be.closeTo(2, 0.5);
+   *     expect(1.5).to.be.closeTo(1, 1);
+   *
+   * Add `.not` earlier in the chain to negate `.closeTo`.
+   *
+   *     expect(1.5).to.equal(1.5); // Recommended
+   *     expect(1.5).to.not.be.closeTo(3, 1); // Not recommended
+   *
+   * `.closeTo` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`.
+   *
+   *     expect(1.5).to.be.closeTo(3, 1, 'nooo why fail??');
+   *     expect(1.5, 'nooo why fail??').to.be.closeTo(3, 1);
+   *
+   * The alias `.approximately` can be used interchangeably with `.closeTo`.
    *
    * @name closeTo
    * @alias approximately
    * @param {Number} expected
    * @param {Number} delta
-   * @param {String} message _optional_
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
   function closeTo(expected, delta, msg) {
     if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
+    var obj = flag(this, 'object')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
 
-    new Assertion(obj, msg).is.a('number');
-    if (_.type(expected) !== 'number' || _.type(delta) !== 'number') {
-      throw new Error('the arguments to closeTo or approximately must be numbers');
+    new Assertion(obj, flagMsg, ssfi, true).is.a('number');
+    if (typeof expected !== 'number' || typeof delta !== 'number') {
+      flagMsg = flagMsg ? flagMsg + ': ' : '';
+      throw new AssertionError(
+          flagMsg + 'the arguments to closeTo or approximately must be numbers',
+          undefined,
+          ssfi
+      );
     }
 
     this.assert(
@@ -9987,93 +11960,176 @@ module.exports = function (chai, _) {
   Assertion.addMethod('closeTo', closeTo);
   Assertion.addMethod('approximately', closeTo);
 
-  function isSubsetOf(subset, superset, cmp) {
-    return subset.every(function(elem) {
-      if (!cmp) return superset.indexOf(elem) !== -1;
+  // Note: Duplicates are ignored if testing for inclusion instead of sameness.
+  function isSubsetOf(subset, superset, cmp, contains, ordered) {
+    if (!contains) {
+      if (subset.length !== superset.length) return false;
+      superset = superset.slice();
+    }
 
-      return superset.some(function(elem2) {
-        return cmp(elem, elem2);
+    return subset.every(function(elem, idx) {
+      if (ordered) return cmp ? cmp(elem, superset[idx]) : elem === superset[idx];
+
+      if (!cmp) {
+        var matchIdx = superset.indexOf(elem);
+        if (matchIdx === -1) return false;
+
+        // Remove match from superset so not counted twice if duplicate in subset.
+        if (!contains) superset.splice(matchIdx, 1);
+        return true;
+      }
+
+      return superset.some(function(elem2, matchIdx) {
+        if (!cmp(elem, elem2)) return false;
+
+        // Remove match from superset so not counted twice if duplicate in subset.
+        if (!contains) superset.splice(matchIdx, 1);
+        return true;
       });
-    })
+    });
   }
 
   /**
-   * ### .members(set)
+   * ### .members(set[, msg])
    *
-   * Asserts that the target is a superset of `set`,
-   * or that the target and `set` have the same strictly-equal (===) members.
-   * Alternately, if the `deep` flag is set, set members are compared for deep
-   * equality.
+   * Asserts that the target array has the same members as the given array
+   * `set`.
    *
-   *     expect([1, 2, 3]).to.include.members([3, 2]);
-   *     expect([1, 2, 3]).to.not.include.members([3, 2, 8]);
+   *     expect([1, 2, 3]).to.have.members([2, 1, 3]);
+   *     expect([1, 2, 2]).to.have.members([2, 1, 2]);
    *
-   *     expect([4, 2]).to.have.members([2, 4]);
-   *     expect([5, 2]).to.not.have.members([5, 2, 1]);
+   * By default, members are compared using strict (`===`) equality. Add `.deep`
+   * earlier in the chain to use deep equality instead. See the `deep-eql`
+   * project page for info on the deep equality algorithm:
+   * https://github.com/chaijs/deep-eql.
    *
-   *     expect([{ id: 1 }]).to.deep.include.members([{ id: 1 }]);
+   *     // Target array deeply (but not strictly) has member `{a: 1}`
+   *     expect([{a: 1}]).to.have.deep.members([{a: 1}]);
+   *     expect([{a: 1}]).to.not.have.members([{a: 1}]);
+   *
+   * By default, order doesn't matter. Add `.ordered` earlier in the chain to
+   * require that members appear in the same order.
+   *
+   *     expect([1, 2, 3]).to.have.ordered.members([1, 2, 3]);
+   *     expect([1, 2, 3]).to.have.members([2, 1, 3])
+   *       .but.not.ordered.members([2, 1, 3]);
+   *
+   * By default, both arrays must be the same size. Add `.include` earlier in
+   * the chain to require that the target's members be a superset of the
+   * expected members. Note that duplicates are ignored in the subset when
+   * `.include` is added.
+   *
+   *     // Target array is a superset of [1, 2] but not identical
+   *     expect([1, 2, 3]).to.include.members([1, 2]);
+   *     expect([1, 2, 3]).to.not.have.members([1, 2]);
+   *
+   *     // Duplicates in the subset are ignored
+   *     expect([1, 2, 3]).to.include.members([1, 2, 2, 2]);
+   *
+   * `.deep`, `.ordered`, and `.include` can all be combined. However, if
+   * `.include` and `.ordered` are combined, the ordering begins at the start of
+   * both arrays.
+   *
+   *     expect([{a: 1}, {b: 2}, {c: 3}])
+   *       .to.include.deep.ordered.members([{a: 1}, {b: 2}])
+   *       .but.not.include.deep.ordered.members([{b: 2}, {c: 3}]);
+   *
+   * Add `.not` earlier in the chain to negate `.members`. However, it's
+   * dangerous to do so. The problem is that it creates uncertain expectations
+   * by asserting that the target array doesn't have all of the same members as
+   * the given array `set` but may or may not have some of them. It's often best
+   * to identify the exact output that's expected, and then write an assertion
+   * that only accepts that exact output.
+   *
+   *     expect([1, 2]).to.not.include(3).and.not.include(4); // Recommended
+   *     expect([1, 2]).to.not.have.members([3, 4]); // Not recommended
+   *
+   * `.members` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`.
+   *
+   *     expect([1, 2]).to.have.members([1, 2, 3], 'nooo why fail??');
+   *     expect([1, 2], 'nooo why fail??').to.have.members([1, 2, 3]);
    *
    * @name members
    * @param {Array} set
-   * @param {String} message _optional_
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
   Assertion.addMethod('members', function (subset, msg) {
     if (msg) flag(this, 'message', msg);
-    var obj = flag(this, 'object');
+    var obj = flag(this, 'object')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
 
-    new Assertion(obj).to.be.an('array');
-    new Assertion(subset).to.be.an('array');
+    new Assertion(obj, flagMsg, ssfi, true).to.be.an('array');
+    new Assertion(subset, flagMsg, ssfi, true).to.be.an('array');
+
+    var contains = flag(this, 'contains');
+    var ordered = flag(this, 'ordered');
+
+    var subject, failMsg, failNegateMsg, lengthCheck;
+
+    if (contains) {
+      subject = ordered ? 'an ordered superset' : 'a superset';
+      failMsg = 'expected #{this} to be ' + subject + ' of #{exp}';
+      failNegateMsg = 'expected #{this} to not be ' + subject + ' of #{exp}';
+    } else {
+      subject = ordered ? 'ordered members' : 'members';
+      failMsg = 'expected #{this} to have the same ' + subject + ' as #{exp}';
+      failNegateMsg = 'expected #{this} to not have the same ' + subject + ' as #{exp}';
+    }
 
     var cmp = flag(this, 'deep') ? _.eql : undefined;
 
-    if (flag(this, 'contains')) {
-      return this.assert(
-          isSubsetOf(subset, obj, cmp)
-        , 'expected #{this} to be a superset of #{act}'
-        , 'expected #{this} to not be a superset of #{act}'
-        , obj
-        , subset
-      );
-    }
-
     this.assert(
-        isSubsetOf(obj, subset, cmp) && isSubsetOf(subset, obj, cmp)
-        , 'expected #{this} to have the same members as #{act}'
-        , 'expected #{this} to not have the same members as #{act}'
-        , obj
-        , subset
+        isSubsetOf(subset, obj, cmp, contains, ordered)
+      , failMsg
+      , failNegateMsg
+      , subset
+      , obj
+      , true
     );
   });
 
   /**
-   * ### .oneOf(list)
+   * ### .oneOf(list[, msg])
    *
-   * Assert that a value appears somewhere in the top level of array `list`.
+   * Asserts that the target is a member of the given array `list`. However,
+   * it's often best to assert that the target is equal to its expected value.
    *
-   *     expect('a').to.be.oneOf(['a', 'b', 'c']);
-   *     expect(9).to.not.be.oneOf(['z']);
-   *     expect([3]).to.not.be.oneOf([1, 2, [3]]);
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.be.oneOf([1, 2, 3]); // Not recommended
    *
-   *     var three = [3];
-   *     // for object-types, contents are not compared
-   *     expect(three).to.not.be.oneOf([1, 2, [3]]);
-   *     // comparing references works
-   *     expect(three).to.be.oneOf([1, 2, three]);
+   * Comparisons are performed using strict (`===`) equality.
+   *
+   * Add `.not` earlier in the chain to negate `.oneOf`.
+   *
+   *     expect(1).to.equal(1); // Recommended
+   *     expect(1).to.not.be.oneOf([2, 3, 4]); // Not recommended
+   *
+   * `.oneOf` accepts an optional `msg` argument which is a custom error message
+   * to show when the assertion fails. The message can also be given as the
+   * second argument to `expect`.
+   *
+   *     expect(1).to.be.oneOf([2, 3, 4], 'nooo why fail??');
+   *     expect(1, 'nooo why fail??').to.be.oneOf([2, 3, 4]);
    *
    * @name oneOf
    * @param {Array<*>} list
-   * @param {String} message _optional_
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
   function oneOf (list, msg) {
     if (msg) flag(this, 'message', msg);
-    var expected = flag(this, 'object');
-    new Assertion(list).to.be.an('array');
+    var expected = flag(this, 'object')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+    new Assertion(list, flagMsg, ssfi, true).to.be.an('array');
 
     this.assert(
         list.indexOf(expected) > -1
@@ -10088,135 +12144,489 @@ module.exports = function (chai, _) {
 
 
   /**
-   * ### .change(function)
+   * ### .change(subject[, prop[, msg]])
    *
-   * Asserts that a function changes an object property
+   * When one argument is provided, `.change` asserts that the given function
+   * `subject` returns a different value when it's invoked before the target
+   * function compared to when it's invoked afterward. However, it's often best
+   * to assert that `subject` is equal to its expected value.
    *
-   *     var obj = { val: 10 };
-   *     var fn = function() { obj.val += 3 };
-   *     var noChangeFn = function() { return 'foo' + 'bar'; }
-   *     expect(fn).to.change(obj, 'val');
-   *     expect(noChangeFn).to.not.change(obj, 'val')
+   *     var dots = ''
+   *       , addDot = function () { dots += '.'; }
+   *       , getDots = function () { return dots; };
+   *
+   *     // Recommended
+   *     expect(getDots()).to.equal('');
+   *     addDot();
+   *     expect(getDots()).to.equal('.');
+   *
+   *     // Not recommended
+   *     expect(addDot).to.change(getDots);
+   *
+   * When two arguments are provided, `.change` asserts that the value of the
+   * given object `subject`'s `prop` property is different before invoking the
+   * target function compared to afterward.
+   *
+   *     var myObj = {dots: ''}
+   *       , addDot = function () { myObj.dots += '.'; };
+   *
+   *     // Recommended
+   *     expect(myObj).to.have.property('dots', '');
+   *     addDot();
+   *     expect(myObj).to.have.property('dots', '.');
+   *
+   *     // Not recommended
+   *     expect(addDot).to.change(myObj, 'dots');
+   *
+   * Strict (`===`) equality is used to compare before and after values.
+   *
+   * Add `.not` earlier in the chain to negate `.change`.
+   *
+   *     var dots = ''
+   *       , noop = function () {}
+   *       , getDots = function () { return dots; };
+   *
+   *     expect(noop).to.not.change(getDots);
+   *
+   *     var myObj = {dots: ''}
+   *       , noop = function () {};
+   *
+   *     expect(noop).to.not.change(myObj, 'dots');
+   *
+   * `.change` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`. When not providing two arguments, always
+   * use the second form.
+   *
+   *     var myObj = {dots: ''}
+   *       , addDot = function () { myObj.dots += '.'; };
+   *
+   *     expect(addDot).to.not.change(myObj, 'dots', 'nooo why fail??');
+   *
+   *     var dots = ''
+   *       , addDot = function () { dots += '.'; }
+   *       , getDots = function () { return dots; };
+   *
+   *     expect(addDot, 'nooo why fail??').to.not.change(getDots);
+   *
+   * `.change` also causes all `.by` assertions that follow in the chain to
+   * assert how much a numeric subject was increased or decreased by. However,
+   * it's dangerous to use `.change.by`. The problem is that it creates
+   * uncertain expectations by asserting that the subject either increases by
+   * the given delta, or that it decreases by the given delta. It's often best
+   * to identify the exact output that's expected, and then write an assertion
+   * that only accepts that exact output.
+   *
+   *     var myObj = {val: 1}
+   *       , addTwo = function () { myObj.val += 2; }
+   *       , subtractTwo = function () { myObj.val -= 2; };
+   *
+   *     expect(addTwo).to.increase(myObj, 'val').by(2); // Recommended
+   *     expect(addTwo).to.change(myObj, 'val').by(2); // Not recommended
+   *
+   *     expect(subtractTwo).to.decrease(myObj, 'val').by(2); // Recommended
+   *     expect(subtractTwo).to.change(myObj, 'val').by(2); // Not recommended
+   *
+   * The alias `.changes` can be used interchangeably with `.change`.
    *
    * @name change
    * @alias changes
-   * @alias Change
-   * @param {String} object
-   * @param {String} property name
-   * @param {String} message _optional_
+   * @param {String} subject
+   * @param {String} prop name _optional_
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
-  function assertChanges (object, prop, msg) {
+  function assertChanges (subject, prop, msg) {
     if (msg) flag(this, 'message', msg);
-    var fn = flag(this, 'object');
-    new Assertion(object, msg).to.have.property(prop);
-    new Assertion(fn).is.a('function');
+    var fn = flag(this, 'object')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+    new Assertion(fn, flagMsg, ssfi, true).is.a('function');
 
-    var initial = object[prop];
+    var initial;
+    if (!prop) {
+      new Assertion(subject, flagMsg, ssfi, true).is.a('function');
+      initial = subject();
+    } else {
+      new Assertion(subject, flagMsg, ssfi, true).to.have.property(prop);
+      initial = subject[prop];
+    }
+
     fn();
 
+    var final = prop === undefined || prop === null ? subject() : subject[prop];
+    var msgObj = prop === undefined || prop === null ? initial : '.' + prop;
+
+    // This gets flagged because of the .by(delta) assertion
+    flag(this, 'deltaMsgObj', msgObj);
+    flag(this, 'initialDeltaValue', initial);
+    flag(this, 'finalDeltaValue', final);
+    flag(this, 'deltaBehavior', 'change');
+    flag(this, 'realDelta', final !== initial);
+
     this.assert(
-      initial !== object[prop]
-      , 'expected .' + prop + ' to change'
-      , 'expected .' + prop + ' to not change'
+      initial !== final
+      , 'expected ' + msgObj + ' to change'
+      , 'expected ' + msgObj + ' to not change'
     );
   }
 
-  Assertion.addChainableMethod('change', assertChanges);
-  Assertion.addChainableMethod('changes', assertChanges);
+  Assertion.addMethod('change', assertChanges);
+  Assertion.addMethod('changes', assertChanges);
 
   /**
-   * ### .increase(function)
+   * ### .increase(subject[, prop[, msg]])
    *
-   * Asserts that a function increases an object property
+   * When one argument is provided, `.increase` asserts that the given function
+   * `subject` returns a greater number when it's invoked after invoking the
+   * target function compared to when it's invoked beforehand. `.increase` also
+   * causes all `.by` assertions that follow in the chain to assert how much
+   * greater of a number is returned. It's often best to assert that the return
+   * value increased by the expected amount, rather than asserting it increased
+   * by any amount.
    *
-   *     var obj = { val: 10 };
-   *     var fn = function() { obj.val = 15 };
-   *     expect(fn).to.increase(obj, 'val');
+   *     var val = 1
+   *       , addTwo = function () { val += 2; }
+   *       , getVal = function () { return val; };
+   *
+   *     expect(addTwo).to.increase(getVal).by(2); // Recommended
+   *     expect(addTwo).to.increase(getVal); // Not recommended
+   *
+   * When two arguments are provided, `.increase` asserts that the value of the
+   * given object `subject`'s `prop` property is greater after invoking the
+   * target function compared to beforehand.
+   *
+   *     var myObj = {val: 1}
+   *       , addTwo = function () { myObj.val += 2; };
+   *
+   *     expect(addTwo).to.increase(myObj, 'val').by(2); // Recommended
+   *     expect(addTwo).to.increase(myObj, 'val'); // Not recommended
+   *
+   * Add `.not` earlier in the chain to negate `.increase`. However, it's
+   * dangerous to do so. The problem is that it creates uncertain expectations
+   * by asserting that the subject either decreases, or that it stays the same.
+   * It's often best to identify the exact output that's expected, and then
+   * write an assertion that only accepts that exact output.
+   *
+   * When the subject is expected to decrease, it's often best to assert that it
+   * decreased by the expected amount.
+   *
+   *     var myObj = {val: 1}
+   *       , subtractTwo = function () { myObj.val -= 2; };
+   *
+   *     expect(subtractTwo).to.decrease(myObj, 'val').by(2); // Recommended
+   *     expect(subtractTwo).to.not.increase(myObj, 'val'); // Not recommended
+   * 
+   * When the subject is expected to stay the same, it's often best to assert
+   * exactly that.
+   *
+   *     var myObj = {val: 1}
+   *       , noop = function () {};
+   *
+   *     expect(noop).to.not.change(myObj, 'val'); // Recommended
+   *     expect(noop).to.not.increase(myObj, 'val'); // Not recommended
+   *
+   * `.increase` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`. When not providing two arguments, always
+   * use the second form.
+   *
+   *     var myObj = {val: 1}
+   *       , noop = function () {};
+   *
+   *     expect(noop).to.increase(myObj, 'val', 'nooo why fail??');
+   *
+   *     var val = 1
+   *       , noop = function () {}
+   *       , getVal = function () { return val; };
+   *
+   *     expect(noop, 'nooo why fail??').to.increase(getVal);
+   *
+   * The alias `.increases` can be used interchangeably with `.increase`.
    *
    * @name increase
    * @alias increases
-   * @alias Increase
-   * @param {String} object
-   * @param {String} property name
-   * @param {String} message _optional_
+   * @param {String|Function} subject
+   * @param {String} prop name _optional_
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
-  function assertIncreases (object, prop, msg) {
+  function assertIncreases (subject, prop, msg) {
     if (msg) flag(this, 'message', msg);
-    var fn = flag(this, 'object');
-    new Assertion(object, msg).to.have.property(prop);
-    new Assertion(fn).is.a('function');
+    var fn = flag(this, 'object')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+    new Assertion(fn, flagMsg, ssfi, true).is.a('function');
 
-    var initial = object[prop];
+    var initial;
+    if (!prop) {
+      new Assertion(subject, flagMsg, ssfi, true).is.a('function');
+      initial = subject();
+    } else {
+      new Assertion(subject, flagMsg, ssfi, true).to.have.property(prop);
+      initial = subject[prop];
+    }
+
+    // Make sure that the target is a number
+    new Assertion(initial, flagMsg, ssfi, true).is.a('number');
+
     fn();
 
+    var final = prop === undefined || prop === null ? subject() : subject[prop];
+    var msgObj = prop === undefined || prop === null ? initial : '.' + prop;
+
+    flag(this, 'deltaMsgObj', msgObj);
+    flag(this, 'initialDeltaValue', initial);
+    flag(this, 'finalDeltaValue', final);
+    flag(this, 'deltaBehavior', 'increase');
+    flag(this, 'realDelta', final - initial);
+
     this.assert(
-      object[prop] - initial > 0
-      , 'expected .' + prop + ' to increase'
-      , 'expected .' + prop + ' to not increase'
+      final - initial > 0
+      , 'expected ' + msgObj + ' to increase'
+      , 'expected ' + msgObj + ' to not increase'
     );
   }
 
-  Assertion.addChainableMethod('increase', assertIncreases);
-  Assertion.addChainableMethod('increases', assertIncreases);
+  Assertion.addMethod('increase', assertIncreases);
+  Assertion.addMethod('increases', assertIncreases);
 
   /**
-   * ### .decrease(function)
+   * ### .decrease(subject[, prop[, msg]])
    *
-   * Asserts that a function decreases an object property
+   * When one argument is provided, `.decrease` asserts that the given function
+   * `subject` returns a lesser number when it's invoked after invoking the
+   * target function compared to when it's invoked beforehand. `.decrease` also
+   * causes all `.by` assertions that follow in the chain to assert how much
+   * lesser of a number is returned. It's often best to assert that the return
+   * value decreased by the expected amount, rather than asserting it decreased
+   * by any amount.
    *
-   *     var obj = { val: 10 };
-   *     var fn = function() { obj.val = 5 };
-   *     expect(fn).to.decrease(obj, 'val');
+   *     var val = 1
+   *       , subtractTwo = function () { val -= 2; }
+   *       , getVal = function () { return val; };
+   *
+   *     expect(subtractTwo).to.decrease(getVal).by(2); // Recommended
+   *     expect(subtractTwo).to.decrease(getVal); // Not recommended
+   *
+   * When two arguments are provided, `.decrease` asserts that the value of the
+   * given object `subject`'s `prop` property is lesser after invoking the
+   * target function compared to beforehand. 
+   *
+   *     var myObj = {val: 1}
+   *       , subtractTwo = function () { myObj.val -= 2; };
+   *
+   *     expect(subtractTwo).to.decrease(myObj, 'val').by(2); // Recommended
+   *     expect(subtractTwo).to.decrease(myObj, 'val'); // Not recommended
+   *
+   * Add `.not` earlier in the chain to negate `.decrease`. However, it's
+   * dangerous to do so. The problem is that it creates uncertain expectations
+   * by asserting that the subject either increases, or that it stays the same.
+   * It's often best to identify the exact output that's expected, and then
+   * write an assertion that only accepts that exact output.
+   *
+   * When the subject is expected to increase, it's often best to assert that it
+   * increased by the expected amount.
+   *
+   *     var myObj = {val: 1}
+   *       , addTwo = function () { myObj.val += 2; };
+   *
+   *     expect(addTwo).to.increase(myObj, 'val').by(2); // Recommended
+   *     expect(addTwo).to.not.decrease(myObj, 'val'); // Not recommended
+   * 
+   * When the subject is expected to stay the same, it's often best to assert
+   * exactly that.
+   *
+   *     var myObj = {val: 1}
+   *       , noop = function () {};
+   *
+   *     expect(noop).to.not.change(myObj, 'val'); // Recommended
+   *     expect(noop).to.not.decrease(myObj, 'val'); // Not recommended
+   *
+   * `.decrease` accepts an optional `msg` argument which is a custom error
+   * message to show when the assertion fails. The message can also be given as
+   * the second argument to `expect`. When not providing two arguments, always
+   * use the second form.
+   *
+   *     var myObj = {val: 1}
+   *       , noop = function () {};
+   *
+   *     expect(noop).to.decrease(myObj, 'val', 'nooo why fail??');
+   *
+   *     var val = 1
+   *       , noop = function () {}
+   *       , getVal = function () { return val; };
+   *
+   *     expect(noop, 'nooo why fail??').to.decrease(getVal);
+   *
+   * The alias `.decreases` can be used interchangeably with `.decrease`.
    *
    * @name decrease
    * @alias decreases
-   * @alias Decrease
-   * @param {String} object
-   * @param {String} property name
-   * @param {String} message _optional_
+   * @param {String|Function} subject
+   * @param {String} prop name _optional_
+   * @param {String} msg _optional_
    * @namespace BDD
    * @api public
    */
 
-  function assertDecreases (object, prop, msg) {
+  function assertDecreases (subject, prop, msg) {
     if (msg) flag(this, 'message', msg);
-    var fn = flag(this, 'object');
-    new Assertion(object, msg).to.have.property(prop);
-    new Assertion(fn).is.a('function');
+    var fn = flag(this, 'object')
+      , flagMsg = flag(this, 'message')
+      , ssfi = flag(this, 'ssfi');
+    new Assertion(fn, flagMsg, ssfi, true).is.a('function');
 
-    var initial = object[prop];
+    var initial;
+    if (!prop) {
+      new Assertion(subject, flagMsg, ssfi, true).is.a('function');
+      initial = subject();
+    } else {
+      new Assertion(subject, flagMsg, ssfi, true).to.have.property(prop);
+      initial = subject[prop];
+    }
+
+    // Make sure that the target is a number
+    new Assertion(initial, flagMsg, ssfi, true).is.a('number');
+
     fn();
 
+    var final = prop === undefined || prop === null ? subject() : subject[prop];
+    var msgObj = prop === undefined || prop === null ? initial : '.' + prop;
+
+    flag(this, 'deltaMsgObj', msgObj);
+    flag(this, 'initialDeltaValue', initial);
+    flag(this, 'finalDeltaValue', final);
+    flag(this, 'deltaBehavior', 'decrease');
+    flag(this, 'realDelta', initial - final);
+
     this.assert(
-      object[prop] - initial < 0
-      , 'expected .' + prop + ' to decrease'
-      , 'expected .' + prop + ' to not decrease'
+      final - initial < 0
+      , 'expected ' + msgObj + ' to decrease'
+      , 'expected ' + msgObj + ' to not decrease'
     );
   }
 
-  Assertion.addChainableMethod('decrease', assertDecreases);
-  Assertion.addChainableMethod('decreases', assertDecreases);
+  Assertion.addMethod('decrease', assertDecreases);
+  Assertion.addMethod('decreases', assertDecreases);
+
+  /**
+   * ### .by(delta[, msg])
+   *
+   * When following an `.increase` assertion in the chain, `.by` asserts that
+   * the subject of the `.increase` assertion increased by the given `delta`.
+   *
+   *     var myObj = {val: 1}
+   *       , addTwo = function () { myObj.val += 2; };
+   *
+   *     expect(addTwo).to.increase(myObj, 'val').by(2);
+   *
+   * When following a `.decrease` assertion in the chain, `.by` asserts that the
+   * subject of the `.decrease` assertion decreased by the given `delta`.
+   *
+   *     var myObj = {val: 1}
+   *       , subtractTwo = function () { myObj.val -= 2; };
+   *
+   *     expect(subtractTwo).to.decrease(myObj, 'val').by(2);
+   *
+   * When following a `.change` assertion in the chain, `.by` asserts that the
+   * subject of the `.change` assertion either increased or decreased by the
+   * given `delta`. However, it's dangerous to use `.change.by`. The problem is
+   * that it creates uncertain expectations. It's often best to identify the
+   * exact output that's expected, and then write an assertion that only accepts
+   * that exact output.
+   *
+   *     var myObj = {val: 1}
+   *       , addTwo = function () { myObj.val += 2; }
+   *       , subtractTwo = function () { myObj.val -= 2; };
+   *
+   *     expect(addTwo).to.increase(myObj, 'val').by(2); // Recommended
+   *     expect(addTwo).to.change(myObj, 'val').by(2); // Not recommended
+   *
+   *     expect(subtractTwo).to.decrease(myObj, 'val').by(2); // Recommended
+   *     expect(subtractTwo).to.change(myObj, 'val').by(2); // Not recommended
+   *
+   * Add `.not` earlier in the chain to negate `.by`. However, it's often best
+   * to assert that the subject changed by its expected delta, rather than
+   * asserting that it didn't change by one of countless unexpected deltas.
+   *
+   *     var myObj = {val: 1}
+   *       , addTwo = function () { myObj.val += 2; };
+   *
+   *     // Recommended
+   *     expect(addTwo).to.increase(myObj, 'val').by(2);
+   *
+   *     // Not recommended
+   *     expect(addTwo).to.increase(myObj, 'val').but.not.by(3);
+   *
+   * `.by` accepts an optional `msg` argument which is a custom error message to
+   * show when the assertion fails. The message can also be given as the second
+   * argument to `expect`.
+   *
+   *     var myObj = {val: 1}
+   *       , addTwo = function () { myObj.val += 2; };
+   *
+   *     expect(addTwo).to.increase(myObj, 'val').by(3, 'nooo why fail??');
+   *     expect(addTwo, 'nooo why fail??').to.increase(myObj, 'val').by(3);
+   *
+   * @name by
+   * @param {Number} delta
+   * @param {String} msg _optional_
+   * @namespace BDD
+   * @api public
+   */
+
+  function assertDelta(delta, msg) {
+    if (msg) flag(this, 'message', msg);
+
+    var msgObj = flag(this, 'deltaMsgObj');
+    var initial = flag(this, 'initialDeltaValue');
+    var final = flag(this, 'finalDeltaValue');
+    var behavior = flag(this, 'deltaBehavior');
+    var realDelta = flag(this, 'realDelta');
+
+    var expression;
+    if (behavior === 'change') {
+      expression = Math.abs(final - initial) === Math.abs(delta);
+    } else {
+      expression = realDelta === Math.abs(delta);
+    }
+
+    this.assert(
+      expression
+      , 'expected ' + msgObj + ' to ' + behavior + ' by ' + delta
+      , 'expected ' + msgObj + ' to not ' + behavior + ' by ' + delta
+    );
+  }
+
+  Assertion.addMethod('by', assertDelta);
 
   /**
    * ### .extensible
    *
-   * Asserts that the target is extensible (can have new properties added to
-   * it).
+   * Asserts that the target is extensible, which means that new properties can
+   * be added to it. Primitives are never extensible.
    *
-   *     var nonExtensibleObject = Object.preventExtensions({});
-   *     var sealedObject = Object.seal({});
-   *     var frozenObject = Object.freeze({});
+   *     expect({a: 1}).to.be.extensible;
    *
-   *     expect({}).to.be.extensible;
+   * Add `.not` earlier in the chain to negate `.extensible`.
+   *
+   *     var nonExtensibleObject = Object.preventExtensions({})
+   *       , sealedObject = Object.seal({})
+   *       , frozenObject = Object.freeze({});
+   *
    *     expect(nonExtensibleObject).to.not.be.extensible;
    *     expect(sealedObject).to.not.be.extensible;
    *     expect(frozenObject).to.not.be.extensible;
+   *     expect(1).to.not.be.extensible;
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect(1, 'nooo why fail??').to.be.extensible;
    *
    * @name extensible
    * @namespace BDD
@@ -10226,19 +12636,12 @@ module.exports = function (chai, _) {
   Assertion.addProperty('extensible', function() {
     var obj = flag(this, 'object');
 
-    // In ES5, if the argument to this method is not an object (a primitive), then it will cause a TypeError.
+    // In ES5, if the argument to this method is a primitive, then it will cause a TypeError.
     // In ES6, a non-object argument will be treated as if it was a non-extensible ordinary object, simply return false.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isExtensible
-    // The following provides ES6 behavior when a TypeError is thrown under ES5.
+    // The following provides ES6 behavior for ES5 environments.
 
-    var isExtensible;
-
-    try {
-      isExtensible = Object.isExtensible(obj);
-    } catch (err) {
-      if (err instanceof TypeError) isExtensible = false;
-      else throw err;
-    }
+    var isExtensible = obj === Object(obj) && Object.isExtensible(obj);
 
     this.assert(
       isExtensible
@@ -10250,15 +12653,25 @@ module.exports = function (chai, _) {
   /**
    * ### .sealed
    *
-   * Asserts that the target is sealed (cannot have new properties added to it
-   * and its existing properties cannot be removed).
+   * Asserts that the target is sealed, which means that new properties can't be
+   * added to it, and its existing properties can't be reconfigured or deleted.
+   * However, it's possible that its existing properties can still be reassigned
+   * to different values. Primitives are always sealed.
    *
    *     var sealedObject = Object.seal({});
    *     var frozenObject = Object.freeze({});
    *
    *     expect(sealedObject).to.be.sealed;
    *     expect(frozenObject).to.be.sealed;
-   *     expect({}).to.not.be.sealed;
+   *     expect(1).to.be.sealed;
+   *
+   * Add `.not` earlier in the chain to negate `.sealed`.
+   *
+   *     expect({a: 1}).to.not.be.sealed;
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect({a: 1}, 'nooo why fail??').to.be.sealed;
    *
    * @name sealed
    * @namespace BDD
@@ -10268,19 +12681,12 @@ module.exports = function (chai, _) {
   Assertion.addProperty('sealed', function() {
     var obj = flag(this, 'object');
 
-    // In ES5, if the argument to this method is not an object (a primitive), then it will cause a TypeError.
+    // In ES5, if the argument to this method is a primitive, then it will cause a TypeError.
     // In ES6, a non-object argument will be treated as if it was a sealed ordinary object, simply return true.
     // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isSealed
-    // The following provides ES6 behavior when a TypeError is thrown under ES5.
+    // The following provides ES6 behavior for ES5 environments.
 
-    var isSealed;
-
-    try {
-      isSealed = Object.isSealed(obj);
-    } catch (err) {
-      if (err instanceof TypeError) isSealed = true;
-      else throw err;
-    }
+    var isSealed = obj === Object(obj) ? Object.isSealed(obj) : true;
 
     this.assert(
       isSealed
@@ -10292,13 +12698,22 @@ module.exports = function (chai, _) {
   /**
    * ### .frozen
    *
-   * Asserts that the target is frozen (cannot have new properties added to it
-   * and its existing properties cannot be modified).
+   * Asserts that the target is frozen, which means that new properties can't be
+   * added to it, and its existing properties can't be reassigned to different
+   * values, reconfigured, or deleted. Primitives are always frozen.
    *
    *     var frozenObject = Object.freeze({});
    *
    *     expect(frozenObject).to.be.frozen;
-   *     expect({}).to.not.be.frozen;
+   *     expect(1).to.be.frozen;
+   *
+   * Add `.not` earlier in the chain to negate `.frozen`.
+   *
+   *     expect({a: 1}).to.not.be.frozen;
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect({a: 1}, 'nooo why fail??').to.be.frozen;
    *
    * @name frozen
    * @namespace BDD
@@ -10308,19 +12723,12 @@ module.exports = function (chai, _) {
   Assertion.addProperty('frozen', function() {
     var obj = flag(this, 'object');
 
-    // In ES5, if the argument to this method is not an object (a primitive), then it will cause a TypeError.
+    // In ES5, if the argument to this method is a primitive, then it will cause a TypeError.
     // In ES6, a non-object argument will be treated as if it was a frozen ordinary object, simply return true.
     // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isFrozen
-    // The following provides ES6 behavior when a TypeError is thrown under ES5.
+    // The following provides ES6 behavior for ES5 environments.
 
-    var isFrozen;
-
-    try {
-      isFrozen = Object.isFrozen(obj);
-    } catch (err) {
-      if (err instanceof TypeError) isFrozen = true;
-      else throw err;
-    }
+    var isFrozen = obj === Object(obj) ? Object.isFrozen(obj) : true;
 
     this.assert(
       isFrozen
@@ -10328,11 +12736,70 @@ module.exports = function (chai, _) {
       , 'expected #{this} to not be frozen'
     );
   });
+
+  /**
+   * ### .finite
+   *
+   * Asserts that the target is a number, and isn't `NaN` or positive/negative
+   * `Infinity`.
+   *
+   *     expect(1).to.be.finite;
+   *
+   * Add `.not` earlier in the chain to negate `.finite`. However, it's
+   * dangerous to do so. The problem is that it creates uncertain expectations
+   * by asserting that the subject either isn't a number, or that it's `NaN`, or
+   * that it's positive `Infinity`, or that it's negative `Infinity`. It's often
+   * best to identify the exact output that's expected, and then write an
+   * assertion that only accepts that exact output.
+   *
+   * When the target isn't expected to be a number, it's often best to assert
+   * that it's the expected type, rather than asserting that it isn't one of
+   * many unexpected types.
+   *
+   *     expect('foo').to.be.a('string'); // Recommended
+   *     expect('foo').to.not.be.finite; // Not recommended
+   *
+   * When the target is expected to be `NaN`, it's often best to assert exactly
+   * that.
+   *
+   *     expect(NaN).to.be.NaN; // Recommended
+   *     expect(NaN).to.not.be.finite; // Not recommended
+   *
+   * When the target is expected to be positive infinity, it's often best to
+   * assert exactly that.
+   *
+   *     expect(Infinity).to.equal(Infinity); // Recommended
+   *     expect(Infinity).to.not.be.finite; // Not recommended
+   *
+   * When the target is expected to be negative infinity, it's often best to
+   * assert exactly that.
+   *
+   *     expect(-Infinity).to.equal(-Infinity); // Recommended
+   *     expect(-Infinity).to.not.be.finite; // Not recommended
+   *
+   * A custom error message can be given as the second argument to `expect`.
+   *
+   *     expect('foo', 'nooo why fail??').to.be.finite;
+   *
+   * @name finite
+   * @namespace BDD
+   * @api public
+   */
+
+  Assertion.addProperty('finite', function(msg) {
+    var obj = flag(this, 'object');
+
+    this.assert(
+        typeof obj === "number" && isFinite(obj)
+      , 'expected #{this} to be a finite number'
+      , 'expected #{this} to not be a finite number'
+    );
+  });
 };
 
 
 /***/ }),
-/* 92 */
+/* 96 */
 /***/ (function(module, exports) {
 
 /*!
@@ -10371,7 +12838,7 @@ module.exports = function (chai, util) {
    */
 
   var assert = chai.assert = function (express, errmsg) {
-    var test = new Assertion(null, null, chai.assert);
+    var test = new Assertion(null, null, chai.assert, true);
     test.assert(
         express
       , errmsg
@@ -10419,7 +12886,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isOk = function (val, msg) {
-    new Assertion(val, msg).is.ok;
+    new Assertion(val, msg, assert.isOk, true).is.ok;
   };
 
   /**
@@ -10439,7 +12906,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotOk = function (val, msg) {
-    new Assertion(val, msg).is.not.ok;
+    new Assertion(val, msg, assert.isNotOk, true).is.not.ok;
   };
 
   /**
@@ -10458,7 +12925,7 @@ module.exports = function (chai, util) {
    */
 
   assert.equal = function (act, exp, msg) {
-    var test = new Assertion(act, msg, assert.equal);
+    var test = new Assertion(act, msg, assert.equal, true);
 
     test.assert(
         exp == flag(test, 'object')
@@ -10466,6 +12933,7 @@ module.exports = function (chai, util) {
       , 'expected #{this} to not equal #{act}'
       , exp
       , act
+      , true
     );
   };
 
@@ -10485,7 +12953,7 @@ module.exports = function (chai, util) {
    */
 
   assert.notEqual = function (act, exp, msg) {
-    var test = new Assertion(act, msg, assert.notEqual);
+    var test = new Assertion(act, msg, assert.notEqual, true);
 
     test.assert(
         exp != flag(test, 'object')
@@ -10493,6 +12961,7 @@ module.exports = function (chai, util) {
       , 'expected #{this} to equal #{act}'
       , exp
       , act
+      , true
     );
   };
 
@@ -10512,7 +12981,7 @@ module.exports = function (chai, util) {
    */
 
   assert.strictEqual = function (act, exp, msg) {
-    new Assertion(act, msg).to.equal(exp);
+    new Assertion(act, msg, assert.strictEqual, true).to.equal(exp);
   };
 
   /**
@@ -10531,7 +13000,7 @@ module.exports = function (chai, util) {
    */
 
   assert.notStrictEqual = function (act, exp, msg) {
-    new Assertion(act, msg).to.not.equal(exp);
+    new Assertion(act, msg, assert.notStrictEqual, true).to.not.equal(exp);
   };
 
   /**
@@ -10545,12 +13014,13 @@ module.exports = function (chai, util) {
    * @param {Mixed} actual
    * @param {Mixed} expected
    * @param {String} message
+   * @alias deepStrictEqual
    * @namespace Assert
    * @api public
    */
 
-  assert.deepEqual = function (act, exp, msg) {
-    new Assertion(act, msg).to.eql(exp);
+  assert.deepEqual = assert.deepStrictEqual = function (act, exp, msg) {
+    new Assertion(act, msg, assert.deepEqual, true).to.eql(exp);
   };
 
   /**
@@ -10569,13 +13039,13 @@ module.exports = function (chai, util) {
    */
 
   assert.notDeepEqual = function (act, exp, msg) {
-    new Assertion(act, msg).to.not.eql(exp);
+    new Assertion(act, msg, assert.notDeepEqual, true).to.not.eql(exp);
   };
 
    /**
    * ### .isAbove(valueToCheck, valueToBeAbove, [message])
    *
-   * Asserts `valueToCheck` is strictly greater than (>) `valueToBeAbove`
+   * Asserts `valueToCheck` is strictly greater than (>) `valueToBeAbove`.
    *
    *     assert.isAbove(5, 2, '5 is strictly greater than 2');
    *
@@ -10588,13 +13058,13 @@ module.exports = function (chai, util) {
    */
 
   assert.isAbove = function (val, abv, msg) {
-    new Assertion(val, msg).to.be.above(abv);
+    new Assertion(val, msg, assert.isAbove, true).to.be.above(abv);
   };
 
    /**
    * ### .isAtLeast(valueToCheck, valueToBeAtLeast, [message])
    *
-   * Asserts `valueToCheck` is greater than or equal to (>=) `valueToBeAtLeast`
+   * Asserts `valueToCheck` is greater than or equal to (>=) `valueToBeAtLeast`.
    *
    *     assert.isAtLeast(5, 2, '5 is greater or equal to 2');
    *     assert.isAtLeast(3, 3, '3 is greater or equal to 3');
@@ -10608,13 +13078,13 @@ module.exports = function (chai, util) {
    */
 
   assert.isAtLeast = function (val, atlst, msg) {
-    new Assertion(val, msg).to.be.least(atlst);
+    new Assertion(val, msg, assert.isAtLeast, true).to.be.least(atlst);
   };
 
    /**
    * ### .isBelow(valueToCheck, valueToBeBelow, [message])
    *
-   * Asserts `valueToCheck` is strictly less than (<) `valueToBeBelow`
+   * Asserts `valueToCheck` is strictly less than (<) `valueToBeBelow`.
    *
    *     assert.isBelow(3, 6, '3 is strictly less than 6');
    *
@@ -10627,13 +13097,13 @@ module.exports = function (chai, util) {
    */
 
   assert.isBelow = function (val, blw, msg) {
-    new Assertion(val, msg).to.be.below(blw);
+    new Assertion(val, msg, assert.isBelow, true).to.be.below(blw);
   };
 
    /**
    * ### .isAtMost(valueToCheck, valueToBeAtMost, [message])
    *
-   * Asserts `valueToCheck` is less than or equal to (<=) `valueToBeAtMost`
+   * Asserts `valueToCheck` is less than or equal to (<=) `valueToBeAtMost`.
    *
    *     assert.isAtMost(3, 6, '3 is less than or equal to 6');
    *     assert.isAtMost(4, 4, '4 is less than or equal to 4');
@@ -10647,7 +13117,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isAtMost = function (val, atmst, msg) {
-    new Assertion(val, msg).to.be.most(atmst);
+    new Assertion(val, msg, assert.isAtMost, true).to.be.most(atmst);
   };
 
   /**
@@ -10666,7 +13136,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isTrue = function (val, msg) {
-    new Assertion(val, msg).is['true'];
+    new Assertion(val, msg, assert.isTrue, true).is['true'];
   };
 
   /**
@@ -10685,7 +13155,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotTrue = function (val, msg) {
-    new Assertion(val, msg).to.not.equal(true);
+    new Assertion(val, msg, assert.isNotTrue, true).to.not.equal(true);
   };
 
   /**
@@ -10704,7 +13174,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isFalse = function (val, msg) {
-    new Assertion(val, msg).is['false'];
+    new Assertion(val, msg, assert.isFalse, true).is['false'];
   };
 
   /**
@@ -10723,7 +13193,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotFalse = function (val, msg) {
-    new Assertion(val, msg).to.not.equal(false);
+    new Assertion(val, msg, assert.isNotFalse, true).to.not.equal(false);
   };
 
   /**
@@ -10741,7 +13211,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNull = function (val, msg) {
-    new Assertion(val, msg).to.equal(null);
+    new Assertion(val, msg, assert.isNull, true).to.equal(null);
   };
 
   /**
@@ -10760,14 +13230,15 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotNull = function (val, msg) {
-    new Assertion(val, msg).to.not.equal(null);
+    new Assertion(val, msg, assert.isNotNull, true).to.not.equal(null);
   };
 
   /**
    * ### .isNaN
-   * Asserts that value is NaN
    *
-   *    assert.isNaN('foo', 'foo is NaN');
+   * Asserts that value is NaN.
+   *
+   *     assert.isNaN(NaN, 'NaN is NaN');
    *
    * @name isNaN
    * @param {Mixed} value
@@ -10777,14 +13248,15 @@ module.exports = function (chai, util) {
    */
 
   assert.isNaN = function (val, msg) {
-    new Assertion(val, msg).to.be.NaN;
+    new Assertion(val, msg, assert.isNaN, true).to.be.NaN;
   };
 
   /**
    * ### .isNotNaN
-   * Asserts that value is not NaN
    *
-   *    assert.isNotNaN(4, '4 is not NaN');
+   * Asserts that value is not NaN.
+   *
+   *     assert.isNotNaN(4, '4 is not NaN');
    *
    * @name isNotNaN
    * @param {Mixed} value
@@ -10793,7 +13265,49 @@ module.exports = function (chai, util) {
    * @api public
    */
   assert.isNotNaN = function (val, msg) {
-    new Assertion(val, msg).not.to.be.NaN;
+    new Assertion(val, msg, assert.isNotNaN, true).not.to.be.NaN;
+  };
+
+  /**
+   * ### .exists
+   *
+   * Asserts that the target is neither `null` nor `undefined`.
+   *
+   *     var foo = 'hi';
+   *
+   *     assert.exists(foo, 'foo is neither `null` nor `undefined`');
+   *
+   * @name exists
+   * @param {Mixed} value
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.exists = function (val, msg) {
+    new Assertion(val, msg, assert.exists, true).to.exist;
+  };
+
+  /**
+   * ### .notExists
+   *
+   * Asserts that the target is either `null` or `undefined`.
+   *
+   *     var bar = null
+   *       , baz;
+   *
+   *     assert.notExists(bar);
+   *     assert.notExists(baz, 'baz is either null or undefined');
+   *
+   * @name notExists
+   * @param {Mixed} value
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notExists = function (val, msg) {
+    new Assertion(val, msg, assert.notExists, true).to.not.exist;
   };
 
   /**
@@ -10812,7 +13326,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isUndefined = function (val, msg) {
-    new Assertion(val, msg).to.equal(undefined);
+    new Assertion(val, msg, assert.isUndefined, true).to.equal(undefined);
   };
 
   /**
@@ -10831,7 +13345,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isDefined = function (val, msg) {
-    new Assertion(val, msg).to.not.equal(undefined);
+    new Assertion(val, msg, assert.isDefined, true).to.not.equal(undefined);
   };
 
   /**
@@ -10850,7 +13364,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isFunction = function (val, msg) {
-    new Assertion(val, msg).to.be.a('function');
+    new Assertion(val, msg, assert.isFunction, true).to.be.a('function');
   };
 
   /**
@@ -10869,7 +13383,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotFunction = function (val, msg) {
-    new Assertion(val, msg).to.not.be.a('function');
+    new Assertion(val, msg, assert.isNotFunction, true).to.not.be.a('function');
   };
 
   /**
@@ -10889,7 +13403,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isObject = function (val, msg) {
-    new Assertion(val, msg).to.be.a('object');
+    new Assertion(val, msg, assert.isObject, true).to.be.a('object');
   };
 
   /**
@@ -10909,7 +13423,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotObject = function (val, msg) {
-    new Assertion(val, msg).to.not.be.a('object');
+    new Assertion(val, msg, assert.isNotObject, true).to.not.be.a('object');
   };
 
   /**
@@ -10928,7 +13442,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isArray = function (val, msg) {
-    new Assertion(val, msg).to.be.an('array');
+    new Assertion(val, msg, assert.isArray, true).to.be.an('array');
   };
 
   /**
@@ -10947,7 +13461,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotArray = function (val, msg) {
-    new Assertion(val, msg).to.not.be.an('array');
+    new Assertion(val, msg, assert.isNotArray, true).to.not.be.an('array');
   };
 
   /**
@@ -10966,7 +13480,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isString = function (val, msg) {
-    new Assertion(val, msg).to.be.a('string');
+    new Assertion(val, msg, assert.isString, true).to.be.a('string');
   };
 
   /**
@@ -10985,7 +13499,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotString = function (val, msg) {
-    new Assertion(val, msg).to.not.be.a('string');
+    new Assertion(val, msg, assert.isNotString, true).to.not.be.a('string');
   };
 
   /**
@@ -11004,7 +13518,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNumber = function (val, msg) {
-    new Assertion(val, msg).to.be.a('number');
+    new Assertion(val, msg, assert.isNumber, true).to.be.a('number');
   };
 
   /**
@@ -11023,7 +13537,28 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotNumber = function (val, msg) {
-    new Assertion(val, msg).to.not.be.a('number');
+    new Assertion(val, msg, assert.isNotNumber, true).to.not.be.a('number');
+  };
+
+   /**
+   * ### .isFinite(value, [message])
+   *
+   * Asserts that `value` is a finite number. Unlike `.isNumber`, this will fail for `NaN` and `Infinity`.
+   *
+   *     var cups = 2;
+   *     assert.isFinite(cups, 'how many cups');
+   *
+   *     assert.isFinite(NaN); // throws
+   *
+   * @name isFinite
+   * @param {Number} value
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.isFinite = function (val, msg) {
+    new Assertion(val, msg, assert.isFinite, true).to.be.finite;
   };
 
   /**
@@ -11045,7 +13580,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isBoolean = function (val, msg) {
-    new Assertion(val, msg).to.be.a('boolean');
+    new Assertion(val, msg, assert.isBoolean, true).to.be.a('boolean');
   };
 
   /**
@@ -11067,7 +13602,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotBoolean = function (val, msg) {
-    new Assertion(val, msg).to.not.be.a('boolean');
+    new Assertion(val, msg, assert.isNotBoolean, true).to.not.be.a('boolean');
   };
 
   /**
@@ -11092,7 +13627,7 @@ module.exports = function (chai, util) {
    */
 
   assert.typeOf = function (val, type, msg) {
-    new Assertion(val, msg).to.be.a(type);
+    new Assertion(val, msg, assert.typeOf, true).to.be.a(type);
   };
 
   /**
@@ -11112,7 +13647,7 @@ module.exports = function (chai, util) {
    */
 
   assert.notTypeOf = function (val, type, msg) {
-    new Assertion(val, msg).to.not.be.a(type);
+    new Assertion(val, msg, assert.notTypeOf, true).to.not.be.a(type);
   };
 
   /**
@@ -11134,7 +13669,7 @@ module.exports = function (chai, util) {
    */
 
   assert.instanceOf = function (val, type, msg) {
-    new Assertion(val, msg).to.be.instanceOf(type);
+    new Assertion(val, msg, assert.instanceOf, true).to.be.instanceOf(type);
   };
 
   /**
@@ -11156,17 +13691,32 @@ module.exports = function (chai, util) {
    */
 
   assert.notInstanceOf = function (val, type, msg) {
-    new Assertion(val, msg).to.not.be.instanceOf(type);
+    new Assertion(val, msg, assert.notInstanceOf, true)
+      .to.not.be.instanceOf(type);
   };
 
   /**
    * ### .include(haystack, needle, [message])
    *
-   * Asserts that `haystack` includes `needle`. Works
-   * for strings and arrays.
+   * Asserts that `haystack` includes `needle`. Can be used to assert the
+   * inclusion of a value in an array, a substring in a string, or a subset of
+   * properties in an object.
    *
-   *     assert.include('foobar', 'bar', 'foobar contains string "bar"');
-   *     assert.include([ 1, 2, 3 ], 3, 'array contains value');
+   *     assert.include([1,2,3], 2, 'array contains value');
+   *     assert.include('foobar', 'foo', 'string contains substring');
+   *     assert.include({ foo: 'bar', hello: 'universe' }, { foo: 'bar' }, 'object contains property');
+   *
+   * Strict equality (===) is used. When asserting the inclusion of a value in
+   * an array, the array is searched for an element that's strictly equal to the
+   * given value. When asserting a subset of properties in an object, the object
+   * is searched for the given property keys, checking that each one is present
+   * and stricty equal to the given property value. For instance:
+   *
+   *     var obj1 = {a: 1}
+   *       , obj2 = {b: 2};
+   *     assert.include([obj1, obj2], obj1);
+   *     assert.include({foo: obj1, bar: obj2}, {foo: obj1});
+   *     assert.include({foo: obj1, bar: obj2}, {foo: obj1, bar: obj2});
    *
    * @name include
    * @param {Array|String} haystack
@@ -11177,17 +13727,32 @@ module.exports = function (chai, util) {
    */
 
   assert.include = function (exp, inc, msg) {
-    new Assertion(exp, msg, assert.include).include(inc);
+    new Assertion(exp, msg, assert.include, true).include(inc);
   };
 
   /**
    * ### .notInclude(haystack, needle, [message])
    *
-   * Asserts that `haystack` does not include `needle`. Works
-   * for strings and arrays.
+   * Asserts that `haystack` does not include `needle`. Can be used to assert
+   * the absence of a value in an array, a substring in a string, or a subset of
+   * properties in an object.
    *
-   *     assert.notInclude('foobar', 'baz', 'string not include substring');
-   *     assert.notInclude([ 1, 2, 3 ], 4, 'array not include contain value');
+   *     assert.notInclude([1,2,3], 4, 'array doesn't contain value');
+   *     assert.notInclude('foobar', 'baz', 'string doesn't contain substring');
+   *     assert.notInclude({ foo: 'bar', hello: 'universe' }, { foo: 'baz' }, 'object doesn't contain property');
+   *
+   * Strict equality (===) is used. When asserting the absence of a value in an
+   * array, the array is searched to confirm the absence of an element that's
+   * strictly equal to the given value. When asserting a subset of properties in
+   * an object, the object is searched to confirm that at least one of the given
+   * property keys is either not present or not strictly equal to the given
+   * property value. For instance:
+   *
+   *     var obj1 = {a: 1}
+   *       , obj2 = {b: 2};
+   *     assert.notInclude([obj1, obj2], {a: 1});
+   *     assert.notInclude({foo: obj1, bar: obj2}, {foo: {a: 1}});
+   *     assert.notInclude({foo: obj1, bar: obj2}, {foo: obj1, bar: {b: 2}});
    *
    * @name notInclude
    * @param {Array|String} haystack
@@ -11198,7 +13763,248 @@ module.exports = function (chai, util) {
    */
 
   assert.notInclude = function (exp, inc, msg) {
-    new Assertion(exp, msg, assert.notInclude).not.include(inc);
+    new Assertion(exp, msg, assert.notInclude, true).not.include(inc);
+  };
+
+  /**
+   * ### .deepInclude(haystack, needle, [message])
+   *
+   * Asserts that `haystack` includes `needle`. Can be used to assert the
+   * inclusion of a value in an array or a subset of properties in an object.
+   * Deep equality is used.
+   *
+   *     var obj1 = {a: 1}
+   *       , obj2 = {b: 2};
+   *     assert.deepInclude([obj1, obj2], {a: 1});
+   *     assert.deepInclude({foo: obj1, bar: obj2}, {foo: {a: 1}});
+   *     assert.deepInclude({foo: obj1, bar: obj2}, {foo: {a: 1}, bar: {b: 2}});
+   *
+   * @name deepInclude
+   * @param {Array|String} haystack
+   * @param {Mixed} needle
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.deepInclude = function (exp, inc, msg) {
+    new Assertion(exp, msg, assert.deepInclude, true).deep.include(inc);
+  };
+
+  /**
+   * ### .notDeepInclude(haystack, needle, [message])
+   *
+   * Asserts that `haystack` does not include `needle`. Can be used to assert
+   * the absence of a value in an array or a subset of properties in an object.
+   * Deep equality is used.
+   *
+   *     var obj1 = {a: 1}
+   *       , obj2 = {b: 2};
+   *     assert.notDeepInclude([obj1, obj2], {a: 9});
+   *     assert.notDeepInclude({foo: obj1, bar: obj2}, {foo: {a: 9}});
+   *     assert.notDeepInclude({foo: obj1, bar: obj2}, {foo: {a: 1}, bar: {b: 9}});
+   *
+   * @name notDeepInclude
+   * @param {Array|String} haystack
+   * @param {Mixed} needle
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notDeepInclude = function (exp, inc, msg) {
+    new Assertion(exp, msg, assert.notDeepInclude, true).not.deep.include(inc);
+  };
+
+  /**
+   * ### .nestedInclude(haystack, needle, [message])
+   * 
+   * Asserts that 'haystack' includes 'needle'. 
+   * Can be used to assert the inclusion of a subset of properties in an 
+   * object.
+   * Enables the use of dot- and bracket-notation for referencing nested 
+   * properties.
+   * '[]' and '.' in property names can be escaped using double backslashes.
+   * 
+   *     assert.nestedInclude({'.a': {'b': 'x'}}, {'\\.a.[b]': 'x'});
+   *     assert.nestedInclude({'a': {'[b]': 'x'}}, {'a.\\[b\\]': 'x'});
+   * 
+   * @name nestedInclude
+   * @param {Object} haystack
+   * @param {Object} needle
+   * @param {String} message
+   * @namespace Assert
+   * @api public 
+   */ 
+
+  assert.nestedInclude = function (exp, inc, msg) {
+    new Assertion(exp, msg, assert.nestedInclude, true).nested.include(inc);
+  };
+
+  /**
+   * ### .notNestedInclude(haystack, needle, [message])
+   * 
+   * Asserts that 'haystack' does not include 'needle'. 
+   * Can be used to assert the absence of a subset of properties in an 
+   * object.
+   * Enables the use of dot- and bracket-notation for referencing nested 
+   * properties. 
+   * '[]' and '.' in property names can be escaped using double backslashes.
+   * 
+   *     assert.notNestedInclude({'.a': {'b': 'x'}}, {'\\.a.b': 'y'});
+   *     assert.notNestedInclude({'a': {'[b]': 'x'}}, {'a.\\[b\\]': 'y'});
+   * 
+   * @name notNestedInclude
+   * @param {Object} haystack
+   * @param {Object} needle
+   * @param {String} message
+   * @namespace Assert
+   * @api public 
+   */ 
+
+  assert.notNestedInclude = function (exp, inc, msg) {
+    new Assertion(exp, msg, assert.notNestedInclude, true)
+      .not.nested.include(inc);
+  };
+
+  /**
+   * ### .deepNestedInclude(haystack, needle, [message])
+   * 
+   * Asserts that 'haystack' includes 'needle'.
+   * Can be used to assert the inclusion of a subset of properties in an 
+   * object while checking for deep equality.
+   * Enables the use of dot- and bracket-notation for referencing nested 
+   * properties.
+   * '[]' and '.' in property names can be escaped using double backslashes.
+   * 
+   *     assert.deepNestedInclude({a: {b: [{x: 1}]}}, {'a.b[0]': {x: 1}});
+   *     assert.deepNestedInclude({'.a': {'[b]': {x: 1}}}, {'\\.a.\\[b\\]': {x: 1}});
+   *    
+   * @name deepNestedInclude
+   * @param {Object} haystack
+   * @param {Object} needle
+   * @param {String} message
+   * @namespace Assert
+   * @api public 
+   */
+
+  assert.deepNestedInclude = function(exp, inc, msg) {
+    new Assertion(exp, msg, assert.deepNestedInclude, true)
+      .deep.nested.include(inc);
+  };
+
+  /**
+   * ### .notDeepNestedInclude(haystack, needle, [message])
+   * 
+   * Asserts that 'haystack' does not include 'needle'.
+   * Can be used to assert the absence of a subset of properties in an 
+   * object while checking for deep equality.
+   * Enables the use of dot- and bracket-notation for referencing nested 
+   * properties.
+   * '[]' and '.' in property names can be escaped using double backslashes.
+   * 
+   *     assert.notDeepNestedInclude({a: {b: [{x: 1}]}}, {'a.b[0]': {y: 1}})
+   *     assert.notDeepNestedInclude({'.a': {'[b]': {x: 1}}}, {'\\.a.\\[b\\]': {y: 2}});
+   *    
+   * @name notDeepNestedInclude
+   * @param {Object} haystack
+   * @param {Object} needle
+   * @param {String} message
+   * @namespace Assert
+   * @api public 
+   */
+
+  assert.notDeepNestedInclude = function(exp, inc, msg) {
+    new Assertion(exp, msg, assert.notDeepNestedInclude, true)
+      .not.deep.nested.include(inc);
+  };
+
+  /**
+   * ### .ownInclude(haystack, needle, [message])
+   * 
+   * Asserts that 'haystack' includes 'needle'.
+   * Can be used to assert the inclusion of a subset of properties in an 
+   * object while ignoring inherited properties.
+   * 
+   *     assert.ownInclude({ a: 1 }, { a: 1 });
+   * 
+   * @name ownInclude
+   * @param {Object} haystack
+   * @param {Object} needle
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.ownInclude = function(exp, inc, msg) {
+    new Assertion(exp, msg, assert.ownInclude, true).own.include(inc);
+  };
+
+  /**
+   * ### .notOwnInclude(haystack, needle, [message])
+   * 
+   * Asserts that 'haystack' includes 'needle'.
+   * Can be used to assert the absence of a subset of properties in an 
+   * object while ignoring inherited properties.
+   * 
+   *     Object.prototype.b = 2;
+   * 
+   *     assert.notOwnInclude({ a: 1 }, { b: 2 });
+   * 
+   * @name notOwnInclude
+   * @param {Object} haystack
+   * @param {Object} needle
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notOwnInclude = function(exp, inc, msg) {
+    new Assertion(exp, msg, assert.notOwnInclude, true).not.own.include(inc);
+  };
+
+  /**
+   * ### .deepOwnInclude(haystack, needle, [message])
+   * 
+   * Asserts that 'haystack' includes 'needle'.
+   * Can be used to assert the inclusion of a subset of properties in an 
+   * object while ignoring inherited properties and checking for deep equality.
+   * 
+   *      assert.deepOwnInclude({a: {b: 2}}, {a: {b: 2}});
+   *      
+   * @name deepOwnInclude
+   * @param {Object} haystack
+   * @param {Object} needle
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.deepOwnInclude = function(exp, inc, msg) {
+    new Assertion(exp, msg, assert.deepOwnInclude, true)
+      .deep.own.include(inc);
+  };
+
+   /**
+   * ### .notDeepOwnInclude(haystack, needle, [message])
+   * 
+   * Asserts that 'haystack' includes 'needle'.
+   * Can be used to assert the absence of a subset of properties in an 
+   * object while ignoring inherited properties and checking for deep equality.
+   * 
+   *      assert.notDeepOwnInclude({a: {b: 2}}, {a: {c: 3}});
+   *      
+   * @name notDeepOwnInclude
+   * @param {Object} haystack
+   * @param {Object} needle
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notDeepOwnInclude = function(exp, inc, msg) {
+    new Assertion(exp, msg, assert.notDeepOwnInclude, true)
+      .not.deep.own.include(inc);
   };
 
   /**
@@ -11217,7 +14023,7 @@ module.exports = function (chai, util) {
    */
 
   assert.match = function (exp, re, msg) {
-    new Assertion(exp, msg).to.match(re);
+    new Assertion(exp, msg, assert.match, true).to.match(re);
   };
 
   /**
@@ -11236,15 +14042,17 @@ module.exports = function (chai, util) {
    */
 
   assert.notMatch = function (exp, re, msg) {
-    new Assertion(exp, msg).to.not.match(re);
+    new Assertion(exp, msg, assert.notMatch, true).to.not.match(re);
   };
 
   /**
    * ### .property(object, property, [message])
    *
-   * Asserts that `object` has a property named by `property`.
+   * Asserts that `object` has a direct or inherited property named by
+   * `property`.
    *
    *     assert.property({ tea: { green: 'matcha' }}, 'tea');
+   *     assert.property({ tea: { green: 'matcha' }}, 'toString');
    *
    * @name property
    * @param {Object} object
@@ -11255,13 +14063,14 @@ module.exports = function (chai, util) {
    */
 
   assert.property = function (obj, prop, msg) {
-    new Assertion(obj, msg).to.have.property(prop);
+    new Assertion(obj, msg, assert.property, true).to.have.property(prop);
   };
 
   /**
    * ### .notProperty(object, property, [message])
    *
-   * Asserts that `object` does _not_ have a property named by `property`.
+   * Asserts that `object` does _not_ have a direct or inherited property named
+   * by `property`.
    *
    *     assert.notProperty({ tea: { green: 'matcha' }}, 'coffee');
    *
@@ -11274,54 +14083,16 @@ module.exports = function (chai, util) {
    */
 
   assert.notProperty = function (obj, prop, msg) {
-    new Assertion(obj, msg).to.not.have.property(prop);
-  };
-
-  /**
-   * ### .deepProperty(object, property, [message])
-   *
-   * Asserts that `object` has a property named by `property`, which can be a
-   * string using dot- and bracket-notation for deep reference.
-   *
-   *     assert.deepProperty({ tea: { green: 'matcha' }}, 'tea.green');
-   *
-   * @name deepProperty
-   * @param {Object} object
-   * @param {String} property
-   * @param {String} message
-   * @namespace Assert
-   * @api public
-   */
-
-  assert.deepProperty = function (obj, prop, msg) {
-    new Assertion(obj, msg).to.have.deep.property(prop);
-  };
-
-  /**
-   * ### .notDeepProperty(object, property, [message])
-   *
-   * Asserts that `object` does _not_ have a property named by `property`, which
-   * can be a string using dot- and bracket-notation for deep reference.
-   *
-   *     assert.notDeepProperty({ tea: { green: 'matcha' }}, 'tea.oolong');
-   *
-   * @name notDeepProperty
-   * @param {Object} object
-   * @param {String} property
-   * @param {String} message
-   * @namespace Assert
-   * @api public
-   */
-
-  assert.notDeepProperty = function (obj, prop, msg) {
-    new Assertion(obj, msg).to.not.have.deep.property(prop);
+    new Assertion(obj, msg, assert.notProperty, true)
+      .to.not.have.property(prop);
   };
 
   /**
    * ### .propertyVal(object, property, value, [message])
    *
-   * Asserts that `object` has a property named by `property` with value given
-   * by `value`.
+   * Asserts that `object` has a direct or inherited property named by
+   * `property` with a value given by `value`. Uses a strict equality check
+   * (===).
    *
    *     assert.propertyVal({ tea: 'is good' }, 'tea', 'is good');
    *
@@ -11335,18 +14106,21 @@ module.exports = function (chai, util) {
    */
 
   assert.propertyVal = function (obj, prop, val, msg) {
-    new Assertion(obj, msg).to.have.property(prop, val);
+    new Assertion(obj, msg, assert.propertyVal, true)
+      .to.have.property(prop, val);
   };
 
   /**
-   * ### .propertyNotVal(object, property, value, [message])
+   * ### .notPropertyVal(object, property, value, [message])
    *
-   * Asserts that `object` has a property named by `property`, but with a value
-   * different from that given by `value`.
+   * Asserts that `object` does _not_ have a direct or inherited property named
+   * by `property` with value given by `value`. Uses a strict equality check
+   * (===).
    *
-   *     assert.propertyNotVal({ tea: 'is good' }, 'tea', 'is bad');
+   *     assert.notPropertyVal({ tea: 'is good' }, 'tea', 'is bad');
+   *     assert.notPropertyVal({ tea: 'is good' }, 'coffee', 'is good');
    *
-   * @name propertyNotVal
+   * @name notPropertyVal
    * @param {Object} object
    * @param {String} property
    * @param {Mixed} value
@@ -11355,18 +14129,18 @@ module.exports = function (chai, util) {
    * @api public
    */
 
-  assert.propertyNotVal = function (obj, prop, val, msg) {
-    new Assertion(obj, msg).to.not.have.property(prop, val);
+  assert.notPropertyVal = function (obj, prop, val, msg) {
+    new Assertion(obj, msg, assert.notPropertyVal, true)
+      .to.not.have.property(prop, val);
   };
 
   /**
    * ### .deepPropertyVal(object, property, value, [message])
    *
-   * Asserts that `object` has a property named by `property` with value given
-   * by `value`. `property` can use dot- and bracket-notation for deep
-   * reference.
+   * Asserts that `object` has a direct or inherited property named by
+   * `property` with a value given by `value`. Uses a deep equality check.
    *
-   *     assert.deepPropertyVal({ tea: { green: 'matcha' }}, 'tea.green', 'matcha');
+   *     assert.deepPropertyVal({ tea: { green: 'matcha' } }, 'tea', { green: 'matcha' });
    *
    * @name deepPropertyVal
    * @param {Object} object
@@ -11378,19 +14152,21 @@ module.exports = function (chai, util) {
    */
 
   assert.deepPropertyVal = function (obj, prop, val, msg) {
-    new Assertion(obj, msg).to.have.deep.property(prop, val);
+    new Assertion(obj, msg, assert.deepPropertyVal, true)
+      .to.have.deep.property(prop, val);
   };
 
   /**
-   * ### .deepPropertyNotVal(object, property, value, [message])
+   * ### .notDeepPropertyVal(object, property, value, [message])
    *
-   * Asserts that `object` has a property named by `property`, but with a value
-   * different from that given by `value`. `property` can use dot- and
-   * bracket-notation for deep reference.
+   * Asserts that `object` does _not_ have a direct or inherited property named
+   * by `property` with value given by `value`. Uses a deep equality check.
    *
-   *     assert.deepPropertyNotVal({ tea: { green: 'matcha' }}, 'tea.green', 'konacha');
+   *     assert.notDeepPropertyVal({ tea: { green: 'matcha' } }, 'tea', { black: 'matcha' });
+   *     assert.notDeepPropertyVal({ tea: { green: 'matcha' } }, 'tea', { green: 'oolong' });
+   *     assert.notDeepPropertyVal({ tea: { green: 'matcha' } }, 'coffee', { green: 'matcha' });
    *
-   * @name deepPropertyNotVal
+   * @name notDeepPropertyVal
    * @param {Object} object
    * @param {String} property
    * @param {Mixed} value
@@ -11399,9 +14175,282 @@ module.exports = function (chai, util) {
    * @api public
    */
 
-  assert.deepPropertyNotVal = function (obj, prop, val, msg) {
-    new Assertion(obj, msg).to.not.have.deep.property(prop, val);
+  assert.notDeepPropertyVal = function (obj, prop, val, msg) {
+    new Assertion(obj, msg, assert.notDeepPropertyVal, true)
+      .to.not.have.deep.property(prop, val);
   };
+
+  /**
+   * ### .ownProperty(object, property, [message])
+   *
+   * Asserts that `object` has a direct property named by `property`. Inherited
+   * properties aren't checked.
+   *
+   *     assert.ownProperty({ tea: { green: 'matcha' }}, 'tea');
+   *
+   * @name ownProperty
+   * @param {Object} object
+   * @param {String} property
+   * @param {String} message
+   * @api public
+   */
+
+  assert.ownProperty = function (obj, prop, msg) {
+    new Assertion(obj, msg, assert.ownProperty, true)
+      .to.have.own.property(prop);
+  };
+
+  /**
+   * ### .notOwnProperty(object, property, [message])
+   *
+   * Asserts that `object` does _not_ have a direct property named by
+   * `property`. Inherited properties aren't checked.
+   *
+   *     assert.notOwnProperty({ tea: { green: 'matcha' }}, 'coffee');
+   *     assert.notOwnProperty({}, 'toString');
+   *
+   * @name notOwnProperty
+   * @param {Object} object
+   * @param {String} property
+   * @param {String} message
+   * @api public
+   */
+
+  assert.notOwnProperty = function (obj, prop, msg) {
+    new Assertion(obj, msg, assert.notOwnProperty, true)
+      .to.not.have.own.property(prop);
+  };
+
+  /**
+   * ### .ownPropertyVal(object, property, value, [message])
+   *
+   * Asserts that `object` has a direct property named by `property` and a value
+   * equal to the provided `value`. Uses a strict equality check (===).
+   * Inherited properties aren't checked.
+   *
+   *     assert.ownPropertyVal({ coffee: 'is good'}, 'coffee', 'is good');
+   *
+   * @name ownPropertyVal
+   * @param {Object} object
+   * @param {String} property
+   * @param {Mixed} value
+   * @param {String} message
+   * @api public
+   */
+
+  assert.ownPropertyVal = function (obj, prop, value, msg) {
+    new Assertion(obj, msg, assert.ownPropertyVal, true)
+      .to.have.own.property(prop, value);
+  };
+
+  /**
+   * ### .notOwnPropertyVal(object, property, value, [message])
+   *
+   * Asserts that `object` does _not_ have a direct property named by `property`
+   * with a value equal to the provided `value`. Uses a strict equality check
+   * (===). Inherited properties aren't checked.
+   *
+   *     assert.notOwnPropertyVal({ tea: 'is better'}, 'tea', 'is worse');
+   *     assert.notOwnPropertyVal({}, 'toString', Object.prototype.toString);
+   *
+   * @name notOwnPropertyVal
+   * @param {Object} object
+   * @param {String} property
+   * @param {Mixed} value
+   * @param {String} message
+   * @api public
+   */
+
+  assert.notOwnPropertyVal = function (obj, prop, value, msg) {
+    new Assertion(obj, msg, assert.notOwnPropertyVal, true)
+      .to.not.have.own.property(prop, value);
+  };
+
+  /**
+   * ### .deepOwnPropertyVal(object, property, value, [message])
+   *
+   * Asserts that `object` has a direct property named by `property` and a value
+   * equal to the provided `value`. Uses a deep equality check. Inherited
+   * properties aren't checked.
+   *
+   *     assert.deepOwnPropertyVal({ tea: { green: 'matcha' } }, 'tea', { green: 'matcha' });
+   *
+   * @name deepOwnPropertyVal
+   * @param {Object} object
+   * @param {String} property
+   * @param {Mixed} value
+   * @param {String} message
+   * @api public
+   */
+
+  assert.deepOwnPropertyVal = function (obj, prop, value, msg) {
+    new Assertion(obj, msg, assert.deepOwnPropertyVal, true)
+      .to.have.deep.own.property(prop, value);
+  };
+
+  /**
+   * ### .notDeepOwnPropertyVal(object, property, value, [message])
+   *
+   * Asserts that `object` does _not_ have a direct property named by `property`
+   * with a value equal to the provided `value`. Uses a deep equality check.
+   * Inherited properties aren't checked.
+   *
+   *     assert.notDeepOwnPropertyVal({ tea: { green: 'matcha' } }, 'tea', { black: 'matcha' });
+   *     assert.notDeepOwnPropertyVal({ tea: { green: 'matcha' } }, 'tea', { green: 'oolong' });
+   *     assert.notDeepOwnPropertyVal({ tea: { green: 'matcha' } }, 'coffee', { green: 'matcha' });
+   *     assert.notDeepOwnPropertyVal({}, 'toString', Object.prototype.toString);
+   *
+   * @name notDeepOwnPropertyVal
+   * @param {Object} object
+   * @param {String} property
+   * @param {Mixed} value
+   * @param {String} message
+   * @api public
+   */
+
+  assert.notDeepOwnPropertyVal = function (obj, prop, value, msg) {
+    new Assertion(obj, msg, assert.notDeepOwnPropertyVal, true)
+      .to.not.have.deep.own.property(prop, value);
+  };
+
+  /**
+   * ### .nestedProperty(object, property, [message])
+   *
+   * Asserts that `object` has a direct or inherited property named by
+   * `property`, which can be a string using dot- and bracket-notation for
+   * nested reference.
+   *
+   *     assert.nestedProperty({ tea: { green: 'matcha' }}, 'tea.green');
+   *
+   * @name nestedProperty
+   * @param {Object} object
+   * @param {String} property
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.nestedProperty = function (obj, prop, msg) {
+    new Assertion(obj, msg, assert.nestedProperty, true)
+      .to.have.nested.property(prop);
+  };
+
+  /**
+   * ### .notNestedProperty(object, property, [message])
+   *
+   * Asserts that `object` does _not_ have a property named by `property`, which
+   * can be a string using dot- and bracket-notation for nested reference. The
+   * property cannot exist on the object nor anywhere in its prototype chain.
+   *
+   *     assert.notNestedProperty({ tea: { green: 'matcha' }}, 'tea.oolong');
+   *
+   * @name notNestedProperty
+   * @param {Object} object
+   * @param {String} property
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notNestedProperty = function (obj, prop, msg) {
+    new Assertion(obj, msg, assert.notNestedProperty, true)
+      .to.not.have.nested.property(prop);
+  };
+
+  /**
+   * ### .nestedPropertyVal(object, property, value, [message])
+   *
+   * Asserts that `object` has a property named by `property` with value given
+   * by `value`. `property` can use dot- and bracket-notation for nested
+   * reference. Uses a strict equality check (===).
+   *
+   *     assert.nestedPropertyVal({ tea: { green: 'matcha' }}, 'tea.green', 'matcha');
+   *
+   * @name nestedPropertyVal
+   * @param {Object} object
+   * @param {String} property
+   * @param {Mixed} value
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.nestedPropertyVal = function (obj, prop, val, msg) {
+    new Assertion(obj, msg, assert.nestedPropertyVal, true)
+      .to.have.nested.property(prop, val);
+  };
+
+  /**
+   * ### .notNestedPropertyVal(object, property, value, [message])
+   *
+   * Asserts that `object` does _not_ have a property named by `property` with
+   * value given by `value`. `property` can use dot- and bracket-notation for
+   * nested reference. Uses a strict equality check (===).
+   *
+   *     assert.notNestedPropertyVal({ tea: { green: 'matcha' }}, 'tea.green', 'konacha');
+   *     assert.notNestedPropertyVal({ tea: { green: 'matcha' }}, 'coffee.green', 'matcha');
+   *
+   * @name notNestedPropertyVal
+   * @param {Object} object
+   * @param {String} property
+   * @param {Mixed} value
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notNestedPropertyVal = function (obj, prop, val, msg) {
+    new Assertion(obj, msg, assert.notNestedPropertyVal, true)
+      .to.not.have.nested.property(prop, val);
+  };
+
+  /**
+   * ### .deepNestedPropertyVal(object, property, value, [message])
+   *
+   * Asserts that `object` has a property named by `property` with a value given
+   * by `value`. `property` can use dot- and bracket-notation for nested
+   * reference. Uses a deep equality check.
+   *
+   *     assert.deepNestedPropertyVal({ tea: { green: { matcha: 'yum' } } }, 'tea.green', { matcha: 'yum' });
+   *
+   * @name deepNestedPropertyVal
+   * @param {Object} object
+   * @param {String} property
+   * @param {Mixed} value
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.deepNestedPropertyVal = function (obj, prop, val, msg) {
+    new Assertion(obj, msg, assert.deepNestedPropertyVal, true)
+      .to.have.deep.nested.property(prop, val);
+  };
+
+  /**
+   * ### .notDeepNestedPropertyVal(object, property, value, [message])
+   *
+   * Asserts that `object` does _not_ have a property named by `property` with
+   * value given by `value`. `property` can use dot- and bracket-notation for
+   * nested reference. Uses a deep equality check.
+   *
+   *     assert.notDeepNestedPropertyVal({ tea: { green: { matcha: 'yum' } } }, 'tea.green', { oolong: 'yum' });
+   *     assert.notDeepNestedPropertyVal({ tea: { green: { matcha: 'yum' } } }, 'tea.green', { matcha: 'yuck' });
+   *     assert.notDeepNestedPropertyVal({ tea: { green: { matcha: 'yum' } } }, 'tea.black', { matcha: 'yum' });
+   *
+   * @name notDeepNestedPropertyVal
+   * @param {Object} object
+   * @param {String} property
+   * @param {Mixed} value
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notDeepNestedPropertyVal = function (obj, prop, val, msg) {
+    new Assertion(obj, msg, assert.notDeepNestedPropertyVal, true)
+      .to.not.have.deep.nested.property(prop, val);
+  }
 
   /**
    * ### .lengthOf(object, length, [message])
@@ -11420,70 +14469,352 @@ module.exports = function (chai, util) {
    */
 
   assert.lengthOf = function (exp, len, msg) {
-    new Assertion(exp, msg).to.have.length(len);
+    new Assertion(exp, msg, assert.lengthOf, true).to.have.lengthOf(len);
   };
 
   /**
-   * ### .throws(function, [constructor/string/regexp], [string/regexp], [message])
+   * ### .hasAnyKeys(object, [keys], [message])
    *
-   * Asserts that `function` will throw an error that is an instance of
-   * `constructor`, or alternately that it will throw an error with message
-   * matching `regexp`.
+   * Asserts that `object` has at least one of the `keys` provided.
+   * You can also provide a single object instead of a `keys` array and its keys
+   * will be used as the expected set of keys.
+   *
+   *     assert.hasAnyKey({foo: 1, bar: 2, baz: 3}, ['foo', 'iDontExist', 'baz']);
+   *     assert.hasAnyKey({foo: 1, bar: 2, baz: 3}, {foo: 30, iDontExist: 99, baz: 1337]);
+   *     assert.hasAnyKey(new Map([[{foo: 1}, 'bar'], ['key', 'value']]), [{foo: 1}, 'thisKeyDoesNotExist']);
+   *     assert.hasAnyKey(new Set([{foo: 'bar'}, 'anotherKey'], [{foo: 'bar'}, 'thisKeyDoesNotExist']);
+   *
+   * @name hasAnyKeys
+   * @param {Mixed} object
+   * @param {Array|Object} keys
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.hasAnyKeys = function (obj, keys, msg) {
+    new Assertion(obj, msg, assert.hasAnyKeys, true).to.have.any.keys(keys);
+  }
+
+  /**
+   * ### .hasAllKeys(object, [keys], [message])
+   *
+   * Asserts that `object` has all and only all of the `keys` provided.
+   * You can also provide a single object instead of a `keys` array and its keys
+   * will be used as the expected set of keys.
+   *
+   *     assert.hasAllKeys({foo: 1, bar: 2, baz: 3}, ['foo', 'bar', 'baz']);
+   *     assert.hasAllKeys({foo: 1, bar: 2, baz: 3}, {foo: 30, bar: 99, baz: 1337]);
+   *     assert.hasAllKeys(new Map([[{foo: 1}, 'bar'], ['key', 'value']]), [{foo: 1}, 'key']);
+   *     assert.hasAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{foo: 'bar'}, 'anotherKey']);
+   *
+   * @name hasAllKeys
+   * @param {Mixed} object
+   * @param {String[]} keys
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.hasAllKeys = function (obj, keys, msg) {
+    new Assertion(obj, msg, assert.hasAllKeys, true).to.have.all.keys(keys);
+  }
+
+  /**
+   * ### .containsAllKeys(object, [keys], [message])
+   *
+   * Asserts that `object` has all of the `keys` provided but may have more keys not listed.
+   * You can also provide a single object instead of a `keys` array and its keys
+   * will be used as the expected set of keys.
+   *
+   *     assert.containsAllKeys({foo: 1, bar: 2, baz: 3}, ['foo', 'baz']);
+   *     assert.containsAllKeys({foo: 1, bar: 2, baz: 3}, ['foo', 'bar', 'baz']);
+   *     assert.containsAllKeys({foo: 1, bar: 2, baz: 3}, {foo: 30, baz: 1337});
+   *     assert.containsAllKeys({foo: 1, bar: 2, baz: 3}, {foo: 30, bar: 99, baz: 1337});
+   *     assert.containsAllKeys(new Map([[{foo: 1}, 'bar'], ['key', 'value']]), [{foo: 1}]);
+   *     assert.containsAllKeys(new Map([[{foo: 1}, 'bar'], ['key', 'value']]), [{foo: 1}, 'key']);
+   *     assert.containsAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{foo: 'bar'}]);
+   *     assert.containsAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{foo: 'bar'}, 'anotherKey']);
+   *
+   * @name containsAllKeys
+   * @param {Mixed} object
+   * @param {String[]} keys
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.containsAllKeys = function (obj, keys, msg) {
+    new Assertion(obj, msg, assert.containsAllKeys, true)
+      .to.contain.all.keys(keys);
+  }
+
+  /**
+   * ### .doesNotHaveAnyKeys(object, [keys], [message])
+   *
+   * Asserts that `object` has none of the `keys` provided.
+   * You can also provide a single object instead of a `keys` array and its keys
+   * will be used as the expected set of keys.
+   *
+   *     assert.doesNotHaveAnyKeys({foo: 1, bar: 2, baz: 3}, ['one', 'two', 'example']);
+   *     assert.doesNotHaveAnyKeys({foo: 1, bar: 2, baz: 3}, {one: 1, two: 2, example: 'foo'});
+   *     assert.doesNotHaveAnyKeys(new Map([[{foo: 1}, 'bar'], ['key', 'value']]), [{one: 'two'}, 'example']);
+   *     assert.doesNotHaveAnyKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{one: 'two'}, 'example']);
+   *
+   * @name doesNotHaveAnyKeys
+   * @param {Mixed} object
+   * @param {String[]} keys
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.doesNotHaveAnyKeys = function (obj, keys, msg) {
+    new Assertion(obj, msg, assert.doesNotHaveAnyKeys, true)
+      .to.not.have.any.keys(keys);
+  }
+
+  /**
+   * ### .doesNotHaveAllKeys(object, [keys], [message])
+   *
+   * Asserts that `object` does not have at least one of the `keys` provided.
+   * You can also provide a single object instead of a `keys` array and its keys
+   * will be used as the expected set of keys.
+   *
+   *     assert.doesNotHaveAllKeys({foo: 1, bar: 2, baz: 3}, ['one', 'two', 'example']);
+   *     assert.doesNotHaveAllKeys({foo: 1, bar: 2, baz: 3}, {one: 1, two: 2, example: 'foo'});
+   *     assert.doesNotHaveAllKeys(new Map([[{foo: 1}, 'bar'], ['key', 'value']]), [{one: 'two'}, 'example']);
+   *     assert.doesNotHaveAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{one: 'two'}, 'example']);
+   *
+   * @name doesNotHaveAllKeys
+   * @param {Mixed} object
+   * @param {String[]} keys
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.doesNotHaveAllKeys = function (obj, keys, msg) {
+    new Assertion(obj, msg, assert.doesNotHaveAllKeys, true)
+      .to.not.have.all.keys(keys);
+  }
+
+  /**
+   * ### .hasAnyDeepKeys(object, [keys], [message])
+   *
+   * Asserts that `object` has at least one of the `keys` provided.
+   * Since Sets and Maps can have objects as keys you can use this assertion to perform
+   * a deep comparison.
+   * You can also provide a single object instead of a `keys` array and its keys
+   * will be used as the expected set of keys.
+   *
+   *     assert.hasAnyDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [1, 2]]), {one: 'one'});
+   *     assert.hasAnyDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [1, 2]]), [{one: 'one'}, {two: 'two'}]);
+   *     assert.hasAnyDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [{two: 'two'}, 'valueTwo']]), [{one: 'one'}, {two: 'two'}]);
+   *     assert.hasAnyDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), {one: 'one'});
+   *     assert.hasAnyDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{one: 'one'}, {three: 'three'}]);
+   *     assert.hasAnyDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{one: 'one'}, {two: 'two'}]);
+   *
+   * @name doesNotHaveAllKeys
+   * @param {Mixed} object
+   * @param {Array|Object} keys
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.hasAnyDeepKeys = function (obj, keys, msg) {
+    new Assertion(obj, msg, assert.hasAnyDeepKeys, true)
+      .to.have.any.deep.keys(keys);
+  }
+
+ /**
+   * ### .hasAllDeepKeys(object, [keys], [message])
+   *
+   * Asserts that `object` has all and only all of the `keys` provided.
+   * Since Sets and Maps can have objects as keys you can use this assertion to perform
+   * a deep comparison.
+   * You can also provide a single object instead of a `keys` array and its keys
+   * will be used as the expected set of keys.
+   *
+   *     assert.hasAllDeepKeys(new Map([[{one: 'one'}, 'valueOne']]), {one: 'one'});
+   *     assert.hasAllDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [{two: 'two'}, 'valueTwo']]), [{one: 'one'}, {two: 'two'}]);
+   *     assert.hasAllDeepKeys(new Set([{one: 'one'}]), {one: 'one'});
+   *     assert.hasAllDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{one: 'one'}, {two: 'two'}]);
+   *
+   * @name hasAllDeepKeys
+   * @param {Mixed} object
+   * @param {Array|Object} keys
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.hasAllDeepKeys = function (obj, keys, msg) {
+    new Assertion(obj, msg, assert.hasAllDeepKeys, true)
+      .to.have.all.deep.keys(keys);
+  }
+
+ /**
+   * ### .containsAllDeepKeys(object, [keys], [message])
+   *
+   * Asserts that `object` contains all of the `keys` provided.
+   * Since Sets and Maps can have objects as keys you can use this assertion to perform
+   * a deep comparison.
+   * You can also provide a single object instead of a `keys` array and its keys
+   * will be used as the expected set of keys.
+   *
+   *     assert.containsAllDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [1, 2]]), {one: 'one'});
+   *     assert.containsAllDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [{two: 'two'}, 'valueTwo']]), [{one: 'one'}, {two: 'two'}]);
+   *     assert.containsAllDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), {one: 'one'});
+   *     assert.containsAllDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{one: 'one'}, {two: 'two'}]);
+   *
+   * @name containsAllDeepKeys
+   * @param {Mixed} object
+   * @param {Array|Object} keys
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.containsAllDeepKeys = function (obj, keys, msg) {
+    new Assertion(obj, msg, assert.containsAllDeepKeys, true)
+      .to.contain.all.deep.keys(keys);
+  }
+
+ /**
+   * ### .doesNotHaveAnyDeepKeys(object, [keys], [message])
+   *
+   * Asserts that `object` has none of the `keys` provided.
+   * Since Sets and Maps can have objects as keys you can use this assertion to perform
+   * a deep comparison.
+   * You can also provide a single object instead of a `keys` array and its keys
+   * will be used as the expected set of keys.
+   *
+   *     assert.doesNotHaveAnyDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [1, 2]]), {thisDoesNot: 'exist'});
+   *     assert.doesNotHaveAnyDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [{two: 'two'}, 'valueTwo']]), [{twenty: 'twenty'}, {fifty: 'fifty'}]);
+   *     assert.doesNotHaveAnyDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), {twenty: 'twenty'});
+   *     assert.doesNotHaveAnyDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{twenty: 'twenty'}, {fifty: 'fifty'}]);
+   *
+   * @name doesNotHaveAnyDeepKeys
+   * @param {Mixed} object
+   * @param {Array|Object} keys
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.doesNotHaveAnyDeepKeys = function (obj, keys, msg) {
+    new Assertion(obj, msg, assert.doesNotHaveAnyDeepKeys, true)
+      .to.not.have.any.deep.keys(keys);
+  }
+
+ /**
+   * ### .doesNotHaveAllDeepKeys(object, [keys], [message])
+   *
+   * Asserts that `object` does not have at least one of the `keys` provided.
+   * Since Sets and Maps can have objects as keys you can use this assertion to perform
+   * a deep comparison.
+   * You can also provide a single object instead of a `keys` array and its keys
+   * will be used as the expected set of keys.
+   *
+   *     assert.doesNotHaveAllDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [1, 2]]), {thisDoesNot: 'exist'});
+   *     assert.doesNotHaveAllDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [{two: 'two'}, 'valueTwo']]), [{twenty: 'twenty'}, {one: 'one'}]);
+   *     assert.doesNotHaveAllDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), {twenty: 'twenty'});
+   *     assert.doesNotHaveAllDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{one: 'one'}, {fifty: 'fifty'}]);
+   *
+   * @name doesNotHaveAllDeepKeys
+   * @param {Mixed} object
+   * @param {Array|Object} keys
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.doesNotHaveAllDeepKeys = function (obj, keys, msg) {
+    new Assertion(obj, msg, assert.doesNotHaveAllDeepKeys, true)
+      .to.not.have.all.deep.keys(keys);
+  }
+
+ /**
+   * ### .throws(fn, [errorLike/string/regexp], [string/regexp], [message])
+   *
+   * If `errorLike` is an `Error` constructor, asserts that `fn` will throw an error that is an
+   * instance of `errorLike`.
+   * If `errorLike` is an `Error` instance, asserts that the error thrown is the same
+   * instance as `errorLike`.
+   * If `errMsgMatcher` is provided, it also asserts that the error thrown will have a
+   * message matching `errMsgMatcher`.
    *
    *     assert.throws(fn, 'function throws a reference error');
    *     assert.throws(fn, /function throws a reference error/);
    *     assert.throws(fn, ReferenceError);
-   *     assert.throws(fn, ReferenceError, 'function throws a reference error');
-   *     assert.throws(fn, ReferenceError, /function throws a reference error/);
+   *     assert.throws(fn, errorInstance);
+   *     assert.throws(fn, ReferenceError, 'Error thrown must be a ReferenceError and have this msg');
+   *     assert.throws(fn, errorInstance, 'Error thrown must be the same errorInstance and have this msg');
+   *     assert.throws(fn, ReferenceError, /Error thrown must be a ReferenceError and match this/);
+   *     assert.throws(fn, errorInstance, /Error thrown must be the same errorInstance and match this/);
    *
    * @name throws
    * @alias throw
    * @alias Throw
-   * @param {Function} function
-   * @param {ErrorConstructor} constructor
-   * @param {RegExp} regexp
+   * @param {Function} fn
+   * @param {ErrorConstructor|Error} errorLike
+   * @param {RegExp|String} errMsgMatcher
    * @param {String} message
    * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error#Error_types
    * @namespace Assert
    * @api public
    */
 
-  assert.throws = function (fn, errt, errs, msg) {
-    if ('string' === typeof errt || errt instanceof RegExp) {
-      errs = errt;
-      errt = null;
+  assert.throws = function (fn, errorLike, errMsgMatcher, msg) {
+    if ('string' === typeof errorLike || errorLike instanceof RegExp) {
+      errMsgMatcher = errorLike;
+      errorLike = null;
     }
 
-    var assertErr = new Assertion(fn, msg).to.throw(errt, errs);
+    var assertErr = new Assertion(fn, msg, assert.throws, true)
+      .to.throw(errorLike, errMsgMatcher);
     return flag(assertErr, 'object');
   };
 
   /**
-   * ### .doesNotThrow(function, [constructor/regexp], [message])
+   * ### .doesNotThrow(fn, [errorLike/string/regexp], [string/regexp], [message])
    *
-   * Asserts that `function` will _not_ throw an error that is an instance of
-   * `constructor`, or alternately that it will not throw an error with message
-   * matching `regexp`.
+   * If `errorLike` is an `Error` constructor, asserts that `fn` will _not_ throw an error that is an
+   * instance of `errorLike`.
+   * If `errorLike` is an `Error` instance, asserts that the error thrown is _not_ the same
+   * instance as `errorLike`.
+   * If `errMsgMatcher` is provided, it also asserts that the error thrown will _not_ have a
+   * message matching `errMsgMatcher`.
    *
-   *     assert.doesNotThrow(fn, Error, 'function does not throw');
+   *     assert.doesNotThrow(fn, 'Any Error thrown must not have this message');
+   *     assert.doesNotThrow(fn, /Any Error thrown must not match this/);
+   *     assert.doesNotThrow(fn, Error);
+   *     assert.doesNotThrow(fn, errorInstance);
+   *     assert.doesNotThrow(fn, Error, 'Error must not have this message');
+   *     assert.doesNotThrow(fn, errorInstance, 'Error must not have this message');
+   *     assert.doesNotThrow(fn, Error, /Error must not match this/);
+   *     assert.doesNotThrow(fn, errorInstance, /Error must not match this/);
    *
    * @name doesNotThrow
-   * @param {Function} function
-   * @param {ErrorConstructor} constructor
-   * @param {RegExp} regexp
+   * @param {Function} fn
+   * @param {ErrorConstructor} errorLike
+   * @param {RegExp|String} errMsgMatcher
    * @param {String} message
    * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error#Error_types
    * @namespace Assert
    * @api public
    */
 
-  assert.doesNotThrow = function (fn, type, msg) {
-    if ('string' === typeof type) {
-      msg = type;
-      type = null;
+  assert.doesNotThrow = function (fn, errorLike, errMsgMatcher, msg) {
+    if ('string' === typeof errorLike || errorLike instanceof RegExp) {
+      errMsgMatcher = errorLike;
+      errorLike = null;
     }
 
-    new Assertion(fn, msg).to.not.Throw(type);
+    new Assertion(fn, msg, assert.doesNotThrow, true)
+      .to.not.throw(errorLike, errMsgMatcher);
   };
 
   /**
@@ -11531,9 +14862,14 @@ module.exports = function (chai, util) {
         ok = val !== val2;
         break;
       default:
-        throw new Error('Invalid operator "' + operator + '"');
+        msg = msg ? msg + ': ' : msg;
+        throw new chai.AssertionError(
+          msg + 'Invalid operator "' + operator + '"',
+          undefined,
+          assert.operator
+        );
     }
-    var test = new Assertion(ok, msg);
+    var test = new Assertion(ok, msg, assert.operator, true);
     test.assert(
         true === flag(test, 'object')
       , 'expected ' + util.inspect(val) + ' to be ' + operator + ' ' + util.inspect(val2)
@@ -11557,7 +14893,7 @@ module.exports = function (chai, util) {
    */
 
   assert.closeTo = function (act, exp, delta, msg) {
-    new Assertion(act, msg).to.be.closeTo(exp, delta);
+    new Assertion(act, msg, assert.closeTo, true).to.be.closeTo(exp, delta);
   };
 
   /**
@@ -11577,14 +14913,15 @@ module.exports = function (chai, util) {
    */
 
   assert.approximately = function (act, exp, delta, msg) {
-    new Assertion(act, msg).to.be.approximately(exp, delta);
+    new Assertion(act, msg, assert.approximately, true)
+      .to.be.approximately(exp, delta);
   };
 
   /**
    * ### .sameMembers(set1, set2, [message])
    *
-   * Asserts that `set1` and `set2` have the same members.
-   * Order is not taken into account.
+   * Asserts that `set1` and `set2` have the same members in any order. Uses a
+   * strict equality check (===).
    *
    *     assert.sameMembers([ 1, 2, 3 ], [ 2, 1, 3 ], 'same members');
    *
@@ -11597,16 +14934,38 @@ module.exports = function (chai, util) {
    */
 
   assert.sameMembers = function (set1, set2, msg) {
-    new Assertion(set1, msg).to.have.same.members(set2);
+    new Assertion(set1, msg, assert.sameMembers, true)
+      .to.have.same.members(set2);
+  }
+
+  /**
+   * ### .notSameMembers(set1, set2, [message])
+   *
+   * Asserts that `set1` and `set2` don't have the same members in any order.
+   * Uses a strict equality check (===).
+   *
+   *     assert.notSameMembers([ 1, 2, 3 ], [ 5, 1, 3 ], 'not same members');
+   *
+   * @name notSameMembers
+   * @param {Array} set1
+   * @param {Array} set2
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notSameMembers = function (set1, set2, msg) {
+    new Assertion(set1, msg, assert.notSameMembers, true)
+      .to.not.have.same.members(set2);
   }
 
   /**
    * ### .sameDeepMembers(set1, set2, [message])
    *
-   * Asserts that `set1` and `set2` have the same members - using a deep equality checking.
-   * Order is not taken into account.
+   * Asserts that `set1` and `set2` have the same members in any order. Uses a
+   * deep equality check.
    *
-   *     assert.sameDeepMembers([ {b: 3}, {a: 2}, {c: 5} ], [ {c: 5}, {b: 3}, {a: 2} ], 'same deep members');
+   *     assert.sameDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [{ b: 2 }, { a: 1 }, { c: 3 }], 'same deep members');
    *
    * @name sameDeepMembers
    * @param {Array} set1
@@ -11617,16 +14976,123 @@ module.exports = function (chai, util) {
    */
 
   assert.sameDeepMembers = function (set1, set2, msg) {
-    new Assertion(set1, msg).to.have.same.deep.members(set2);
+    new Assertion(set1, msg, assert.sameDeepMembers, true)
+      .to.have.same.deep.members(set2);
+  }
+
+  /**
+   * ### .notSameDeepMembers(set1, set2, [message])
+   *
+   * Asserts that `set1` and `set2` don't have the same members in any order.
+   * Uses a deep equality check.
+   *
+   *     assert.notSameDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [{ b: 2 }, { a: 1 }, { f: 5 }], 'not same deep members');
+   *
+   * @name notSameDeepMembers
+   * @param {Array} set1
+   * @param {Array} set2
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notSameDeepMembers = function (set1, set2, msg) {
+    new Assertion(set1, msg, assert.notSameDeepMembers, true)
+      .to.not.have.same.deep.members(set2);
+  }
+
+  /**
+   * ### .sameOrderedMembers(set1, set2, [message])
+   *
+   * Asserts that `set1` and `set2` have the same members in the same order.
+   * Uses a strict equality check (===).
+   *
+   *     assert.sameOrderedMembers([ 1, 2, 3 ], [ 1, 2, 3 ], 'same ordered members');
+   *
+   * @name sameOrderedMembers
+   * @param {Array} set1
+   * @param {Array} set2
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.sameOrderedMembers = function (set1, set2, msg) {
+    new Assertion(set1, msg, assert.sameOrderedMembers, true)
+      .to.have.same.ordered.members(set2);
+  }
+
+  /**
+   * ### .notSameOrderedMembers(set1, set2, [message])
+   *
+   * Asserts that `set1` and `set2` don't have the same members in the same
+   * order. Uses a strict equality check (===).
+   *
+   *     assert.notSameOrderedMembers([ 1, 2, 3 ], [ 2, 1, 3 ], 'not same ordered members');
+   *
+   * @name notSameOrderedMembers
+   * @param {Array} set1
+   * @param {Array} set2
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notSameOrderedMembers = function (set1, set2, msg) {
+    new Assertion(set1, msg, assert.notSameOrderedMembers, true)
+      .to.not.have.same.ordered.members(set2);
+  }
+
+  /**
+   * ### .sameDeepOrderedMembers(set1, set2, [message])
+   *
+   * Asserts that `set1` and `set2` have the same members in the same order.
+   * Uses a deep equality check.
+   *
+   * assert.sameDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { a: 1 }, { b: 2 }, { c: 3 } ], 'same deep ordered members');
+   *
+   * @name sameDeepOrderedMembers
+   * @param {Array} set1
+   * @param {Array} set2
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.sameDeepOrderedMembers = function (set1, set2, msg) {
+    new Assertion(set1, msg, assert.sameDeepOrderedMembers, true)
+      .to.have.same.deep.ordered.members(set2);
+  }
+
+  /**
+   * ### .notSameDeepOrderedMembers(set1, set2, [message])
+   *
+   * Asserts that `set1` and `set2` don't have the same members in the same
+   * order. Uses a deep equality check.
+   *
+   * assert.notSameDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { a: 1 }, { b: 2 }, { z: 5 } ], 'not same deep ordered members');
+   * assert.notSameDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { a: 1 }, { c: 3 } ], 'not same deep ordered members');
+   *
+   * @name notSameDeepOrderedMembers
+   * @param {Array} set1
+   * @param {Array} set2
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notSameDeepOrderedMembers = function (set1, set2, msg) {
+    new Assertion(set1, msg, assert.notSameDeepOrderedMembers, true)
+      .to.not.have.same.deep.ordered.members(set2);
   }
 
   /**
    * ### .includeMembers(superset, subset, [message])
    *
-   * Asserts that `subset` is included in `superset`.
-   * Order is not taken into account.
+   * Asserts that `subset` is included in `superset` in any order. Uses a
+   * strict equality check (===). Duplicates are ignored.
    *
-   *     assert.includeMembers([ 1, 2, 3 ], [ 2, 1 ], 'include members');
+   *     assert.includeMembers([ 1, 2, 3 ], [ 2, 1, 2 ], 'include members');
    *
    * @name includeMembers
    * @param {Array} superset
@@ -11637,17 +15103,38 @@ module.exports = function (chai, util) {
    */
 
   assert.includeMembers = function (superset, subset, msg) {
-    new Assertion(superset, msg).to.include.members(subset);
+    new Assertion(superset, msg, assert.includeMembers, true)
+      .to.include.members(subset);
+  }
+
+  /**
+   * ### .notIncludeMembers(superset, subset, [message])
+   *
+   * Asserts that `subset` isn't included in `superset` in any order. Uses a
+   * strict equality check (===). Duplicates are ignored.
+   *
+   *     assert.notIncludeMembers([ 1, 2, 3 ], [ 5, 1 ], 'not include members');
+   *
+   * @name notIncludeMembers
+   * @param {Array} superset
+   * @param {Array} subset
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notIncludeMembers = function (superset, subset, msg) {
+    new Assertion(superset, msg, assert.notIncludeMembers, true)
+      .to.not.include.members(subset);
   }
 
   /**
    * ### .includeDeepMembers(superset, subset, [message])
    *
-   * Asserts that `subset` is included in `superset` - using deep equality checking.
-   * Order is not taken into account.
-   * Duplicates are ignored.
+   * Asserts that `subset` is included in `superset` in any order. Uses a deep
+   * equality check. Duplicates are ignored.
    *
-   *     assert.includeDeepMembers([ {a: 1}, {b: 2}, {c: 3} ], [ {b: 2}, {a: 1}, {b: 2} ], 'include deep members');
+   *     assert.includeDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { a: 1 }, { b: 2 } ], 'include deep members');
    *
    * @name includeDeepMembers
    * @param {Array} superset
@@ -11658,7 +15145,120 @@ module.exports = function (chai, util) {
    */
 
   assert.includeDeepMembers = function (superset, subset, msg) {
-    new Assertion(superset, msg).to.include.deep.members(subset);
+    new Assertion(superset, msg, assert.includeDeepMembers, true)
+      .to.include.deep.members(subset);
+  }
+
+  /**
+   * ### .notIncludeDeepMembers(superset, subset, [message])
+   *
+   * Asserts that `subset` isn't included in `superset` in any order. Uses a
+   * deep equality check. Duplicates are ignored.
+   *
+   *     assert.notIncludeDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { f: 5 } ], 'not include deep members');
+   *
+   * @name notIncludeDeepMembers
+   * @param {Array} superset
+   * @param {Array} subset
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notIncludeDeepMembers = function (superset, subset, msg) {
+    new Assertion(superset, msg, assert.notIncludeDeepMembers, true)
+      .to.not.include.deep.members(subset);
+  }
+
+  /**
+   * ### .includeOrderedMembers(superset, subset, [message])
+   *
+   * Asserts that `subset` is included in `superset` in the same order
+   * beginning with the first element in `superset`. Uses a strict equality
+   * check (===).
+   *
+   *     assert.includeOrderedMembers([ 1, 2, 3 ], [ 1, 2 ], 'include ordered members');
+   *
+   * @name includeOrderedMembers
+   * @param {Array} superset
+   * @param {Array} subset
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.includeOrderedMembers = function (superset, subset, msg) {
+    new Assertion(superset, msg, assert.includeOrderedMembers, true)
+      .to.include.ordered.members(subset);
+  }
+
+  /**
+   * ### .notIncludeOrderedMembers(superset, subset, [message])
+   *
+   * Asserts that `subset` isn't included in `superset` in the same order
+   * beginning with the first element in `superset`. Uses a strict equality
+   * check (===).
+   *
+   *     assert.notIncludeOrderedMembers([ 1, 2, 3 ], [ 2, 1 ], 'not include ordered members');
+   *     assert.notIncludeOrderedMembers([ 1, 2, 3 ], [ 2, 3 ], 'not include ordered members');
+   *
+   * @name notIncludeOrderedMembers
+   * @param {Array} superset
+   * @param {Array} subset
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notIncludeOrderedMembers = function (superset, subset, msg) {
+    new Assertion(superset, msg, assert.notIncludeOrderedMembers, true)
+      .to.not.include.ordered.members(subset);
+  }
+
+  /**
+   * ### .includeDeepOrderedMembers(superset, subset, [message])
+   *
+   * Asserts that `subset` is included in `superset` in the same order
+   * beginning with the first element in `superset`. Uses a deep equality
+   * check.
+   *
+   *     assert.includeDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { a: 1 }, { b: 2 } ], 'include deep ordered members');
+   *
+   * @name includeDeepOrderedMembers
+   * @param {Array} superset
+   * @param {Array} subset
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.includeDeepOrderedMembers = function (superset, subset, msg) {
+    new Assertion(superset, msg, assert.includeDeepOrderedMembers, true)
+      .to.include.deep.ordered.members(subset);
+  }
+
+  /**
+   * ### .notIncludeDeepOrderedMembers(superset, subset, [message])
+   *
+   * Asserts that `subset` isn't included in `superset` in the same order
+   * beginning with the first element in `superset`. Uses a deep equality
+   * check.
+   *
+   *     assert.notIncludeDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { a: 1 }, { f: 5 } ], 'not include deep ordered members');
+   *     assert.notIncludeDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { a: 1 } ], 'not include deep ordered members');
+   *     assert.notIncludeDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { c: 3 } ], 'not include deep ordered members');
+   *
+   * @name notIncludeDeepOrderedMembers
+   * @param {Array} superset
+   * @param {Array} subset
+   * @param {String} message
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.notIncludeDeepOrderedMembers = function (superset, subset, msg) {
+    new Assertion(superset, msg, assert.notIncludeDeepOrderedMembers, true)
+      .to.not.include.deep.ordered.members(subset);
   }
 
   /**
@@ -11677,13 +15277,13 @@ module.exports = function (chai, util) {
    */
 
   assert.oneOf = function (inList, list, msg) {
-    new Assertion(inList, msg).to.be.oneOf(list);
+    new Assertion(inList, msg, assert.oneOf, true).to.be.oneOf(list);
   }
 
-   /**
-   * ### .changes(function, object, property)
+  /**
+   * ### .changes(function, object, property, [message])
    *
-   * Asserts that a function changes the value of a property
+   * Asserts that a function changes the value of a property.
    *
    *     var obj = { val: 10 };
    *     var fn = function() { obj.val = 22 };
@@ -11691,21 +15291,59 @@ module.exports = function (chai, util) {
    *
    * @name changes
    * @param {Function} modifier function
-   * @param {Object} object
-   * @param {String} property name
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
    * @param {String} message _optional_
    * @namespace Assert
    * @api public
    */
 
-  assert.changes = function (fn, obj, prop) {
-    new Assertion(fn).to.change(obj, prop);
+  assert.changes = function (fn, obj, prop, msg) {
+    if (arguments.length === 3 && typeof obj === 'function') {
+      msg = prop;
+      prop = null;
+    }
+
+    new Assertion(fn, msg, assert.changes, true).to.change(obj, prop);
   }
 
    /**
-   * ### .doesNotChange(function, object, property)
+   * ### .changesBy(function, object, property, delta, [message])
    *
-   * Asserts that a function does not changes the value of a property
+   * Asserts that a function changes the value of a property by an amount (delta).
+   *
+   *     var obj = { val: 10 };
+   *     var fn = function() { obj.val += 2 };
+   *     assert.changesBy(fn, obj, 'val', 2);
+   *
+   * @name changesBy
+   * @param {Function} modifier function
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
+   * @param {Number} change amount (delta)
+   * @param {String} message _optional_
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.changesBy = function (fn, obj, prop, delta, msg) {
+    if (arguments.length === 4 && typeof obj === 'function') {
+      var tmpMsg = delta;
+      delta = prop;
+      msg = tmpMsg;
+    } else if (arguments.length === 3) {
+      delta = prop;
+      prop = null;
+    }
+
+    new Assertion(fn, msg, assert.changesBy, true)
+      .to.change(obj, prop).by(delta);
+  }
+
+   /**
+   * ### .doesNotChange(function, object, property, [message])
+   *
+   * Asserts that a function does not change the value of a property.
    *
    *     var obj = { val: 10 };
    *     var fn = function() { console.log('foo'); };
@@ -11713,21 +15351,60 @@ module.exports = function (chai, util) {
    *
    * @name doesNotChange
    * @param {Function} modifier function
-   * @param {Object} object
-   * @param {String} property name
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
    * @param {String} message _optional_
    * @namespace Assert
    * @api public
    */
 
-  assert.doesNotChange = function (fn, obj, prop) {
-    new Assertion(fn).to.not.change(obj, prop);
+  assert.doesNotChange = function (fn, obj, prop, msg) {
+    if (arguments.length === 3 && typeof obj === 'function') {
+      msg = prop;
+      prop = null;
+    }
+
+    return new Assertion(fn, msg, assert.doesNotChange, true)
+      .to.not.change(obj, prop);
   }
 
-   /**
-   * ### .increases(function, object, property)
+  /**
+   * ### .changesButNotBy(function, object, property, delta, [message])
    *
-   * Asserts that a function increases an object property
+   * Asserts that a function does not change the value of a property or of a function's return value by an amount (delta)
+   *
+   *     var obj = { val: 10 };
+   *     var fn = function() { obj.val += 10 };
+   *     assert.changesButNotBy(fn, obj, 'val', 5);
+   *
+   * @name changesButNotBy
+   * @param {Function} modifier function
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
+   * @param {Number} change amount (delta)
+   * @param {String} message _optional_
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.changesButNotBy = function (fn, obj, prop, delta, msg) {
+    if (arguments.length === 4 && typeof obj === 'function') {
+      var tmpMsg = delta;
+      delta = prop;
+      msg = tmpMsg;
+    } else if (arguments.length === 3) {
+      delta = prop;
+      prop = null;
+    }
+
+    new Assertion(fn, msg, assert.changesButNotBy, true)
+      .to.change(obj, prop).but.not.by(delta);
+  }
+
+  /**
+   * ### .increases(function, object, property, [message])
+   *
+   * Asserts that a function increases a numeric object property.
    *
    *     var obj = { val: 10 };
    *     var fn = function() { obj.val = 13 };
@@ -11735,21 +15412,60 @@ module.exports = function (chai, util) {
    *
    * @name increases
    * @param {Function} modifier function
-   * @param {Object} object
-   * @param {String} property name
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
    * @param {String} message _optional_
    * @namespace Assert
    * @api public
    */
 
-  assert.increases = function (fn, obj, prop) {
-    new Assertion(fn).to.increase(obj, prop);
+  assert.increases = function (fn, obj, prop, msg) {
+    if (arguments.length === 3 && typeof obj === 'function') {
+      msg = prop;
+      prop = null;
+    }
+
+    return new Assertion(fn, msg, assert.increases, true)
+      .to.increase(obj, prop);
   }
 
-   /**
-   * ### .doesNotIncrease(function, object, property)
+  /**
+   * ### .increasesBy(function, object, property, delta, [message])
    *
-   * Asserts that a function does not increase object property
+   * Asserts that a function increases a numeric object property or a function's return value by an amount (delta).
+   *
+   *     var obj = { val: 10 };
+   *     var fn = function() { obj.val += 10 };
+   *     assert.increasesBy(fn, obj, 'val', 10);
+   *
+   * @name increasesBy
+   * @param {Function} modifier function
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
+   * @param {Number} change amount (delta)
+   * @param {String} message _optional_
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.increasesBy = function (fn, obj, prop, delta, msg) {
+    if (arguments.length === 4 && typeof obj === 'function') {
+      var tmpMsg = delta;
+      delta = prop;
+      msg = tmpMsg;
+    } else if (arguments.length === 3) {
+      delta = prop;
+      prop = null;
+    }
+
+    new Assertion(fn, msg, assert.increasesBy, true)
+      .to.increase(obj, prop).by(delta);
+  }
+
+  /**
+   * ### .doesNotIncrease(function, object, property, [message])
+   *
+   * Asserts that a function does not increase a numeric object property.
    *
    *     var obj = { val: 10 };
    *     var fn = function() { obj.val = 8 };
@@ -11757,21 +15473,60 @@ module.exports = function (chai, util) {
    *
    * @name doesNotIncrease
    * @param {Function} modifier function
-   * @param {Object} object
-   * @param {String} property name
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
    * @param {String} message _optional_
    * @namespace Assert
    * @api public
    */
 
-  assert.doesNotIncrease = function (fn, obj, prop) {
-    new Assertion(fn).to.not.increase(obj, prop);
+  assert.doesNotIncrease = function (fn, obj, prop, msg) {
+    if (arguments.length === 3 && typeof obj === 'function') {
+      msg = prop;
+      prop = null;
+    }
+
+    return new Assertion(fn, msg, assert.doesNotIncrease, true)
+      .to.not.increase(obj, prop);
   }
 
-   /**
-   * ### .decreases(function, object, property)
+  /**
+   * ### .increasesButNotBy(function, object, property, [message])
    *
-   * Asserts that a function decreases an object property
+   * Asserts that a function does not increase a numeric object property or function's return value by an amount (delta).
+   *
+   *     var obj = { val: 10 };
+   *     var fn = function() { obj.val = 15 };
+   *     assert.increasesButNotBy(fn, obj, 'val', 10);
+   *
+   * @name increasesButNotBy
+   * @param {Function} modifier function
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
+   * @param {Number} change amount (delta)
+   * @param {String} message _optional_
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.increasesButNotBy = function (fn, obj, prop, delta, msg) {
+    if (arguments.length === 4 && typeof obj === 'function') {
+      var tmpMsg = delta;
+      delta = prop;
+      msg = tmpMsg;
+    } else if (arguments.length === 3) {
+      delta = prop;
+      prop = null;
+    }
+
+    new Assertion(fn, msg, assert.increasesButNotBy, true)
+      .to.increase(obj, prop).but.not.by(delta);
+  }
+
+  /**
+   * ### .decreases(function, object, property, [message])
+   *
+   * Asserts that a function decreases a numeric object property.
    *
    *     var obj = { val: 10 };
    *     var fn = function() { obj.val = 5 };
@@ -11779,21 +15534,60 @@ module.exports = function (chai, util) {
    *
    * @name decreases
    * @param {Function} modifier function
-   * @param {Object} object
-   * @param {String} property name
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
    * @param {String} message _optional_
    * @namespace Assert
    * @api public
    */
 
-  assert.decreases = function (fn, obj, prop) {
-    new Assertion(fn).to.decrease(obj, prop);
+  assert.decreases = function (fn, obj, prop, msg) {
+    if (arguments.length === 3 && typeof obj === 'function') {
+      msg = prop;
+      prop = null;
+    }
+
+    return new Assertion(fn, msg, assert.decreases, true)
+      .to.decrease(obj, prop);
   }
 
-   /**
-   * ### .doesNotDecrease(function, object, property)
+  /**
+   * ### .decreasesBy(function, object, property, delta, [message])
    *
-   * Asserts that a function does not decreases an object property
+   * Asserts that a function decreases a numeric object property or a function's return value by an amount (delta)
+   *
+   *     var obj = { val: 10 };
+   *     var fn = function() { obj.val -= 5 };
+   *     assert.decreasesBy(fn, obj, 'val', 5);
+   *
+   * @name decreasesBy
+   * @param {Function} modifier function
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
+   * @param {Number} change amount (delta)
+   * @param {String} message _optional_
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.decreasesBy = function (fn, obj, prop, delta, msg) {
+    if (arguments.length === 4 && typeof obj === 'function') {
+      var tmpMsg = delta;
+      delta = prop;
+      msg = tmpMsg;
+    } else if (arguments.length === 3) {
+      delta = prop;
+      prop = null;
+    }
+
+    new Assertion(fn, msg, assert.decreasesBy, true)
+      .to.decrease(obj, prop).by(delta);
+  }
+
+  /**
+   * ### .doesNotDecrease(function, object, property, [message])
+   *
+   * Asserts that a function does not decreases a numeric object property.
    *
    *     var obj = { val: 10 };
    *     var fn = function() { obj.val = 15 };
@@ -11801,15 +15595,87 @@ module.exports = function (chai, util) {
    *
    * @name doesNotDecrease
    * @param {Function} modifier function
-   * @param {Object} object
-   * @param {String} property name
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
    * @param {String} message _optional_
    * @namespace Assert
    * @api public
    */
 
-  assert.doesNotDecrease = function (fn, obj, prop) {
-    new Assertion(fn).to.not.decrease(obj, prop);
+  assert.doesNotDecrease = function (fn, obj, prop, msg) {
+    if (arguments.length === 3 && typeof obj === 'function') {
+      msg = prop;
+      prop = null;
+    }
+
+    return new Assertion(fn, msg, assert.doesNotDecrease, true)
+      .to.not.decrease(obj, prop);
+  }
+
+  /**
+   * ### .doesNotDecreaseBy(function, object, property, delta, [message])
+   *
+   * Asserts that a function does not decreases a numeric object property or a function's return value by an amount (delta)
+   *
+   *     var obj = { val: 10 };
+   *     var fn = function() { obj.val = 5 };
+   *     assert.doesNotDecreaseBy(fn, obj, 'val', 1);
+   *
+   * @name doesNotDecrease
+   * @param {Function} modifier function
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
+   * @param {Number} change amount (delta)
+   * @param {String} message _optional_
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.doesNotDecreaseBy = function (fn, obj, prop, delta, msg) {
+    if (arguments.length === 4 && typeof obj === 'function') {
+      var tmpMsg = delta;
+      delta = prop;
+      msg = tmpMsg;
+    } else if (arguments.length === 3) {
+      delta = prop;
+      prop = null;
+    }
+
+    return new Assertion(fn, msg, assert.doesNotDecreaseBy, true)
+      .to.not.decrease(obj, prop).by(delta);
+  }
+
+  /**
+   * ### .decreasesButNotBy(function, object, property, delta, [message])
+   *
+   * Asserts that a function does not decreases a numeric object property or a function's return value by an amount (delta)
+   *
+   *     var obj = { val: 10 };
+   *     var fn = function() { obj.val = 5 };
+   *     assert.decreasesButNotBy(fn, obj, 'val', 1);
+   *
+   * @name decreasesButNotBy
+   * @param {Function} modifier function
+   * @param {Object} object or getter function
+   * @param {String} property name _optional_
+   * @param {Number} change amount (delta)
+   * @param {String} message _optional_
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.decreasesButNotBy = function (fn, obj, prop, delta, msg) {
+    if (arguments.length === 4 && typeof obj === 'function') {
+      var tmpMsg = delta;
+      delta = prop;
+      msg = tmpMsg;
+    } else if (arguments.length === 3) {
+      delta = prop;
+      prop = null;
+    }
+
+    new Assertion(fn, msg, assert.decreasesButNotBy, true)
+      .to.decrease(obj, prop).but.not.by(delta);
   }
 
   /*!
@@ -11850,7 +15716,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isExtensible = function (obj, msg) {
-    new Assertion(obj, msg).to.be.extensible;
+    new Assertion(obj, msg, assert.isExtensible, true).to.be.extensible;
   };
 
   /**
@@ -11860,7 +15726,7 @@ module.exports = function (chai, util) {
    *
    *     var nonExtensibleObject = Object.preventExtensions({});
    *     var sealedObject = Object.seal({});
-   *     var frozenObject = Object.freese({});
+   *     var frozenObject = Object.freeze({});
    *
    *     assert.isNotExtensible(nonExtensibleObject);
    *     assert.isNotExtensible(sealedObject);
@@ -11875,7 +15741,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotExtensible = function (obj, msg) {
-    new Assertion(obj, msg).to.not.be.extensible;
+    new Assertion(obj, msg, assert.isNotExtensible, true).to.not.be.extensible;
   };
 
   /**
@@ -11899,7 +15765,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isSealed = function (obj, msg) {
-    new Assertion(obj, msg).to.be.sealed;
+    new Assertion(obj, msg, assert.isSealed, true).to.be.sealed;
   };
 
   /**
@@ -11918,7 +15784,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotSealed = function (obj, msg) {
-    new Assertion(obj, msg).to.not.be.sealed;
+    new Assertion(obj, msg, assert.isNotSealed, true).to.not.be.sealed;
   };
 
   /**
@@ -11939,7 +15805,7 @@ module.exports = function (chai, util) {
    */
 
   assert.isFrozen = function (obj, msg) {
-    new Assertion(obj, msg).to.be.frozen;
+    new Assertion(obj, msg, assert.isFrozen, true).to.be.frozen;
   };
 
   /**
@@ -11958,7 +15824,59 @@ module.exports = function (chai, util) {
    */
 
   assert.isNotFrozen = function (obj, msg) {
-    new Assertion(obj, msg).to.not.be.frozen;
+    new Assertion(obj, msg, assert.isNotFrozen, true).to.not.be.frozen;
+  };
+
+  /**
+   * ### .isEmpty(target)
+   *
+   * Asserts that the target does not contain any values.
+   * For arrays and strings, it checks the `length` property.
+   * For `Map` and `Set` instances, it checks the `size` property.
+   * For non-function objects, it gets the count of own
+   * enumerable string keys.
+   *
+   *     assert.isEmpty([]);
+   *     assert.isEmpty('');
+   *     assert.isEmpty(new Map);
+   *     assert.isEmpty({});
+   *
+   * @name isEmpty
+   * @alias empty
+   * @param {Object|Array|String|Map|Set} target
+   * @param {String} message _optional_
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.isEmpty = function(val, msg) {
+    new Assertion(val, msg, assert.isEmpty, true).to.be.empty;
+  };
+
+  /**
+   * ### .isNotEmpty(target)
+   *
+   * Asserts that the target contains values.
+   * For arrays and strings, it checks the `length` property.
+   * For `Map` and `Set` instances, it checks the `size` property.
+   * For non-function objects, it gets the count of own
+   * enumerable string keys.
+   *
+   *     assert.isNotEmpty([1, 2]);
+   *     assert.isNotEmpty('34');
+   *     assert.isNotEmpty(new Set([5, 6]));
+   *     assert.isNotEmpty({ key: 7 });
+   *
+   * @name isNotEmpty
+   * @alias notEmpty
+   * @param {Object|Array|String|Map|Set} target
+   * @param {String} message _optional_
+   * @namespace Assert
+   * @api public
+   */
+
+  assert.isNotEmpty = function(val, msg) {
+    new Assertion(val, msg, assert.isNotEmpty, true).to.not.be.empty;
   };
 
   /*!
@@ -11978,12 +15896,14 @@ module.exports = function (chai, util) {
   ('isSealed', 'sealed')
   ('isNotSealed', 'notSealed')
   ('isFrozen', 'frozen')
-  ('isNotFrozen', 'notFrozen');
+  ('isNotFrozen', 'notFrozen')
+  ('isEmpty', 'empty')
+  ('isNotEmpty', 'notEmpty');
 };
 
 
 /***/ }),
-/* 93 */
+/* 97 */
 /***/ (function(module, exports) {
 
 /*!
@@ -12007,7 +15927,7 @@ module.exports = function (chai, util) {
    * @param {Mixed} expected
    * @param {String} message
    * @param {String} operator
-   * @namespace Expect
+   * @namespace BDD
    * @api public
    */
 
@@ -12023,7 +15943,7 @@ module.exports = function (chai, util) {
 
 
 /***/ }),
-/* 94 */
+/* 98 */
 /***/ (function(module, exports) {
 
 /*!
@@ -12038,7 +15958,10 @@ module.exports = function (chai, util) {
   function loadShould () {
     // explicitly define this method as function as to have it's name to include as `ssfi`
     function shouldGetter() {
-      if (this instanceof String || this instanceof Number || this instanceof Boolean ) {
+      if (this instanceof String
+          || this instanceof Number
+          || this instanceof Boolean
+          || typeof Symbol === 'function' && this instanceof Symbol) {
         return new Assertion(this.valueOf(), null, shouldGetter);
       }
       return new Assertion(this, null, shouldGetter);
@@ -12076,7 +15999,7 @@ module.exports = function (chai, util) {
      * @param {Mixed} expected
      * @param {String} message
      * @param {String} operator
-     * @namespace Should
+     * @namespace BDD
      * @api public
      */
 
@@ -12230,7 +16153,7 @@ module.exports = function (chai, util) {
 
 
 /***/ }),
-/* 95 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -12243,28 +16166,41 @@ module.exports = function (chai, util) {
  * Module dependencies
  */
 
-var transferFlags = __webpack_require__(54);
-var flag = __webpack_require__(16);
-var config = __webpack_require__(19);
+var addLengthGuard = __webpack_require__(29);
+var chai = __webpack_require__(18);
+var flag = __webpack_require__(6);
+var proxify = __webpack_require__(32);
+var transferFlags = __webpack_require__(20);
 
 /*!
  * Module variables
  */
 
-// Check whether `__proto__` is supported
-var hasProtoSupport = '__proto__' in Object;
+// Check whether `Object.setPrototypeOf` is supported
+var canSetPrototype = typeof Object.setPrototypeOf === 'function';
 
-// Without `__proto__` support, this module will need to add properties to a function.
-// However, some Function.prototype methods cannot be overwritten,
-// and there seems no easy cross-platform way to detect them (@see chaijs/chai/issues/69).
-var excludeNames = /^(?:length|name|arguments|caller)$/;
+// Without `Object.setPrototypeOf` support, this module will need to add properties to a function.
+// However, some of functions' own props are not configurable and should be skipped.
+var testFn = function() {};
+var excludeNames = Object.getOwnPropertyNames(testFn).filter(function(name) {
+  var propDesc = Object.getOwnPropertyDescriptor(testFn, name);
+
+  // Note: PhantomJS 1.x includes `callee` as one of `testFn`'s own properties,
+  // but then returns `undefined` as the property descriptor for `callee`. As a
+  // workaround, we perform an otherwise unnecessary type-check for `propDesc`,
+  // and then filter it out if it's not an object as it should be.
+  if (typeof propDesc !== 'object')
+    return true;
+
+  return !propDesc.configurable;
+});
 
 // Cache `Function` properties
 var call  = Function.prototype.call,
     apply = Function.prototype.apply;
 
 /**
- * ### addChainableMethod (ctx, name, method, chainingBehavior)
+ * ### .addChainableMethod(ctx, name, method, chainingBehavior)
  *
  * Adds a method to an object, such that the method can also be chained.
  *
@@ -12292,7 +16228,7 @@ var call  = Function.prototype.call,
  * @api public
  */
 
-module.exports = function (ctx, name, method, chainingBehavior) {
+module.exports = function addChainableMethod(ctx, name, method, chainingBehavior) {
   if (typeof chainingBehavior !== 'function') {
     chainingBehavior = function () { };
   }
@@ -12309,38 +16245,65 @@ module.exports = function (ctx, name, method, chainingBehavior) {
   ctx.__methods[name] = chainableBehavior;
 
   Object.defineProperty(ctx, name,
-    { get: function () {
+    { get: function chainableMethodGetter() {
         chainableBehavior.chainingBehavior.call(this);
 
-        var assert = function assert() {
-          var old_ssfi = flag(this, 'ssfi');
-          if (old_ssfi && config.includeStack === false)
-            flag(this, 'ssfi', assert);
+        var chainableMethodWrapper = function () {
+          // Setting the `ssfi` flag to `chainableMethodWrapper` causes this
+          // function to be the starting point for removing implementation
+          // frames from the stack trace of a failed assertion.
+          //
+          // However, we only want to use this function as the starting point if
+          // the `lockSsfi` flag isn't set.
+          //
+          // If the `lockSsfi` flag is set, then this assertion is being
+          // invoked from inside of another assertion. In this case, the `ssfi`
+          // flag has already been set by the outer assertion.
+          //
+          // Note that overwriting a chainable method merely replaces the saved
+          // methods in `ctx.__methods` instead of completely replacing the
+          // overwritten assertion. Therefore, an overwriting assertion won't
+          // set the `ssfi` or `lockSsfi` flags.
+          if (!flag(this, 'lockSsfi')) {
+            flag(this, 'ssfi', chainableMethodWrapper);
+          }
+
           var result = chainableBehavior.method.apply(this, arguments);
-          return result === undefined ? this : result;
+          if (result !== undefined) {
+            return result;
+          }
+
+          var newAssertion = new chai.Assertion();
+          transferFlags(this, newAssertion);
+          return newAssertion;
         };
 
-        // Use `__proto__` if available
-        if (hasProtoSupport) {
+        addLengthGuard(chainableMethodWrapper, name, true);
+
+        // Use `Object.setPrototypeOf` if available
+        if (canSetPrototype) {
           // Inherit all properties from the object by replacing the `Function` prototype
-          var prototype = assert.__proto__ = Object.create(this);
+          var prototype = Object.create(this);
           // Restore the `call` and `apply` methods from `Function`
           prototype.call = call;
           prototype.apply = apply;
+          Object.setPrototypeOf(chainableMethodWrapper, prototype);
         }
         // Otherwise, redefine all properties (slow!)
         else {
           var asserterNames = Object.getOwnPropertyNames(ctx);
           asserterNames.forEach(function (asserterName) {
-            if (!excludeNames.test(asserterName)) {
-              var pd = Object.getOwnPropertyDescriptor(ctx, asserterName);
-              Object.defineProperty(assert, asserterName, pd);
+            if (excludeNames.indexOf(asserterName) !== -1) {
+              return;
             }
+
+            var pd = Object.getOwnPropertyDescriptor(ctx, asserterName);
+            Object.defineProperty(chainableMethodWrapper, asserterName, pd);
           });
         }
 
-        transferFlags(this, assert);
-        return assert;
+        transferFlags(this, chainableMethodWrapper);
+        return proxify(chainableMethodWrapper);
       }
     , configurable: true
   });
@@ -12348,7 +16311,7 @@ module.exports = function (ctx, name, method, chainingBehavior) {
 
 
 /***/ }),
-/* 96 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -12357,10 +16320,14 @@ module.exports = function (ctx, name, method, chainingBehavior) {
  * MIT Licensed
  */
 
-var config = __webpack_require__(19);
+var addLengthGuard = __webpack_require__(29);
+var chai = __webpack_require__(18);
+var flag = __webpack_require__(6);
+var proxify = __webpack_require__(32);
+var transferFlags = __webpack_require__(20);
 
 /**
- * ### .addMethod (ctx, name, method)
+ * ### .addMethod(ctx, name, method)
  *
  * Adds a method to the prototype of an object.
  *
@@ -12384,21 +16351,41 @@ var config = __webpack_require__(19);
  * @name addMethod
  * @api public
  */
-var flag = __webpack_require__(16);
 
-module.exports = function (ctx, name, method) {
-  ctx[name] = function () {
-    var old_ssfi = flag(this, 'ssfi');
-    if (old_ssfi && config.includeStack === false)
-      flag(this, 'ssfi', ctx[name]);
+module.exports = function addMethod(ctx, name, method) {
+  var methodWrapper = function () {
+    // Setting the `ssfi` flag to `methodWrapper` causes this function to be the
+    // starting point for removing implementation frames from the stack trace of
+    // a failed assertion.
+    //
+    // However, we only want to use this function as the starting point if the
+    // `lockSsfi` flag isn't set.
+    //
+    // If the `lockSsfi` flag is set, then either this assertion has been
+    // overwritten by another assertion, or this assertion is being invoked from
+    // inside of another assertion. In the first case, the `ssfi` flag has
+    // already been set by the overwriting assertion. In the second case, the
+    // `ssfi` flag has already been set by the outer assertion.
+    if (!flag(this, 'lockSsfi')) {
+      flag(this, 'ssfi', methodWrapper);
+    }
+
     var result = method.apply(this, arguments);
-    return result === undefined ? this : result;
+    if (result !== undefined)
+      return result;
+
+    var newAssertion = new chai.Assertion();
+    transferFlags(this, newAssertion);
+    return newAssertion;
   };
+
+  addLengthGuard(methodWrapper, name, false);
+  ctx[name] = proxify(methodWrapper, name);
 };
 
 
 /***/ }),
-/* 97 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -12407,11 +16394,13 @@ module.exports = function (ctx, name, method) {
  * MIT Licensed
  */
 
-var config = __webpack_require__(19);
-var flag = __webpack_require__(16);
+var chai = __webpack_require__(18);
+var flag = __webpack_require__(6);
+var isProxyEnabled = __webpack_require__(31);
+var transferFlags = __webpack_require__(20);
 
 /**
- * ### addProperty (ctx, name, getter)
+ * ### .addProperty(ctx, name, getter)
  *
  * Adds a property to the prototype of an object.
  *
@@ -12436,15 +16425,37 @@ var flag = __webpack_require__(16);
  * @api public
  */
 
-module.exports = function (ctx, name, getter) {
+module.exports = function addProperty(ctx, name, getter) {
+  getter = getter === undefined ? new Function() : getter;
+
   Object.defineProperty(ctx, name,
-    { get: function addProperty() {
-        var old_ssfi = flag(this, 'ssfi');
-        if (old_ssfi && config.includeStack === false)
-          flag(this, 'ssfi', addProperty);
+    { get: function propertyGetter() {
+        // Setting the `ssfi` flag to `propertyGetter` causes this function to
+        // be the starting point for removing implementation frames from the
+        // stack trace of a failed assertion.
+        //
+        // However, we only want to use this function as the starting point if
+        // the `lockSsfi` flag isn't set and proxy protection is disabled.
+        //
+        // If the `lockSsfi` flag is set, then either this assertion has been
+        // overwritten by another assertion, or this assertion is being invoked
+        // from inside of another assertion. In the first case, the `ssfi` flag
+        // has already been set by the overwriting assertion. In the second
+        // case, the `ssfi` flag has already been set by the outer assertion.
+        //
+        // If proxy protection is enabled, then the `ssfi` flag has already been
+        // set by the proxy getter.
+        if (!isProxyEnabled() && !flag(this, 'lockSsfi')) {
+          flag(this, 'ssfi', propertyGetter);
+        }
 
         var result = getter.call(this);
-        return result === undefined ? this : result;
+        if (result !== undefined)
+          return result;
+
+        var newAssertion = new chai.Assertion();
+        transferFlags(this, newAssertion);
+        return newAssertion;
       }
     , configurable: true
   });
@@ -12452,7 +16463,44 @@ module.exports = function (ctx, name, getter) {
 
 
 /***/ }),
-/* 98 */
+/* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+ * Chai - compareByInspect utility
+ * Copyright(c) 2011-2016 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/*!
+ * Module dependancies
+ */
+
+var inspect = __webpack_require__(30);
+
+/**
+ * ### .compareByInspect(mixed, mixed)
+ *
+ * To be used as a compareFunction with Array.prototype.sort. Compares elements
+ * using inspect instead of default behavior of using toString so that Symbols
+ * and objects with irregular/missing toString can still be sorted without a
+ * TypeError.
+ *
+ * @param {Mixed} first element to compare
+ * @param {Mixed} second element to compare
+ * @returns {Number} -1 if 'a' should come before 'b'; otherwise 1 
+ * @name compareByInspect
+ * @namespace Utils
+ * @api public
+ */
+
+module.exports = function compareByInspect(a, b) {
+  return inspect(a) < inspect(b) ? -1 : 1;
+};
+
+
+/***/ }),
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -12462,7 +16510,7 @@ module.exports = function (ctx, name, getter) {
  */
 
 /**
- * ### expectTypes(obj, types)
+ * ### .expectTypes(obj, types)
  *
  * Ensures that the object being tested against is of a valid type.
  *
@@ -12470,17 +16518,23 @@ module.exports = function (ctx, name, getter) {
  *
  * @param {Mixed} obj constructed Assertion
  * @param {Array} type A list of allowed types for this assertion
+ * @param {Function} ssfi starting point for removing implementation frames from
+ *                        stack trace of AssertionError
  * @namespace Utils
  * @name expectTypes
  * @api public
  */
 
-var AssertionError = __webpack_require__(48);
-var flag = __webpack_require__(16);
-var type = __webpack_require__(47);
+var AssertionError = __webpack_require__(54);
+var flag = __webpack_require__(6);
+var type = __webpack_require__(53);
 
-module.exports = function (obj, types) {
-  var obj = flag(obj, 'object');
+module.exports = function expectTypes(obj, types, ssfi) {
+  var flagMsg = flag(obj, 'message');
+
+  flagMsg = flagMsg ? flagMsg + ': ' : '';
+
+  obj = flag(obj, 'object');
   types = types.map(function (t) { return t.toLowerCase(); });
   types.sort();
 
@@ -12491,16 +16545,20 @@ module.exports = function (obj, types) {
     return or + art + ' ' + t;
   }).join(', ');
 
-  if (!types.some(function (expected) { return type(obj) === expected; })) {
+  var objType = type(obj).toLowerCase();
+
+  if (!types.some(function (expected) { return objType === expected; })) {
     throw new AssertionError(
-      'object tested must be ' + str + ', but ' + type(obj) + ' given'
+      flagMsg + 'object tested must be ' + str + ', but ' + objType + ' given',
+      undefined,
+      ssfi
     );
   }
 };
 
 
 /***/ }),
-/* 99 */
+/* 104 */
 /***/ (function(module, exports) {
 
 /*!
@@ -12532,7 +16590,7 @@ module.exports = function getEnumerableProperties(object) {
 
 
 /***/ }),
-/* 100 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -12545,10 +16603,10 @@ module.exports = function getEnumerableProperties(object) {
  * Module dependancies
  */
 
-var flag = __webpack_require__(16)
-  , getActual = __webpack_require__(49)
-  , inspect = __webpack_require__(33)
-  , objDisplay = __webpack_require__(53);
+var flag = __webpack_require__(6)
+  , getActual = __webpack_require__(55)
+  , inspect = __webpack_require__(30)
+  , objDisplay = __webpack_require__(58);
 
 /**
  * ### .getMessage(object, message, negateMessage)
@@ -12569,7 +16627,7 @@ var flag = __webpack_require__(16)
  * @api public
  */
 
-module.exports = function (obj, args) {
+module.exports = function getMessage(obj, args) {
   var negate = flag(obj, 'negate')
     , val = flag(obj, 'object')
     , expected = args[3]
@@ -12589,98 +16647,42 @@ module.exports = function (obj, args) {
 
 
 /***/ }),
-/* 101 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
- * Chai - getPathValue utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * @see https://github.com/logicalparadox/filtr
+ * Chai - getOwnEnumerableProperties utility
+ * Copyright(c) 2011-2016 Jake Luer <jake@alogicalparadox.com>
  * MIT Licensed
  */
-
-var getPathInfo = __webpack_require__(51);
-
-/**
- * ### .getPathValue(path, object)
- *
- * This allows the retrieval of values in an
- * object given a string path.
- *
- *     var obj = {
- *         prop1: {
- *             arr: ['a', 'b', 'c']
- *           , str: 'Hello'
- *         }
- *       , prop2: {
- *             arr: [ { nested: 'Universe' } ]
- *           , str: 'Hello again!'
- *         }
- *     }
- *
- * The following would be the results.
- *
- *     getPathValue('prop1.str', obj); // Hello
- *     getPathValue('prop1.att[2]', obj); // b
- *     getPathValue('prop2.arr[0].nested', obj); // Universe
- *
- * @param {String} path
- * @param {Object} object
- * @returns {Object} value or `undefined`
- * @namespace Utils
- * @name getPathValue
- * @api public
- */
-module.exports = function(path, obj) {
-  var info = getPathInfo(path, obj);
-  return info.value;
-};
-
-
-/***/ }),
-/* 102 */
-/***/ (function(module, exports) {
 
 /*!
- * Chai - getProperties utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
+ * Module dependancies
  */
 
+var getOwnEnumerablePropertySymbols = __webpack_require__(56);
+
 /**
- * ### .getProperties(object)
+ * ### .getOwnEnumerableProperties(object)
  *
- * This allows the retrieval of property names of an object, enumerable or not,
- * inherited or not.
+ * This allows the retrieval of directly-owned enumerable property names and
+ * symbols of an object. This function is necessary because Object.keys only
+ * returns enumerable property names, not enumerable property symbols.
  *
  * @param {Object} object
  * @returns {Array}
  * @namespace Utils
- * @name getProperties
+ * @name getOwnEnumerableProperties
  * @api public
  */
 
-module.exports = function getProperties(object) {
-  var result = Object.getOwnPropertyNames(object);
-
-  function addProperty(property) {
-    if (result.indexOf(property) === -1) {
-      result.push(property);
-    }
-  }
-
-  var proto = Object.getPrototypeOf(object);
-  while (proto !== null) {
-    Object.getOwnPropertyNames(proto).forEach(addProperty);
-    proto = Object.getPrototypeOf(proto);
-  }
-
-  return result;
+module.exports = function getOwnEnumerableProperties(obj) {
+  return Object.keys(obj).concat(getOwnEnumerablePropertySymbols(obj));
 };
 
 
 /***/ }),
-/* 103 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -12690,134 +16692,208 @@ module.exports = function getProperties(object) {
  */
 
 /*!
- * Main exports
+ * Dependencies that are used for multiple exports are required here only once
  */
 
-var exports = module.exports = {};
+var pathval = __webpack_require__(130);
 
 /*!
  * test utility
  */
 
-exports.test = __webpack_require__(107);
+exports.test = __webpack_require__(112);
 
 /*!
  * type utility
  */
 
-exports.type = __webpack_require__(47);
+exports.type = __webpack_require__(53);
 
 /*!
  * expectTypes utility
  */
-exports.expectTypes = __webpack_require__(98);
+exports.expectTypes = __webpack_require__(103);
 
 /*!
  * message utility
  */
 
-exports.getMessage = __webpack_require__(100);
+exports.getMessage = __webpack_require__(105);
 
 /*!
  * actual utility
  */
 
-exports.getActual = __webpack_require__(49);
+exports.getActual = __webpack_require__(55);
 
 /*!
  * Inspect util
  */
 
-exports.inspect = __webpack_require__(33);
+exports.inspect = __webpack_require__(30);
 
 /*!
  * Object Display util
  */
 
-exports.objDisplay = __webpack_require__(53);
+exports.objDisplay = __webpack_require__(58);
 
 /*!
  * Flag utility
  */
 
-exports.flag = __webpack_require__(16);
+exports.flag = __webpack_require__(6);
 
 /*!
  * Flag transferring utility
  */
 
-exports.transferFlags = __webpack_require__(54);
+exports.transferFlags = __webpack_require__(20);
 
 /*!
  * Deep equal utility
  */
 
-exports.eql = __webpack_require__(108);
-
-/*!
- * Deep path value
- */
-
-exports.getPathValue = __webpack_require__(101);
+exports.eql = __webpack_require__(114);
 
 /*!
  * Deep path info
  */
 
-exports.getPathInfo = __webpack_require__(51);
+exports.getPathInfo = pathval.getPathInfo;
 
 /*!
  * Check if a property exists
  */
 
-exports.hasProperty = __webpack_require__(52);
+exports.hasProperty = pathval.hasProperty;
 
 /*!
  * Function name
  */
 
-exports.getName = __webpack_require__(50);
+exports.getName = __webpack_require__(61);
 
 /*!
  * add Property
  */
 
-exports.addProperty = __webpack_require__(97);
+exports.addProperty = __webpack_require__(101);
 
 /*!
  * add Method
  */
 
-exports.addMethod = __webpack_require__(96);
+exports.addMethod = __webpack_require__(100);
 
 /*!
  * overwrite Property
  */
 
-exports.overwriteProperty = __webpack_require__(106);
+exports.overwriteProperty = __webpack_require__(111);
 
 /*!
  * overwrite Method
  */
 
-exports.overwriteMethod = __webpack_require__(105);
+exports.overwriteMethod = __webpack_require__(110);
 
 /*!
  * Add a chainable method
  */
 
-exports.addChainableMethod = __webpack_require__(95);
+exports.addChainableMethod = __webpack_require__(99);
 
 /*!
  * Overwrite chainable method
  */
 
-exports.overwriteChainableMethod = __webpack_require__(104);
+exports.overwriteChainableMethod = __webpack_require__(109);
+
+/*!
+ * Compare by inspect method
+ */
+
+exports.compareByInspect = __webpack_require__(102);
+
+/*!
+ * Get own enumerable property symbols method
+ */
+
+exports.getOwnEnumerablePropertySymbols = __webpack_require__(56);
+
+/*!
+ * Get own enumerable properties method
+ */
+
+exports.getOwnEnumerableProperties = __webpack_require__(106);
+
+/*!
+ * Checks error against a given set of criteria
+ */
+
+exports.checkError = __webpack_require__(113);
+
+/*!
+ * Proxify util
+ */
+
+exports.proxify = __webpack_require__(32);
+
+/*!
+ * addLengthGuard util
+ */
+
+exports.addLengthGuard = __webpack_require__(29);
+
+/*!
+ * isProxyEnabled helper
+ */
+
+exports.isProxyEnabled = __webpack_require__(31);
+
+/*!
+ * isNaN method
+ */
+
+exports.isNaN = __webpack_require__(108);
 
 
 /***/ }),
-/* 104 */
+/* 108 */
 /***/ (function(module, exports) {
+
+/*!
+ * Chai - isNaN utility
+ * Copyright(c) 2012-2015 Sakthipriyan Vairamani <thechargingvolcano@gmail.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .isNaN(value)
+ *
+ * Checks if the given value is NaN or not.
+ *
+ *     utils.isNaN(NaN); // true
+ *
+ * @param {Value} The value which has to be checked if it is NaN
+ * @name isNaN
+ * @api private
+ */
+
+function isNaN(value) {
+  // Refer http://www.ecma-international.org/ecma-262/6.0/#sec-isnan-number
+  // section's NOTE.
+  return value !== value;
+}
+
+// If ECMAScript 6's Number.isNaN is present, prefer that.
+module.exports = Number.isNaN || isNaN;
+
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
 
 /*!
  * Chai - overwriteChainableMethod utility
@@ -12825,15 +16901,18 @@ exports.overwriteChainableMethod = __webpack_require__(104);
  * MIT Licensed
  */
 
+var chai = __webpack_require__(18);
+var transferFlags = __webpack_require__(20);
+
 /**
- * ### overwriteChainableMethod (ctx, name, method, chainingBehavior)
+ * ### .overwriteChainableMethod(ctx, name, method, chainingBehavior)
  *
  * Overwites an already existing chainable method
  * and provides access to the previous function or
  * property.  Must return functions to be used for
  * name.
  *
- *     utils.overwriteChainableMethod(chai.Assertion.prototype, 'length',
+ *     utils.overwriteChainableMethod(chai.Assertion.prototype, 'lengthOf',
  *       function (_super) {
  *       }
  *     , function (_super) {
@@ -12846,8 +16925,8 @@ exports.overwriteChainableMethod = __webpack_require__(104);
  *
  * Then can be used as any other assertion.
  *
- *     expect(myFoo).to.have.length(3);
- *     expect(myFoo).to.have.length.above(3);
+ *     expect(myFoo).to.have.lengthOf(3);
+ *     expect(myFoo).to.have.lengthOf.above(3);
  *
  * @param {Object} ctx object whose method / property is to be overwritten
  * @param {String} name of method / property to overwrite
@@ -12858,26 +16937,38 @@ exports.overwriteChainableMethod = __webpack_require__(104);
  * @api public
  */
 
-module.exports = function (ctx, name, method, chainingBehavior) {
+module.exports = function overwriteChainableMethod(ctx, name, method, chainingBehavior) {
   var chainableBehavior = ctx.__methods[name];
 
   var _chainingBehavior = chainableBehavior.chainingBehavior;
-  chainableBehavior.chainingBehavior = function () {
+  chainableBehavior.chainingBehavior = function overwritingChainableMethodGetter() {
     var result = chainingBehavior(_chainingBehavior).call(this);
-    return result === undefined ? this : result;
+    if (result !== undefined) {
+      return result;
+    }
+
+    var newAssertion = new chai.Assertion();
+    transferFlags(this, newAssertion);
+    return newAssertion;
   };
 
   var _method = chainableBehavior.method;
-  chainableBehavior.method = function () {
+  chainableBehavior.method = function overwritingChainableMethodWrapper() {
     var result = method(_method).apply(this, arguments);
-    return result === undefined ? this : result;
+    if (result !== undefined) {
+      return result;
+    }
+
+    var newAssertion = new chai.Assertion();
+    transferFlags(this, newAssertion);
+    return newAssertion;
   };
 };
 
 
 /***/ }),
-/* 105 */
-/***/ (function(module, exports) {
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
 
 /*!
  * Chai - overwriteMethod utility
@@ -12885,8 +16976,14 @@ module.exports = function (ctx, name, method, chainingBehavior) {
  * MIT Licensed
  */
 
+var addLengthGuard = __webpack_require__(29);
+var chai = __webpack_require__(18);
+var flag = __webpack_require__(6);
+var proxify = __webpack_require__(32);
+var transferFlags = __webpack_require__(20);
+
 /**
- * ### overwriteMethod (ctx, name, fn)
+ * ### .overwriteMethod(ctx, name, fn)
  *
  * Overwites an already existing method and provides
  * access to previous function. Must return function
@@ -12919,23 +17016,57 @@ module.exports = function (ctx, name, method, chainingBehavior) {
  * @api public
  */
 
-module.exports = function (ctx, name, method) {
+module.exports = function overwriteMethod(ctx, name, method) {
   var _method = ctx[name]
-    , _super = function () { return this; };
+    , _super = function () {
+      throw new Error(name + ' is not a function');
+    };
 
   if (_method && 'function' === typeof _method)
     _super = _method;
 
-  ctx[name] = function () {
+  var overwritingMethodWrapper = function () {
+    // Setting the `ssfi` flag to `overwritingMethodWrapper` causes this
+    // function to be the starting point for removing implementation frames from
+    // the stack trace of a failed assertion.
+    //
+    // However, we only want to use this function as the starting point if the
+    // `lockSsfi` flag isn't set.
+    //
+    // If the `lockSsfi` flag is set, then either this assertion has been
+    // overwritten by another assertion, or this assertion is being invoked from
+    // inside of another assertion. In the first case, the `ssfi` flag has
+    // already been set by the overwriting assertion. In the second case, the
+    // `ssfi` flag has already been set by the outer assertion.
+    if (!flag(this, 'lockSsfi')) {
+      flag(this, 'ssfi', overwritingMethodWrapper);
+    }
+
+    // Setting the `lockSsfi` flag to `true` prevents the overwritten assertion
+    // from changing the `ssfi` flag. By this point, the `ssfi` flag is already
+    // set to the correct starting point for this assertion.
+    var origLockSsfi = flag(this, 'lockSsfi');
+    flag(this, 'lockSsfi', true);
     var result = method(_super).apply(this, arguments);
-    return result === undefined ? this : result;
+    flag(this, 'lockSsfi', origLockSsfi);
+
+    if (result !== undefined) {
+      return result;
+    }
+
+    var newAssertion = new chai.Assertion();
+    transferFlags(this, newAssertion);
+    return newAssertion;
   }
+
+  addLengthGuard(overwritingMethodWrapper, name, false);
+  ctx[name] = proxify(overwritingMethodWrapper, name);
 };
 
 
 /***/ }),
-/* 106 */
-/***/ (function(module, exports) {
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
 
 /*!
  * Chai - overwriteProperty utility
@@ -12943,8 +17074,13 @@ module.exports = function (ctx, name, method) {
  * MIT Licensed
  */
 
+var chai = __webpack_require__(18);
+var flag = __webpack_require__(6);
+var isProxyEnabled = __webpack_require__(31);
+var transferFlags = __webpack_require__(20);
+
 /**
- * ### overwriteProperty (ctx, name, fn)
+ * ### .overwriteProperty(ctx, name, fn)
  *
  * Overwites an already existing property getter and provides
  * access to previous value. Must return function to use as getter.
@@ -12977,7 +17113,7 @@ module.exports = function (ctx, name, method) {
  * @api public
  */
 
-module.exports = function (ctx, name, getter) {
+module.exports = function overwriteProperty(ctx, name, getter) {
   var _get = Object.getOwnPropertyDescriptor(ctx, name)
     , _super = function () {};
 
@@ -12985,9 +17121,41 @@ module.exports = function (ctx, name, getter) {
     _super = _get.get
 
   Object.defineProperty(ctx, name,
-    { get: function () {
+    { get: function overwritingPropertyGetter() {
+        // Setting the `ssfi` flag to `overwritingPropertyGetter` causes this
+        // function to be the starting point for removing implementation frames
+        // from the stack trace of a failed assertion.
+        //
+        // However, we only want to use this function as the starting point if
+        // the `lockSsfi` flag isn't set and proxy protection is disabled.
+        //
+        // If the `lockSsfi` flag is set, then either this assertion has been
+        // overwritten by another assertion, or this assertion is being invoked
+        // from inside of another assertion. In the first case, the `ssfi` flag
+        // has already been set by the overwriting assertion. In the second
+        // case, the `ssfi` flag has already been set by the outer assertion.
+        //
+        // If proxy protection is enabled, then the `ssfi` flag has already been
+        // set by the proxy getter.
+        if (!isProxyEnabled() && !flag(this, 'lockSsfi')) {
+          flag(this, 'ssfi', overwritingPropertyGetter);
+        }
+
+        // Setting the `lockSsfi` flag to `true` prevents the overwritten
+        // assertion from changing the `ssfi` flag. By this point, the `ssfi`
+        // flag is already set to the correct starting point for this assertion.
+        var origLockSsfi = flag(this, 'lockSsfi');
+        flag(this, 'lockSsfi', true);
         var result = getter(_super).call(this);
-        return result === undefined ? this : result;
+        flag(this, 'lockSsfi', origLockSsfi);
+
+        if (result !== undefined) {
+          return result;
+        }
+
+        var newAssertion = new chai.Assertion();
+        transferFlags(this, newAssertion);
+        return newAssertion;
       }
     , configurable: true
   });
@@ -12995,7 +17163,7 @@ module.exports = function (ctx, name, getter) {
 
 
 /***/ }),
-/* 107 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -13008,10 +17176,10 @@ module.exports = function (ctx, name, getter) {
  * Module dependancies
  */
 
-var flag = __webpack_require__(16);
+var flag = __webpack_require__(6);
 
 /**
- * # test(object, expression)
+ * ### .test(object, expression)
  *
  * Test and object for expression.
  *
@@ -13021,7 +17189,7 @@ var flag = __webpack_require__(16);
  * @name test
  */
 
-module.exports = function (obj, args) {
+module.exports = function test(obj, args) {
   var negate = flag(obj, 'negate')
     , expr = args[0];
   return negate ? !expr : expr;
@@ -13029,16 +17197,191 @@ module.exports = function (obj, args) {
 
 
 /***/ }),
-/* 108 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(109);
+"use strict";
+
+
+/* !
+ * Chai - checkError utility
+ * Copyright(c) 2012-2016 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .checkError
+ *
+ * Checks that an error conforms to a given set of criteria and/or retrieves information about it.
+ *
+ * @api public
+ */
+
+/**
+ * ### .compatibleInstance(thrown, errorLike)
+ *
+ * Checks if two instances are compatible (strict equal).
+ * Returns false if errorLike is not an instance of Error, because instances
+ * can only be compatible if they're both error instances.
+ *
+ * @name compatibleInstance
+ * @param {Error} thrown error
+ * @param {Error|ErrorConstructor} errorLike object to compare against
+ * @namespace Utils
+ * @api public
+ */
+
+function compatibleInstance(thrown, errorLike) {
+  return errorLike instanceof Error && thrown === errorLike;
+}
+
+/**
+ * ### .compatibleConstructor(thrown, errorLike)
+ *
+ * Checks if two constructors are compatible.
+ * This function can receive either an error constructor or
+ * an error instance as the `errorLike` argument.
+ * Constructors are compatible if they're the same or if one is
+ * an instance of another.
+ *
+ * @name compatibleConstructor
+ * @param {Error} thrown error
+ * @param {Error|ErrorConstructor} errorLike object to compare against
+ * @namespace Utils
+ * @api public
+ */
+
+function compatibleConstructor(thrown, errorLike) {
+  if (errorLike instanceof Error) {
+    // If `errorLike` is an instance of any error we compare their constructors
+    return thrown.constructor === errorLike.constructor || thrown instanceof errorLike.constructor;
+  } else if (errorLike.prototype instanceof Error || errorLike === Error) {
+    // If `errorLike` is a constructor that inherits from Error, we compare `thrown` to `errorLike` directly
+    return thrown.constructor === errorLike || thrown instanceof errorLike;
+  }
+
+  return false;
+}
+
+/**
+ * ### .compatibleMessage(thrown, errMatcher)
+ *
+ * Checks if an error's message is compatible with a matcher (String or RegExp).
+ * If the message contains the String or passes the RegExp test,
+ * it is considered compatible.
+ *
+ * @name compatibleMessage
+ * @param {Error} thrown error
+ * @param {String|RegExp} errMatcher to look for into the message
+ * @namespace Utils
+ * @api public
+ */
+
+function compatibleMessage(thrown, errMatcher) {
+  var comparisonString = typeof thrown === 'string' ? thrown : thrown.message;
+  if (errMatcher instanceof RegExp) {
+    return errMatcher.test(comparisonString);
+  } else if (typeof errMatcher === 'string') {
+    return comparisonString.indexOf(errMatcher) !== -1; // eslint-disable-line no-magic-numbers
+  }
+
+  return false;
+}
+
+/**
+ * ### .getFunctionName(constructorFn)
+ *
+ * Returns the name of a function.
+ * This also includes a polyfill function if `constructorFn.name` is not defined.
+ *
+ * @name getFunctionName
+ * @param {Function} constructorFn
+ * @namespace Utils
+ * @api private
+ */
+
+var functionNameMatch = /\s*function(?:\s|\s*\/\*[^(?:*\/)]+\*\/\s*)*([^\(\/]+)/;
+function getFunctionName(constructorFn) {
+  var name = '';
+  if (typeof constructorFn.name === 'undefined') {
+    // Here we run a polyfill if constructorFn.name is not defined
+    var match = String(constructorFn).match(functionNameMatch);
+    if (match) {
+      name = match[1];
+    }
+  } else {
+    name = constructorFn.name;
+  }
+
+  return name;
+}
+
+/**
+ * ### .getConstructorName(errorLike)
+ *
+ * Gets the constructor name for an Error instance or constructor itself.
+ *
+ * @name getConstructorName
+ * @param {Error|ErrorConstructor} errorLike
+ * @namespace Utils
+ * @api public
+ */
+
+function getConstructorName(errorLike) {
+  var constructorName = errorLike;
+  if (errorLike instanceof Error) {
+    constructorName = getFunctionName(errorLike.constructor);
+  } else if (typeof errorLike === 'function') {
+    // If `err` is not an instance of Error it is an error constructor itself or another function.
+    // If we've got a common function we get its name, otherwise we may need to create a new instance
+    // of the error just in case it's a poorly-constructed error. Please see chaijs/chai/issues/45 to know more.
+    constructorName = getFunctionName(errorLike).trim() ||
+        getFunctionName(new errorLike()); // eslint-disable-line new-cap
+  }
+
+  return constructorName;
+}
+
+/**
+ * ### .getMessage(errorLike)
+ *
+ * Gets the error message from an error.
+ * If `err` is a String itself, we return it.
+ * If the error has no message, we return an empty string.
+ *
+ * @name getMessage
+ * @param {Error|String} errorLike
+ * @namespace Utils
+ * @api public
+ */
+
+function getMessage(errorLike) {
+  var msg = '';
+  if (errorLike && errorLike.message) {
+    msg = errorLike.message;
+  } else if (typeof errorLike === 'string') {
+    msg = errorLike;
+  }
+
+  return msg;
+}
+
+module.exports = {
+  compatibleInstance: compatibleInstance,
+  compatibleConstructor: compatibleConstructor,
+  compatibleMessage: compatibleMessage,
+  getMessage: getMessage,
+  getConstructorName: getConstructorName,
+};
 
 
 /***/ }),
-/* 109 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+/* globals Symbol: true, Uint8Array: true, WeakMap: true */
 /*!
  * deep-eql
  * Copyright(c) 2013 Jake Luer <jake@alogicalparadox.com>
@@ -13049,17 +17392,90 @@ module.exports = __webpack_require__(109);
  * Module dependencies
  */
 
-var type = __webpack_require__(110);
+var type = __webpack_require__(115);
+function FakeMap() {
+  this.clear();
+}
+FakeMap.prototype = {
+  clear: function clearMap() {
+    this.keys = [];
+    this.values = [];
+    return this;
+  },
+  set: function setMap(key, value) {
+    var index = this.keys.indexOf(key);
+    if (index >= 0) {
+      this.values[index] = value;
+    } else {
+      this.keys.push(key);
+      this.values.push(value);
+    }
+    return this;
+  },
+  get: function getMap(key) {
+    return this.values[this.keys.indexOf(key)];
+  },
+  delete: function deleteMap(key) {
+    var index = this.keys.indexOf(key);
+    if (index >= 0) {
+      this.values = this.values.slice(0, index).concat(this.values.slice(index + 1));
+      this.keys = this.keys.slice(0, index).concat(this.keys.slice(index + 1));
+    }
+    return this;
+  },
+};
+
+var MemoizeMap = null;
+if (typeof WeakMap === 'function') {
+  MemoizeMap = WeakMap;
+} else {
+  MemoizeMap = FakeMap;
+}
 
 /*!
- * Buffer.isBuffer browser shim
- */
+ * Check to see if the MemoizeMap has recorded a result of the two operands
+ *
+ * @param {Mixed} leftHandOperand
+ * @param {Mixed} rightHandOperand
+ * @param {MemoizeMap} memoizeMap
+ * @returns {Boolean|null} result
+*/
+function memoizeCompare(leftHandOperand, rightHandOperand, memoizeMap) {
+  // Technically, WeakMap keys can *only* be objects, not primitives.
+  if (!memoizeMap || isPrimitive(leftHandOperand) || isPrimitive(rightHandOperand)) {
+    return null;
+  }
+  var leftHandMap = memoizeMap.get(leftHandOperand);
+  if (leftHandMap) {
+    var result = leftHandMap.get(rightHandOperand);
+    if (typeof result === 'boolean') {
+      return result;
+    }
+  }
+  return null;
+}
 
-var Buffer;
-try { Buffer = __webpack_require__(168).Buffer; }
-catch(ex) {
-  Buffer = {};
-  Buffer.isBuffer = function() { return false; }
+/*!
+ * Set the result of the equality into the MemoizeMap
+ *
+ * @param {Mixed} leftHandOperand
+ * @param {Mixed} rightHandOperand
+ * @param {MemoizeMap} memoizeMap
+ * @param {Boolean} result
+*/
+function memoizeSet(leftHandOperand, rightHandOperand, memoizeMap, result) {
+  // Technically, WeakMap keys can *only* be objects, not primitives.
+  if (!memoizeMap || isPrimitive(leftHandOperand) || isPrimitive(rightHandOperand)) {
+    return;
+  }
+  var leftHandMap = memoizeMap.get(leftHandOperand);
+  if (leftHandMap) {
+    leftHandMap.set(rightHandOperand, result);
+  } else {
+    leftHandMap = new MemoizeMap();
+    leftHandMap.set(rightHandOperand, result);
+    memoizeMap.set(leftHandOperand, leftHandMap);
+  }
 }
 
 /*!
@@ -13067,403 +17483,1632 @@ catch(ex) {
  */
 
 module.exports = deepEqual;
+module.exports.MemoizeMap = MemoizeMap;
 
 /**
- * Assert super-strict (egal) equality between
- * two objects of any type.
+ * Assert deeply nested sameValue equality between two objects of any type.
  *
- * @param {Mixed} a
- * @param {Mixed} b
- * @param {Array} memoised (optional)
+ * @param {Mixed} leftHandOperand
+ * @param {Mixed} rightHandOperand
+ * @param {Object} [options] (optional) Additional options
+ * @param {Array} [options.comparator] (optional) Override default algorithm, determining custom equality.
+ * @param {Array} [options.memoize] (optional) Provide a custom memoization object which will cache the results of
+    complex objects for a speed boost. By passing `false` you can disable memoization, but this will cause circular
+    references to blow the stack.
  * @return {Boolean} equal match
  */
+function deepEqual(leftHandOperand, rightHandOperand, options) {
+  // If we have a comparator, we can't assume anything; so bail to its check first.
+  if (options && options.comparator) {
+    return extensiveDeepEqual(leftHandOperand, rightHandOperand, options);
+  }
 
-function deepEqual(a, b, m) {
-  if (sameValue(a, b)) {
+  var simpleResult = simpleEqual(leftHandOperand, rightHandOperand);
+  if (simpleResult !== null) {
+    return simpleResult;
+  }
+
+  // Deeper comparisons are pushed through to a larger function
+  return extensiveDeepEqual(leftHandOperand, rightHandOperand, options);
+}
+
+/**
+ * Many comparisons can be canceled out early via simple equality or primitive checks.
+ * @param {Mixed} leftHandOperand
+ * @param {Mixed} rightHandOperand
+ * @return {Boolean|null} equal match
+ */
+function simpleEqual(leftHandOperand, rightHandOperand) {
+  // Equal references (except for Numbers) can be returned early
+  if (leftHandOperand === rightHandOperand) {
+    // Handle +-0 cases
+    return leftHandOperand !== 0 || 1 / leftHandOperand === 1 / rightHandOperand;
+  }
+
+  // handle NaN cases
+  if (
+    leftHandOperand !== leftHandOperand && // eslint-disable-line no-self-compare
+    rightHandOperand !== rightHandOperand // eslint-disable-line no-self-compare
+  ) {
     return true;
-  } else if ('date' === type(a)) {
-    return dateEqual(a, b);
-  } else if ('regexp' === type(a)) {
-    return regexpEqual(a, b);
-  } else if (Buffer.isBuffer(a)) {
-    return bufferEqual(a, b);
-  } else if ('arguments' === type(a)) {
-    return argumentsEqual(a, b, m);
-  } else if (!typeEqual(a, b)) {
-    return false;
-  } else if (('object' !== type(a) && 'object' !== type(b))
-  && ('array' !== type(a) && 'array' !== type(b))) {
-    return sameValue(a, b);
-  } else {
-    return objectEqual(a, b, m);
   }
+
+  // Anything that is not an 'object', i.e. symbols, functions, booleans, numbers,
+  // strings, and undefined, can be compared by reference.
+  if (isPrimitive(leftHandOperand) || isPrimitive(rightHandOperand)) {
+    // Easy out b/c it would have passed the first equality check
+    return false;
+  }
+  return null;
 }
 
 /*!
- * Strict (egal) equality test. Ensures that NaN always
- * equals NaN and `-0` does not equal `+0`.
+ * The main logic of the `deepEqual` function.
  *
- * @param {Mixed} a
- * @param {Mixed} b
+ * @param {Mixed} leftHandOperand
+ * @param {Mixed} rightHandOperand
+ * @param {Object} [options] (optional) Additional options
+ * @param {Array} [options.comparator] (optional) Override default algorithm, determining custom equality.
+ * @param {Array} [options.memoize] (optional) Provide a custom memoization object which will cache the results of
+    complex objects for a speed boost. By passing `false` you can disable memoization, but this will cause circular
+    references to blow the stack.
  * @return {Boolean} equal match
- */
+*/
+function extensiveDeepEqual(leftHandOperand, rightHandOperand, options) {
+  options = options || {};
+  options.memoize = options.memoize === false ? false : options.memoize || new MemoizeMap();
+  var comparator = options && options.comparator;
 
-function sameValue(a, b) {
-  if (a === b) return a !== 0 || 1 / a === 1 / b;
-  return a !== a && b !== b;
-}
+  // Check if a memoized result exists.
+  var memoizeResultLeft = memoizeCompare(leftHandOperand, rightHandOperand, options.memoize);
+  if (memoizeResultLeft !== null) {
+    return memoizeResultLeft;
+  }
+  var memoizeResultRight = memoizeCompare(rightHandOperand, leftHandOperand, options.memoize);
+  if (memoizeResultRight !== null) {
+    return memoizeResultRight;
+  }
 
-/*!
- * Compare the types of two given objects and
- * return if they are equal. Note that an Array
- * has a type of `array` (not `object`) and arguments
- * have a type of `arguments` (not `array`/`object`).
- *
- * @param {Mixed} a
- * @param {Mixed} b
- * @return {Boolean} result
- */
-
-function typeEqual(a, b) {
-  return type(a) === type(b);
-}
-
-/*!
- * Compare two Date objects by asserting that
- * the time values are equal using `saveValue`.
- *
- * @param {Date} a
- * @param {Date} b
- * @return {Boolean} result
- */
-
-function dateEqual(a, b) {
-  if ('date' !== type(b)) return false;
-  return sameValue(a.getTime(), b.getTime());
-}
-
-/*!
- * Compare two regular expressions by converting them
- * to string and checking for `sameValue`.
- *
- * @param {RegExp} a
- * @param {RegExp} b
- * @return {Boolean} result
- */
-
-function regexpEqual(a, b) {
-  if ('regexp' !== type(b)) return false;
-  return sameValue(a.toString(), b.toString());
-}
-
-/*!
- * Assert deep equality of two `arguments` objects.
- * Unfortunately, these must be sliced to arrays
- * prior to test to ensure no bad behavior.
- *
- * @param {Arguments} a
- * @param {Arguments} b
- * @param {Array} memoize (optional)
- * @return {Boolean} result
- */
-
-function argumentsEqual(a, b, m) {
-  if ('arguments' !== type(b)) return false;
-  a = [].slice.call(a);
-  b = [].slice.call(b);
-  return deepEqual(a, b, m);
-}
-
-/*!
- * Get enumerable properties of a given object.
- *
- * @param {Object} a
- * @return {Array} property names
- */
-
-function enumerable(a) {
-  var res = [];
-  for (var key in a) res.push(key);
-  return res;
-}
-
-/*!
- * Simple equality for flat iterable objects
- * such as Arrays or Node.js buffers.
- *
- * @param {Iterable} a
- * @param {Iterable} b
- * @return {Boolean} result
- */
-
-function iterableEqual(a, b) {
-  if (a.length !==  b.length) return false;
-
-  var i = 0;
-  var match = true;
-
-  for (; i < a.length; i++) {
-    if (a[i] !== b[i]) {
-      match = false;
-      break;
+  // If a comparator is present, use it.
+  if (comparator) {
+    var comparatorResult = comparator(leftHandOperand, rightHandOperand);
+    // Comparators may return null, in which case we want to go back to default behavior.
+    if (comparatorResult === false || comparatorResult === true) {
+      memoizeSet(leftHandOperand, rightHandOperand, options.memoize, comparatorResult);
+      return comparatorResult;
+    }
+    // To allow comparators to override *any* behavior, we ran them first. Since it didn't decide
+    // what to do, we need to make sure to return the basic tests first before we move on.
+    var simpleResult = simpleEqual(leftHandOperand, rightHandOperand);
+    if (simpleResult !== null) {
+      // Don't memoize this, it takes longer to set/retrieve than to just compare.
+      return simpleResult;
     }
   }
 
-  return match;
+  var leftHandType = type(leftHandOperand);
+  if (leftHandType !== type(rightHandOperand)) {
+    memoizeSet(leftHandOperand, rightHandOperand, options.memoize, false);
+    return false;
+  }
+
+  // Temporarily set the operands in the memoize object to prevent blowing the stack
+  memoizeSet(leftHandOperand, rightHandOperand, options.memoize, true);
+
+  var result = extensiveDeepEqualByType(leftHandOperand, rightHandOperand, leftHandType, options);
+  memoizeSet(leftHandOperand, rightHandOperand, options.memoize, result);
+  return result;
+}
+
+function extensiveDeepEqualByType(leftHandOperand, rightHandOperand, leftHandType, options) {
+  switch (leftHandType) {
+    case 'String':
+    case 'Number':
+    case 'Boolean':
+    case 'Date':
+      // If these types are their instance types (e.g. `new Number`) then re-deepEqual against their values
+      return deepEqual(leftHandOperand.valueOf(), rightHandOperand.valueOf());
+    case 'Promise':
+    case 'Symbol':
+    case 'function':
+    case 'WeakMap':
+    case 'WeakSet':
+    case 'Error':
+      return leftHandOperand === rightHandOperand;
+    case 'Arguments':
+    case 'Int8Array':
+    case 'Uint8Array':
+    case 'Uint8ClampedArray':
+    case 'Int16Array':
+    case 'Uint16Array':
+    case 'Int32Array':
+    case 'Uint32Array':
+    case 'Float32Array':
+    case 'Float64Array':
+    case 'Array':
+      return iterableEqual(leftHandOperand, rightHandOperand, options);
+    case 'RegExp':
+      return regexpEqual(leftHandOperand, rightHandOperand);
+    case 'Generator':
+      return generatorEqual(leftHandOperand, rightHandOperand, options);
+    case 'DataView':
+      return iterableEqual(new Uint8Array(leftHandOperand.buffer), new Uint8Array(rightHandOperand.buffer), options);
+    case 'ArrayBuffer':
+      return iterableEqual(new Uint8Array(leftHandOperand), new Uint8Array(rightHandOperand), options);
+    case 'Set':
+      return entriesEqual(leftHandOperand, rightHandOperand, options);
+    case 'Map':
+      return entriesEqual(leftHandOperand, rightHandOperand, options);
+    default:
+      return objectEqual(leftHandOperand, rightHandOperand, options);
+  }
 }
 
 /*!
- * Extension to `iterableEqual` specifically
- * for Node.js Buffers.
+ * Compare two Regular Expressions for equality.
  *
- * @param {Buffer} a
- * @param {Mixed} b
+ * @param {RegExp} leftHandOperand
+ * @param {RegExp} rightHandOperand
  * @return {Boolean} result
  */
 
-function bufferEqual(a, b) {
-  if (!Buffer.isBuffer(b)) return false;
-  return iterableEqual(a, b);
+function regexpEqual(leftHandOperand, rightHandOperand) {
+  return leftHandOperand.toString() === rightHandOperand.toString();
 }
 
 /*!
- * Block for `objectEqual` ensuring non-existing
- * values don't get in.
+ * Compare two Sets/Maps for equality. Faster than other equality functions.
  *
- * @param {Mixed} object
+ * @param {Set} leftHandOperand
+ * @param {Set} rightHandOperand
+ * @param {Object} [options] (Optional)
  * @return {Boolean} result
  */
 
-function isValue(a) {
-  return a !== null && a !== undefined;
+function entriesEqual(leftHandOperand, rightHandOperand, options) {
+  // IE11 doesn't support Set#entries or Set#@@iterator, so we need manually populate using Set#forEach
+  if (leftHandOperand.size !== rightHandOperand.size) {
+    return false;
+  }
+  if (leftHandOperand.size === 0) {
+    return true;
+  }
+  var leftHandItems = [];
+  var rightHandItems = [];
+  leftHandOperand.forEach(function gatherEntries(key, value) {
+    leftHandItems.push([ key, value ]);
+  });
+  rightHandOperand.forEach(function gatherEntries(key, value) {
+    rightHandItems.push([ key, value ]);
+  });
+  return iterableEqual(leftHandItems.sort(), rightHandItems.sort(), options);
 }
 
 /*!
- * Recursively check the equality of two objects.
- * Once basic sameness has been established it will
- * defer to `deepEqual` for each enumerable key
- * in the object.
+ * Simple equality for flat iterable objects such as Arrays, TypedArrays or Node.js buffers.
  *
- * @param {Mixed} a
- * @param {Mixed} b
+ * @param {Iterable} leftHandOperand
+ * @param {Iterable} rightHandOperand
+ * @param {Object} [options] (Optional)
  * @return {Boolean} result
  */
 
-function objectEqual(a, b, m) {
-  if (!isValue(a) || !isValue(b)) {
+function iterableEqual(leftHandOperand, rightHandOperand, options) {
+  var length = leftHandOperand.length;
+  if (length !== rightHandOperand.length) {
     return false;
   }
-
-  if (a.prototype !== b.prototype) {
-    return false;
+  if (length === 0) {
+    return true;
   }
-
-  var i;
-  if (m) {
-    for (i = 0; i < m.length; i++) {
-      if ((m[i][0] === a && m[i][1] === b)
-      ||  (m[i][0] === b && m[i][1] === a)) {
-        return true;
-      }
-    }
-  } else {
-    m = [];
-  }
-
-  try {
-    var ka = enumerable(a);
-    var kb = enumerable(b);
-  } catch (ex) {
-    return false;
-  }
-
-  ka.sort();
-  kb.sort();
-
-  if (!iterableEqual(ka, kb)) {
-    return false;
-  }
-
-  m.push([ a, b ]);
-
-  var key;
-  for (i = ka.length - 1; i >= 0; i--) {
-    key = ka[i];
-    if (!deepEqual(a[key], b[key], m)) {
+  var index = -1;
+  while (++index < length) {
+    if (deepEqual(leftHandOperand[index], rightHandOperand[index], options) === false) {
       return false;
     }
   }
-
   return true;
+}
+
+/*!
+ * Simple equality for generator objects such as those returned by generator functions.
+ *
+ * @param {Iterable} leftHandOperand
+ * @param {Iterable} rightHandOperand
+ * @param {Object} [options] (Optional)
+ * @return {Boolean} result
+ */
+
+function generatorEqual(leftHandOperand, rightHandOperand, options) {
+  return iterableEqual(getGeneratorEntries(leftHandOperand), getGeneratorEntries(rightHandOperand), options);
+}
+
+/*!
+ * Determine if the given object has an @@iterator function.
+ *
+ * @param {Object} target
+ * @return {Boolean} `true` if the object has an @@iterator function.
+ */
+function hasIteratorFunction(target) {
+  return typeof Symbol !== 'undefined' &&
+    typeof target === 'object' &&
+    typeof Symbol.iterator !== 'undefined' &&
+    typeof target[Symbol.iterator] === 'function';
+}
+
+/*!
+ * Gets all iterator entries from the given Object. If the Object has no @@iterator function, returns an empty array.
+ * This will consume the iterator - which could have side effects depending on the @@iterator implementation.
+ *
+ * @param {Object} target
+ * @returns {Array} an array of entries from the @@iterator function
+ */
+function getIteratorEntries(target) {
+  if (hasIteratorFunction(target)) {
+    try {
+      return getGeneratorEntries(target[Symbol.iterator]());
+    } catch (iteratorError) {
+      return [];
+    }
+  }
+  return [];
+}
+
+/*!
+ * Gets all entries from a Generator. This will consume the generator - which could have side effects.
+ *
+ * @param {Generator} target
+ * @returns {Array} an array of entries from the Generator.
+ */
+function getGeneratorEntries(generator) {
+  var generatorResult = generator.next();
+  var accumulator = [ generatorResult.value ];
+  while (generatorResult.done === false) {
+    generatorResult = generator.next();
+    accumulator.push(generatorResult.value);
+  }
+  return accumulator;
+}
+
+/*!
+ * Gets all own and inherited enumerable keys from a target.
+ *
+ * @param {Object} target
+ * @returns {Array} an array of own and inherited enumerable keys from the target.
+ */
+function getEnumerableKeys(target) {
+  var keys = [];
+  for (var key in target) {
+    keys.push(key);
+  }
+  return keys;
+}
+
+/*!
+ * Determines if two objects have matching values, given a set of keys. Defers to deepEqual for the equality check of
+ * each key. If any value of the given key is not equal, the function will return false (early).
+ *
+ * @param {Mixed} leftHandOperand
+ * @param {Mixed} rightHandOperand
+ * @param {Array} keys An array of keys to compare the values of leftHandOperand and rightHandOperand against
+ * @param {Object} [options] (Optional)
+ * @return {Boolean} result
+ */
+function keysEqual(leftHandOperand, rightHandOperand, keys, options) {
+  var length = keys.length;
+  if (length === 0) {
+    return true;
+  }
+  for (var i = 0; i < length; i += 1) {
+    if (deepEqual(leftHandOperand[keys[i]], rightHandOperand[keys[i]], options) === false) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/*!
+ * Recursively check the equality of two Objects. Once basic sameness has been established it will defer to `deepEqual`
+ * for each enumerable key in the object.
+ *
+ * @param {Mixed} leftHandOperand
+ * @param {Mixed} rightHandOperand
+ * @param {Object} [options] (Optional)
+ * @return {Boolean} result
+ */
+
+function objectEqual(leftHandOperand, rightHandOperand, options) {
+  var leftHandKeys = getEnumerableKeys(leftHandOperand);
+  var rightHandKeys = getEnumerableKeys(rightHandOperand);
+  if (leftHandKeys.length && leftHandKeys.length === rightHandKeys.length) {
+    leftHandKeys.sort();
+    rightHandKeys.sort();
+    if (iterableEqual(leftHandKeys, rightHandKeys) === false) {
+      return false;
+    }
+    return keysEqual(leftHandOperand, rightHandOperand, leftHandKeys, options);
+  }
+
+  var leftHandEntries = getIteratorEntries(leftHandOperand);
+  var rightHandEntries = getIteratorEntries(rightHandOperand);
+  if (leftHandEntries.length && leftHandEntries.length === rightHandEntries.length) {
+    leftHandEntries.sort();
+    rightHandEntries.sort();
+    return iterableEqual(leftHandEntries, rightHandEntries, options);
+  }
+
+  if (leftHandKeys.length === 0 &&
+      leftHandEntries.length === 0 &&
+      rightHandKeys.length === 0 &&
+      rightHandEntries.length === 0) {
+    return true;
+  }
+
+  return false;
+}
+
+/*!
+ * Returns true if the argument is a primitive.
+ *
+ * This intentionally returns true for all objects that can be compared by reference,
+ * including functions and symbols.
+ *
+ * @param {Mixed} value
+ * @return {Boolean} result
+ */
+function isPrimitive(value) {
+  return value === null || typeof value !== 'object';
 }
 
 
 /***/ }),
-/* 110 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(111);
+"use strict";
 
-
-/***/ }),
-/* 111 */
-/***/ (function(module, exports) {
-
-/*!
+/* !
  * type-detect
  * Copyright(c) 2013 jake luer <jake@alogicalparadox.com>
  * MIT Licensed
  */
-
-/*!
- * Primary Exports
- */
-
-var exports = module.exports = getType;
-
-/*!
- * Detectable javascript natives
- */
-
-var natives = {
-    '[object Array]': 'array'
-  , '[object RegExp]': 'regexp'
-  , '[object Function]': 'function'
-  , '[object Arguments]': 'arguments'
-  , '[object Date]': 'date'
-};
-
+var getPrototypeOfExists = typeof Object.getPrototypeOf === 'function';
+var promiseExists = typeof Promise === 'function';
+var globalObject = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : self; // eslint-disable-line
+var isDom = 'location' in globalObject && 'document' in globalObject;
+var htmlElementExists = typeof HTMLElement !== 'undefined';
+var isArrayExists = typeof Array.isArray === 'function';
+var symbolExists = typeof Symbol !== 'undefined';
+var mapExists = typeof Map !== 'undefined';
+var setExists = typeof Set !== 'undefined';
+var weakMapExists = typeof WeakMap !== 'undefined';
+var weakSetExists = typeof WeakSet !== 'undefined';
+var dataViewExists = typeof DataView !== 'undefined';
+var symbolIteratorExists = symbolExists && typeof Symbol.iterator !== 'undefined';
+var symbolToStringTagExists = symbolExists && typeof Symbol.toStringTag !== 'undefined';
+var setEntriesExists = setExists && typeof Set.prototype.entries === 'function';
+var mapEntriesExists = mapExists && typeof Map.prototype.entries === 'function';
+var setIteratorPrototype = getPrototypeOfExists && setEntriesExists && Object.getPrototypeOf(new Set().entries());
+var mapIteratorPrototype = getPrototypeOfExists && mapEntriesExists && Object.getPrototypeOf(new Map().entries());
+var arrayIteratorExists = symbolIteratorExists && typeof Array.prototype[Symbol.iterator] === 'function';
+var arrayIteratorPrototype = arrayIteratorExists && Object.getPrototypeOf([][Symbol.iterator]());
+var stringIteratorExists = symbolIteratorExists && typeof Array.prototype[Symbol.iterator] === 'function';
+var stringIteratorPrototype = stringIteratorExists && Object.getPrototypeOf(''[Symbol.iterator]());
+var toStringLeftSliceLength = 8;
+var toStringRightSliceLength = -1;
 /**
  * ### typeOf (obj)
  *
- * Use several different techniques to determine
- * the type of object being tested.
- *
+ * Uses `Object.prototype.toString` to determine the type of an object,
+ * normalising behaviour across engine versions & well optimised.
  *
  * @param {Mixed} object
  * @return {String} object type
  * @api public
  */
-
-function getType (obj) {
-  var str = Object.prototype.toString.call(obj);
-  if (natives[str]) return natives[str];
-  if (obj === null) return 'null';
-  if (obj === undefined) return 'undefined';
-  if (obj === Object(obj)) return 'object';
-  return typeof obj;
-}
-
-exports.Library = Library;
-
-/**
- * ### Library
- *
- * Create a repository for custom type detection.
- *
- * ```js
- * var lib = new type.Library;
- * ```
- *
- */
-
-function Library () {
-  this.tests = {};
-}
-
-/**
- * #### .of (obj)
- *
- * Expose replacement `typeof` detection to the library.
- *
- * ```js
- * if ('string' === lib.of('hello world')) {
- *   // ...
- * }
- * ```
- *
- * @param {Mixed} object to test
- * @return {String} type
- */
-
-Library.prototype.of = getType;
-
-/**
- * #### .define (type, test)
- *
- * Add a test to for the `.test()` assertion.
- *
- * Can be defined as a regular expression:
- *
- * ```js
- * lib.define('int', /^[0-9]+$/);
- * ```
- *
- * ... or as a function:
- *
- * ```js
- * lib.define('bln', function (obj) {
- *   if ('boolean' === lib.of(obj)) return true;
- *   var blns = [ 'yes', 'no', 'true', 'false', 1, 0 ];
- *   if ('string' === lib.of(obj)) obj = obj.toLowerCase();
- *   return !! ~blns.indexOf(obj);
- * });
- * ```
- *
- * @param {String} type
- * @param {RegExp|Function} test
- * @api public
- */
-
-Library.prototype.define = function (type, test) {
-  if (arguments.length === 1) return this.tests[type];
-  this.tests[type] = test;
-  return this;
-};
-
-/**
- * #### .test (obj, test)
- *
- * Assert that an object is of type. Will first
- * check natives, and if that does not pass it will
- * use the user defined custom tests.
- *
- * ```js
- * assert(lib.test('1', 'int'));
- * assert(lib.test('yes', 'bln'));
- * ```
- *
- * @param {Mixed} object
- * @param {String} type
- * @return {Boolean} result
- * @api public
- */
-
-Library.prototype.test = function (obj, type) {
-  if (type === getType(obj)) return true;
-  var test = this.tests[type];
-
-  if (test && 'regexp' === getType(test)) {
-    return test.test(obj);
-  } else if (test && 'function' === getType(test)) {
-    return test(obj);
-  } else {
-    throw new ReferenceError('Type test "' + type + '" not defined or invalid.');
+module.exports = function typeDetect(obj) {
+  /* ! Speed optimisation
+   * Pre:
+   *   string literal     x 3,039,035 ops/sec ±1.62% (78 runs sampled)
+   *   boolean literal    x 1,424,138 ops/sec ±4.54% (75 runs sampled)
+   *   number literal     x 1,653,153 ops/sec ±1.91% (82 runs sampled)
+   *   undefined          x 9,978,660 ops/sec ±1.92% (75 runs sampled)
+   *   function           x 2,556,769 ops/sec ±1.73% (77 runs sampled)
+   * Post:
+   *   string literal     x 38,564,796 ops/sec ±1.15% (79 runs sampled)
+   *   boolean literal    x 31,148,940 ops/sec ±1.10% (79 runs sampled)
+   *   number literal     x 32,679,330 ops/sec ±1.90% (78 runs sampled)
+   *   undefined          x 32,363,368 ops/sec ±1.07% (82 runs sampled)
+   *   function           x 31,296,870 ops/sec ±0.96% (83 runs sampled)
+   */
+  var typeofObj = typeof obj;
+  if (typeofObj !== 'object') {
+    return typeofObj;
   }
+
+  /* ! Speed optimisation
+   * Pre:
+   *   null               x 28,645,765 ops/sec ±1.17% (82 runs sampled)
+   * Post:
+   *   null               x 36,428,962 ops/sec ±1.37% (84 runs sampled)
+   */
+  if (obj === null) {
+    return 'null';
+  }
+
+  /* ! Spec Conformance
+   * Test: `Object.prototype.toString.call(window)``
+   *  - Node === "[object global]"
+   *  - Chrome === "[object global]"
+   *  - Firefox === "[object Window]"
+   *  - PhantomJS === "[object Window]"
+   *  - Safari === "[object Window]"
+   *  - IE 11 === "[object Window]"
+   *  - IE Edge === "[object Window]"
+   * Test: `Object.prototype.toString.call(this)``
+   *  - Chrome Worker === "[object global]"
+   *  - Firefox Worker === "[object DedicatedWorkerGlobalScope]"
+   *  - Safari Worker === "[object DedicatedWorkerGlobalScope]"
+   *  - IE 11 Worker === "[object WorkerGlobalScope]"
+   *  - IE Edge Worker === "[object WorkerGlobalScope]"
+   */
+  if (obj === globalObject) {
+    return 'global';
+  }
+
+  /* ! Speed optimisation
+   * Pre:
+   *   array literal      x 2,888,352 ops/sec ±0.67% (82 runs sampled)
+   * Post:
+   *   array literal      x 22,479,650 ops/sec ±0.96% (81 runs sampled)
+   */
+  if (isArrayExists && Array.isArray(obj)) {
+    return 'Array';
+  }
+
+  if (isDom) {
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/multipage/browsers.html#location)
+     * WhatWG HTML$7.7.3 - The `Location` interface
+     * Test: `Object.prototype.toString.call(window.location)``
+     *  - IE <=11 === "[object Object]"
+     *  - IE Edge <=13 === "[object Object]"
+     */
+    if (obj === globalObject.location) {
+      return 'Location';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/#document)
+     * WhatWG HTML$3.1.1 - The `Document` object
+     * Note: Most browsers currently adher to the W3C DOM Level 2 spec
+     *       (https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-26809268)
+     *       which suggests that browsers should use HTMLTableCellElement for
+     *       both TD and TH elements. WhatWG separates these.
+     *       WhatWG HTML states:
+     *         > For historical reasons, Window objects must also have a
+     *         > writable, configurable, non-enumerable property named
+     *         > HTMLDocument whose value is the Document interface object.
+     * Test: `Object.prototype.toString.call(document)``
+     *  - Chrome === "[object HTMLDocument]"
+     *  - Firefox === "[object HTMLDocument]"
+     *  - Safari === "[object HTMLDocument]"
+     *  - IE <=10 === "[object Document]"
+     *  - IE 11 === "[object HTMLDocument]"
+     *  - IE Edge <=13 === "[object HTMLDocument]"
+     */
+    if (obj === globalObject.document) {
+      return 'Document';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/multipage/webappapis.html#mimetypearray)
+     * WhatWG HTML$8.6.1.5 - Plugins - Interface MimeTypeArray
+     * Test: `Object.prototype.toString.call(navigator.mimeTypes)``
+     *  - IE <=10 === "[object MSMimeTypesCollection]"
+     */
+    if (obj === (globalObject.navigator || {}).mimeTypes) {
+      return 'MimeTypeArray';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/multipage/webappapis.html#pluginarray)
+     * WhatWG HTML$8.6.1.5 - Plugins - Interface PluginArray
+     * Test: `Object.prototype.toString.call(navigator.plugins)``
+     *  - IE <=10 === "[object MSPluginsCollection]"
+     */
+    if (obj === (globalObject.navigator || {}).plugins) {
+      return 'PluginArray';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/multipage/webappapis.html#pluginarray)
+     * WhatWG HTML$4.4.4 - The `blockquote` element - Interface `HTMLQuoteElement`
+     * Test: `Object.prototype.toString.call(document.createElement('blockquote'))``
+     *  - IE <=10 === "[object HTMLBlockElement]"
+     */
+    if (htmlElementExists && obj instanceof HTMLElement && obj.tagName === 'BLOCKQUOTE') {
+      return 'HTMLQuoteElement';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/#htmltabledatacellelement)
+     * WhatWG HTML$4.9.9 - The `td` element - Interface `HTMLTableDataCellElement`
+     * Note: Most browsers currently adher to the W3C DOM Level 2 spec
+     *       (https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-82915075)
+     *       which suggests that browsers should use HTMLTableCellElement for
+     *       both TD and TH elements. WhatWG separates these.
+     * Test: Object.prototype.toString.call(document.createElement('td'))
+     *  - Chrome === "[object HTMLTableCellElement]"
+     *  - Firefox === "[object HTMLTableCellElement]"
+     *  - Safari === "[object HTMLTableCellElement]"
+     */
+    if (htmlElementExists && obj instanceof HTMLElement && obj.tagName === 'TD') {
+      return 'HTMLTableDataCellElement';
+    }
+
+    /* ! Spec Conformance
+     * (https://html.spec.whatwg.org/#htmltableheadercellelement)
+     * WhatWG HTML$4.9.9 - The `td` element - Interface `HTMLTableHeaderCellElement`
+     * Note: Most browsers currently adher to the W3C DOM Level 2 spec
+     *       (https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-82915075)
+     *       which suggests that browsers should use HTMLTableCellElement for
+     *       both TD and TH elements. WhatWG separates these.
+     * Test: Object.prototype.toString.call(document.createElement('th'))
+     *  - Chrome === "[object HTMLTableCellElement]"
+     *  - Firefox === "[object HTMLTableCellElement]"
+     *  - Safari === "[object HTMLTableCellElement]"
+     */
+    if (htmlElementExists && obj instanceof HTMLElement && obj.tagName === 'TH') {
+      return 'HTMLTableHeaderCellElement';
+    }
+  }
+
+  /* ! Speed optimisation
+  * Pre:
+  *   Float64Array       x 625,644 ops/sec ±1.58% (80 runs sampled)
+  *   Float32Array       x 1,279,852 ops/sec ±2.91% (77 runs sampled)
+  *   Uint32Array        x 1,178,185 ops/sec ±1.95% (83 runs sampled)
+  *   Uint16Array        x 1,008,380 ops/sec ±2.25% (80 runs sampled)
+  *   Uint8Array         x 1,128,040 ops/sec ±2.11% (81 runs sampled)
+  *   Int32Array         x 1,170,119 ops/sec ±2.88% (80 runs sampled)
+  *   Int16Array         x 1,176,348 ops/sec ±5.79% (86 runs sampled)
+  *   Int8Array          x 1,058,707 ops/sec ±4.94% (77 runs sampled)
+  *   Uint8ClampedArray  x 1,110,633 ops/sec ±4.20% (80 runs sampled)
+  * Post:
+  *   Float64Array       x 7,105,671 ops/sec ±13.47% (64 runs sampled)
+  *   Float32Array       x 5,887,912 ops/sec ±1.46% (82 runs sampled)
+  *   Uint32Array        x 6,491,661 ops/sec ±1.76% (79 runs sampled)
+  *   Uint16Array        x 6,559,795 ops/sec ±1.67% (82 runs sampled)
+  *   Uint8Array         x 6,463,966 ops/sec ±1.43% (85 runs sampled)
+  *   Int32Array         x 5,641,841 ops/sec ±3.49% (81 runs sampled)
+  *   Int16Array         x 6,583,511 ops/sec ±1.98% (80 runs sampled)
+  *   Int8Array          x 6,606,078 ops/sec ±1.74% (81 runs sampled)
+  *   Uint8ClampedArray  x 6,602,224 ops/sec ±1.77% (83 runs sampled)
+  */
+  var stringTag = (symbolToStringTagExists && obj[Symbol.toStringTag]);
+  if (typeof stringTag === 'string') {
+    return stringTag;
+  }
+
+  if (getPrototypeOfExists) {
+    var objPrototype = Object.getPrototypeOf(obj);
+    /* ! Speed optimisation
+    * Pre:
+    *   regex literal      x 1,772,385 ops/sec ±1.85% (77 runs sampled)
+    *   regex constructor  x 2,143,634 ops/sec ±2.46% (78 runs sampled)
+    * Post:
+    *   regex literal      x 3,928,009 ops/sec ±0.65% (78 runs sampled)
+    *   regex constructor  x 3,931,108 ops/sec ±0.58% (84 runs sampled)
+    */
+    if (objPrototype === RegExp.prototype) {
+      return 'RegExp';
+    }
+
+    /* ! Speed optimisation
+    * Pre:
+    *   date               x 2,130,074 ops/sec ±4.42% (68 runs sampled)
+    * Post:
+    *   date               x 3,953,779 ops/sec ±1.35% (77 runs sampled)
+    */
+    if (objPrototype === Date.prototype) {
+      return 'Date';
+    }
+
+    /* ! Spec Conformance
+     * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-promise.prototype-@@tostringtag)
+     * ES6$25.4.5.4 - Promise.prototype[@@toStringTag] should be "Promise":
+     * Test: `Object.prototype.toString.call(Promise.resolve())``
+     *  - Chrome <=47 === "[object Object]"
+     *  - Edge <=20 === "[object Object]"
+     *  - Firefox 29-Latest === "[object Promise]"
+     *  - Safari 7.1-Latest === "[object Promise]"
+     */
+    if (promiseExists && objPrototype === Promise.prototype) {
+      return 'Promise';
+    }
+
+    /* ! Speed optimisation
+    * Pre:
+    *   set                x 2,222,186 ops/sec ±1.31% (82 runs sampled)
+    * Post:
+    *   set                x 4,545,879 ops/sec ±1.13% (83 runs sampled)
+    */
+    if (setExists && objPrototype === Set.prototype) {
+      return 'Set';
+    }
+
+    /* ! Speed optimisation
+    * Pre:
+    *   map                x 2,396,842 ops/sec ±1.59% (81 runs sampled)
+    * Post:
+    *   map                x 4,183,945 ops/sec ±6.59% (82 runs sampled)
+    */
+    if (mapExists && objPrototype === Map.prototype) {
+      return 'Map';
+    }
+
+    /* ! Speed optimisation
+    * Pre:
+    *   weakset            x 1,323,220 ops/sec ±2.17% (76 runs sampled)
+    * Post:
+    *   weakset            x 4,237,510 ops/sec ±2.01% (77 runs sampled)
+    */
+    if (weakSetExists && objPrototype === WeakSet.prototype) {
+      return 'WeakSet';
+    }
+
+    /* ! Speed optimisation
+    * Pre:
+    *   weakmap            x 1,500,260 ops/sec ±2.02% (78 runs sampled)
+    * Post:
+    *   weakmap            x 3,881,384 ops/sec ±1.45% (82 runs sampled)
+    */
+    if (weakMapExists && objPrototype === WeakMap.prototype) {
+      return 'WeakMap';
+    }
+
+    /* ! Spec Conformance
+     * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-dataview.prototype-@@tostringtag)
+     * ES6$24.2.4.21 - DataView.prototype[@@toStringTag] should be "DataView":
+     * Test: `Object.prototype.toString.call(new DataView(new ArrayBuffer(1)))``
+     *  - Edge <=13 === "[object Object]"
+     */
+    if (dataViewExists && objPrototype === DataView.prototype) {
+      return 'DataView';
+    }
+
+    /* ! Spec Conformance
+     * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%mapiteratorprototype%-@@tostringtag)
+     * ES6$23.1.5.2.2 - %MapIteratorPrototype%[@@toStringTag] should be "Map Iterator":
+     * Test: `Object.prototype.toString.call(new Map().entries())``
+     *  - Edge <=13 === "[object Object]"
+     */
+    if (mapExists && objPrototype === mapIteratorPrototype) {
+      return 'Map Iterator';
+    }
+
+    /* ! Spec Conformance
+     * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%setiteratorprototype%-@@tostringtag)
+     * ES6$23.2.5.2.2 - %SetIteratorPrototype%[@@toStringTag] should be "Set Iterator":
+     * Test: `Object.prototype.toString.call(new Set().entries())``
+     *  - Edge <=13 === "[object Object]"
+     */
+    if (setExists && objPrototype === setIteratorPrototype) {
+      return 'Set Iterator';
+    }
+
+    /* ! Spec Conformance
+     * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%arrayiteratorprototype%-@@tostringtag)
+     * ES6$22.1.5.2.2 - %ArrayIteratorPrototype%[@@toStringTag] should be "Array Iterator":
+     * Test: `Object.prototype.toString.call([][Symbol.iterator]())``
+     *  - Edge <=13 === "[object Object]"
+     */
+    if (arrayIteratorExists && objPrototype === arrayIteratorPrototype) {
+      return 'Array Iterator';
+    }
+
+    /* ! Spec Conformance
+     * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%stringiteratorprototype%-@@tostringtag)
+     * ES6$21.1.5.2.2 - %StringIteratorPrototype%[@@toStringTag] should be "String Iterator":
+     * Test: `Object.prototype.toString.call(''[Symbol.iterator]())``
+     *  - Edge <=13 === "[object Object]"
+     */
+    if (stringIteratorExists && objPrototype === stringIteratorPrototype) {
+      return 'String Iterator';
+    }
+
+    /* ! Speed optimisation
+    * Pre:
+    *   object from null   x 2,424,320 ops/sec ±1.67% (76 runs sampled)
+    * Post:
+    *   object from null   x 5,838,000 ops/sec ±0.99% (84 runs sampled)
+    */
+    if (objPrototype === null) {
+      return 'Object';
+    }
+  }
+
+  return Object
+    .prototype
+    .toString
+    .call(obj)
+    .slice(toStringLeftSliceLength, toStringRightSliceLength);
 };
+
+module.exports.typeDetect = module.exports;
 
 
 /***/ }),
-/* 112 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(("function" === "function" && __webpack_require__(82) && function (m) {
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(55)], __WEBPACK_AMD_DEFINE_FACTORY__ = (m),
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports. /*istanbul ignore end*/convertChangesToDMP = convertChangesToDMP;
+// See: http://code.google.com/p/google-diff-match-patch/wiki/API
+function convertChangesToDMP(changes) {
+  var ret = [],
+      change = /*istanbul ignore start*/void 0 /*istanbul ignore end*/,
+      operation = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
+  for (var i = 0; i < changes.length; i++) {
+    change = changes[i];
+    if (change.added) {
+      operation = 1;
+    } else if (change.removed) {
+      operation = -1;
+    } else {
+      operation = 0;
+    }
+
+    ret.push([operation, change.value]);
+  }
+  return ret;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9jb252ZXJ0L2RtcC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Z0NBQ2dCLG1CLEdBQUEsbUI7O0FBQVQsU0FBUyxtQkFBVCxDQUE2QixPQUE3QixFQUFzQztBQUMzQyxNQUFJLE1BQU0sRUFBVjtBQUFBLE1BQ0ksUyx5QkFBQSxNLHdCQURKO0FBQUEsTUFFSSxZLHlCQUFBLE0sd0JBRko7QUFHQSxPQUFLLElBQUksSUFBSSxDQUFiLEVBQWdCLElBQUksUUFBUSxNQUE1QixFQUFvQyxHQUFwQyxFQUF5QztBQUN2QyxhQUFTLFFBQVEsQ0FBUixDQUFUO0FBQ0EsUUFBSSxPQUFPLEtBQVgsRUFBa0I7QUFDaEIsa0JBQVksQ0FBWjtBQUNELEtBRkQsTUFFTyxJQUFJLE9BQU8sT0FBWCxFQUFvQjtBQUN6QixrQkFBWSxDQUFDLENBQWI7QUFDRCxLQUZNLE1BRUE7QUFDTCxrQkFBWSxDQUFaO0FBQ0Q7O0FBRUQsUUFBSSxJQUFKLENBQVMsQ0FBQyxTQUFELEVBQVksT0FBTyxLQUFuQixDQUFUO0FBQ0Q7QUFDRCxTQUFPLEdBQVA7QUFDRCIsImZpbGUiOiJkbXAuanMiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBTZWU6IGh0dHA6Ly9jb2RlLmdvb2dsZS5jb20vcC9nb29nbGUtZGlmZi1tYXRjaC1wYXRjaC93aWtpL0FQSVxuZXhwb3J0IGZ1bmN0aW9uIGNvbnZlcnRDaGFuZ2VzVG9ETVAoY2hhbmdlcykge1xuICBsZXQgcmV0ID0gW10sXG4gICAgICBjaGFuZ2UsXG4gICAgICBvcGVyYXRpb247XG4gIGZvciAobGV0IGkgPSAwOyBpIDwgY2hhbmdlcy5sZW5ndGg7IGkrKykge1xuICAgIGNoYW5nZSA9IGNoYW5nZXNbaV07XG4gICAgaWYgKGNoYW5nZS5hZGRlZCkge1xuICAgICAgb3BlcmF0aW9uID0gMTtcbiAgICB9IGVsc2UgaWYgKGNoYW5nZS5yZW1vdmVkKSB7XG4gICAgICBvcGVyYXRpb24gPSAtMTtcbiAgICB9IGVsc2Uge1xuICAgICAgb3BlcmF0aW9uID0gMDtcbiAgICB9XG5cbiAgICByZXQucHVzaChbb3BlcmF0aW9uLCBjaGFuZ2UudmFsdWVdKTtcbiAgfVxuICByZXR1cm4gcmV0O1xufVxuIl19
+
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports. /*istanbul ignore end*/convertChangesToXML = convertChangesToXML;
+function convertChangesToXML(changes) {
+  var ret = [];
+  for (var i = 0; i < changes.length; i++) {
+    var change = changes[i];
+    if (change.added) {
+      ret.push('<ins>');
+    } else if (change.removed) {
+      ret.push('<del>');
+    }
+
+    ret.push(escapeHTML(change.value));
+
+    if (change.added) {
+      ret.push('</ins>');
+    } else if (change.removed) {
+      ret.push('</del>');
+    }
+  }
+  return ret.join('');
+}
+
+function escapeHTML(s) {
+  var n = s;
+  n = n.replace(/&/g, '&amp;');
+  n = n.replace(/</g, '&lt;');
+  n = n.replace(/>/g, '&gt;');
+  n = n.replace(/"/g, '&quot;');
+
+  return n;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9jb252ZXJ0L3htbC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Z0NBQWdCLG1CLEdBQUEsbUI7QUFBVCxTQUFTLG1CQUFULENBQTZCLE9BQTdCLEVBQXNDO0FBQzNDLE1BQUksTUFBTSxFQUFWO0FBQ0EsT0FBSyxJQUFJLElBQUksQ0FBYixFQUFnQixJQUFJLFFBQVEsTUFBNUIsRUFBb0MsR0FBcEMsRUFBeUM7QUFDdkMsUUFBSSxTQUFTLFFBQVEsQ0FBUixDQUFiO0FBQ0EsUUFBSSxPQUFPLEtBQVgsRUFBa0I7QUFDaEIsVUFBSSxJQUFKLENBQVMsT0FBVDtBQUNELEtBRkQsTUFFTyxJQUFJLE9BQU8sT0FBWCxFQUFvQjtBQUN6QixVQUFJLElBQUosQ0FBUyxPQUFUO0FBQ0Q7O0FBRUQsUUFBSSxJQUFKLENBQVMsV0FBVyxPQUFPLEtBQWxCLENBQVQ7O0FBRUEsUUFBSSxPQUFPLEtBQVgsRUFBa0I7QUFDaEIsVUFBSSxJQUFKLENBQVMsUUFBVDtBQUNELEtBRkQsTUFFTyxJQUFJLE9BQU8sT0FBWCxFQUFvQjtBQUN6QixVQUFJLElBQUosQ0FBUyxRQUFUO0FBQ0Q7QUFDRjtBQUNELFNBQU8sSUFBSSxJQUFKLENBQVMsRUFBVCxDQUFQO0FBQ0Q7O0FBRUQsU0FBUyxVQUFULENBQW9CLENBQXBCLEVBQXVCO0FBQ3JCLE1BQUksSUFBSSxDQUFSO0FBQ0EsTUFBSSxFQUFFLE9BQUYsQ0FBVSxJQUFWLEVBQWdCLE9BQWhCLENBQUo7QUFDQSxNQUFJLEVBQUUsT0FBRixDQUFVLElBQVYsRUFBZ0IsTUFBaEIsQ0FBSjtBQUNBLE1BQUksRUFBRSxPQUFGLENBQVUsSUFBVixFQUFnQixNQUFoQixDQUFKO0FBQ0EsTUFBSSxFQUFFLE9BQUYsQ0FBVSxJQUFWLEVBQWdCLFFBQWhCLENBQUo7O0FBRUEsU0FBTyxDQUFQO0FBQ0QiLCJmaWxlIjoieG1sLmpzIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGZ1bmN0aW9uIGNvbnZlcnRDaGFuZ2VzVG9YTUwoY2hhbmdlcykge1xuICBsZXQgcmV0ID0gW107XG4gIGZvciAobGV0IGkgPSAwOyBpIDwgY2hhbmdlcy5sZW5ndGg7IGkrKykge1xuICAgIGxldCBjaGFuZ2UgPSBjaGFuZ2VzW2ldO1xuICAgIGlmIChjaGFuZ2UuYWRkZWQpIHtcbiAgICAgIHJldC5wdXNoKCc8aW5zPicpO1xuICAgIH0gZWxzZSBpZiAoY2hhbmdlLnJlbW92ZWQpIHtcbiAgICAgIHJldC5wdXNoKCc8ZGVsPicpO1xuICAgIH1cblxuICAgIHJldC5wdXNoKGVzY2FwZUhUTUwoY2hhbmdlLnZhbHVlKSk7XG5cbiAgICBpZiAoY2hhbmdlLmFkZGVkKSB7XG4gICAgICByZXQucHVzaCgnPC9pbnM+Jyk7XG4gICAgfSBlbHNlIGlmIChjaGFuZ2UucmVtb3ZlZCkge1xuICAgICAgcmV0LnB1c2goJzwvZGVsPicpO1xuICAgIH1cbiAgfVxuICByZXR1cm4gcmV0LmpvaW4oJycpO1xufVxuXG5mdW5jdGlvbiBlc2NhcGVIVE1MKHMpIHtcbiAgbGV0IG4gPSBzO1xuICBuID0gbi5yZXBsYWNlKC8mL2csICcmYW1wOycpO1xuICBuID0gbi5yZXBsYWNlKC88L2csICcmbHQ7Jyk7XG4gIG4gPSBuLnJlcGxhY2UoLz4vZywgJyZndDsnKTtcbiAgbiA9IG4ucmVwbGFjZSgvXCIvZywgJyZxdW90OycpO1xuXG4gIHJldHVybiBuO1xufVxuIl19
+
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports.arrayDiff = undefined;
+exports. /*istanbul ignore end*/diffArrays = diffArrays;
+
+var /*istanbul ignore start*/_base = __webpack_require__(13) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/*istanbul ignore end*/var arrayDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/arrayDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
+arrayDiff.tokenize = arrayDiff.join = function (value) {
+  return value.slice();
+};
+
+function diffArrays(oldArr, newArr, callback) {
+  return arrayDiff.diff(oldArr, newArr, callback);
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL2FycmF5LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Z0NBT2dCLFUsR0FBQSxVOztBQVBoQixJLHlCQUFBLHlCLHdCQUFBOzs7Ozs7O3VCQUVPLElBQU0sWSx5QkFBQSxRLHdCQUFBLFlBQVksSSx5QkFBQSxtQix3QkFBbEI7QUFDUCxVQUFVLFFBQVYsR0FBcUIsVUFBVSxJQUFWLEdBQWlCLFVBQVMsS0FBVCxFQUFnQjtBQUNwRCxTQUFPLE1BQU0sS0FBTixFQUFQO0FBQ0QsQ0FGRDs7QUFJTyxTQUFTLFVBQVQsQ0FBb0IsTUFBcEIsRUFBNEIsTUFBNUIsRUFBb0MsUUFBcEMsRUFBOEM7QUFBRSxTQUFPLFVBQVUsSUFBVixDQUFlLE1BQWYsRUFBdUIsTUFBdkIsRUFBK0IsUUFBL0IsQ0FBUDtBQUFrRCIsImZpbGUiOiJhcnJheS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBEaWZmIGZyb20gJy4vYmFzZSc7XG5cbmV4cG9ydCBjb25zdCBhcnJheURpZmYgPSBuZXcgRGlmZigpO1xuYXJyYXlEaWZmLnRva2VuaXplID0gYXJyYXlEaWZmLmpvaW4gPSBmdW5jdGlvbih2YWx1ZSkge1xuICByZXR1cm4gdmFsdWUuc2xpY2UoKTtcbn07XG5cbmV4cG9ydCBmdW5jdGlvbiBkaWZmQXJyYXlzKG9sZEFyciwgbmV3QXJyLCBjYWxsYmFjaykgeyByZXR1cm4gYXJyYXlEaWZmLmRpZmYob2xkQXJyLCBuZXdBcnIsIGNhbGxiYWNrKTsgfVxuIl19
+
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports.characterDiff = undefined;
+exports. /*istanbul ignore end*/diffChars = diffChars;
+
+var /*istanbul ignore start*/_base = __webpack_require__(13) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/*istanbul ignore end*/var characterDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/characterDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
+function diffChars(oldStr, newStr, callback) {
+  return characterDiff.diff(oldStr, newStr, callback);
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL2NoYXJhY3Rlci5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O2dDQUdnQixTLEdBQUEsUzs7QUFIaEIsSSx5QkFBQSx5Qix3QkFBQTs7Ozs7Ozt1QkFFTyxJQUFNLGdCLHlCQUFBLFEsd0JBQUEsZ0JBQWdCLEkseUJBQUEsbUIsd0JBQXRCO0FBQ0EsU0FBUyxTQUFULENBQW1CLE1BQW5CLEVBQTJCLE1BQTNCLEVBQW1DLFFBQW5DLEVBQTZDO0FBQUUsU0FBTyxjQUFjLElBQWQsQ0FBbUIsTUFBbkIsRUFBMkIsTUFBM0IsRUFBbUMsUUFBbkMsQ0FBUDtBQUFzRCIsImZpbGUiOiJjaGFyYWN0ZXIuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgRGlmZiBmcm9tICcuL2Jhc2UnO1xuXG5leHBvcnQgY29uc3QgY2hhcmFjdGVyRGlmZiA9IG5ldyBEaWZmKCk7XG5leHBvcnQgZnVuY3Rpb24gZGlmZkNoYXJzKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjaykgeyByZXR1cm4gY2hhcmFjdGVyRGlmZi5kaWZmKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjayk7IH1cbiJdfQ==
+
+
+/***/ }),
+/* 120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports.cssDiff = undefined;
+exports. /*istanbul ignore end*/diffCss = diffCss;
+
+var /*istanbul ignore start*/_base = __webpack_require__(13) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/*istanbul ignore end*/var cssDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/cssDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
+cssDiff.tokenize = function (value) {
+  return value.split(/([{}:;,]|\s+)/);
+};
+
+function diffCss(oldStr, newStr, callback) {
+  return cssDiff.diff(oldStr, newStr, callback);
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL2Nzcy5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O2dDQU9nQixPLEdBQUEsTzs7QUFQaEIsSSx5QkFBQSx5Qix3QkFBQTs7Ozs7Ozt1QkFFTyxJQUFNLFUseUJBQUEsUSx3QkFBQSxVQUFVLEkseUJBQUEsbUIsd0JBQWhCO0FBQ1AsUUFBUSxRQUFSLEdBQW1CLFVBQVMsS0FBVCxFQUFnQjtBQUNqQyxTQUFPLE1BQU0sS0FBTixDQUFZLGVBQVosQ0FBUDtBQUNELENBRkQ7O0FBSU8sU0FBUyxPQUFULENBQWlCLE1BQWpCLEVBQXlCLE1BQXpCLEVBQWlDLFFBQWpDLEVBQTJDO0FBQUUsU0FBTyxRQUFRLElBQVIsQ0FBYSxNQUFiLEVBQXFCLE1BQXJCLEVBQTZCLFFBQTdCLENBQVA7QUFBZ0QiLCJmaWxlIjoiY3NzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IERpZmYgZnJvbSAnLi9iYXNlJztcblxuZXhwb3J0IGNvbnN0IGNzc0RpZmYgPSBuZXcgRGlmZigpO1xuY3NzRGlmZi50b2tlbml6ZSA9IGZ1bmN0aW9uKHZhbHVlKSB7XG4gIHJldHVybiB2YWx1ZS5zcGxpdCgvKFt7fTo7LF18XFxzKykvKTtcbn07XG5cbmV4cG9ydCBmdW5jdGlvbiBkaWZmQ3NzKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjaykgeyByZXR1cm4gY3NzRGlmZi5kaWZmKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjayk7IH1cbiJdfQ==
+
+
+/***/ }),
+/* 121 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports.jsonDiff = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+exports. /*istanbul ignore end*/diffJson = diffJson;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/canonicalize = canonicalize;
+
+var /*istanbul ignore start*/_base = __webpack_require__(13) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+var _base2 = _interopRequireDefault(_base);
+
+/*istanbul ignore end*/
+var /*istanbul ignore start*/_line = __webpack_require__(39) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/*istanbul ignore end*/
+
+var objectPrototypeToString = Object.prototype.toString;
+
+var jsonDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/jsonDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
+// Discriminate between two lines of pretty-printed, serialized JSON where one of them has a
+// dangling comma and the other doesn't. Turns out including the dangling comma yields the nicest output:
+jsonDiff.useLongestToken = true;
+
+jsonDiff.tokenize = /*istanbul ignore start*/_line.lineDiff. /*istanbul ignore end*/tokenize;
+jsonDiff.castInput = function (value) {
+  /*istanbul ignore start*/var /*istanbul ignore end*/undefinedReplacement = this.options.undefinedReplacement;
+
+
+  return typeof value === 'string' ? value : JSON.stringify(canonicalize(value), function (k, v) {
+    if (typeof v === 'undefined') {
+      return undefinedReplacement;
+    }
+
+    return v;
+  }, '  ');
+};
+jsonDiff.equals = function (left, right) {
+  return (/*istanbul ignore start*/_base2['default']. /*istanbul ignore end*/prototype.equals(left.replace(/,([\r\n])/g, '$1'), right.replace(/,([\r\n])/g, '$1'))
+  );
+};
+
+function diffJson(oldObj, newObj, options) {
+  return jsonDiff.diff(oldObj, newObj, options);
+}
+
+// This function handles the presence of circular references by bailing out when encountering an
+// object that is already on the "stack" of items being processed.
+function canonicalize(obj, stack, replacementStack) {
+  stack = stack || [];
+  replacementStack = replacementStack || [];
+
+  var i = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
+
+  for (i = 0; i < stack.length; i += 1) {
+    if (stack[i] === obj) {
+      return replacementStack[i];
+    }
+  }
+
+  var canonicalizedObj = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
+
+  if ('[object Array]' === objectPrototypeToString.call(obj)) {
+    stack.push(obj);
+    canonicalizedObj = new Array(obj.length);
+    replacementStack.push(canonicalizedObj);
+    for (i = 0; i < obj.length; i += 1) {
+      canonicalizedObj[i] = canonicalize(obj[i], stack, replacementStack);
+    }
+    stack.pop();
+    replacementStack.pop();
+    return canonicalizedObj;
+  }
+
+  if (obj && obj.toJSON) {
+    obj = obj.toJSON();
+  }
+
+  if ( /*istanbul ignore start*/(typeof /*istanbul ignore end*/obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && obj !== null) {
+    stack.push(obj);
+    canonicalizedObj = {};
+    replacementStack.push(canonicalizedObj);
+    var sortedKeys = [],
+        key = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
+    for (key in obj) {
+      /* istanbul ignore else */
+      if (obj.hasOwnProperty(key)) {
+        sortedKeys.push(key);
+      }
+    }
+    sortedKeys.sort();
+    for (i = 0; i < sortedKeys.length; i += 1) {
+      key = sortedKeys[i];
+      canonicalizedObj[key] = canonicalize(obj[key], stack, replacementStack);
+    }
+    stack.pop();
+    replacementStack.pop();
+  } else {
+    canonicalizedObj = obj;
+  }
+  return canonicalizedObj;
+}
+//# sourceMappingURL=data:application/json;base64,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QWlCLElBQWpCLENBQXNCLGdCQUF0QjtBQUNBLFFBQUksYUFBYSxFQUFqQjtBQUFBLFFBQ0ksTSx5QkFBQSxNLHdCQURKO0FBRUEsU0FBSyxHQUFMLElBQVksR0FBWixFQUFpQjs7QUFFZixVQUFJLElBQUksY0FBSixDQUFtQixHQUFuQixDQUFKLEVBQTZCO0FBQzNCLG1CQUFXLElBQVgsQ0FBZ0IsR0FBaEI7QUFDRDtBQUNGO0FBQ0QsZUFBVyxJQUFYO0FBQ0EsU0FBSyxJQUFJLENBQVQsRUFBWSxJQUFJLFdBQVcsTUFBM0IsRUFBbUMsS0FBSyxDQUF4QyxFQUEyQztBQUN6QyxZQUFNLFdBQVcsQ0FBWCxDQUFOO0FBQ0EsdUJBQWlCLEdBQWpCLElBQXdCLGFBQWEsSUFBSSxHQUFKLENBQWIsRUFBdUIsS0FBdkIsRUFBOEIsZ0JBQTlCLENBQXhCO0FBQ0Q7QUFDRCxVQUFNLEdBQU47QUFDQSxxQkFBaUIsR0FBakI7QUFDRCxHQW5CRCxNQW1CTztBQUNMLHVCQUFtQixHQUFuQjtBQUNEO0FBQ0QsU0FBTyxnQkFBUDtBQUNEIiwiZmlsZSI6Impzb24uanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgRGlmZiBmcm9tICcuL2Jhc2UnO1xuaW1wb3J0IHtsaW5lRGlmZn0gZnJvbSAnLi9saW5lJztcblxuY29uc3Qgb2JqZWN0UHJvdG90eXBlVG9TdHJpbmcgPSBPYmplY3QucHJvdG90eXBlLnRvU3RyaW5nO1xuXG5cbmV4cG9ydCBjb25zdCBqc29uRGlmZiA9IG5ldyBEaWZmKCk7XG4vLyBEaXNjcmltaW5hdGUgYmV0d2VlbiB0d28gbGluZXMgb2YgcHJldHR5LXByaW50ZWQsIHNlcmlhbGl6ZWQgSlNPTiB3aGVyZSBvbmUgb2YgdGhlbSBoYXMgYVxuLy8gZGFuZ2xpbmcgY29tbWEgYW5kIHRoZSBvdGhlciBkb2Vzbid0LiBUdXJucyBvdXQgaW5jbHVkaW5nIHRoZSBkYW5nbGluZyBjb21tYSB5aWVsZHMgdGhlIG5pY2VzdCBvdXRwdXQ6XG5qc29uRGlmZi51c2VMb25nZXN0VG9rZW4gPSB0cnVlO1xuXG5qc29uRGlmZi50b2tlbml6ZSA9IGxpbmVEaWZmLnRva2VuaXplO1xuanNvbkRpZmYuY2FzdElucHV0ID0gZnVuY3Rpb24odmFsdWUpIHtcbiAgY29uc3Qge3VuZGVmaW5lZFJlcGxhY2VtZW50fSA9IHRoaXMub3B0aW9ucztcblxuICByZXR1cm4gdHlwZW9mIHZhbHVlID09PSAnc3RyaW5nJyA/IHZhbHVlIDogSlNPTi5zdHJpbmdpZnkoY2Fub25pY2FsaXplKHZhbHVlKSwgZnVuY3Rpb24oaywgdikge1xuICAgIGlmICh0eXBlb2YgdiA9PT0gJ3VuZGVmaW5lZCcpIHtcbiAgICAgIHJldHVybiB1bmRlZmluZWRSZXBsYWNlbWVudDtcbiAgICB9XG5cbiAgICByZXR1cm4gdjtcbiAgfSwgJyAgJyk7XG59O1xuanNvbkRpZmYuZXF1YWxzID0gZnVuY3Rpb24obGVmdCwgcmlnaHQpIHtcbiAgcmV0dXJuIERpZmYucHJvdG90eXBlLmVxdWFscyhsZWZ0LnJlcGxhY2UoLywoW1xcclxcbl0pL2csICckMScpLCByaWdodC5yZXBsYWNlKC8sKFtcXHJcXG5dKS9nLCAnJDEnKSk7XG59O1xuXG5leHBvcnQgZnVuY3Rpb24gZGlmZkpzb24ob2xkT2JqLCBuZXdPYmosIG9wdGlvbnMpIHsgcmV0dXJuIGpzb25EaWZmLmRpZmYob2xkT2JqLCBuZXdPYmosIG9wdGlvbnMpOyB9XG5cbi8vIFRoaXMgZnVuY3Rpb24gaGFuZGxlcyB0aGUgcHJlc2VuY2Ugb2YgY2lyY3VsYXIgcmVmZXJlbmNlcyBieSBiYWlsaW5nIG91dCB3aGVuIGVuY291bnRlcmluZyBhblxuLy8gb2JqZWN0IHRoYXQgaXMgYWxyZWFkeSBvbiB0aGUgXCJzdGFja1wiIG9mIGl0ZW1zIGJlaW5nIHByb2Nlc3NlZC5cbmV4cG9ydCBmdW5jdGlvbiBjYW5vbmljYWxpemUob2JqLCBzdGFjaywgcmVwbGFjZW1lbnRTdGFjaykge1xuICBzdGFjayA9IHN0YWNrIHx8IFtdO1xuICByZXBsYWNlbWVudFN0YWNrID0gcmVwbGFjZW1lbnRTdGFjayB8fCBbXTtcblxuICBsZXQgaTtcblxuICBmb3IgKGkgPSAwOyBpIDwgc3RhY2subGVuZ3RoOyBpICs9IDEpIHtcbiAgICBpZiAoc3RhY2tbaV0gPT09IG9iaikge1xuICAgICAgcmV0dXJuIHJlcGxhY2VtZW50U3RhY2tbaV07XG4gICAgfVxuICB9XG5cbiAgbGV0IGNhbm9uaWNhbGl6ZWRPYmo7XG5cbiAgaWYgKCdbb2JqZWN0IEFycmF5XScgPT09IG9iamVjdFByb3RvdHlwZVRvU3RyaW5nLmNhbGwob2JqKSkge1xuICAgIHN0YWNrLnB1c2gob2JqKTtcbiAgICBjYW5vbmljYWxpemVkT2JqID0gbmV3IEFycmF5KG9iai5sZW5ndGgpO1xuICAgIHJlcGxhY2VtZW50U3RhY2sucHVzaChjYW5vbmljYWxpemVkT2JqKTtcbiAgICBmb3IgKGkgPSAwOyBpIDwgb2JqLmxlbmd0aDsgaSArPSAxKSB7XG4gICAgICBjYW5vbmljYWxpemVkT2JqW2ldID0gY2Fub25pY2FsaXplKG9ialtpXSwgc3RhY2ssIHJlcGxhY2VtZW50U3RhY2spO1xuICAgIH1cbiAgICBzdGFjay5wb3AoKTtcbiAgICByZXBsYWNlbWVudFN0YWNrLnBvcCgpO1xuICAgIHJldHVybiBjYW5vbmljYWxpemVkT2JqO1xuICB9XG5cbiAgaWYgKG9iaiAmJiBvYmoudG9KU09OKSB7XG4gICAgb2JqID0gb2JqLnRvSlNPTigpO1xuICB9XG5cbiAgaWYgKHR5cGVvZiBvYmogPT09ICdvYmplY3QnICYmIG9iaiAhPT0gbnVsbCkge1xuICAgIHN0YWNrLnB1c2gob2JqKTtcbiAgICBjYW5vbmljYWxpemVkT2JqID0ge307XG4gICAgcmVwbGFjZW1lbnRTdGFjay5wdXNoKGNhbm9uaWNhbGl6ZWRPYmopO1xuICAgIGxldCBzb3J0ZWRLZXlzID0gW10sXG4gICAgICAgIGtleTtcbiAgICBmb3IgKGtleSBpbiBvYmopIHtcbiAgICAgIC8qIGlzdGFuYnVsIGlnbm9yZSBlbHNlICovXG4gICAgICBpZiAob2JqLmhhc093blByb3BlcnR5KGtleSkpIHtcbiAgICAgICAgc29ydGVkS2V5cy5wdXNoKGtleSk7XG4gICAgICB9XG4gICAgfVxuICAgIHNvcnRlZEtleXMuc29ydCgpO1xuICAgIGZvciAoaSA9IDA7IGkgPCBzb3J0ZWRLZXlzLmxlbmd0aDsgaSArPSAxKSB7XG4gICAgICBrZXkgPSBzb3J0ZWRLZXlzW2ldO1xuICAgICAgY2Fub25pY2FsaXplZE9ialtrZXldID0gY2Fub25pY2FsaXplKG9ialtrZXldLCBzdGFjaywgcmVwbGFjZW1lbnRTdGFjayk7XG4gICAgfVxuICAgIHN0YWNrLnBvcCgpO1xuICAgIHJlcGxhY2VtZW50U3RhY2sucG9wKCk7XG4gIH0gZWxzZSB7XG4gICAgY2Fub25pY2FsaXplZE9iaiA9IG9iajtcbiAgfVxuICByZXR1cm4gY2Fub25pY2FsaXplZE9iajtcbn1cbiJdfQ==
+
+
+/***/ }),
+/* 122 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports.sentenceDiff = undefined;
+exports. /*istanbul ignore end*/diffSentences = diffSentences;
+
+var /*istanbul ignore start*/_base = __webpack_require__(13) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/*istanbul ignore end*/var sentenceDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/sentenceDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
+sentenceDiff.tokenize = function (value) {
+  return value.split(/(\S.+?[.!?])(?=\s+|$)/);
+};
+
+function diffSentences(oldStr, newStr, callback) {
+  return sentenceDiff.diff(oldStr, newStr, callback);
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL3NlbnRlbmNlLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Z0NBUWdCLGEsR0FBQSxhOztBQVJoQixJLHlCQUFBLHlCLHdCQUFBOzs7Ozs7O3VCQUdPLElBQU0sZSx5QkFBQSxRLHdCQUFBLGVBQWUsSSx5QkFBQSxtQix3QkFBckI7QUFDUCxhQUFhLFFBQWIsR0FBd0IsVUFBUyxLQUFULEVBQWdCO0FBQ3RDLFNBQU8sTUFBTSxLQUFOLENBQVksdUJBQVosQ0FBUDtBQUNELENBRkQ7O0FBSU8sU0FBUyxhQUFULENBQXVCLE1BQXZCLEVBQStCLE1BQS9CLEVBQXVDLFFBQXZDLEVBQWlEO0FBQUUsU0FBTyxhQUFhLElBQWIsQ0FBa0IsTUFBbEIsRUFBMEIsTUFBMUIsRUFBa0MsUUFBbEMsQ0FBUDtBQUFxRCIsImZpbGUiOiJzZW50ZW5jZS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBEaWZmIGZyb20gJy4vYmFzZSc7XG5cblxuZXhwb3J0IGNvbnN0IHNlbnRlbmNlRGlmZiA9IG5ldyBEaWZmKCk7XG5zZW50ZW5jZURpZmYudG9rZW5pemUgPSBmdW5jdGlvbih2YWx1ZSkge1xuICByZXR1cm4gdmFsdWUuc3BsaXQoLyhcXFMuKz9bLiE/XSkoPz1cXHMrfCQpLyk7XG59O1xuXG5leHBvcnQgZnVuY3Rpb24gZGlmZlNlbnRlbmNlcyhvbGRTdHIsIG5ld1N0ciwgY2FsbGJhY2spIHsgcmV0dXJuIHNlbnRlbmNlRGlmZi5kaWZmKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjayk7IH1cbiJdfQ==
+
+
+/***/ }),
+/* 123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports.wordDiff = undefined;
+exports. /*istanbul ignore end*/diffWords = diffWords;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffWordsWithSpace = diffWordsWithSpace;
+
+var /*istanbul ignore start*/_base = __webpack_require__(13) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+var _base2 = _interopRequireDefault(_base);
+
+/*istanbul ignore end*/
+var /*istanbul ignore start*/_params = __webpack_require__(60) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/*istanbul ignore end*/
+
+// Based on https://en.wikipedia.org/wiki/Latin_script_in_Unicode
+//
+// Ranges and exceptions:
+// Latin-1 Supplement, 0080–00FF
+//  - U+00D7  × Multiplication sign
+//  - U+00F7  ÷ Division sign
+// Latin Extended-A, 0100–017F
+// Latin Extended-B, 0180–024F
+// IPA Extensions, 0250–02AF
+// Spacing Modifier Letters, 02B0–02FF
+//  - U+02C7  ˇ &#711;  Caron
+//  - U+02D8  ˘ &#728;  Breve
+//  - U+02D9  ˙ &#729;  Dot Above
+//  - U+02DA  ˚ &#730;  Ring Above
+//  - U+02DB  ˛ &#731;  Ogonek
+//  - U+02DC  ˜ &#732;  Small Tilde
+//  - U+02DD  ˝ &#733;  Double Acute Accent
+// Latin Extended Additional, 1E00–1EFF
+var extendedWordChars = /^[A-Za-z\xC0-\u02C6\u02C8-\u02D7\u02DE-\u02FF\u1E00-\u1EFF]+$/;
+
+var reWhitespace = /\S/;
+
+var wordDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/wordDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
+wordDiff.equals = function (left, right) {
+  return left === right || this.options.ignoreWhitespace && !reWhitespace.test(left) && !reWhitespace.test(right);
+};
+wordDiff.tokenize = function (value) {
+  var tokens = value.split(/(\s+|\b)/);
+
+  // Join the boundary splits that we do not consider to be boundaries. This is primarily the extended Latin character set.
+  for (var i = 0; i < tokens.length - 1; i++) {
+    // If we have an empty string in the next field and we have only word chars before and after, merge
+    if (!tokens[i + 1] && tokens[i + 2] && extendedWordChars.test(tokens[i]) && extendedWordChars.test(tokens[i + 2])) {
+      tokens[i] += tokens[i + 2];
+      tokens.splice(i + 1, 2);
+      i--;
+    }
+  }
+
+  return tokens;
+};
+
+function diffWords(oldStr, newStr, callback) {
+  var options = /*istanbul ignore start*/(0, _params.generateOptions) /*istanbul ignore end*/(callback, { ignoreWhitespace: true });
+  return wordDiff.diff(oldStr, newStr, options);
+}
+function diffWordsWithSpace(oldStr, newStr, callback) {
+  return wordDiff.diff(oldStr, newStr, callback);
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL3dvcmQuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztnQ0ErQ2dCLFMsR0FBQSxTO3lEQUlBLGtCLEdBQUEsa0I7O0FBbkRoQixJLHlCQUFBLHlCLHdCQUFBOzs7Ozs7QUFDQSxJLHlCQUFBLG1DLHdCQUFBOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBb0JBLElBQU0sb0JBQW9CLCtEQUExQjs7QUFFQSxJQUFNLGVBQWUsSUFBckI7O0FBRU8sSUFBTSxXLHlCQUFBLFEsd0JBQUEsV0FBVyxJLHlCQUFBLG1CLHdCQUFqQjtBQUNQLFNBQVMsTUFBVCxHQUFrQixVQUFTLElBQVQsRUFBZSxLQUFmLEVBQXNCO0FBQ3RDLFNBQU8sU0FBUyxLQUFULElBQW1CLEtBQUssT0FBTCxDQUFhLGdCQUFiLElBQWlDLENBQUMsYUFBYSxJQUFiLENBQWtCLElBQWxCLENBQWxDLElBQTZELENBQUMsYUFBYSxJQUFiLENBQWtCLEtBQWxCLENBQXhGO0FBQ0QsQ0FGRDtBQUdBLFNBQVMsUUFBVCxHQUFvQixVQUFTLEtBQVQsRUFBZ0I7QUFDbEMsTUFBSSxTQUFTLE1BQU0sS0FBTixDQUFZLFVBQVosQ0FBYjs7O0FBR0EsT0FBSyxJQUFJLElBQUksQ0FBYixFQUFnQixJQUFJLE9BQU8sTUFBUCxHQUFnQixDQUFwQyxFQUF1QyxHQUF2QyxFQUE0Qzs7QUFFMUMsUUFBSSxDQUFDLE9BQU8sSUFBSSxDQUFYLENBQUQsSUFBa0IsT0FBTyxJQUFJLENBQVgsQ0FBbEIsSUFDSyxrQkFBa0IsSUFBbEIsQ0FBdUIsT0FBTyxDQUFQLENBQXZCLENBREwsSUFFSyxrQkFBa0IsSUFBbEIsQ0FBdUIsT0FBTyxJQUFJLENBQVgsQ0FBdkIsQ0FGVCxFQUVnRDtBQUM5QyxhQUFPLENBQVAsS0FBYSxPQUFPLElBQUksQ0FBWCxDQUFiO0FBQ0EsYUFBTyxNQUFQLENBQWMsSUFBSSxDQUFsQixFQUFxQixDQUFyQjtBQUNBO0FBQ0Q7QUFDRjs7QUFFRCxTQUFPLE1BQVA7QUFDRCxDQWhCRDs7QUFrQk8sU0FBUyxTQUFULENBQW1CLE1BQW5CLEVBQTJCLE1BQTNCLEVBQW1DLFFBQW5DLEVBQTZDO0FBQ2xELE1BQUksVSx5QkFBVSw0Qix3QkFBQSxDQUFnQixRQUFoQixFQUEwQixFQUFDLGtCQUFrQixJQUFuQixFQUExQixDQUFkO0FBQ0EsU0FBTyxTQUFTLElBQVQsQ0FBYyxNQUFkLEVBQXNCLE1BQXRCLEVBQThCLE9BQTlCLENBQVA7QUFDRDtBQUNNLFNBQVMsa0JBQVQsQ0FBNEIsTUFBNUIsRUFBb0MsTUFBcEMsRUFBNEMsUUFBNUMsRUFBc0Q7QUFDM0QsU0FBTyxTQUFTLElBQVQsQ0FBYyxNQUFkLEVBQXNCLE1BQXRCLEVBQThCLFFBQTlCLENBQVA7QUFDRCIsImZpbGUiOiJ3b3JkLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IERpZmYgZnJvbSAnLi9iYXNlJztcbmltcG9ydCB7Z2VuZXJhdGVPcHRpb25zfSBmcm9tICcuLi91dGlsL3BhcmFtcyc7XG5cbi8vIEJhc2VkIG9uIGh0dHBzOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpL0xhdGluX3NjcmlwdF9pbl9Vbmljb2RlXG4vL1xuLy8gUmFuZ2VzIGFuZCBleGNlcHRpb25zOlxuLy8gTGF0aW4tMSBTdXBwbGVtZW50LCAwMDgw4oCTMDBGRlxuLy8gIC0gVSswMEQ3ICDDlyBNdWx0aXBsaWNhdGlvbiBzaWduXG4vLyAgLSBVKzAwRjcgIMO3IERpdmlzaW9uIHNpZ25cbi8vIExhdGluIEV4dGVuZGVkLUEsIDAxMDDigJMwMTdGXG4vLyBMYXRpbiBFeHRlbmRlZC1CLCAwMTgw4oCTMDI0RlxuLy8gSVBBIEV4dGVuc2lvbnMsIDAyNTDigJMwMkFGXG4vLyBTcGFjaW5nIE1vZGlmaWVyIExldHRlcnMsIDAyQjDigJMwMkZGXG4vLyAgLSBVKzAyQzcgIMuHICYjNzExOyAgQ2Fyb25cbi8vICAtIFUrMDJEOCAgy5ggJiM3Mjg7ICBCcmV2ZVxuLy8gIC0gVSswMkQ5ICDLmSAmIzcyOTsgIERvdCBBYm92ZVxuLy8gIC0gVSswMkRBICDLmiAmIzczMDsgIFJpbmcgQWJvdmVcbi8vICAtIFUrMDJEQiAgy5sgJiM3MzE7ICBPZ29uZWtcbi8vICAtIFUrMDJEQyAgy5wgJiM3MzI7ICBTbWFsbCBUaWxkZVxuLy8gIC0gVSswMkREICDLnSAmIzczMzsgIERvdWJsZSBBY3V0ZSBBY2NlbnRcbi8vIExhdGluIEV4dGVuZGVkIEFkZGl0aW9uYWwsIDFFMDDigJMxRUZGXG5jb25zdCBleHRlbmRlZFdvcmRDaGFycyA9IC9eW2EtekEtWlxcdXtDMH0tXFx1e0ZGfVxcdXtEOH0tXFx1e0Y2fVxcdXtGOH0tXFx1ezJDNn1cXHV7MkM4fS1cXHV7MkQ3fVxcdXsyREV9LVxcdXsyRkZ9XFx1ezFFMDB9LVxcdXsxRUZGfV0rJC91O1xuXG5jb25zdCByZVdoaXRlc3BhY2UgPSAvXFxTLztcblxuZXhwb3J0IGNvbnN0IHdvcmREaWZmID0gbmV3IERpZmYoKTtcbndvcmREaWZmLmVxdWFscyA9IGZ1bmN0aW9uKGxlZnQsIHJpZ2h0KSB7XG4gIHJldHVybiBsZWZ0ID09PSByaWdodCB8fCAodGhpcy5vcHRpb25zLmlnbm9yZVdoaXRlc3BhY2UgJiYgIXJlV2hpdGVzcGFjZS50ZXN0KGxlZnQpICYmICFyZVdoaXRlc3BhY2UudGVzdChyaWdodCkpO1xufTtcbndvcmREaWZmLnRva2VuaXplID0gZnVuY3Rpb24odmFsdWUpIHtcbiAgbGV0IHRva2VucyA9IHZhbHVlLnNwbGl0KC8oXFxzK3xcXGIpLyk7XG5cbiAgLy8gSm9pbiB0aGUgYm91bmRhcnkgc3BsaXRzIHRoYXQgd2UgZG8gbm90IGNvbnNpZGVyIHRvIGJlIGJvdW5kYXJpZXMuIFRoaXMgaXMgcHJpbWFyaWx5IHRoZSBleHRlbmRlZCBMYXRpbiBjaGFyYWN0ZXIgc2V0LlxuICBmb3IgKGxldCBpID0gMDsgaSA8IHRva2Vucy5sZW5ndGggLSAxOyBpKyspIHtcbiAgICAvLyBJZiB3ZSBoYXZlIGFuIGVtcHR5IHN0cmluZyBpbiB0aGUgbmV4dCBmaWVsZCBhbmQgd2UgaGF2ZSBvbmx5IHdvcmQgY2hhcnMgYmVmb3JlIGFuZCBhZnRlciwgbWVyZ2VcbiAgICBpZiAoIXRva2Vuc1tpICsgMV0gJiYgdG9rZW5zW2kgKyAyXVxuICAgICAgICAgICYmIGV4dGVuZGVkV29yZENoYXJzLnRlc3QodG9rZW5zW2ldKVxuICAgICAgICAgICYmIGV4dGVuZGVkV29yZENoYXJzLnRlc3QodG9rZW5zW2kgKyAyXSkpIHtcbiAgICAgIHRva2Vuc1tpXSArPSB0b2tlbnNbaSArIDJdO1xuICAgICAgdG9rZW5zLnNwbGljZShpICsgMSwgMik7XG4gICAgICBpLS07XG4gICAgfVxuICB9XG5cbiAgcmV0dXJuIHRva2Vucztcbn07XG5cbmV4cG9ydCBmdW5jdGlvbiBkaWZmV29yZHMob2xkU3RyLCBuZXdTdHIsIGNhbGxiYWNrKSB7XG4gIGxldCBvcHRpb25zID0gZ2VuZXJhdGVPcHRpb25zKGNhbGxiYWNrLCB7aWdub3JlV2hpdGVzcGFjZTogdHJ1ZX0pO1xuICByZXR1cm4gd29yZERpZmYuZGlmZihvbGRTdHIsIG5ld1N0ciwgb3B0aW9ucyk7XG59XG5leHBvcnQgZnVuY3Rpb24gZGlmZldvcmRzV2l0aFNwYWNlKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjaykge1xuICByZXR1cm4gd29yZERpZmYuZGlmZihvbGRTdHIsIG5ld1N0ciwgY2FsbGJhY2spO1xufVxuIl19
+
+
+/***/ }),
+/* 124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports.canonicalize = exports.convertChangesToXML = exports.convertChangesToDMP = exports.parsePatch = exports.applyPatches = exports.applyPatch = exports.createPatch = exports.createTwoFilesPatch = exports.structuredPatch = exports.diffArrays = exports.diffJson = exports.diffCss = exports.diffSentences = exports.diffTrimmedLines = exports.diffLines = exports.diffWordsWithSpace = exports.diffWords = exports.diffChars = exports.Diff = undefined;
+/*istanbul ignore end*/
+var /*istanbul ignore start*/_base = __webpack_require__(13) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+var _base2 = _interopRequireDefault(_base);
+
+/*istanbul ignore end*/
+var /*istanbul ignore start*/_character = __webpack_require__(119) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_word = __webpack_require__(123) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_line = __webpack_require__(39) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_sentence = __webpack_require__(122) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_css = __webpack_require__(120) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_json = __webpack_require__(121) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_array = __webpack_require__(118) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_apply = __webpack_require__(125) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_parse = __webpack_require__(59) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_create = __webpack_require__(126) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_dmp = __webpack_require__(116) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_xml = __webpack_require__(117) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+exports. /*istanbul ignore end*/Diff = _base2['default'];
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffChars = _character.diffChars;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffWords = _word.diffWords;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffWordsWithSpace = _word.diffWordsWithSpace;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffLines = _line.diffLines;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffTrimmedLines = _line.diffTrimmedLines;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffSentences = _sentence.diffSentences;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffCss = _css.diffCss;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffJson = _json.diffJson;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/diffArrays = _array.diffArrays;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/structuredPatch = _create.structuredPatch;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/createTwoFilesPatch = _create.createTwoFilesPatch;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/createPatch = _create.createPatch;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/applyPatch = _apply.applyPatch;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/applyPatches = _apply.applyPatches;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/parsePatch = _parse.parsePatch;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/convertChangesToDMP = _dmp.convertChangesToDMP;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/convertChangesToXML = _xml.convertChangesToXML;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/canonicalize = _json.canonicalize; /* See LICENSE file for terms of use */
+
+/*
+ * Text diff implementation.
+ *
+ * This library supports the following APIS:
+ * JsDiff.diffChars: Character by character diff
+ * JsDiff.diffWords: Word (as defined by \b regex) diff which ignores whitespace
+ * JsDiff.diffLines: Line based diff
+ *
+ * JsDiff.diffCss: Diff targeted at CSS content
+ *
+ * These methods are based on the implementation proposed in
+ * "An O(ND) Difference Algorithm and its Variations" (Myers, 1986).
+ * http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.4.6927
+ */
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9pbmRleC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQWdCQSxJLHlCQUFBLDhCLHdCQUFBOzs7Ozs7QUFDQSxJLHlCQUFBLHdDLHdCQUFBOztBQUNBLEkseUJBQUEsOEIsd0JBQUE7O0FBQ0EsSSx5QkFBQSw4Qix3QkFBQTs7QUFDQSxJLHlCQUFBLHNDLHdCQUFBOztBQUVBLEkseUJBQUEsNEIsd0JBQUE7O0FBQ0EsSSx5QkFBQSw4Qix3QkFBQTs7QUFFQSxJLHlCQUFBLGdDLHdCQUFBOztBQUVBLEkseUJBQUEsaUMsd0JBQUE7O0FBQ0EsSSx5QkFBQSxpQyx3QkFBQTs7QUFDQSxJLHlCQUFBLG1DLHdCQUFBOztBQUVBLEkseUJBQUEsK0Isd0JBQUE7O0FBQ0EsSSx5QkFBQSwrQix3QkFBQTs7Ozs7Z0NBR0UsSTt5REFFQSxTO3lEQUNBLFM7eURBQ0Esa0I7eURBQ0EsUzt5REFDQSxnQjt5REFDQSxhO3lEQUVBLE87eURBQ0EsUTt5REFFQSxVO3lEQUVBLGU7eURBQ0EsbUI7eURBQ0EsVzt5REFDQSxVO3lEQUNBLFk7eURBQ0EsVTt5REFDQSxtQjt5REFDQSxtQjt5REFDQSxZIiwiZmlsZSI6ImluZGV4LmpzIiwic291cmNlc0NvbnRlbnQiOlsiLyogU2VlIExJQ0VOU0UgZmlsZSBmb3IgdGVybXMgb2YgdXNlICovXG5cbi8qXG4gKiBUZXh0IGRpZmYgaW1wbGVtZW50YXRpb24uXG4gKlxuICogVGhpcyBsaWJyYXJ5IHN1cHBvcnRzIHRoZSBmb2xsb3dpbmcgQVBJUzpcbiAqIEpzRGlmZi5kaWZmQ2hhcnM6IENoYXJhY3RlciBieSBjaGFyYWN0ZXIgZGlmZlxuICogSnNEaWZmLmRpZmZXb3JkczogV29yZCAoYXMgZGVmaW5lZCBieSBcXGIgcmVnZXgpIGRpZmYgd2hpY2ggaWdub3JlcyB3aGl0ZXNwYWNlXG4gKiBKc0RpZmYuZGlmZkxpbmVzOiBMaW5lIGJhc2VkIGRpZmZcbiAqXG4gKiBKc0RpZmYuZGlmZkNzczogRGlmZiB0YXJnZXRlZCBhdCBDU1MgY29udGVudFxuICpcbiAqIFRoZXNlIG1ldGhvZHMgYXJlIGJhc2VkIG9uIHRoZSBpbXBsZW1lbnRhdGlvbiBwcm9wb3NlZCBpblxuICogXCJBbiBPKE5EKSBEaWZmZXJlbmNlIEFsZ29yaXRobSBhbmQgaXRzIFZhcmlhdGlvbnNcIiAoTXllcnMsIDE5ODYpLlxuICogaHR0cDovL2NpdGVzZWVyeC5pc3QucHN1LmVkdS92aWV3ZG9jL3N1bW1hcnk/ZG9pPTEwLjEuMS40LjY5MjdcbiAqL1xuaW1wb3J0IERpZmYgZnJvbSAnLi9kaWZmL2Jhc2UnO1xuaW1wb3J0IHtkaWZmQ2hhcnN9IGZyb20gJy4vZGlmZi9jaGFyYWN0ZXInO1xuaW1wb3J0IHtkaWZmV29yZHMsIGRpZmZXb3Jkc1dpdGhTcGFjZX0gZnJvbSAnLi9kaWZmL3dvcmQnO1xuaW1wb3J0IHtkaWZmTGluZXMsIGRpZmZUcmltbWVkTGluZXN9IGZyb20gJy4vZGlmZi9saW5lJztcbmltcG9ydCB7ZGlmZlNlbnRlbmNlc30gZnJvbSAnLi9kaWZmL3NlbnRlbmNlJztcblxuaW1wb3J0IHtkaWZmQ3NzfSBmcm9tICcuL2RpZmYvY3NzJztcbmltcG9ydCB7ZGlmZkpzb24sIGNhbm9uaWNhbGl6ZX0gZnJvbSAnLi9kaWZmL2pzb24nO1xuXG5pbXBvcnQge2RpZmZBcnJheXN9IGZyb20gJy4vZGlmZi9hcnJheSc7XG5cbmltcG9ydCB7YXBwbHlQYXRjaCwgYXBwbHlQYXRjaGVzfSBmcm9tICcuL3BhdGNoL2FwcGx5JztcbmltcG9ydCB7cGFyc2VQYXRjaH0gZnJvbSAnLi9wYXRjaC9wYXJzZSc7XG5pbXBvcnQge3N0cnVjdHVyZWRQYXRjaCwgY3JlYXRlVHdvRmlsZXNQYXRjaCwgY3JlYXRlUGF0Y2h9IGZyb20gJy4vcGF0Y2gvY3JlYXRlJztcblxuaW1wb3J0IHtjb252ZXJ0Q2hhbmdlc1RvRE1QfSBmcm9tICcuL2NvbnZlcnQvZG1wJztcbmltcG9ydCB7Y29udmVydENoYW5nZXNUb1hNTH0gZnJvbSAnLi9jb252ZXJ0L3htbCc7XG5cbmV4cG9ydCB7XG4gIERpZmYsXG5cbiAgZGlmZkNoYXJzLFxuICBkaWZmV29yZHMsXG4gIGRpZmZXb3Jkc1dpdGhTcGFjZSxcbiAgZGlmZkxpbmVzLFxuICBkaWZmVHJpbW1lZExpbmVzLFxuICBkaWZmU2VudGVuY2VzLFxuXG4gIGRpZmZDc3MsXG4gIGRpZmZKc29uLFxuXG4gIGRpZmZBcnJheXMsXG5cbiAgc3RydWN0dXJlZFBhdGNoLFxuICBjcmVhdGVUd29GaWxlc1BhdGNoLFxuICBjcmVhdGVQYXRjaCxcbiAgYXBwbHlQYXRjaCxcbiAgYXBwbHlQYXRjaGVzLFxuICBwYXJzZVBhdGNoLFxuICBjb252ZXJ0Q2hhbmdlc1RvRE1QLFxuICBjb252ZXJ0Q2hhbmdlc1RvWE1MLFxuICBjYW5vbmljYWxpemVcbn07XG4iXX0=
+
+
+/***/ }),
+/* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports. /*istanbul ignore end*/applyPatch = applyPatch;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/applyPatches = applyPatches;
+
+var /*istanbul ignore start*/_parse = __webpack_require__(59) /*istanbul ignore end*/;
+
+var /*istanbul ignore start*/_distanceIterator = __webpack_require__(127) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+var _distanceIterator2 = _interopRequireDefault(_distanceIterator);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/*istanbul ignore end*/function applyPatch(source, uniDiff) {
+  /*istanbul ignore start*/var /*istanbul ignore end*/options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+  if (typeof uniDiff === 'string') {
+    uniDiff = /*istanbul ignore start*/(0, _parse.parsePatch) /*istanbul ignore end*/(uniDiff);
+  }
+
+  if (Array.isArray(uniDiff)) {
+    if (uniDiff.length > 1) {
+      throw new Error('applyPatch only works with a single input.');
+    }
+
+    uniDiff = uniDiff[0];
+  }
+
+  // Apply the diff to the input
+  var lines = source.split(/\r\n|[\n\v\f\r\x85]/),
+      delimiters = source.match(/\r\n|[\n\v\f\r\x85]/g) || [],
+      hunks = uniDiff.hunks,
+      compareLine = options.compareLine || function (lineNumber, line, operation, patchContent) /*istanbul ignore start*/{
+    return (/*istanbul ignore end*/line === patchContent
+    );
+  },
+      errorCount = 0,
+      fuzzFactor = options.fuzzFactor || 0,
+      minLine = 0,
+      offset = 0,
+      removeEOFNL = /*istanbul ignore start*/void 0 /*istanbul ignore end*/,
+      addEOFNL = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
+
+  /**
+   * Checks if the hunk exactly fits on the provided location
+   */
+  function hunkFits(hunk, toPos) {
+    for (var j = 0; j < hunk.lines.length; j++) {
+      var line = hunk.lines[j],
+          operation = line[0],
+          content = line.substr(1);
+
+      if (operation === ' ' || operation === '-') {
+        // Context sanity check
+        if (!compareLine(toPos + 1, lines[toPos], operation, content)) {
+          errorCount++;
+
+          if (errorCount > fuzzFactor) {
+            return false;
+          }
+        }
+        toPos++;
+      }
+    }
+
+    return true;
+  }
+
+  // Search best fit offsets for each hunk based on the previous ones
+  for (var i = 0; i < hunks.length; i++) {
+    var hunk = hunks[i],
+        maxLine = lines.length - hunk.oldLines,
+        localOffset = 0,
+        toPos = offset + hunk.oldStart - 1;
+
+    var iterator = /*istanbul ignore start*/(0, _distanceIterator2['default']) /*istanbul ignore end*/(toPos, minLine, maxLine);
+
+    for (; localOffset !== undefined; localOffset = iterator()) {
+      if (hunkFits(hunk, toPos + localOffset)) {
+        hunk.offset = offset += localOffset;
+        break;
+      }
+    }
+
+    if (localOffset === undefined) {
+      return false;
+    }
+
+    // Set lower text limit to end of the current hunk, so next ones don't try
+    // to fit over already patched text
+    minLine = hunk.offset + hunk.oldStart + hunk.oldLines;
+  }
+
+  // Apply patch hunks
+  for (var _i = 0; _i < hunks.length; _i++) {
+    var _hunk = hunks[_i],
+        _toPos = _hunk.offset + _hunk.newStart - 1;
+    if (_hunk.newLines == 0) {
+      _toPos++;
+    }
+
+    for (var j = 0; j < _hunk.lines.length; j++) {
+      var line = _hunk.lines[j],
+          operation = line[0],
+          content = line.substr(1),
+          delimiter = _hunk.linedelimiters[j];
+
+      if (operation === ' ') {
+        _toPos++;
+      } else if (operation === '-') {
+        lines.splice(_toPos, 1);
+        delimiters.splice(_toPos, 1);
+        /* istanbul ignore else */
+      } else if (operation === '+') {
+          lines.splice(_toPos, 0, content);
+          delimiters.splice(_toPos, 0, delimiter);
+          _toPos++;
+        } else if (operation === '\\') {
+          var previousOperation = _hunk.lines[j - 1] ? _hunk.lines[j - 1][0] : null;
+          if (previousOperation === '+') {
+            removeEOFNL = true;
+          } else if (previousOperation === '-') {
+            addEOFNL = true;
+          }
+        }
+    }
+  }
+
+  // Handle EOFNL insertion/removal
+  if (removeEOFNL) {
+    while (!lines[lines.length - 1]) {
+      lines.pop();
+      delimiters.pop();
+    }
+  } else if (addEOFNL) {
+    lines.push('');
+    delimiters.push('\n');
+  }
+  for (var _k = 0; _k < lines.length - 1; _k++) {
+    lines[_k] = lines[_k] + delimiters[_k];
+  }
+  return lines.join('');
+}
+
+// Wrapper that supports multiple file patches via callbacks.
+function applyPatches(uniDiff, options) {
+  if (typeof uniDiff === 'string') {
+    uniDiff = /*istanbul ignore start*/(0, _parse.parsePatch) /*istanbul ignore end*/(uniDiff);
+  }
+
+  var currentIndex = 0;
+  function processIndex() {
+    var index = uniDiff[currentIndex++];
+    if (!index) {
+      return options.complete();
+    }
+
+    options.loadFile(index, function (err, data) {
+      if (err) {
+        return options.complete(err);
+      }
+
+      var updatedContent = applyPatch(data, index, options);
+      options.patched(index, updatedContent, function (err) {
+        if (err) {
+          return options.complete(err);
+        }
+
+        processIndex();
+      });
+    });
+  }
+  processIndex();
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9wYXRjaC9hcHBseS5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Z0NBR2dCLFUsR0FBQSxVO3lEQStIQSxZLEdBQUEsWTs7QUFsSWhCLEkseUJBQUEsMkIsd0JBQUE7O0FBQ0EsSSx5QkFBQSx3RCx3QkFBQTs7Ozs7Ozt1QkFFTyxTQUFTLFVBQVQsQ0FBb0IsTUFBcEIsRUFBNEIsT0FBNUIsRUFBbUQ7MkJBQUEsSSx1QkFBZCxPQUFjLHlEQUFKLEVBQUk7O0FBQ3hELE1BQUksT0FBTyxPQUFQLEtBQW1CLFFBQXZCLEVBQWlDO0FBQy9CLGMseUJBQVUsc0Isd0JBQUEsQ0FBVyxPQUFYLENBQVY7QUFDRDs7QUFFRCxNQUFJLE1BQU0sT0FBTixDQUFjLE9BQWQsQ0FBSixFQUE0QjtBQUMxQixRQUFJLFFBQVEsTUFBUixHQUFpQixDQUFyQixFQUF3QjtBQUN0QixZQUFNLElBQUksS0FBSixDQUFVLDRDQUFWLENBQU47QUFDRDs7QUFFRCxjQUFVLFFBQVEsQ0FBUixDQUFWO0FBQ0Q7OztBQUdELE1BQUksUUFBUSxPQUFPLEtBQVAsQ0FBYSxxQkFBYixDQUFaO0FBQUEsTUFDSSxhQUFhLE9BQU8sS0FBUCxDQUFhLHNCQUFiLEtBQXdDLEVBRHpEO0FBQUEsTUFFSSxRQUFRLFFBQVEsS0FGcEI7QUFBQSxNQUlJLGNBQWMsUUFBUSxXQUFSLElBQXdCLFVBQUMsVUFBRCxFQUFhLElBQWIsRUFBbUIsU0FBbkIsRUFBOEIsWUFBOUIsRSx5QkFBQTtBQUFBLFcsd0JBQStDLFNBQVM7QUFBeEQ7QUFBQSxHQUoxQztBQUFBLE1BS0ksYUFBYSxDQUxqQjtBQUFBLE1BTUksYUFBYSxRQUFRLFVBQVIsSUFBc0IsQ0FOdkM7QUFBQSxNQU9JLFVBQVUsQ0FQZDtBQUFBLE1BUUksU0FBUyxDQVJiO0FBQUEsTUFVSSxjLHlCQUFBLE0sd0JBVko7QUFBQSxNQVdJLFcseUJBQUEsTSx3QkFYSjs7Ozs7QUFnQkEsV0FBUyxRQUFULENBQWtCLElBQWxCLEVBQXdC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QUFFRCxVQUFJLGlCQUFpQixXQUFXLElBQVgsRUFBaUIsS0FBakIsRUFBd0IsT0FBeEIsQ0FBckI7QUFDQSxjQUFRLE9BQVIsQ0FBZ0IsS0FBaEIsRUFBdUIsY0FBdkIsRUFBdUMsVUFBUyxHQUFULEVBQWM7QUFDbkQsWUFBSSxHQUFKLEVBQVM7QUFDUCxpQkFBTyxRQUFRLFFBQVIsQ0FBaUIsR0FBakIsQ0FBUDtBQUNEOztBQUVEO0FBQ0QsT0FORDtBQU9ELEtBYkQ7QUFjRDtBQUNEO0FBQ0QiLCJmaWxlIjoiYXBwbHkuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge3BhcnNlUGF0Y2h9IGZyb20gJy4vcGFyc2UnO1xuaW1wb3J0IGRpc3RhbmNlSXRlcmF0b3IgZnJvbSAnLi4vdXRpbC9kaXN0YW5jZS1pdGVyYXRvcic7XG5cbmV4cG9ydCBmdW5jdGlvbiBhcHBseVBhdGNoKHNvdXJjZSwgdW5pRGlmZiwgb3B0aW9ucyA9IHt9KSB7XG4gIGlmICh0eXBlb2YgdW5pRGlmZiA9PT0gJ3N0cmluZycpIHtcbiAgICB1bmlEaWZmID0gcGFyc2VQYXRjaCh1bmlEaWZmKTtcbiAgfVxuXG4gIGlmIChBcnJheS5pc0FycmF5KHVuaURpZmYpKSB7XG4gICAgaWYgKHVuaURpZmYubGVuZ3RoID4gMSkge1xuICAgICAgdGhyb3cgbmV3IEVycm9yKCdhcHBseVBhdGNoIG9ubHkgd29ya3Mgd2l0aCBhIHNpbmdsZSBpbnB1dC4nKTtcbiAgICB9XG5cbiAgICB1bmlEaWZmID0gdW5pRGlmZlswXTtcbiAgfVxuXG4gIC8vIEFwcGx5IHRoZSBkaWZmIHRvIHRoZSBpbnB1dFxuICBsZXQgbGluZXMgPSBzb3VyY2Uuc3BsaXQoL1xcclxcbnxbXFxuXFx2XFxmXFxyXFx4ODVdLyksXG4gICAgICBkZWxpbWl0ZXJzID0gc291cmNlLm1hdGNoKC9cXHJcXG58W1xcblxcdlxcZlxcclxceDg1XS9nKSB8fCBbXSxcbiAgICAgIGh1bmtzID0gdW5pRGlmZi5odW5rcyxcblxuICAgICAgY29tcGFyZUxpbmUgPSBvcHRpb25zLmNvbXBhcmVMaW5lIHx8ICgobGluZU51bWJlciwgbGluZSwgb3BlcmF0aW9uLCBwYXRjaENvbnRlbnQpID0+IGxpbmUgPT09IHBhdGNoQ29udGVudCksXG4gICAgICBlcnJvckNvdW50ID0gMCxcbiAgICAgIGZ1enpGYWN0b3IgPSBvcHRpb25zLmZ1enpGYWN0b3IgfHwgMCxcbiAgICAgIG1pbkxpbmUgPSAwLFxuICAgICAgb2Zmc2V0ID0gMCxcblxuICAgICAgcmVtb3ZlRU9GTkwsXG4gICAgICBhZGRFT0ZOTDtcblxuICAvKipcbiAgICogQ2hlY2tzIGlmIHRoZSBodW5rIGV4YWN0bHkgZml0cyBvbiB0aGUgcHJvdmlkZWQgbG9jYXRpb25cbiAgICovXG4gIGZ1bmN0aW9uIGh1bmtGaXRzKGh1bmssIHRvUG9zKSB7XG4gICAgZm9yIChsZXQgaiA9IDA7IGogPCBodW5rLmxpbmVzLmxlbmd0aDsgaisrKSB7XG4gICAgICBsZXQgbGluZSA9IGh1bmsubGluZXNbal0sXG4gICAgICAgICAgb3BlcmF0aW9uID0gbGluZVswXSxcbiAgICAgICAgICBjb250ZW50ID0gbGluZS5zdWJzdHIoMSk7XG5cbiAgICAgIGlmIChvcGVyYXRpb24gPT09ICcgJyB8fCBvcGVyYXRpb24gPT09ICctJykge1xuICAgICAgICAvLyBDb250ZXh0IHNhbml0eSBjaGVja1xuICAgICAgICBpZiAoIWNvbXBhcmVMaW5lKHRvUG9zICsgMSwgbGluZXNbdG9Qb3NdLCBvcGVyYXRpb24sIGNvbnRlbnQpKSB7XG4gICAgICAgICAgZXJyb3JDb3VudCsrO1xuXG4gICAgICAgICAgaWYgKGVycm9yQ291bnQgPiBmdXp6RmFjdG9yKSB7XG4gICAgICAgICAgICByZXR1cm4gZmFsc2U7XG4gICAgICAgICAgfVxuICAgICAgICB9XG4gICAgICAgIHRvUG9zKys7XG4gICAgICB9XG4gICAgfVxuXG4gICAgcmV0dXJuIHRydWU7XG4gIH1cblxuICAvLyBTZWFyY2ggYmVzdCBmaXQgb2Zmc2V0cyBmb3IgZWFjaCBodW5rIGJhc2VkIG9uIHRoZSBwcmV2aW91cyBvbmVzXG4gIGZvciAobGV0IGkgPSAwOyBpIDwgaHVua3MubGVuZ3RoOyBpKyspIHtcbiAgICBsZXQgaHVuayA9IGh1bmtzW2ldLFxuICAgICAgICBtYXhMaW5lID0gbGluZXMubGVuZ3RoIC0gaHVuay5vbGRMaW5lcyxcbiAgICAgICAgbG9jYWxPZmZzZXQgPSAwLFxuICAgICAgICB0b1BvcyA9IG9mZnNldCArIGh1bmsub2xkU3RhcnQgLSAxO1xuXG4gICAgbGV0IGl0ZXJhdG9yID0gZGlzdGFuY2VJdGVyYXRvcih0b1BvcywgbWluTGluZSwgbWF4TGluZSk7XG5cbiAgICBmb3IgKDsgbG9jYWxPZmZzZXQgIT09IHVuZGVmaW5lZDsgbG9jYWxPZmZzZXQgPSBpdGVyYXRvcigpKSB7XG4gICAgICBpZiAoaHVua0ZpdHMoaHVuaywgdG9Qb3MgKyBsb2NhbE9mZnNldCkpIHtcbiAgICAgICAgaHVuay5vZmZzZXQgPSBvZmZzZXQgKz0gbG9jYWxPZmZzZXQ7XG4gICAgICAgIGJyZWFrO1xuICAgICAgfVxuICAgIH1cblxuICAgIGlmIChsb2NhbE9mZnNldCA9PT0gdW5kZWZpbmVkKSB7XG4gICAgICByZXR1cm4gZmFsc2U7XG4gICAgfVxuXG4gICAgLy8gU2V0IGxvd2VyIHRleHQgbGltaXQgdG8gZW5kIG9mIHRoZSBjdXJyZW50IGh1bmssIHNvIG5leHQgb25lcyBkb24ndCB0cnlcbiAgICAvLyB0byBmaXQgb3ZlciBhbHJlYWR5IHBhdGNoZWQgdGV4dFxuICAgIG1pbkxpbmUgPSBodW5rLm9mZnNldCArIGh1bmsub2xkU3RhcnQgKyBodW5rLm9sZExpbmVzO1xuICB9XG5cbiAgLy8gQXBwbHkgcGF0Y2ggaHVua3NcbiAgZm9yIChsZXQgaSA9IDA7IGkgPCBodW5rcy5sZW5ndGg7IGkrKykge1xuICAgIGxldCBodW5rID0gaHVua3NbaV0sXG4gICAgICAgIHRvUG9zID0gaHVuay5vZmZzZXQgKyBodW5rLm5ld1N0YXJ0IC0gMTtcbiAgICBpZiAoaHVuay5uZXdMaW5lcyA9PSAwKSB7IHRvUG9zKys7IH1cblxuICAgIGZvciAobGV0IGogPSAwOyBqIDwgaHVuay5saW5lcy5sZW5ndGg7IGorKykge1xuICAgICAgbGV0IGxpbmUgPSBodW5rLmxpbmVzW2pdLFxuICAgICAgICAgIG9wZXJhdGlvbiA9IGxpbmVbMF0sXG4gICAgICAgICAgY29udGVudCA9IGxpbmUuc3Vic3RyKDEpLFxuICAgICAgICAgIGRlbGltaXRlciA9IGh1bmsubGluZWRlbGltaXRlcnNbal07XG5cbiAgICAgIGlmIChvcGVyYXRpb24gPT09ICcgJykge1xuICAgICAgICB0b1BvcysrO1xuICAgICAgfSBlbHNlIGlmIChvcGVyYXRpb24gPT09ICctJykge1xuICAgICAgICBsaW5lcy5zcGxpY2UodG9Qb3MsIDEpO1xuICAgICAgICBkZWxpbWl0ZXJzLnNwbGljZSh0b1BvcywgMSk7XG4gICAgICAvKiBpc3RhbmJ1bCBpZ25vcmUgZWxzZSAqL1xuICAgICAgfSBlbHNlIGlmIChvcGVyYXRpb24gPT09ICcrJykge1xuICAgICAgICBsaW5lcy5zcGxpY2UodG9Qb3MsIDAsIGNvbnRlbnQpO1xuICAgICAgICBkZWxpbWl0ZXJzLnNwbGljZSh0b1BvcywgMCwgZGVsaW1pdGVyKTtcbiAgICAgICAgdG9Qb3MrKztcbiAgICAgIH0gZWxzZSBpZiAob3BlcmF0aW9uID09PSAnXFxcXCcpIHtcbiAgICAgICAgbGV0IHByZXZpb3VzT3BlcmF0aW9uID0gaHVuay5saW5lc1tqIC0gMV0gPyBodW5rLmxpbmVzW2ogLSAxXVswXSA6IG51bGw7XG4gICAgICAgIGlmIChwcmV2aW91c09wZXJhdGlvbiA9PT0gJysnKSB7XG4gICAgICAgICAgcmVtb3ZlRU9GTkwgPSB0cnVlO1xuICAgICAgICB9IGVsc2UgaWYgKHByZXZpb3VzT3BlcmF0aW9uID09PSAnLScpIHtcbiAgICAgICAgICBhZGRFT0ZOTCA9IHRydWU7XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICB9XG4gIH1cblxuICAvLyBIYW5kbGUgRU9GTkwgaW5zZXJ0aW9uL3JlbW92YWxcbiAgaWYgKHJlbW92ZUVPRk5MKSB7XG4gICAgd2hpbGUgKCFsaW5lc1tsaW5lcy5sZW5ndGggLSAxXSkge1xuICAgICAgbGluZXMucG9wKCk7XG4gICAgICBkZWxpbWl0ZXJzLnBvcCgpO1xuICAgIH1cbiAgfSBlbHNlIGlmIChhZGRFT0ZOTCkge1xuICAgIGxpbmVzLnB1c2goJycpO1xuICAgIGRlbGltaXRlcnMucHVzaCgnXFxuJyk7XG4gIH1cbiAgZm9yIChsZXQgX2sgPSAwOyBfayA8IGxpbmVzLmxlbmd0aCAtIDE7IF9rKyspIHtcbiAgICBsaW5lc1tfa10gPSBsaW5lc1tfa10gKyBkZWxpbWl0ZXJzW19rXTtcbiAgfVxuICByZXR1cm4gbGluZXMuam9pbignJyk7XG59XG5cbi8vIFdyYXBwZXIgdGhhdCBzdXBwb3J0cyBtdWx0aXBsZSBmaWxlIHBhdGNoZXMgdmlhIGNhbGxiYWNrcy5cbmV4cG9ydCBmdW5jdGlvbiBhcHBseVBhdGNoZXModW5pRGlmZiwgb3B0aW9ucykge1xuICBpZiAodHlwZW9mIHVuaURpZmYgPT09ICdzdHJpbmcnKSB7XG4gICAgdW5pRGlmZiA9IHBhcnNlUGF0Y2godW5pRGlmZik7XG4gIH1cblxuICBsZXQgY3VycmVudEluZGV4ID0gMDtcbiAgZnVuY3Rpb24gcHJvY2Vzc0luZGV4KCkge1xuICAgIGxldCBpbmRleCA9IHVuaURpZmZbY3VycmVudEluZGV4KytdO1xuICAgIGlmICghaW5kZXgpIHtcbiAgICAgIHJldHVybiBvcHRpb25zLmNvbXBsZXRlKCk7XG4gICAgfVxuXG4gICAgb3B0aW9ucy5sb2FkRmlsZShpbmRleCwgZnVuY3Rpb24oZXJyLCBkYXRhKSB7XG4gICAgICBpZiAoZXJyKSB7XG4gICAgICAgIHJldHVybiBvcHRpb25zLmNvbXBsZXRlKGVycik7XG4gICAgICB9XG5cbiAgICAgIGxldCB1cGRhdGVkQ29udGVudCA9IGFwcGx5UGF0Y2goZGF0YSwgaW5kZXgsIG9wdGlvbnMpO1xuICAgICAgb3B0aW9ucy5wYXRjaGVkKGluZGV4LCB1cGRhdGVkQ29udGVudCwgZnVuY3Rpb24oZXJyKSB7XG4gICAgICAgIGlmIChlcnIpIHtcbiAgICAgICAgICByZXR1cm4gb3B0aW9ucy5jb21wbGV0ZShlcnIpO1xuICAgICAgICB9XG5cbiAgICAgICAgcHJvY2Vzc0luZGV4KCk7XG4gICAgICB9KTtcbiAgICB9KTtcbiAgfVxuICBwcm9jZXNzSW5kZXgoKTtcbn1cbiJdfQ==
+
+
+/***/ }),
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+exports. /*istanbul ignore end*/structuredPatch = structuredPatch;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/createTwoFilesPatch = createTwoFilesPatch;
+/*istanbul ignore start*/exports. /*istanbul ignore end*/createPatch = createPatch;
+
+var /*istanbul ignore start*/_line = __webpack_require__(39) /*istanbul ignore end*/;
+
+/*istanbul ignore start*/
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/*istanbul ignore end*/function structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options) {
+  if (!options) {
+    options = {};
+  }
+  if (typeof options.context === 'undefined') {
+    options.context = 4;
+  }
+
+  var diff = /*istanbul ignore start*/(0, _line.diffLines) /*istanbul ignore end*/(oldStr, newStr, options);
+  diff.push({ value: '', lines: [] }); // Append an empty value to make cleanup easier
+
+  function contextLines(lines) {
+    return lines.map(function (entry) {
+      return ' ' + entry;
+    });
+  }
+
+  var hunks = [];
+  var oldRangeStart = 0,
+      newRangeStart = 0,
+      curRange = [],
+      oldLine = 1,
+      newLine = 1;
+  /*istanbul ignore start*/
+  var _loop = function _loop( /*istanbul ignore end*/i) {
+    var current = diff[i],
+        lines = current.lines || current.value.replace(/\n$/, '').split('\n');
+    current.lines = lines;
+
+    if (current.added || current.removed) {
+      /*istanbul ignore start*/
+      var _curRange;
+
+      /*istanbul ignore end*/
+      // If we have previous context, start with that
+      if (!oldRangeStart) {
+        var prev = diff[i - 1];
+        oldRangeStart = oldLine;
+        newRangeStart = newLine;
+
+        if (prev) {
+          curRange = options.context > 0 ? contextLines(prev.lines.slice(-options.context)) : [];
+          oldRangeStart -= curRange.length;
+          newRangeStart -= curRange.length;
+        }
+      }
+
+      // Output our changes
+      /*istanbul ignore start*/(_curRange = /*istanbul ignore end*/curRange).push. /*istanbul ignore start*/apply /*istanbul ignore end*/( /*istanbul ignore start*/_curRange /*istanbul ignore end*/, /*istanbul ignore start*/_toConsumableArray( /*istanbul ignore end*/lines.map(function (entry) {
+        return (current.added ? '+' : '-') + entry;
+      })));
+
+      // Track the updated file position
+      if (current.added) {
+        newLine += lines.length;
+      } else {
+        oldLine += lines.length;
+      }
+    } else {
+      // Identical context lines. Track line changes
+      if (oldRangeStart) {
+        // Close out any changes that have been output (or join overlapping)
+        if (lines.length <= options.context * 2 && i < diff.length - 2) {
+          /*istanbul ignore start*/
+          var _curRange2;
+
+          /*istanbul ignore end*/
+          // Overlapping
+          /*istanbul ignore start*/(_curRange2 = /*istanbul ignore end*/curRange).push. /*istanbul ignore start*/apply /*istanbul ignore end*/( /*istanbul ignore start*/_curRange2 /*istanbul ignore end*/, /*istanbul ignore start*/_toConsumableArray( /*istanbul ignore end*/contextLines(lines)));
+        } else {
+          /*istanbul ignore start*/
+          var _curRange3;
+
+          /*istanbul ignore end*/
+          // end the range and output
+          var contextSize = Math.min(lines.length, options.context);
+          /*istanbul ignore start*/(_curRange3 = /*istanbul ignore end*/curRange).push. /*istanbul ignore start*/apply /*istanbul ignore end*/( /*istanbul ignore start*/_curRange3 /*istanbul ignore end*/, /*istanbul ignore start*/_toConsumableArray( /*istanbul ignore end*/contextLines(lines.slice(0, contextSize))));
+
+          var hunk = {
+            oldStart: oldRangeStart,
+            oldLines: oldLine - oldRangeStart + contextSize,
+            newStart: newRangeStart,
+            newLines: newLine - newRangeStart + contextSize,
+            lines: curRange
+          };
+          if (i >= diff.length - 2 && lines.length <= options.context) {
+            // EOF is inside this hunk
+            var oldEOFNewline = /\n$/.test(oldStr);
+            var newEOFNewline = /\n$/.test(newStr);
+            if (lines.length == 0 && !oldEOFNewline) {
+              // special case: old has no eol and no trailing context; no-nl can end up before adds
+              curRange.splice(hunk.oldLines, 0, '\\ No newline at end of file');
+            } else if (!oldEOFNewline || !newEOFNewline) {
+              curRange.push('\\ No newline at end of file');
+            }
+          }
+          hunks.push(hunk);
+
+          oldRangeStart = 0;
+          newRangeStart = 0;
+          curRange = [];
+        }
+      }
+      oldLine += lines.length;
+      newLine += lines.length;
+    }
+  };
+
+  for (var i = 0; i < diff.length; i++) {
+    /*istanbul ignore start*/
+    _loop( /*istanbul ignore end*/i);
+  }
+
+  return {
+    oldFileName: oldFileName, newFileName: newFileName,
+    oldHeader: oldHeader, newHeader: newHeader,
+    hunks: hunks
+  };
+}
+
+function createTwoFilesPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options) {
+  var diff = structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options);
+
+  var ret = [];
+  if (oldFileName == newFileName) {
+    ret.push('Index: ' + oldFileName);
+  }
+  ret.push('===================================================================');
+  ret.push('--- ' + diff.oldFileName + (typeof diff.oldHeader === 'undefined' ? '' : '\t' + diff.oldHeader));
+  ret.push('+++ ' + diff.newFileName + (typeof diff.newHeader === 'undefined' ? '' : '\t' + diff.newHeader));
+
+  for (var i = 0; i < diff.hunks.length; i++) {
+    var hunk = diff.hunks[i];
+    ret.push('@@ -' + hunk.oldStart + ',' + hunk.oldLines + ' +' + hunk.newStart + ',' + hunk.newLines + ' @@');
+    ret.push.apply(ret, hunk.lines);
+  }
+
+  return ret.join('\n') + '\n';
+}
+
+function createPatch(fileName, oldStr, newStr, oldHeader, newHeader, options) {
+  return createTwoFilesPatch(fileName, fileName, oldStr, newStr, oldHeader, newHeader, options);
+}
+//# sourceMappingURL=data:application/json;base64,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QixHQUR6QixHQUMrQixLQUFLLFFBRHBDLEdBRUUsS0FISjtBQUtBLFFBQUksSUFBSixDQUFTLEtBQVQsQ0FBZSxHQUFmLEVBQW9CLEtBQUssS0FBekI7QUFDRDs7QUFFRCxTQUFPLElBQUksSUFBSixDQUFTLElBQVQsSUFBaUIsSUFBeEI7QUFDRDs7QUFFTSxTQUFTLFdBQVQsQ0FBcUIsUUFBckIsRUFBK0IsTUFBL0IsRUFBdUMsTUFBdkMsRUFBK0MsU0FBL0MsRUFBMEQsU0FBMUQsRUFBcUUsT0FBckUsRUFBOEU7QUFDbkYsU0FBTyxvQkFBb0IsUUFBcEIsRUFBOEIsUUFBOUIsRUFBd0MsTUFBeEMsRUFBZ0QsTUFBaEQsRUFBd0QsU0FBeEQsRUFBbUUsU0FBbkUsRUFBOEUsT0FBOUUsQ0FBUDtBQUNEIiwiZmlsZSI6ImNyZWF0ZS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7ZGlmZkxpbmVzfSBmcm9tICcuLi9kaWZmL2xpbmUnO1xuXG5leHBvcnQgZnVuY3Rpb24gc3RydWN0dXJlZFBhdGNoKG9sZEZpbGVOYW1lLCBuZXdGaWxlTmFtZSwgb2xkU3RyLCBuZXdTdHIsIG9sZEhlYWRlciwgbmV3SGVhZGVyLCBvcHRpb25zKSB7XG4gIGlmICghb3B0aW9ucykge1xuICAgIG9wdGlvbnMgPSB7fTtcbiAgfVxuICBpZiAodHlwZW9mIG9wdGlvbnMuY29udGV4dCA9PT0gJ3VuZGVmaW5lZCcpIHtcbiAgICBvcHRpb25zLmNvbnRleHQgPSA0O1xuICB9XG5cbiAgY29uc3QgZGlmZiA9IGRpZmZMaW5lcyhvbGRTdHIsIG5ld1N0ciwgb3B0aW9ucyk7XG4gIGRpZmYucHVzaCh7dmFsdWU6ICcnLCBsaW5lczogW119KTsgICAvLyBBcHBlbmQgYW4gZW1wdHkgdmFsdWUgdG8gbWFrZSBjbGVhbnVwIGVhc2llclxuXG4gIGZ1bmN0aW9uIGNvbnRleHRMaW5lcyhsaW5lcykge1xuICAgIHJldHVybiBsaW5lcy5tYXAoZnVuY3Rpb24oZW50cnkpIHsgcmV0dXJuICcgJyArIGVudHJ5OyB9KTtcbiAgfVxuXG4gIGxldCBodW5rcyA9IFtdO1xuICBsZXQgb2xkUmFuZ2VTdGFydCA9IDAsIG5ld1JhbmdlU3RhcnQgPSAwLCBjdXJSYW5nZSA9IFtdLFxuICAgICAgb2xkTGluZSA9IDEsIG5ld0xpbmUgPSAxO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IGRpZmYubGVuZ3RoOyBpKyspIHtcbiAgICBjb25zdCBjdXJyZW50ID0gZGlmZltpXSxcbiAgICAgICAgICBsaW5lcyA9IGN1cnJlbnQubGluZXMgfHwgY3VycmVudC52YWx1ZS5yZXBsYWNlKC9cXG4kLywgJycpLnNwbGl0KCdcXG4nKTtcbiAgICBjdXJyZW50LmxpbmVzID0gbGluZXM7XG5cbiAgICBpZiAoY3VycmVudC5hZGRlZCB8fCBjdXJyZW50LnJlbW92ZWQpIHtcbiAgICAgIC8vIElmIHdlIGhhdmUgcHJldmlvdXMgY29udGV4dCwgc3RhcnQgd2l0aCB0aGF0XG4gICAgICBpZiAoIW9sZFJhbmdlU3RhcnQpIHtcbiAgICAgICAgY29uc3QgcHJldiA9IGRpZmZbaSAtIDFdO1xuICAgICAgICBvbGRSYW5nZVN0YXJ0ID0gb2xkTGluZTtcbiAgICAgICAgbmV3UmFuZ2VTdGFydCA9IG5ld0xpbmU7XG5cbiAgICAgICAgaWYgKHByZXYpIHtcbiAgICAgICAgICBjdXJSYW5nZSA9IG9wdGlvbnMuY29udGV4dCA+IDAgPyBjb250ZXh0TGluZXMocHJldi5saW5lcy5zbGljZSgtb3B0aW9ucy5jb250ZXh0KSkgOiBbXTtcbiAgICAgICAgICBvbGRSYW5nZVN0YXJ0IC09IGN1clJhbmdlLmxlbmd0aDtcbiAgICAgICAgICBuZXdSYW5nZVN0YXJ0IC09IGN1clJhbmdlLmxlbmd0aDtcbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBPdXRwdXQgb3VyIGNoYW5nZXNcbiAgICAgIGN1clJhbmdlLnB1c2goLi4uIGxpbmVzLm1hcChmdW5jdGlvbihlbnRyeSkge1xuICAgICAgICByZXR1cm4gKGN1cnJlbnQuYWRkZWQgPyAnKycgOiAnLScpICsgZW50cnk7XG4gICAgICB9KSk7XG5cbiAgICAgIC8vIFRyYWNrIHRoZSB1cGRhdGVkIGZpbGUgcG9zaXRpb25cbiAgICAgIGlmIChjdXJyZW50LmFkZGVkKSB7XG4gICAgICAgIG5ld0xpbmUgKz0gbGluZXMubGVuZ3RoO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgb2xkTGluZSArPSBsaW5lcy5sZW5ndGg7XG4gICAgICB9XG4gICAgfSBlbHNlIHtcbiAgICAgIC8vIElkZW50aWNhbCBjb250ZXh0IGxpbmVzLiBUcmFjayBsaW5lIGNoYW5nZXNcbiAgICAgIGlmIChvbGRSYW5nZVN0YXJ0KSB7XG4gICAgICAgIC8vIENsb3NlIG91dCBhbnkgY2hhbmdlcyB0aGF0IGhhdmUgYmVlbiBvdXRwdXQgKG9yIGpvaW4gb3ZlcmxhcHBpbmcpXG4gICAgICAgIGlmIChsaW5lcy5sZW5ndGggPD0gb3B0aW9ucy5jb250ZXh0ICogMiAmJiBpIDwgZGlmZi5sZW5ndGggLSAyKSB7XG4gICAgICAgICAgLy8gT3ZlcmxhcHBpbmdcbiAgICAgICAgICBjdXJSYW5nZS5wdXNoKC4uLiBjb250ZXh0TGluZXMobGluZXMpKTtcbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAvLyBlbmQgdGhlIHJhbmdlIGFuZCBvdXRwdXRcbiAgICAgICAgICBsZXQgY29udGV4dFNpemUgPSBNYXRoLm1pbihsaW5lcy5sZW5ndGgsIG9wdGlvbnMuY29udGV4dCk7XG4gICAgICAgICAgY3VyUmFuZ2UucHVzaCguLi4gY29udGV4dExpbmVzKGxpbmVzLnNsaWNlKDAsIGNvbnRleHRTaXplKSkpO1xuXG4gICAgICAgICAgbGV0IGh1bmsgPSB7XG4gICAgICAgICAgICBvbGRTdGFydDogb2xkUmFuZ2VTdGFydCxcbiAgICAgICAgICAgIG9sZExpbmVzOiAob2xkTGluZSAtIG9sZFJhbmdlU3RhcnQgKyBjb250ZXh0U2l6ZSksXG4gICAgICAgICAgICBuZXdTdGFydDogbmV3UmFuZ2VTdGFydCxcbiAgICAgICAgICAgIG5ld0xpbmVzOiAobmV3TGluZSAtIG5ld1JhbmdlU3RhcnQgKyBjb250ZXh0U2l6ZSksXG4gICAgICAgICAgICBsaW5lczogY3VyUmFuZ2VcbiAgICAgICAgICB9O1xuICAgICAgICAgIGlmIChpID49IGRpZmYubGVuZ3RoIC0gMiAmJiBsaW5lcy5sZW5ndGggPD0gb3B0aW9ucy5jb250ZXh0KSB7XG4gICAgICAgICAgICAvLyBFT0YgaXMgaW5zaWRlIHRoaXMgaHVua1xuICAgICAgICAgICAgbGV0IG9sZEVPRk5ld2xpbmUgPSAoL1xcbiQvLnRlc3Qob2xkU3RyKSk7XG4gICAgICAgICAgICBsZXQgbmV3RU9GTmV3bGluZSA9ICgvXFxuJC8udGVzdChuZXdTdHIpKTtcbiAgICAgICAgICAgIGlmIChsaW5lcy5sZW5ndGggPT0gMCAmJiAhb2xkRU9GTmV3bGluZSkge1xuICAgICAgICAgICAgICAvLyBzcGVjaWFsIGNhc2U6IG9sZCBoYXMgbm8gZW9sIGFuZCBubyB0cmFpbGluZyBjb250ZXh0OyBuby1ubCBjYW4gZW5kIHVwIGJlZm9yZSBhZGRzXG4gICAgICAgICAgICAgIGN1clJhbmdlLnNwbGljZShodW5rLm9sZExpbmVzLCAwLCAnXFxcXCBObyBuZXdsaW5lIGF0IGVuZCBvZiBmaWxlJyk7XG4gICAgICAgICAgICB9IGVsc2UgaWYgKCFvbGRFT0ZOZXdsaW5lIHx8ICFuZXdFT0ZOZXdsaW5lKSB7XG4gICAgICAgICAgICAgIGN1clJhbmdlLnB1c2goJ1xcXFwgTm8gbmV3bGluZSBhdCBlbmQgb2YgZmlsZScpO1xuICAgICAgICAgICAgfVxuICAgICAgICAgIH1cbiAgICAgICAgICBodW5rcy5wdXNoKGh1bmspO1xuXG4gICAgICAgICAgb2xkUmFuZ2VTdGFydCA9IDA7XG4gICAgICAgICAgbmV3UmFuZ2VTdGFydCA9IDA7XG4gICAgICAgICAgY3VyUmFuZ2UgPSBbXTtcbiAgICAgICAgfVxuICAgICAgfVxuICAgICAgb2xkTGluZSArPSBsaW5lcy5sZW5ndGg7XG4gICAgICBuZXdMaW5lICs9IGxpbmVzLmxlbmd0aDtcbiAgICB9XG4gIH1cblxuICByZXR1cm4ge1xuICAgIG9sZEZpbGVOYW1lOiBvbGRGaWxlTmFtZSwgbmV3RmlsZU5hbWU6IG5ld0ZpbGVOYW1lLFxuICAgIG9sZEhlYWRlcjogb2xkSGVhZGVyLCBuZXdIZWFkZXI6IG5ld0hlYWRlcixcbiAgICBodW5rczogaHVua3NcbiAgfTtcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIGNyZWF0ZVR3b0ZpbGVzUGF0Y2gob2xkRmlsZU5hbWUsIG5ld0ZpbGVOYW1lLCBvbGRTdHIsIG5ld1N0ciwgb2xkSGVhZGVyLCBuZXdIZWFkZXIsIG9wdGlvbnMpIHtcbiAgY29uc3QgZGlmZiA9IHN0cnVjdHVyZWRQYXRjaChvbGRGaWxlTmFtZSwgbmV3RmlsZU5hbWUsIG9sZFN0ciwgbmV3U3RyLCBvbGRIZWFkZXIsIG5ld0hlYWRlciwgb3B0aW9ucyk7XG5cbiAgY29uc3QgcmV0ID0gW107XG4gIGlmIChvbGRGaWxlTmFtZSA9PSBuZXdGaWxlTmFtZSkge1xuICAgIHJldC5wdXNoKCdJbmRleDogJyArIG9sZEZpbGVOYW1lKTtcbiAgfVxuICByZXQucHVzaCgnPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PScpO1xuICByZXQucHVzaCgnLS0tICcgKyBkaWZmLm9sZEZpbGVOYW1lICsgKHR5cGVvZiBkaWZmLm9sZEhlYWRlciA9PT0gJ3VuZGVmaW5lZCcgPyAnJyA6ICdcXHQnICsgZGlmZi5vbGRIZWFkZXIpKTtcbiAgcmV0LnB1c2goJysrKyAnICsgZGlmZi5uZXdGaWxlTmFtZSArICh0eXBlb2YgZGlmZi5uZXdIZWFkZXIgPT09ICd1bmRlZmluZWQnID8gJycgOiAnXFx0JyArIGRpZmYubmV3SGVhZGVyKSk7XG5cbiAgZm9yIChsZXQgaSA9IDA7IGkgPCBkaWZmLmh1bmtzLmxlbmd0aDsgaSsrKSB7XG4gICAgY29uc3QgaHVuayA9IGRpZmYuaHVua3NbaV07XG4gICAgcmV0LnB1c2goXG4gICAgICAnQEAgLScgKyBodW5rLm9sZFN0YXJ0ICsgJywnICsgaHVuay5vbGRMaW5lc1xuICAgICAgKyAnICsnICsgaHVuay5uZXdTdGFydCArICcsJyArIGh1bmsubmV3TGluZXNcbiAgICAgICsgJyBAQCdcbiAgICApO1xuICAgIHJldC5wdXNoLmFwcGx5KHJldCwgaHVuay5saW5lcyk7XG4gIH1cblxuICByZXR1cm4gcmV0LmpvaW4oJ1xcbicpICsgJ1xcbic7XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBjcmVhdGVQYXRjaChmaWxlTmFtZSwgb2xkU3RyLCBuZXdTdHIsIG9sZEhlYWRlciwgbmV3SGVhZGVyLCBvcHRpb25zKSB7XG4gIHJldHVybiBjcmVhdGVUd29GaWxlc1BhdGNoKGZpbGVOYW1lLCBmaWxlTmFtZSwgb2xkU3RyLCBuZXdTdHIsIG9sZEhlYWRlciwgbmV3SGVhZGVyLCBvcHRpb25zKTtcbn1cbiJdfQ==
+
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*istanbul ignore start*/
+
+exports.__esModule = true;
+
+exports["default"] = /*istanbul ignore end*/function (start, minLine, maxLine) {
+  var wantForward = true,
+      backwardExhausted = false,
+      forwardExhausted = false,
+      localOffset = 1;
+
+  return function iterator() {
+    if (wantForward && !forwardExhausted) {
+      if (backwardExhausted) {
+        localOffset++;
+      } else {
+        wantForward = false;
+      }
+
+      // Check if trying to fit beyond text length, and if not, check it fits
+      // after offset location (or desired location on first iteration)
+      if (start + localOffset <= maxLine) {
+        return localOffset;
+      }
+
+      forwardExhausted = true;
+    }
+
+    if (!backwardExhausted) {
+      if (!forwardExhausted) {
+        wantForward = true;
+      }
+
+      // Check if trying to fit before text beginning, and if not, check it fits
+      // before offset location
+      if (minLine <= start - localOffset) {
+        return -localOffset++;
+      }
+
+      backwardExhausted = true;
+      return iterator();
+    }
+
+    // We tried to fit hunk before text beginning and beyond text lenght, then
+    // hunk can't fit on the text. Return undefined
+  };
+};
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy91dGlsL2Rpc3RhbmNlLWl0ZXJhdG9yLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7NENBR2UsVUFBUyxLQUFULEVBQWdCLE9BQWhCLEVBQXlCLE9BQXpCLEVBQWtDO0FBQy9DLE1BQUksY0FBYyxJQUFsQjtBQUFBLE1BQ0ksb0JBQW9CLEtBRHhCO0FBQUEsTUFFSSxtQkFBbUIsS0FGdkI7QUFBQSxNQUdJLGNBQWMsQ0FIbEI7O0FBS0EsU0FBTyxTQUFTLFFBQVQsR0FBb0I7QUFDekIsUUFBSSxlQUFlLENBQUMsZ0JBQXBCLEVBQXNDO0FBQ3BDLFVBQUksaUJBQUosRUFBdUI7QUFDckI7QUFDRCxPQUZELE1BRU87QUFDTCxzQkFBYyxLQUFkO0FBQ0Q7Ozs7QUFJRCxVQUFJLFFBQVEsV0FBUixJQUF1QixPQUEzQixFQUFvQztBQUNsQyxlQUFPLFdBQVA7QUFDRDs7QUFFRCx5QkFBbUIsSUFBbkI7QUFDRDs7QUFFRCxRQUFJLENBQUMsaUJBQUwsRUFBd0I7QUFDdEIsVUFBSSxDQUFDLGdCQUFMLEVBQXVCO0FBQ3JCLHNCQUFjLElBQWQ7QUFDRDs7OztBQUlELFVBQUksV0FBVyxRQUFRLFdBQXZCLEVBQW9DO0FBQ2xDLGVBQU8sQ0FBQyxhQUFSO0FBQ0Q7O0FBRUQsMEJBQW9CLElBQXBCO0FBQ0EsYUFBTyxVQUFQO0FBQ0Q7Ozs7QUFJRixHQWxDRDtBQW1DRCxDIiwiZmlsZSI6ImRpc3RhbmNlLWl0ZXJhdG9yLmpzIiwic291cmNlc0NvbnRlbnQiOlsiLy8gSXRlcmF0b3IgdGhhdCB0cmF2ZXJzZXMgaW4gdGhlIHJhbmdlIG9mIFttaW4sIG1heF0sIHN0ZXBwaW5nXG4vLyBieSBkaXN0YW5jZSBmcm9tIGEgZ2l2ZW4gc3RhcnQgcG9zaXRpb24uIEkuZS4gZm9yIFswLCA0XSwgd2l0aFxuLy8gc3RhcnQgb2YgMiwgdGhpcyB3aWxsIGl0ZXJhdGUgMiwgMywgMSwgNCwgMC5cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uKHN0YXJ0LCBtaW5MaW5lLCBtYXhMaW5lKSB7XG4gIGxldCB3YW50Rm9yd2FyZCA9IHRydWUsXG4gICAgICBiYWNrd2FyZEV4aGF1c3RlZCA9IGZhbHNlLFxuICAgICAgZm9yd2FyZEV4aGF1c3RlZCA9IGZhbHNlLFxuICAgICAgbG9jYWxPZmZzZXQgPSAxO1xuXG4gIHJldHVybiBmdW5jdGlvbiBpdGVyYXRvcigpIHtcbiAgICBpZiAod2FudEZvcndhcmQgJiYgIWZvcndhcmRFeGhhdXN0ZWQpIHtcbiAgICAgIGlmIChiYWNrd2FyZEV4aGF1c3RlZCkge1xuICAgICAgICBsb2NhbE9mZnNldCsrO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgd2FudEZvcndhcmQgPSBmYWxzZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ2hlY2sgaWYgdHJ5aW5nIHRvIGZpdCBiZXlvbmQgdGV4dCBsZW5ndGgsIGFuZCBpZiBub3QsIGNoZWNrIGl0IGZpdHNcbiAgICAgIC8vIGFmdGVyIG9mZnNldCBsb2NhdGlvbiAob3IgZGVzaXJlZCBsb2NhdGlvbiBvbiBmaXJzdCBpdGVyYXRpb24pXG4gICAgICBpZiAoc3RhcnQgKyBsb2NhbE9mZnNldCA8PSBtYXhMaW5lKSB7XG4gICAgICAgIHJldHVybiBsb2NhbE9mZnNldDtcbiAgICAgIH1cblxuICAgICAgZm9yd2FyZEV4aGF1c3RlZCA9IHRydWU7XG4gICAgfVxuXG4gICAgaWYgKCFiYWNrd2FyZEV4aGF1c3RlZCkge1xuICAgICAgaWYgKCFmb3J3YXJkRXhoYXVzdGVkKSB7XG4gICAgICAgIHdhbnRGb3J3YXJkID0gdHJ1ZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ2hlY2sgaWYgdHJ5aW5nIHRvIGZpdCBiZWZvcmUgdGV4dCBiZWdpbm5pbmcsIGFuZCBpZiBub3QsIGNoZWNrIGl0IGZpdHNcbiAgICAgIC8vIGJlZm9yZSBvZmZzZXQgbG9jYXRpb25cbiAgICAgIGlmIChtaW5MaW5lIDw9IHN0YXJ0IC0gbG9jYWxPZmZzZXQpIHtcbiAgICAgICAgcmV0dXJuIC1sb2NhbE9mZnNldCsrO1xuICAgICAgfVxuXG4gICAgICBiYWNrd2FyZEV4aGF1c3RlZCA9IHRydWU7XG4gICAgICByZXR1cm4gaXRlcmF0b3IoKTtcbiAgICB9XG5cbiAgICAvLyBXZSB0cmllZCB0byBmaXQgaHVuayBiZWZvcmUgdGV4dCBiZWdpbm5pbmcgYW5kIGJleW9uZCB0ZXh0IGxlbmdodCwgdGhlblxuICAgIC8vIGh1bmsgY2FuJ3QgZml0IG9uIHRoZSB0ZXh0LiBSZXR1cm4gdW5kZWZpbmVkXG4gIH07XG59XG4iXX0=
+
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(("function" === "function" && __webpack_require__(87) && function (m) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(62)], __WEBPACK_AMD_DEFINE_FACTORY__ = (m),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 }) || (typeof module === "object" && function (m) {
-    module.exports = m(__webpack_require__(55));
+    module.exports = m(__webpack_require__(62));
 }) || function (m) { this.formatio = m(this.samsam); }
 )(function (samsam) {
     "use strict";
@@ -13692,7 +19337,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 113 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14355,7 +20000,305 @@ exports.install = function install(target, now, toFake, loopLimit) {
 
 
 /***/ }),
-/* 114 */
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/* !
+ * Chai - pathval utility
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * @see https://github.com/logicalparadox/filtr
+ * MIT Licensed
+ */
+
+/**
+ * ### .hasProperty(object, name)
+ *
+ * This allows checking whether an object has own
+ * or inherited from prototype chain named property.
+ *
+ * Basically does the same thing as the `in`
+ * operator but works properly with null/undefined values
+ * and other primitives.
+ *
+ *     var obj = {
+ *         arr: ['a', 'b', 'c']
+ *       , str: 'Hello'
+ *     }
+ *
+ * The following would be the results.
+ *
+ *     hasProperty(obj, 'str');  // true
+ *     hasProperty(obj, 'constructor');  // true
+ *     hasProperty(obj, 'bar');  // false
+ *
+ *     hasProperty(obj.str, 'length'); // true
+ *     hasProperty(obj.str, 1);  // true
+ *     hasProperty(obj.str, 5);  // false
+ *
+ *     hasProperty(obj.arr, 'length');  // true
+ *     hasProperty(obj.arr, 2);  // true
+ *     hasProperty(obj.arr, 3);  // false
+ *
+ * @param {Object} object
+ * @param {String|Symbol} name
+ * @returns {Boolean} whether it exists
+ * @namespace Utils
+ * @name hasProperty
+ * @api public
+ */
+
+function hasProperty(obj, name) {
+  if (typeof obj === 'undefined' || obj === null) {
+    return false;
+  }
+
+  // The `in` operator does not work with primitives.
+  return name in Object(obj);
+}
+
+/* !
+ * ## parsePath(path)
+ *
+ * Helper function used to parse string object
+ * paths. Use in conjunction with `internalGetPathValue`.
+ *
+ *      var parsed = parsePath('myobject.property.subprop');
+ *
+ * ### Paths:
+ *
+ * * Can be infinitely deep and nested.
+ * * Arrays are also valid using the formal `myobject.document[3].property`.
+ * * Literal dots and brackets (not delimiter) must be backslash-escaped.
+ *
+ * @param {String} path
+ * @returns {Object} parsed
+ * @api private
+ */
+
+function parsePath(path) {
+  var str = path.replace(/([^\\])\[/g, '$1.[');
+  var parts = str.match(/(\\\.|[^.]+?)+/g);
+  return parts.map(function mapMatches(value) {
+    var regexp = /^\[(\d+)\]$/;
+    var mArr = regexp.exec(value);
+    var parsed = null;
+    if (mArr) {
+      parsed = { i: parseFloat(mArr[1]) };
+    } else {
+      parsed = { p: value.replace(/\\([.\[\]])/g, '$1') };
+    }
+
+    return parsed;
+  });
+}
+
+/* !
+ * ## internalGetPathValue(obj, parsed[, pathDepth])
+ *
+ * Helper companion function for `.parsePath` that returns
+ * the value located at the parsed address.
+ *
+ *      var value = getPathValue(obj, parsed);
+ *
+ * @param {Object} object to search against
+ * @param {Object} parsed definition from `parsePath`.
+ * @param {Number} depth (nesting level) of the property we want to retrieve
+ * @returns {Object|Undefined} value
+ * @api private
+ */
+
+function internalGetPathValue(obj, parsed, pathDepth) {
+  var temporaryValue = obj;
+  var res = null;
+  pathDepth = (typeof pathDepth === 'undefined' ? parsed.length : pathDepth);
+
+  for (var i = 0; i < pathDepth; i++) {
+    var part = parsed[i];
+    if (temporaryValue) {
+      if (typeof part.p === 'undefined') {
+        temporaryValue = temporaryValue[part.i];
+      } else {
+        temporaryValue = temporaryValue[part.p];
+      }
+
+      if (i === (pathDepth - 1)) {
+        res = temporaryValue;
+      }
+    }
+  }
+
+  return res;
+}
+
+/* !
+ * ## internalSetPathValue(obj, value, parsed)
+ *
+ * Companion function for `parsePath` that sets
+ * the value located at a parsed address.
+ *
+ *  internalSetPathValue(obj, 'value', parsed);
+ *
+ * @param {Object} object to search and define on
+ * @param {*} value to use upon set
+ * @param {Object} parsed definition from `parsePath`
+ * @api private
+ */
+
+function internalSetPathValue(obj, val, parsed) {
+  var tempObj = obj;
+  var pathDepth = parsed.length;
+  var part = null;
+  // Here we iterate through every part of the path
+  for (var i = 0; i < pathDepth; i++) {
+    var propName = null;
+    var propVal = null;
+    part = parsed[i];
+
+    // If it's the last part of the path, we set the 'propName' value with the property name
+    if (i === (pathDepth - 1)) {
+      propName = typeof part.p === 'undefined' ? part.i : part.p;
+      // Now we set the property with the name held by 'propName' on object with the desired val
+      tempObj[propName] = val;
+    } else if (typeof part.p !== 'undefined' && tempObj[part.p]) {
+      tempObj = tempObj[part.p];
+    } else if (typeof part.i !== 'undefined' && tempObj[part.i]) {
+      tempObj = tempObj[part.i];
+    } else {
+      // If the obj doesn't have the property we create one with that name to define it
+      var next = parsed[i + 1];
+      // Here we set the name of the property which will be defined
+      propName = typeof part.p === 'undefined' ? part.i : part.p;
+      // Here we decide if this property will be an array or a new object
+      propVal = typeof next.p === 'undefined' ? [] : {};
+      tempObj[propName] = propVal;
+      tempObj = tempObj[propName];
+    }
+  }
+}
+
+/**
+ * ### .getPathInfo(object, path)
+ *
+ * This allows the retrieval of property info in an
+ * object given a string path.
+ *
+ * The path info consists of an object with the
+ * following properties:
+ *
+ * * parent - The parent object of the property referenced by `path`
+ * * name - The name of the final property, a number if it was an array indexer
+ * * value - The value of the property, if it exists, otherwise `undefined`
+ * * exists - Whether the property exists or not
+ *
+ * @param {Object} object
+ * @param {String} path
+ * @returns {Object} info
+ * @namespace Utils
+ * @name getPathInfo
+ * @api public
+ */
+
+function getPathInfo(obj, path) {
+  var parsed = parsePath(path);
+  var last = parsed[parsed.length - 1];
+  var info = {
+    parent: parsed.length > 1 ? internalGetPathValue(obj, parsed, parsed.length - 1) : obj,
+    name: last.p || last.i,
+    value: internalGetPathValue(obj, parsed),
+  };
+  info.exists = hasProperty(info.parent, info.name);
+
+  return info;
+}
+
+/**
+ * ### .getPathValue(object, path)
+ *
+ * This allows the retrieval of values in an
+ * object given a string path.
+ *
+ *     var obj = {
+ *         prop1: {
+ *             arr: ['a', 'b', 'c']
+ *           , str: 'Hello'
+ *         }
+ *       , prop2: {
+ *             arr: [ { nested: 'Universe' } ]
+ *           , str: 'Hello again!'
+ *         }
+ *     }
+ *
+ * The following would be the results.
+ *
+ *     getPathValue(obj, 'prop1.str'); // Hello
+ *     getPathValue(obj, 'prop1.att[2]'); // b
+ *     getPathValue(obj, 'prop2.arr[0].nested'); // Universe
+ *
+ * @param {Object} object
+ * @param {String} path
+ * @returns {Object} value or `undefined`
+ * @namespace Utils
+ * @name getPathValue
+ * @api public
+ */
+
+function getPathValue(obj, path) {
+  var info = getPathInfo(obj, path);
+  return info.value;
+}
+
+/**
+ * ### .setPathValue(object, path, value)
+ *
+ * Define the value in an object at a given string path.
+ *
+ * ```js
+ * var obj = {
+ *     prop1: {
+ *         arr: ['a', 'b', 'c']
+ *       , str: 'Hello'
+ *     }
+ *   , prop2: {
+ *         arr: [ { nested: 'Universe' } ]
+ *       , str: 'Hello again!'
+ *     }
+ * };
+ * ```
+ *
+ * The following would be acceptable.
+ *
+ * ```js
+ * var properties = require('tea-properties');
+ * properties.set(obj, 'prop1.str', 'Hello Universe!');
+ * properties.set(obj, 'prop1.arr[2]', 'B');
+ * properties.set(obj, 'prop2.arr[0].nested.value', { hello: 'universe' });
+ * ```
+ *
+ * @param {Object} object
+ * @param {String} path
+ * @param {Mixed} value
+ * @api private
+ */
+
+function setPathValue(obj, path, val) {
+  var parsed = parsePath(path);
+  internalSetPathValue(obj, val, parsed);
+  return obj;
+}
+
+module.exports = {
+  hasProperty: hasProperty,
+  getPathInfo: getPathInfo,
+  getPathValue: getPathValue,
+  setPathValue: setPathValue,
+};
+
+
+/***/ }),
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14372,38 +20315,7 @@ exports.isSupported = (function () {
 
 
 /***/ }),
-/* 115 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var walk = __webpack_require__(29);
-var getPropertyDescriptor = __webpack_require__(20);
-
-function collectMethod(methods, object, prop, propOwner) {
-    if (
-        typeof getPropertyDescriptor(propOwner, prop).value === "function" &&
-        object.hasOwnProperty(prop)
-    ) {
-        methods.push(object[prop]);
-    }
-}
-
-// This function returns an array of all the own methods on the passed object
-function collectOwnMethods(object) {
-    var methods = [];
-
-    walk(object, collectMethod.bind(null, methods, object));
-
-    return methods;
-}
-
-module.exports = collectOwnMethods;
-
-
-/***/ }),
-/* 116 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14429,11 +20341,13 @@ exports.green = function (str) {
 
 
 /***/ }),
-/* 117 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+var getPropertyDescriptor = __webpack_require__(16);
 
 var slice = [].slice;
 var useLeftMostCallback = -1;
@@ -14448,6 +20362,12 @@ function throwsException(fake, error, message) {
     } else {
         fake.exception = error;
     }
+}
+
+function isPropertyConfigurable(obj, propName) {
+    var propertyDescriptor = getPropertyDescriptor(obj, propName);
+
+    return propertyDescriptor ? propertyDescriptor.configurable : true;
 }
 
 module.exports = {
@@ -14501,6 +20421,10 @@ module.exports = {
         fake.callbackContext = context;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
+    },
+
+    usingPromise: function usingPromise(fake, promiseLibrary) {
+        fake.promiseLibrary = promiseLibrary;
     },
 
     yields: function (fake) {
@@ -14563,6 +20487,14 @@ module.exports = {
         fake.returnArgAt = pos;
     },
 
+    throwsArg: function throwsArg(fake, pos) {
+        if (typeof pos !== "number") {
+            throw new TypeError("argument index is not number");
+        }
+
+        fake.throwArgAt = pos;
+    },
+
     returnsThis: function returnsThis(fake) {
         fake.returnThis = true;
     },
@@ -14604,7 +20536,8 @@ module.exports = {
         var rootStub = fake.stub || fake;
 
         Object.defineProperty(rootStub.rootObj, rootStub.propName, {
-            get: getterFunction
+            get: getterFunction,
+            configurable: isPropertyConfigurable(rootStub.rootObj, rootStub.propName)
         });
 
         return fake;
@@ -14614,7 +20547,20 @@ module.exports = {
         var rootStub = fake.stub || fake;
 
         Object.defineProperty(rootStub.rootObj, rootStub.propName, { // eslint-disable-line accessor-pairs
-            set: setterFunction
+            set: setterFunction,
+            configurable: isPropertyConfigurable(rootStub.rootObj, rootStub.propName)
+        });
+
+        return fake;
+    },
+
+    value: function value(fake, newVal) {
+        var rootStub = fake.stub || fake;
+
+        Object.defineProperty(rootStub.rootObj, rootStub.propName, {
+            value: newVal,
+            enumerable: true,
+            configurable: isPropertyConfigurable(rootStub.rootObj, rootStub.propName)
         });
 
         return fake;
@@ -14639,20 +20585,78 @@ Object.keys(module.exports).forEach(function (method) {
 
 
 /***/ }),
-/* 118 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var extend = __webpack_require__(13);
-var sinonCollection = __webpack_require__(57);
-var sinonMatch = __webpack_require__(12);
-var sinonAssert = __webpack_require__(34);
-var sinonClock = __webpack_require__(39);
-var fakeServer = __webpack_require__(38);
-var fakeXhr = __webpack_require__(40);
-var fakeServerWithClock = __webpack_require__(68);
+var collectOwnMethods = __webpack_require__(64);
+var deprecated = __webpack_require__(41);
+var getPropertyDescriptor = __webpack_require__(16);
+var stubNonFunctionProperty = __webpack_require__(139);
+var sinonStub = __webpack_require__(24);
+var throwOnFalsyObject = __webpack_require__(68);
+
+// This is deprecated and will be removed in a future version of sinon.
+// We will only consider pull requests that fix serious bugs in the implementation
+function sandboxStub(object, property/*, value*/) {
+    deprecated.printWarning(
+      "sandbox.stub(obj, 'meth', val) is deprecated and will be removed from " +
+      "the public API in a future version of sinon." +
+      "\n Use sandbox.stub(obj, 'meth').callsFake(fn) instead in order to stub a function." +
+      "\n Use sandbox.stub(obj, 'meth').value(fn) instead in order to stub a non-function value."
+    );
+
+    throwOnFalsyObject.apply(null, arguments);
+
+    var actualDescriptor = getPropertyDescriptor(object, property);
+    var isStubbingEntireObject = typeof property === "undefined" && typeof object === "object";
+    var isStubbingNonFuncProperty = typeof object === "object"
+                                    && typeof property !== "undefined"
+                                    && (typeof actualDescriptor === "undefined"
+                                    || typeof actualDescriptor.value !== "function");
+
+
+    // When passing a value as third argument it will be applied to stubNonFunctionProperty
+    var stubbed = isStubbingNonFuncProperty ?
+                    stubNonFunctionProperty.apply(null, arguments) :
+                    sinonStub.apply(null, arguments);
+
+    if (isStubbingEntireObject) {
+        var ownMethods = collectOwnMethods(stubbed);
+        ownMethods.forEach(this.add.bind(this));
+        if (this.promiseLibrary) {
+            ownMethods.forEach(this.addUsingPromise.bind(this));
+        }
+    } else {
+        this.add(stubbed);
+        if (this.promiseLibrary) {
+            stubbed.usingPromise(this.promiseLibrary);
+        }
+    }
+
+    return stubbed;
+}
+
+module.exports = sandboxStub;
+
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var extend = __webpack_require__(15);
+var sinonCollection = __webpack_require__(65);
+var sinonMatch = __webpack_require__(14);
+var sinonAssert = __webpack_require__(40);
+var sinonClock = __webpack_require__(46);
+var fakeServer = __webpack_require__(45);
+var fakeXhr = __webpack_require__(47);
+var fakeServerWithClock = __webpack_require__(75);
 
 var push = [].push;
 
@@ -14735,6 +20739,13 @@ extend(sinonSandbox, {
         return obj;
     },
 
+    usingPromise: function (promiseLibrary) {
+
+        this.promiseLibrary = promiseLibrary;
+
+        return this;
+    },
+
     restore: function () {
         if (arguments.length) {
             throw new Error("sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()");
@@ -14791,17 +20802,17 @@ module.exports = sinonSandbox;
 
 
 /***/ }),
-/* 119 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var color = __webpack_require__(116);
-var timesInWords = __webpack_require__(28);
-var sinonFormat = __webpack_require__(18);
-var sinonMatch = __webpack_require__(12);
-var jsDiff = __webpack_require__(134);
+var color = __webpack_require__(132);
+var timesInWords = __webpack_require__(34);
+var sinonFormat = __webpack_require__(22);
+var sinonMatch = __webpack_require__(14);
+var jsDiff = __webpack_require__(124);
 var push = Array.prototype.push;
 
 function colorSinonMatchText(matcher, calledArg, calledArgMessage) {
@@ -14898,15 +20909,15 @@ module.exports = {
 
 
 /***/ }),
-/* 120 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var deprecated = __webpack_require__(63);
-var spy = __webpack_require__(21);
-var wrapMethod = __webpack_require__(23);
+var deprecated = __webpack_require__(41);
+var spy = __webpack_require__(23);
+var wrapMethod = __webpack_require__(26);
 
 // This is deprecated and will be removed in a future version of sinon.
 // We will only consider pull requests that fix serious bugs in the implementation
@@ -14946,14 +20957,14 @@ module.exports = stubDescriptor;
 
 
 /***/ }),
-/* 121 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var getPropertyDescriptor = __webpack_require__(20);
-var walk = __webpack_require__(29);
+var getPropertyDescriptor = __webpack_require__(16);
+var walk = __webpack_require__(35);
 
 function stubEntireObject(stub, object) {
     walk(object || {}, function (prop, propOwner) {
@@ -14975,13 +20986,13 @@ module.exports = stubEntireObject;
 
 
 /***/ }),
-/* 122 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var valueToString = __webpack_require__(14);
+var valueToString = __webpack_require__(17);
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 function stubNonFunctionProperty(object, property, value) {
@@ -14994,7 +21005,7 @@ function stubNonFunctionProperty(object, property, value) {
     object[property] = value;
 
     return {
-        restore: function () {
+        restore: function restore() {
             object[property] = original;
         }
     };
@@ -15004,13 +21015,13 @@ module.exports = stubNonFunctionProperty;
 
 
 /***/ }),
-/* 123 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var defaultConfig = __webpack_require__(62);
+var defaultConfig = __webpack_require__(70);
 
 module.exports = function getConfig(custom) {
     var config = {};
@@ -15029,42 +21040,42 @@ module.exports = function getConfig(custom) {
 
 
 /***/ }),
-/* 124 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 module.exports = {
-    calledInOrder: __webpack_require__(61),
-    configureLogError: __webpack_require__(36),
-    defaultConfig: __webpack_require__(62),
-    deepEqual: __webpack_require__(17),
-    every: __webpack_require__(64),
-    extend: __webpack_require__(13),
-    format: __webpack_require__(18),
-    functionName: __webpack_require__(22),
-    functionToString: __webpack_require__(35),
-    getConfig: __webpack_require__(123),
-    getPropertyDescriptor: __webpack_require__(20),
-    iterableToString: __webpack_require__(65),
-    orderByFirstCall: __webpack_require__(66),
-    restore: __webpack_require__(125),
-    timesInWords: __webpack_require__(28),
-    typeOf: __webpack_require__(37),
-    walk: __webpack_require__(29),
-    wrapMethod: __webpack_require__(23)
+    calledInOrder: __webpack_require__(69),
+    configureLogError: __webpack_require__(43),
+    defaultConfig: __webpack_require__(70),
+    deepEqual: __webpack_require__(21),
+    every: __webpack_require__(71),
+    extend: __webpack_require__(15),
+    format: __webpack_require__(22),
+    functionName: __webpack_require__(25),
+    functionToString: __webpack_require__(42),
+    getConfig: __webpack_require__(140),
+    getPropertyDescriptor: __webpack_require__(16),
+    iterableToString: __webpack_require__(72),
+    orderByFirstCall: __webpack_require__(73),
+    restore: __webpack_require__(142),
+    timesInWords: __webpack_require__(34),
+    typeOf: __webpack_require__(44),
+    walk: __webpack_require__(35),
+    wrapMethod: __webpack_require__(26)
 };
 
 
 /***/ }),
-/* 125 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var walk = __webpack_require__(29);
+var walk = __webpack_require__(35);
 
 function isRestorable(obj) {
     return typeof obj === "function" && typeof obj.restore === "function" && obj.restore.sinon;
@@ -15084,866 +21095,7 @@ module.exports = function restore(object) {
 
 
 /***/ }),
-/* 126 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports. /*istanbul ignore end*/convertChangesToDMP = convertChangesToDMP;
-// See: http://code.google.com/p/google-diff-match-patch/wiki/API
-function convertChangesToDMP(changes) {
-  var ret = [],
-      change = /*istanbul ignore start*/void 0 /*istanbul ignore end*/,
-      operation = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
-  for (var i = 0; i < changes.length; i++) {
-    change = changes[i];
-    if (change.added) {
-      operation = 1;
-    } else if (change.removed) {
-      operation = -1;
-    } else {
-      operation = 0;
-    }
-
-    ret.push([operation, change.value]);
-  }
-  return ret;
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9jb252ZXJ0L2RtcC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Z0NBQ2dCLG1CLEdBQUEsbUI7O0FBQVQsU0FBUyxtQkFBVCxDQUE2QixPQUE3QixFQUFzQztBQUMzQyxNQUFJLE1BQU0sRUFBVjtBQUFBLE1BQ0ksUyx5QkFBQSxNLHdCQURKO0FBQUEsTUFFSSxZLHlCQUFBLE0sd0JBRko7QUFHQSxPQUFLLElBQUksSUFBSSxDQUFiLEVBQWdCLElBQUksUUFBUSxNQUE1QixFQUFvQyxHQUFwQyxFQUF5QztBQUN2QyxhQUFTLFFBQVEsQ0FBUixDQUFUO0FBQ0EsUUFBSSxPQUFPLEtBQVgsRUFBa0I7QUFDaEIsa0JBQVksQ0FBWjtBQUNELEtBRkQsTUFFTyxJQUFJLE9BQU8sT0FBWCxFQUFvQjtBQUN6QixrQkFBWSxDQUFDLENBQWI7QUFDRCxLQUZNLE1BRUE7QUFDTCxrQkFBWSxDQUFaO0FBQ0Q7O0FBRUQsUUFBSSxJQUFKLENBQVMsQ0FBQyxTQUFELEVBQVksT0FBTyxLQUFuQixDQUFUO0FBQ0Q7QUFDRCxTQUFPLEdBQVA7QUFDRCIsImZpbGUiOiJkbXAuanMiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBTZWU6IGh0dHA6Ly9jb2RlLmdvb2dsZS5jb20vcC9nb29nbGUtZGlmZi1tYXRjaC1wYXRjaC93aWtpL0FQSVxuZXhwb3J0IGZ1bmN0aW9uIGNvbnZlcnRDaGFuZ2VzVG9ETVAoY2hhbmdlcykge1xuICBsZXQgcmV0ID0gW10sXG4gICAgICBjaGFuZ2UsXG4gICAgICBvcGVyYXRpb247XG4gIGZvciAobGV0IGkgPSAwOyBpIDwgY2hhbmdlcy5sZW5ndGg7IGkrKykge1xuICAgIGNoYW5nZSA9IGNoYW5nZXNbaV07XG4gICAgaWYgKGNoYW5nZS5hZGRlZCkge1xuICAgICAgb3BlcmF0aW9uID0gMTtcbiAgICB9IGVsc2UgaWYgKGNoYW5nZS5yZW1vdmVkKSB7XG4gICAgICBvcGVyYXRpb24gPSAtMTtcbiAgICB9IGVsc2Uge1xuICAgICAgb3BlcmF0aW9uID0gMDtcbiAgICB9XG5cbiAgICByZXQucHVzaChbb3BlcmF0aW9uLCBjaGFuZ2UudmFsdWVdKTtcbiAgfVxuICByZXR1cm4gcmV0O1xufVxuIl19
-
-
-/***/ }),
-/* 127 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports. /*istanbul ignore end*/convertChangesToXML = convertChangesToXML;
-function convertChangesToXML(changes) {
-  var ret = [];
-  for (var i = 0; i < changes.length; i++) {
-    var change = changes[i];
-    if (change.added) {
-      ret.push('<ins>');
-    } else if (change.removed) {
-      ret.push('<del>');
-    }
-
-    ret.push(escapeHTML(change.value));
-
-    if (change.added) {
-      ret.push('</ins>');
-    } else if (change.removed) {
-      ret.push('</del>');
-    }
-  }
-  return ret.join('');
-}
-
-function escapeHTML(s) {
-  var n = s;
-  n = n.replace(/&/g, '&amp;');
-  n = n.replace(/</g, '&lt;');
-  n = n.replace(/>/g, '&gt;');
-  n = n.replace(/"/g, '&quot;');
-
-  return n;
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9jb252ZXJ0L3htbC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Z0NBQWdCLG1CLEdBQUEsbUI7QUFBVCxTQUFTLG1CQUFULENBQTZCLE9BQTdCLEVBQXNDO0FBQzNDLE1BQUksTUFBTSxFQUFWO0FBQ0EsT0FBSyxJQUFJLElBQUksQ0FBYixFQUFnQixJQUFJLFFBQVEsTUFBNUIsRUFBb0MsR0FBcEMsRUFBeUM7QUFDdkMsUUFBSSxTQUFTLFFBQVEsQ0FBUixDQUFiO0FBQ0EsUUFBSSxPQUFPLEtBQVgsRUFBa0I7QUFDaEIsVUFBSSxJQUFKLENBQVMsT0FBVDtBQUNELEtBRkQsTUFFTyxJQUFJLE9BQU8sT0FBWCxFQUFvQjtBQUN6QixVQUFJLElBQUosQ0FBUyxPQUFUO0FBQ0Q7O0FBRUQsUUFBSSxJQUFKLENBQVMsV0FBVyxPQUFPLEtBQWxCLENBQVQ7O0FBRUEsUUFBSSxPQUFPLEtBQVgsRUFBa0I7QUFDaEIsVUFBSSxJQUFKLENBQVMsUUFBVDtBQUNELEtBRkQsTUFFTyxJQUFJLE9BQU8sT0FBWCxFQUFvQjtBQUN6QixVQUFJLElBQUosQ0FBUyxRQUFUO0FBQ0Q7QUFDRjtBQUNELFNBQU8sSUFBSSxJQUFKLENBQVMsRUFBVCxDQUFQO0FBQ0Q7O0FBRUQsU0FBUyxVQUFULENBQW9CLENBQXBCLEVBQXVCO0FBQ3JCLE1BQUksSUFBSSxDQUFSO0FBQ0EsTUFBSSxFQUFFLE9BQUYsQ0FBVSxJQUFWLEVBQWdCLE9BQWhCLENBQUo7QUFDQSxNQUFJLEVBQUUsT0FBRixDQUFVLElBQVYsRUFBZ0IsTUFBaEIsQ0FBSjtBQUNBLE1BQUksRUFBRSxPQUFGLENBQVUsSUFBVixFQUFnQixNQUFoQixDQUFKO0FBQ0EsTUFBSSxFQUFFLE9BQUYsQ0FBVSxJQUFWLEVBQWdCLFFBQWhCLENBQUo7O0FBRUEsU0FBTyxDQUFQO0FBQ0QiLCJmaWxlIjoieG1sLmpzIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGZ1bmN0aW9uIGNvbnZlcnRDaGFuZ2VzVG9YTUwoY2hhbmdlcykge1xuICBsZXQgcmV0ID0gW107XG4gIGZvciAobGV0IGkgPSAwOyBpIDwgY2hhbmdlcy5sZW5ndGg7IGkrKykge1xuICAgIGxldCBjaGFuZ2UgPSBjaGFuZ2VzW2ldO1xuICAgIGlmIChjaGFuZ2UuYWRkZWQpIHtcbiAgICAgIHJldC5wdXNoKCc8aW5zPicpO1xuICAgIH0gZWxzZSBpZiAoY2hhbmdlLnJlbW92ZWQpIHtcbiAgICAgIHJldC5wdXNoKCc8ZGVsPicpO1xuICAgIH1cblxuICAgIHJldC5wdXNoKGVzY2FwZUhUTUwoY2hhbmdlLnZhbHVlKSk7XG5cbiAgICBpZiAoY2hhbmdlLmFkZGVkKSB7XG4gICAgICByZXQucHVzaCgnPC9pbnM+Jyk7XG4gICAgfSBlbHNlIGlmIChjaGFuZ2UucmVtb3ZlZCkge1xuICAgICAgcmV0LnB1c2goJzwvZGVsPicpO1xuICAgIH1cbiAgfVxuICByZXR1cm4gcmV0LmpvaW4oJycpO1xufVxuXG5mdW5jdGlvbiBlc2NhcGVIVE1MKHMpIHtcbiAgbGV0IG4gPSBzO1xuICBuID0gbi5yZXBsYWNlKC8mL2csICcmYW1wOycpO1xuICBuID0gbi5yZXBsYWNlKC88L2csICcmbHQ7Jyk7XG4gIG4gPSBuLnJlcGxhY2UoLz4vZywgJyZndDsnKTtcbiAgbiA9IG4ucmVwbGFjZSgvXCIvZywgJyZxdW90OycpO1xuXG4gIHJldHVybiBuO1xufVxuIl19
-
-
-/***/ }),
-/* 128 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports.arrayDiff = undefined;
-exports. /*istanbul ignore end*/diffArrays = diffArrays;
-
-var /*istanbul ignore start*/_base = __webpack_require__(15) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-var _base2 = _interopRequireDefault(_base);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-/*istanbul ignore end*/var arrayDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/arrayDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
-arrayDiff.tokenize = arrayDiff.join = function (value) {
-  return value.slice();
-};
-
-function diffArrays(oldArr, newArr, callback) {
-  return arrayDiff.diff(oldArr, newArr, callback);
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL2FycmF5LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Z0NBT2dCLFUsR0FBQSxVOztBQVBoQixJLHlCQUFBLHlCLHdCQUFBOzs7Ozs7O3VCQUVPLElBQU0sWSx5QkFBQSxRLHdCQUFBLFlBQVksSSx5QkFBQSxtQix3QkFBbEI7QUFDUCxVQUFVLFFBQVYsR0FBcUIsVUFBVSxJQUFWLEdBQWlCLFVBQVMsS0FBVCxFQUFnQjtBQUNwRCxTQUFPLE1BQU0sS0FBTixFQUFQO0FBQ0QsQ0FGRDs7QUFJTyxTQUFTLFVBQVQsQ0FBb0IsTUFBcEIsRUFBNEIsTUFBNUIsRUFBb0MsUUFBcEMsRUFBOEM7QUFBRSxTQUFPLFVBQVUsSUFBVixDQUFlLE1BQWYsRUFBdUIsTUFBdkIsRUFBK0IsUUFBL0IsQ0FBUDtBQUFrRCIsImZpbGUiOiJhcnJheS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBEaWZmIGZyb20gJy4vYmFzZSc7XG5cbmV4cG9ydCBjb25zdCBhcnJheURpZmYgPSBuZXcgRGlmZigpO1xuYXJyYXlEaWZmLnRva2VuaXplID0gYXJyYXlEaWZmLmpvaW4gPSBmdW5jdGlvbih2YWx1ZSkge1xuICByZXR1cm4gdmFsdWUuc2xpY2UoKTtcbn07XG5cbmV4cG9ydCBmdW5jdGlvbiBkaWZmQXJyYXlzKG9sZEFyciwgbmV3QXJyLCBjYWxsYmFjaykgeyByZXR1cm4gYXJyYXlEaWZmLmRpZmYob2xkQXJyLCBuZXdBcnIsIGNhbGxiYWNrKTsgfVxuIl19
-
-
-/***/ }),
-/* 129 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports.characterDiff = undefined;
-exports. /*istanbul ignore end*/diffChars = diffChars;
-
-var /*istanbul ignore start*/_base = __webpack_require__(15) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-var _base2 = _interopRequireDefault(_base);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-/*istanbul ignore end*/var characterDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/characterDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
-function diffChars(oldStr, newStr, callback) {
-  return characterDiff.diff(oldStr, newStr, callback);
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL2NoYXJhY3Rlci5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O2dDQUdnQixTLEdBQUEsUzs7QUFIaEIsSSx5QkFBQSx5Qix3QkFBQTs7Ozs7Ozt1QkFFTyxJQUFNLGdCLHlCQUFBLFEsd0JBQUEsZ0JBQWdCLEkseUJBQUEsbUIsd0JBQXRCO0FBQ0EsU0FBUyxTQUFULENBQW1CLE1BQW5CLEVBQTJCLE1BQTNCLEVBQW1DLFFBQW5DLEVBQTZDO0FBQUUsU0FBTyxjQUFjLElBQWQsQ0FBbUIsTUFBbkIsRUFBMkIsTUFBM0IsRUFBbUMsUUFBbkMsQ0FBUDtBQUFzRCIsImZpbGUiOiJjaGFyYWN0ZXIuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgRGlmZiBmcm9tICcuL2Jhc2UnO1xuXG5leHBvcnQgY29uc3QgY2hhcmFjdGVyRGlmZiA9IG5ldyBEaWZmKCk7XG5leHBvcnQgZnVuY3Rpb24gZGlmZkNoYXJzKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjaykgeyByZXR1cm4gY2hhcmFjdGVyRGlmZi5kaWZmKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjayk7IH1cbiJdfQ==
-
-
-/***/ }),
-/* 130 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports.cssDiff = undefined;
-exports. /*istanbul ignore end*/diffCss = diffCss;
-
-var /*istanbul ignore start*/_base = __webpack_require__(15) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-var _base2 = _interopRequireDefault(_base);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-/*istanbul ignore end*/var cssDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/cssDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
-cssDiff.tokenize = function (value) {
-  return value.split(/([{}:;,]|\s+)/);
-};
-
-function diffCss(oldStr, newStr, callback) {
-  return cssDiff.diff(oldStr, newStr, callback);
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL2Nzcy5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O2dDQU9nQixPLEdBQUEsTzs7QUFQaEIsSSx5QkFBQSx5Qix3QkFBQTs7Ozs7Ozt1QkFFTyxJQUFNLFUseUJBQUEsUSx3QkFBQSxVQUFVLEkseUJBQUEsbUIsd0JBQWhCO0FBQ1AsUUFBUSxRQUFSLEdBQW1CLFVBQVMsS0FBVCxFQUFnQjtBQUNqQyxTQUFPLE1BQU0sS0FBTixDQUFZLGVBQVosQ0FBUDtBQUNELENBRkQ7O0FBSU8sU0FBUyxPQUFULENBQWlCLE1BQWpCLEVBQXlCLE1BQXpCLEVBQWlDLFFBQWpDLEVBQTJDO0FBQUUsU0FBTyxRQUFRLElBQVIsQ0FBYSxNQUFiLEVBQXFCLE1BQXJCLEVBQTZCLFFBQTdCLENBQVA7QUFBZ0QiLCJmaWxlIjoiY3NzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IERpZmYgZnJvbSAnLi9iYXNlJztcblxuZXhwb3J0IGNvbnN0IGNzc0RpZmYgPSBuZXcgRGlmZigpO1xuY3NzRGlmZi50b2tlbml6ZSA9IGZ1bmN0aW9uKHZhbHVlKSB7XG4gIHJldHVybiB2YWx1ZS5zcGxpdCgvKFt7fTo7LF18XFxzKykvKTtcbn07XG5cbmV4cG9ydCBmdW5jdGlvbiBkaWZmQ3NzKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjaykgeyByZXR1cm4gY3NzRGlmZi5kaWZmKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjayk7IH1cbiJdfQ==
-
-
-/***/ }),
-/* 131 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports.jsonDiff = undefined;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-exports. /*istanbul ignore end*/diffJson = diffJson;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/canonicalize = canonicalize;
-
-var /*istanbul ignore start*/_base = __webpack_require__(15) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-var _base2 = _interopRequireDefault(_base);
-
-/*istanbul ignore end*/
-var /*istanbul ignore start*/_line = __webpack_require__(41) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-/*istanbul ignore end*/
-
-var objectPrototypeToString = Object.prototype.toString;
-
-var jsonDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/jsonDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
-// Discriminate between two lines of pretty-printed, serialized JSON where one of them has a
-// dangling comma and the other doesn't. Turns out including the dangling comma yields the nicest output:
-jsonDiff.useLongestToken = true;
-
-jsonDiff.tokenize = /*istanbul ignore start*/_line.lineDiff. /*istanbul ignore end*/tokenize;
-jsonDiff.castInput = function (value) {
-  /*istanbul ignore start*/var /*istanbul ignore end*/undefinedReplacement = this.options.undefinedReplacement;
-
-
-  return typeof value === 'string' ? value : JSON.stringify(canonicalize(value), function (k, v) {
-    if (typeof v === 'undefined') {
-      return undefinedReplacement;
-    }
-
-    return v;
-  }, '  ');
-};
-jsonDiff.equals = function (left, right) {
-  return (/*istanbul ignore start*/_base2['default']. /*istanbul ignore end*/prototype.equals(left.replace(/,([\r\n])/g, '$1'), right.replace(/,([\r\n])/g, '$1'))
-  );
-};
-
-function diffJson(oldObj, newObj, options) {
-  return jsonDiff.diff(oldObj, newObj, options);
-}
-
-// This function handles the presence of circular references by bailing out when encountering an
-// object that is already on the "stack" of items being processed.
-function canonicalize(obj, stack, replacementStack) {
-  stack = stack || [];
-  replacementStack = replacementStack || [];
-
-  var i = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
-
-  for (i = 0; i < stack.length; i += 1) {
-    if (stack[i] === obj) {
-      return replacementStack[i];
-    }
-  }
-
-  var canonicalizedObj = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
-
-  if ('[object Array]' === objectPrototypeToString.call(obj)) {
-    stack.push(obj);
-    canonicalizedObj = new Array(obj.length);
-    replacementStack.push(canonicalizedObj);
-    for (i = 0; i < obj.length; i += 1) {
-      canonicalizedObj[i] = canonicalize(obj[i], stack, replacementStack);
-    }
-    stack.pop();
-    replacementStack.pop();
-    return canonicalizedObj;
-  }
-
-  if (obj && obj.toJSON) {
-    obj = obj.toJSON();
-  }
-
-  if ( /*istanbul ignore start*/(typeof /*istanbul ignore end*/obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && obj !== null) {
-    stack.push(obj);
-    canonicalizedObj = {};
-    replacementStack.push(canonicalizedObj);
-    var sortedKeys = [],
-        key = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
-    for (key in obj) {
-      /* istanbul ignore else */
-      if (obj.hasOwnProperty(key)) {
-        sortedKeys.push(key);
-      }
-    }
-    sortedKeys.sort();
-    for (i = 0; i < sortedKeys.length; i += 1) {
-      key = sortedKeys[i];
-      canonicalizedObj[key] = canonicalize(obj[key], stack, replacementStack);
-    }
-    stack.pop();
-    replacementStack.pop();
-  } else {
-    canonicalizedObj = obj;
-  }
-  return canonicalizedObj;
-}
-//# sourceMappingURL=data:application/json;base64,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QWlCLElBQWpCLENBQXNCLGdCQUF0QjtBQUNBLFFBQUksYUFBYSxFQUFqQjtBQUFBLFFBQ0ksTSx5QkFBQSxNLHdCQURKO0FBRUEsU0FBSyxHQUFMLElBQVksR0FBWixFQUFpQjs7QUFFZixVQUFJLElBQUksY0FBSixDQUFtQixHQUFuQixDQUFKLEVBQTZCO0FBQzNCLG1CQUFXLElBQVgsQ0FBZ0IsR0FBaEI7QUFDRDtBQUNGO0FBQ0QsZUFBVyxJQUFYO0FBQ0EsU0FBSyxJQUFJLENBQVQsRUFBWSxJQUFJLFdBQVcsTUFBM0IsRUFBbUMsS0FBSyxDQUF4QyxFQUEyQztBQUN6QyxZQUFNLFdBQVcsQ0FBWCxDQUFOO0FBQ0EsdUJBQWlCLEdBQWpCLElBQXdCLGFBQWEsSUFBSSxHQUFKLENBQWIsRUFBdUIsS0FBdkIsRUFBOEIsZ0JBQTlCLENBQXhCO0FBQ0Q7QUFDRCxVQUFNLEdBQU47QUFDQSxxQkFBaUIsR0FBakI7QUFDRCxHQW5CRCxNQW1CTztBQUNMLHVCQUFtQixHQUFuQjtBQUNEO0FBQ0QsU0FBTyxnQkFBUDtBQUNEIiwiZmlsZSI6Impzb24uanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgRGlmZiBmcm9tICcuL2Jhc2UnO1xuaW1wb3J0IHtsaW5lRGlmZn0gZnJvbSAnLi9saW5lJztcblxuY29uc3Qgb2JqZWN0UHJvdG90eXBlVG9TdHJpbmcgPSBPYmplY3QucHJvdG90eXBlLnRvU3RyaW5nO1xuXG5cbmV4cG9ydCBjb25zdCBqc29uRGlmZiA9IG5ldyBEaWZmKCk7XG4vLyBEaXNjcmltaW5hdGUgYmV0d2VlbiB0d28gbGluZXMgb2YgcHJldHR5LXByaW50ZWQsIHNlcmlhbGl6ZWQgSlNPTiB3aGVyZSBvbmUgb2YgdGhlbSBoYXMgYVxuLy8gZGFuZ2xpbmcgY29tbWEgYW5kIHRoZSBvdGhlciBkb2Vzbid0LiBUdXJucyBvdXQgaW5jbHVkaW5nIHRoZSBkYW5nbGluZyBjb21tYSB5aWVsZHMgdGhlIG5pY2VzdCBvdXRwdXQ6XG5qc29uRGlmZi51c2VMb25nZXN0VG9rZW4gPSB0cnVlO1xuXG5qc29uRGlmZi50b2tlbml6ZSA9IGxpbmVEaWZmLnRva2VuaXplO1xuanNvbkRpZmYuY2FzdElucHV0ID0gZnVuY3Rpb24odmFsdWUpIHtcbiAgY29uc3Qge3VuZGVmaW5lZFJlcGxhY2VtZW50fSA9IHRoaXMub3B0aW9ucztcblxuICByZXR1cm4gdHlwZW9mIHZhbHVlID09PSAnc3RyaW5nJyA/IHZhbHVlIDogSlNPTi5zdHJpbmdpZnkoY2Fub25pY2FsaXplKHZhbHVlKSwgZnVuY3Rpb24oaywgdikge1xuICAgIGlmICh0eXBlb2YgdiA9PT0gJ3VuZGVmaW5lZCcpIHtcbiAgICAgIHJldHVybiB1bmRlZmluZWRSZXBsYWNlbWVudDtcbiAgICB9XG5cbiAgICByZXR1cm4gdjtcbiAgfSwgJyAgJyk7XG59O1xuanNvbkRpZmYuZXF1YWxzID0gZnVuY3Rpb24obGVmdCwgcmlnaHQpIHtcbiAgcmV0dXJuIERpZmYucHJvdG90eXBlLmVxdWFscyhsZWZ0LnJlcGxhY2UoLywoW1xcclxcbl0pL2csICckMScpLCByaWdodC5yZXBsYWNlKC8sKFtcXHJcXG5dKS9nLCAnJDEnKSk7XG59O1xuXG5leHBvcnQgZnVuY3Rpb24gZGlmZkpzb24ob2xkT2JqLCBuZXdPYmosIG9wdGlvbnMpIHsgcmV0dXJuIGpzb25EaWZmLmRpZmYob2xkT2JqLCBuZXdPYmosIG9wdGlvbnMpOyB9XG5cbi8vIFRoaXMgZnVuY3Rpb24gaGFuZGxlcyB0aGUgcHJlc2VuY2Ugb2YgY2lyY3VsYXIgcmVmZXJlbmNlcyBieSBiYWlsaW5nIG91dCB3aGVuIGVuY291bnRlcmluZyBhblxuLy8gb2JqZWN0IHRoYXQgaXMgYWxyZWFkeSBvbiB0aGUgXCJzdGFja1wiIG9mIGl0ZW1zIGJlaW5nIHByb2Nlc3NlZC5cbmV4cG9ydCBmdW5jdGlvbiBjYW5vbmljYWxpemUob2JqLCBzdGFjaywgcmVwbGFjZW1lbnRTdGFjaykge1xuICBzdGFjayA9IHN0YWNrIHx8IFtdO1xuICByZXBsYWNlbWVudFN0YWNrID0gcmVwbGFjZW1lbnRTdGFjayB8fCBbXTtcblxuICBsZXQgaTtcblxuICBmb3IgKGkgPSAwOyBpIDwgc3RhY2subGVuZ3RoOyBpICs9IDEpIHtcbiAgICBpZiAoc3RhY2tbaV0gPT09IG9iaikge1xuICAgICAgcmV0dXJuIHJlcGxhY2VtZW50U3RhY2tbaV07XG4gICAgfVxuICB9XG5cbiAgbGV0IGNhbm9uaWNhbGl6ZWRPYmo7XG5cbiAgaWYgKCdbb2JqZWN0IEFycmF5XScgPT09IG9iamVjdFByb3RvdHlwZVRvU3RyaW5nLmNhbGwob2JqKSkge1xuICAgIHN0YWNrLnB1c2gob2JqKTtcbiAgICBjYW5vbmljYWxpemVkT2JqID0gbmV3IEFycmF5KG9iai5sZW5ndGgpO1xuICAgIHJlcGxhY2VtZW50U3RhY2sucHVzaChjYW5vbmljYWxpemVkT2JqKTtcbiAgICBmb3IgKGkgPSAwOyBpIDwgb2JqLmxlbmd0aDsgaSArPSAxKSB7XG4gICAgICBjYW5vbmljYWxpemVkT2JqW2ldID0gY2Fub25pY2FsaXplKG9ialtpXSwgc3RhY2ssIHJlcGxhY2VtZW50U3RhY2spO1xuICAgIH1cbiAgICBzdGFjay5wb3AoKTtcbiAgICByZXBsYWNlbWVudFN0YWNrLnBvcCgpO1xuICAgIHJldHVybiBjYW5vbmljYWxpemVkT2JqO1xuICB9XG5cbiAgaWYgKG9iaiAmJiBvYmoudG9KU09OKSB7XG4gICAgb2JqID0gb2JqLnRvSlNPTigpO1xuICB9XG5cbiAgaWYgKHR5cGVvZiBvYmogPT09ICdvYmplY3QnICYmIG9iaiAhPT0gbnVsbCkge1xuICAgIHN0YWNrLnB1c2gob2JqKTtcbiAgICBjYW5vbmljYWxpemVkT2JqID0ge307XG4gICAgcmVwbGFjZW1lbnRTdGFjay5wdXNoKGNhbm9uaWNhbGl6ZWRPYmopO1xuICAgIGxldCBzb3J0ZWRLZXlzID0gW10sXG4gICAgICAgIGtleTtcbiAgICBmb3IgKGtleSBpbiBvYmopIHtcbiAgICAgIC8qIGlzdGFuYnVsIGlnbm9yZSBlbHNlICovXG4gICAgICBpZiAob2JqLmhhc093blByb3BlcnR5KGtleSkpIHtcbiAgICAgICAgc29ydGVkS2V5cy5wdXNoKGtleSk7XG4gICAgICB9XG4gICAgfVxuICAgIHNvcnRlZEtleXMuc29ydCgpO1xuICAgIGZvciAoaSA9IDA7IGkgPCBzb3J0ZWRLZXlzLmxlbmd0aDsgaSArPSAxKSB7XG4gICAgICBrZXkgPSBzb3J0ZWRLZXlzW2ldO1xuICAgICAgY2Fub25pY2FsaXplZE9ialtrZXldID0gY2Fub25pY2FsaXplKG9ialtrZXldLCBzdGFjaywgcmVwbGFjZW1lbnRTdGFjayk7XG4gICAgfVxuICAgIHN0YWNrLnBvcCgpO1xuICAgIHJlcGxhY2VtZW50U3RhY2sucG9wKCk7XG4gIH0gZWxzZSB7XG4gICAgY2Fub25pY2FsaXplZE9iaiA9IG9iajtcbiAgfVxuICByZXR1cm4gY2Fub25pY2FsaXplZE9iajtcbn1cbiJdfQ==
-
-
-/***/ }),
-/* 132 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports.sentenceDiff = undefined;
-exports. /*istanbul ignore end*/diffSentences = diffSentences;
-
-var /*istanbul ignore start*/_base = __webpack_require__(15) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-var _base2 = _interopRequireDefault(_base);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-/*istanbul ignore end*/var sentenceDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/sentenceDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
-sentenceDiff.tokenize = function (value) {
-  return value.split(/(\S.+?[.!?])(?=\s+|$)/);
-};
-
-function diffSentences(oldStr, newStr, callback) {
-  return sentenceDiff.diff(oldStr, newStr, callback);
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL3NlbnRlbmNlLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Z0NBUWdCLGEsR0FBQSxhOztBQVJoQixJLHlCQUFBLHlCLHdCQUFBOzs7Ozs7O3VCQUdPLElBQU0sZSx5QkFBQSxRLHdCQUFBLGVBQWUsSSx5QkFBQSxtQix3QkFBckI7QUFDUCxhQUFhLFFBQWIsR0FBd0IsVUFBUyxLQUFULEVBQWdCO0FBQ3RDLFNBQU8sTUFBTSxLQUFOLENBQVksdUJBQVosQ0FBUDtBQUNELENBRkQ7O0FBSU8sU0FBUyxhQUFULENBQXVCLE1BQXZCLEVBQStCLE1BQS9CLEVBQXVDLFFBQXZDLEVBQWlEO0FBQUUsU0FBTyxhQUFhLElBQWIsQ0FBa0IsTUFBbEIsRUFBMEIsTUFBMUIsRUFBa0MsUUFBbEMsQ0FBUDtBQUFxRCIsImZpbGUiOiJzZW50ZW5jZS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBEaWZmIGZyb20gJy4vYmFzZSc7XG5cblxuZXhwb3J0IGNvbnN0IHNlbnRlbmNlRGlmZiA9IG5ldyBEaWZmKCk7XG5zZW50ZW5jZURpZmYudG9rZW5pemUgPSBmdW5jdGlvbih2YWx1ZSkge1xuICByZXR1cm4gdmFsdWUuc3BsaXQoLyhcXFMuKz9bLiE/XSkoPz1cXHMrfCQpLyk7XG59O1xuXG5leHBvcnQgZnVuY3Rpb24gZGlmZlNlbnRlbmNlcyhvbGRTdHIsIG5ld1N0ciwgY2FsbGJhY2spIHsgcmV0dXJuIHNlbnRlbmNlRGlmZi5kaWZmKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjayk7IH1cbiJdfQ==
-
-
-/***/ }),
-/* 133 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports.wordDiff = undefined;
-exports. /*istanbul ignore end*/diffWords = diffWords;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffWordsWithSpace = diffWordsWithSpace;
-
-var /*istanbul ignore start*/_base = __webpack_require__(15) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-var _base2 = _interopRequireDefault(_base);
-
-/*istanbul ignore end*/
-var /*istanbul ignore start*/_params = __webpack_require__(70) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-/*istanbul ignore end*/
-
-// Based on https://en.wikipedia.org/wiki/Latin_script_in_Unicode
-//
-// Ranges and exceptions:
-// Latin-1 Supplement, 0080–00FF
-//  - U+00D7  × Multiplication sign
-//  - U+00F7  ÷ Division sign
-// Latin Extended-A, 0100–017F
-// Latin Extended-B, 0180–024F
-// IPA Extensions, 0250–02AF
-// Spacing Modifier Letters, 02B0–02FF
-//  - U+02C7  ˇ &#711;  Caron
-//  - U+02D8  ˘ &#728;  Breve
-//  - U+02D9  ˙ &#729;  Dot Above
-//  - U+02DA  ˚ &#730;  Ring Above
-//  - U+02DB  ˛ &#731;  Ogonek
-//  - U+02DC  ˜ &#732;  Small Tilde
-//  - U+02DD  ˝ &#733;  Double Acute Accent
-// Latin Extended Additional, 1E00–1EFF
-var extendedWordChars = /^[A-Za-z\xC0-\u02C6\u02C8-\u02D7\u02DE-\u02FF\u1E00-\u1EFF]+$/;
-
-var reWhitespace = /\S/;
-
-var wordDiff = /*istanbul ignore start*/exports. /*istanbul ignore end*/wordDiff = new /*istanbul ignore start*/_base2['default']() /*istanbul ignore end*/;
-wordDiff.equals = function (left, right) {
-  return left === right || this.options.ignoreWhitespace && !reWhitespace.test(left) && !reWhitespace.test(right);
-};
-wordDiff.tokenize = function (value) {
-  var tokens = value.split(/(\s+|\b)/);
-
-  // Join the boundary splits that we do not consider to be boundaries. This is primarily the extended Latin character set.
-  for (var i = 0; i < tokens.length - 1; i++) {
-    // If we have an empty string in the next field and we have only word chars before and after, merge
-    if (!tokens[i + 1] && tokens[i + 2] && extendedWordChars.test(tokens[i]) && extendedWordChars.test(tokens[i + 2])) {
-      tokens[i] += tokens[i + 2];
-      tokens.splice(i + 1, 2);
-      i--;
-    }
-  }
-
-  return tokens;
-};
-
-function diffWords(oldStr, newStr, callback) {
-  var options = /*istanbul ignore start*/(0, _params.generateOptions) /*istanbul ignore end*/(callback, { ignoreWhitespace: true });
-  return wordDiff.diff(oldStr, newStr, options);
-}
-function diffWordsWithSpace(oldStr, newStr, callback) {
-  return wordDiff.diff(oldStr, newStr, callback);
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWZmL3dvcmQuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztnQ0ErQ2dCLFMsR0FBQSxTO3lEQUlBLGtCLEdBQUEsa0I7O0FBbkRoQixJLHlCQUFBLHlCLHdCQUFBOzs7Ozs7QUFDQSxJLHlCQUFBLG1DLHdCQUFBOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBb0JBLElBQU0sb0JBQW9CLCtEQUExQjs7QUFFQSxJQUFNLGVBQWUsSUFBckI7O0FBRU8sSUFBTSxXLHlCQUFBLFEsd0JBQUEsV0FBVyxJLHlCQUFBLG1CLHdCQUFqQjtBQUNQLFNBQVMsTUFBVCxHQUFrQixVQUFTLElBQVQsRUFBZSxLQUFmLEVBQXNCO0FBQ3RDLFNBQU8sU0FBUyxLQUFULElBQW1CLEtBQUssT0FBTCxDQUFhLGdCQUFiLElBQWlDLENBQUMsYUFBYSxJQUFiLENBQWtCLElBQWxCLENBQWxDLElBQTZELENBQUMsYUFBYSxJQUFiLENBQWtCLEtBQWxCLENBQXhGO0FBQ0QsQ0FGRDtBQUdBLFNBQVMsUUFBVCxHQUFvQixVQUFTLEtBQVQsRUFBZ0I7QUFDbEMsTUFBSSxTQUFTLE1BQU0sS0FBTixDQUFZLFVBQVosQ0FBYjs7O0FBR0EsT0FBSyxJQUFJLElBQUksQ0FBYixFQUFnQixJQUFJLE9BQU8sTUFBUCxHQUFnQixDQUFwQyxFQUF1QyxHQUF2QyxFQUE0Qzs7QUFFMUMsUUFBSSxDQUFDLE9BQU8sSUFBSSxDQUFYLENBQUQsSUFBa0IsT0FBTyxJQUFJLENBQVgsQ0FBbEIsSUFDSyxrQkFBa0IsSUFBbEIsQ0FBdUIsT0FBTyxDQUFQLENBQXZCLENBREwsSUFFSyxrQkFBa0IsSUFBbEIsQ0FBdUIsT0FBTyxJQUFJLENBQVgsQ0FBdkIsQ0FGVCxFQUVnRDtBQUM5QyxhQUFPLENBQVAsS0FBYSxPQUFPLElBQUksQ0FBWCxDQUFiO0FBQ0EsYUFBTyxNQUFQLENBQWMsSUFBSSxDQUFsQixFQUFxQixDQUFyQjtBQUNBO0FBQ0Q7QUFDRjs7QUFFRCxTQUFPLE1BQVA7QUFDRCxDQWhCRDs7QUFrQk8sU0FBUyxTQUFULENBQW1CLE1BQW5CLEVBQTJCLE1BQTNCLEVBQW1DLFFBQW5DLEVBQTZDO0FBQ2xELE1BQUksVSx5QkFBVSw0Qix3QkFBQSxDQUFnQixRQUFoQixFQUEwQixFQUFDLGtCQUFrQixJQUFuQixFQUExQixDQUFkO0FBQ0EsU0FBTyxTQUFTLElBQVQsQ0FBYyxNQUFkLEVBQXNCLE1BQXRCLEVBQThCLE9BQTlCLENBQVA7QUFDRDtBQUNNLFNBQVMsa0JBQVQsQ0FBNEIsTUFBNUIsRUFBb0MsTUFBcEMsRUFBNEMsUUFBNUMsRUFBc0Q7QUFDM0QsU0FBTyxTQUFTLElBQVQsQ0FBYyxNQUFkLEVBQXNCLE1BQXRCLEVBQThCLFFBQTlCLENBQVA7QUFDRCIsImZpbGUiOiJ3b3JkLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IERpZmYgZnJvbSAnLi9iYXNlJztcbmltcG9ydCB7Z2VuZXJhdGVPcHRpb25zfSBmcm9tICcuLi91dGlsL3BhcmFtcyc7XG5cbi8vIEJhc2VkIG9uIGh0dHBzOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpL0xhdGluX3NjcmlwdF9pbl9Vbmljb2RlXG4vL1xuLy8gUmFuZ2VzIGFuZCBleGNlcHRpb25zOlxuLy8gTGF0aW4tMSBTdXBwbGVtZW50LCAwMDgw4oCTMDBGRlxuLy8gIC0gVSswMEQ3ICDDlyBNdWx0aXBsaWNhdGlvbiBzaWduXG4vLyAgLSBVKzAwRjcgIMO3IERpdmlzaW9uIHNpZ25cbi8vIExhdGluIEV4dGVuZGVkLUEsIDAxMDDigJMwMTdGXG4vLyBMYXRpbiBFeHRlbmRlZC1CLCAwMTgw4oCTMDI0RlxuLy8gSVBBIEV4dGVuc2lvbnMsIDAyNTDigJMwMkFGXG4vLyBTcGFjaW5nIE1vZGlmaWVyIExldHRlcnMsIDAyQjDigJMwMkZGXG4vLyAgLSBVKzAyQzcgIMuHICYjNzExOyAgQ2Fyb25cbi8vICAtIFUrMDJEOCAgy5ggJiM3Mjg7ICBCcmV2ZVxuLy8gIC0gVSswMkQ5ICDLmSAmIzcyOTsgIERvdCBBYm92ZVxuLy8gIC0gVSswMkRBICDLmiAmIzczMDsgIFJpbmcgQWJvdmVcbi8vICAtIFUrMDJEQiAgy5sgJiM3MzE7ICBPZ29uZWtcbi8vICAtIFUrMDJEQyAgy5wgJiM3MzI7ICBTbWFsbCBUaWxkZVxuLy8gIC0gVSswMkREICDLnSAmIzczMzsgIERvdWJsZSBBY3V0ZSBBY2NlbnRcbi8vIExhdGluIEV4dGVuZGVkIEFkZGl0aW9uYWwsIDFFMDDigJMxRUZGXG5jb25zdCBleHRlbmRlZFdvcmRDaGFycyA9IC9eW2EtekEtWlxcdXtDMH0tXFx1e0ZGfVxcdXtEOH0tXFx1e0Y2fVxcdXtGOH0tXFx1ezJDNn1cXHV7MkM4fS1cXHV7MkQ3fVxcdXsyREV9LVxcdXsyRkZ9XFx1ezFFMDB9LVxcdXsxRUZGfV0rJC91O1xuXG5jb25zdCByZVdoaXRlc3BhY2UgPSAvXFxTLztcblxuZXhwb3J0IGNvbnN0IHdvcmREaWZmID0gbmV3IERpZmYoKTtcbndvcmREaWZmLmVxdWFscyA9IGZ1bmN0aW9uKGxlZnQsIHJpZ2h0KSB7XG4gIHJldHVybiBsZWZ0ID09PSByaWdodCB8fCAodGhpcy5vcHRpb25zLmlnbm9yZVdoaXRlc3BhY2UgJiYgIXJlV2hpdGVzcGFjZS50ZXN0KGxlZnQpICYmICFyZVdoaXRlc3BhY2UudGVzdChyaWdodCkpO1xufTtcbndvcmREaWZmLnRva2VuaXplID0gZnVuY3Rpb24odmFsdWUpIHtcbiAgbGV0IHRva2VucyA9IHZhbHVlLnNwbGl0KC8oXFxzK3xcXGIpLyk7XG5cbiAgLy8gSm9pbiB0aGUgYm91bmRhcnkgc3BsaXRzIHRoYXQgd2UgZG8gbm90IGNvbnNpZGVyIHRvIGJlIGJvdW5kYXJpZXMuIFRoaXMgaXMgcHJpbWFyaWx5IHRoZSBleHRlbmRlZCBMYXRpbiBjaGFyYWN0ZXIgc2V0LlxuICBmb3IgKGxldCBpID0gMDsgaSA8IHRva2Vucy5sZW5ndGggLSAxOyBpKyspIHtcbiAgICAvLyBJZiB3ZSBoYXZlIGFuIGVtcHR5IHN0cmluZyBpbiB0aGUgbmV4dCBmaWVsZCBhbmQgd2UgaGF2ZSBvbmx5IHdvcmQgY2hhcnMgYmVmb3JlIGFuZCBhZnRlciwgbWVyZ2VcbiAgICBpZiAoIXRva2Vuc1tpICsgMV0gJiYgdG9rZW5zW2kgKyAyXVxuICAgICAgICAgICYmIGV4dGVuZGVkV29yZENoYXJzLnRlc3QodG9rZW5zW2ldKVxuICAgICAgICAgICYmIGV4dGVuZGVkV29yZENoYXJzLnRlc3QodG9rZW5zW2kgKyAyXSkpIHtcbiAgICAgIHRva2Vuc1tpXSArPSB0b2tlbnNbaSArIDJdO1xuICAgICAgdG9rZW5zLnNwbGljZShpICsgMSwgMik7XG4gICAgICBpLS07XG4gICAgfVxuICB9XG5cbiAgcmV0dXJuIHRva2Vucztcbn07XG5cbmV4cG9ydCBmdW5jdGlvbiBkaWZmV29yZHMob2xkU3RyLCBuZXdTdHIsIGNhbGxiYWNrKSB7XG4gIGxldCBvcHRpb25zID0gZ2VuZXJhdGVPcHRpb25zKGNhbGxiYWNrLCB7aWdub3JlV2hpdGVzcGFjZTogdHJ1ZX0pO1xuICByZXR1cm4gd29yZERpZmYuZGlmZihvbGRTdHIsIG5ld1N0ciwgb3B0aW9ucyk7XG59XG5leHBvcnQgZnVuY3Rpb24gZGlmZldvcmRzV2l0aFNwYWNlKG9sZFN0ciwgbmV3U3RyLCBjYWxsYmFjaykge1xuICByZXR1cm4gd29yZERpZmYuZGlmZihvbGRTdHIsIG5ld1N0ciwgY2FsbGJhY2spO1xufVxuIl19
-
-
-/***/ }),
-/* 134 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports.canonicalize = exports.convertChangesToXML = exports.convertChangesToDMP = exports.parsePatch = exports.applyPatches = exports.applyPatch = exports.createPatch = exports.createTwoFilesPatch = exports.structuredPatch = exports.diffArrays = exports.diffJson = exports.diffCss = exports.diffSentences = exports.diffTrimmedLines = exports.diffLines = exports.diffWordsWithSpace = exports.diffWords = exports.diffChars = exports.Diff = undefined;
-/*istanbul ignore end*/
-var /*istanbul ignore start*/_base = __webpack_require__(15) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-var _base2 = _interopRequireDefault(_base);
-
-/*istanbul ignore end*/
-var /*istanbul ignore start*/_character = __webpack_require__(129) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_word = __webpack_require__(133) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_line = __webpack_require__(41) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_sentence = __webpack_require__(132) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_css = __webpack_require__(130) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_json = __webpack_require__(131) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_array = __webpack_require__(128) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_apply = __webpack_require__(135) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_parse = __webpack_require__(69) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_create = __webpack_require__(136) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_dmp = __webpack_require__(126) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_xml = __webpack_require__(127) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-exports. /*istanbul ignore end*/Diff = _base2['default'];
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffChars = _character.diffChars;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffWords = _word.diffWords;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffWordsWithSpace = _word.diffWordsWithSpace;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffLines = _line.diffLines;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffTrimmedLines = _line.diffTrimmedLines;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffSentences = _sentence.diffSentences;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffCss = _css.diffCss;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffJson = _json.diffJson;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/diffArrays = _array.diffArrays;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/structuredPatch = _create.structuredPatch;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/createTwoFilesPatch = _create.createTwoFilesPatch;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/createPatch = _create.createPatch;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/applyPatch = _apply.applyPatch;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/applyPatches = _apply.applyPatches;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/parsePatch = _parse.parsePatch;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/convertChangesToDMP = _dmp.convertChangesToDMP;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/convertChangesToXML = _xml.convertChangesToXML;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/canonicalize = _json.canonicalize; /* See LICENSE file for terms of use */
-
-/*
- * Text diff implementation.
- *
- * This library supports the following APIS:
- * JsDiff.diffChars: Character by character diff
- * JsDiff.diffWords: Word (as defined by \b regex) diff which ignores whitespace
- * JsDiff.diffLines: Line based diff
- *
- * JsDiff.diffCss: Diff targeted at CSS content
- *
- * These methods are based on the implementation proposed in
- * "An O(ND) Difference Algorithm and its Variations" (Myers, 1986).
- * http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.4.6927
- */
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9pbmRleC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQWdCQSxJLHlCQUFBLDhCLHdCQUFBOzs7Ozs7QUFDQSxJLHlCQUFBLHdDLHdCQUFBOztBQUNBLEkseUJBQUEsOEIsd0JBQUE7O0FBQ0EsSSx5QkFBQSw4Qix3QkFBQTs7QUFDQSxJLHlCQUFBLHNDLHdCQUFBOztBQUVBLEkseUJBQUEsNEIsd0JBQUE7O0FBQ0EsSSx5QkFBQSw4Qix3QkFBQTs7QUFFQSxJLHlCQUFBLGdDLHdCQUFBOztBQUVBLEkseUJBQUEsaUMsd0JBQUE7O0FBQ0EsSSx5QkFBQSxpQyx3QkFBQTs7QUFDQSxJLHlCQUFBLG1DLHdCQUFBOztBQUVBLEkseUJBQUEsK0Isd0JBQUE7O0FBQ0EsSSx5QkFBQSwrQix3QkFBQTs7Ozs7Z0NBR0UsSTt5REFFQSxTO3lEQUNBLFM7eURBQ0Esa0I7eURBQ0EsUzt5REFDQSxnQjt5REFDQSxhO3lEQUVBLE87eURBQ0EsUTt5REFFQSxVO3lEQUVBLGU7eURBQ0EsbUI7eURBQ0EsVzt5REFDQSxVO3lEQUNBLFk7eURBQ0EsVTt5REFDQSxtQjt5REFDQSxtQjt5REFDQSxZIiwiZmlsZSI6ImluZGV4LmpzIiwic291cmNlc0NvbnRlbnQiOlsiLyogU2VlIExJQ0VOU0UgZmlsZSBmb3IgdGVybXMgb2YgdXNlICovXG5cbi8qXG4gKiBUZXh0IGRpZmYgaW1wbGVtZW50YXRpb24uXG4gKlxuICogVGhpcyBsaWJyYXJ5IHN1cHBvcnRzIHRoZSBmb2xsb3dpbmcgQVBJUzpcbiAqIEpzRGlmZi5kaWZmQ2hhcnM6IENoYXJhY3RlciBieSBjaGFyYWN0ZXIgZGlmZlxuICogSnNEaWZmLmRpZmZXb3JkczogV29yZCAoYXMgZGVmaW5lZCBieSBcXGIgcmVnZXgpIGRpZmYgd2hpY2ggaWdub3JlcyB3aGl0ZXNwYWNlXG4gKiBKc0RpZmYuZGlmZkxpbmVzOiBMaW5lIGJhc2VkIGRpZmZcbiAqXG4gKiBKc0RpZmYuZGlmZkNzczogRGlmZiB0YXJnZXRlZCBhdCBDU1MgY29udGVudFxuICpcbiAqIFRoZXNlIG1ldGhvZHMgYXJlIGJhc2VkIG9uIHRoZSBpbXBsZW1lbnRhdGlvbiBwcm9wb3NlZCBpblxuICogXCJBbiBPKE5EKSBEaWZmZXJlbmNlIEFsZ29yaXRobSBhbmQgaXRzIFZhcmlhdGlvbnNcIiAoTXllcnMsIDE5ODYpLlxuICogaHR0cDovL2NpdGVzZWVyeC5pc3QucHN1LmVkdS92aWV3ZG9jL3N1bW1hcnk/ZG9pPTEwLjEuMS40LjY5MjdcbiAqL1xuaW1wb3J0IERpZmYgZnJvbSAnLi9kaWZmL2Jhc2UnO1xuaW1wb3J0IHtkaWZmQ2hhcnN9IGZyb20gJy4vZGlmZi9jaGFyYWN0ZXInO1xuaW1wb3J0IHtkaWZmV29yZHMsIGRpZmZXb3Jkc1dpdGhTcGFjZX0gZnJvbSAnLi9kaWZmL3dvcmQnO1xuaW1wb3J0IHtkaWZmTGluZXMsIGRpZmZUcmltbWVkTGluZXN9IGZyb20gJy4vZGlmZi9saW5lJztcbmltcG9ydCB7ZGlmZlNlbnRlbmNlc30gZnJvbSAnLi9kaWZmL3NlbnRlbmNlJztcblxuaW1wb3J0IHtkaWZmQ3NzfSBmcm9tICcuL2RpZmYvY3NzJztcbmltcG9ydCB7ZGlmZkpzb24sIGNhbm9uaWNhbGl6ZX0gZnJvbSAnLi9kaWZmL2pzb24nO1xuXG5pbXBvcnQge2RpZmZBcnJheXN9IGZyb20gJy4vZGlmZi9hcnJheSc7XG5cbmltcG9ydCB7YXBwbHlQYXRjaCwgYXBwbHlQYXRjaGVzfSBmcm9tICcuL3BhdGNoL2FwcGx5JztcbmltcG9ydCB7cGFyc2VQYXRjaH0gZnJvbSAnLi9wYXRjaC9wYXJzZSc7XG5pbXBvcnQge3N0cnVjdHVyZWRQYXRjaCwgY3JlYXRlVHdvRmlsZXNQYXRjaCwgY3JlYXRlUGF0Y2h9IGZyb20gJy4vcGF0Y2gvY3JlYXRlJztcblxuaW1wb3J0IHtjb252ZXJ0Q2hhbmdlc1RvRE1QfSBmcm9tICcuL2NvbnZlcnQvZG1wJztcbmltcG9ydCB7Y29udmVydENoYW5nZXNUb1hNTH0gZnJvbSAnLi9jb252ZXJ0L3htbCc7XG5cbmV4cG9ydCB7XG4gIERpZmYsXG5cbiAgZGlmZkNoYXJzLFxuICBkaWZmV29yZHMsXG4gIGRpZmZXb3Jkc1dpdGhTcGFjZSxcbiAgZGlmZkxpbmVzLFxuICBkaWZmVHJpbW1lZExpbmVzLFxuICBkaWZmU2VudGVuY2VzLFxuXG4gIGRpZmZDc3MsXG4gIGRpZmZKc29uLFxuXG4gIGRpZmZBcnJheXMsXG5cbiAgc3RydWN0dXJlZFBhdGNoLFxuICBjcmVhdGVUd29GaWxlc1BhdGNoLFxuICBjcmVhdGVQYXRjaCxcbiAgYXBwbHlQYXRjaCxcbiAgYXBwbHlQYXRjaGVzLFxuICBwYXJzZVBhdGNoLFxuICBjb252ZXJ0Q2hhbmdlc1RvRE1QLFxuICBjb252ZXJ0Q2hhbmdlc1RvWE1MLFxuICBjYW5vbmljYWxpemVcbn07XG4iXX0=
-
-
-/***/ }),
-/* 135 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports. /*istanbul ignore end*/applyPatch = applyPatch;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/applyPatches = applyPatches;
-
-var /*istanbul ignore start*/_parse = __webpack_require__(69) /*istanbul ignore end*/;
-
-var /*istanbul ignore start*/_distanceIterator = __webpack_require__(137) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-var _distanceIterator2 = _interopRequireDefault(_distanceIterator);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-/*istanbul ignore end*/function applyPatch(source, uniDiff) {
-  /*istanbul ignore start*/var /*istanbul ignore end*/options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-  if (typeof uniDiff === 'string') {
-    uniDiff = /*istanbul ignore start*/(0, _parse.parsePatch) /*istanbul ignore end*/(uniDiff);
-  }
-
-  if (Array.isArray(uniDiff)) {
-    if (uniDiff.length > 1) {
-      throw new Error('applyPatch only works with a single input.');
-    }
-
-    uniDiff = uniDiff[0];
-  }
-
-  // Apply the diff to the input
-  var lines = source.split(/\r\n|[\n\v\f\r\x85]/),
-      delimiters = source.match(/\r\n|[\n\v\f\r\x85]/g) || [],
-      hunks = uniDiff.hunks,
-      compareLine = options.compareLine || function (lineNumber, line, operation, patchContent) /*istanbul ignore start*/{
-    return (/*istanbul ignore end*/line === patchContent
-    );
-  },
-      errorCount = 0,
-      fuzzFactor = options.fuzzFactor || 0,
-      minLine = 0,
-      offset = 0,
-      removeEOFNL = /*istanbul ignore start*/void 0 /*istanbul ignore end*/,
-      addEOFNL = /*istanbul ignore start*/void 0 /*istanbul ignore end*/;
-
-  /**
-   * Checks if the hunk exactly fits on the provided location
-   */
-  function hunkFits(hunk, toPos) {
-    for (var j = 0; j < hunk.lines.length; j++) {
-      var line = hunk.lines[j],
-          operation = line[0],
-          content = line.substr(1);
-
-      if (operation === ' ' || operation === '-') {
-        // Context sanity check
-        if (!compareLine(toPos + 1, lines[toPos], operation, content)) {
-          errorCount++;
-
-          if (errorCount > fuzzFactor) {
-            return false;
-          }
-        }
-        toPos++;
-      }
-    }
-
-    return true;
-  }
-
-  // Search best fit offsets for each hunk based on the previous ones
-  for (var i = 0; i < hunks.length; i++) {
-    var hunk = hunks[i],
-        maxLine = lines.length - hunk.oldLines,
-        localOffset = 0,
-        toPos = offset + hunk.oldStart - 1;
-
-    var iterator = /*istanbul ignore start*/(0, _distanceIterator2['default']) /*istanbul ignore end*/(toPos, minLine, maxLine);
-
-    for (; localOffset !== undefined; localOffset = iterator()) {
-      if (hunkFits(hunk, toPos + localOffset)) {
-        hunk.offset = offset += localOffset;
-        break;
-      }
-    }
-
-    if (localOffset === undefined) {
-      return false;
-    }
-
-    // Set lower text limit to end of the current hunk, so next ones don't try
-    // to fit over already patched text
-    minLine = hunk.offset + hunk.oldStart + hunk.oldLines;
-  }
-
-  // Apply patch hunks
-  for (var _i = 0; _i < hunks.length; _i++) {
-    var _hunk = hunks[_i],
-        _toPos = _hunk.offset + _hunk.newStart - 1;
-    if (_hunk.newLines == 0) {
-      _toPos++;
-    }
-
-    for (var j = 0; j < _hunk.lines.length; j++) {
-      var line = _hunk.lines[j],
-          operation = line[0],
-          content = line.substr(1),
-          delimiter = _hunk.linedelimiters[j];
-
-      if (operation === ' ') {
-        _toPos++;
-      } else if (operation === '-') {
-        lines.splice(_toPos, 1);
-        delimiters.splice(_toPos, 1);
-        /* istanbul ignore else */
-      } else if (operation === '+') {
-          lines.splice(_toPos, 0, content);
-          delimiters.splice(_toPos, 0, delimiter);
-          _toPos++;
-        } else if (operation === '\\') {
-          var previousOperation = _hunk.lines[j - 1] ? _hunk.lines[j - 1][0] : null;
-          if (previousOperation === '+') {
-            removeEOFNL = true;
-          } else if (previousOperation === '-') {
-            addEOFNL = true;
-          }
-        }
-    }
-  }
-
-  // Handle EOFNL insertion/removal
-  if (removeEOFNL) {
-    while (!lines[lines.length - 1]) {
-      lines.pop();
-      delimiters.pop();
-    }
-  } else if (addEOFNL) {
-    lines.push('');
-    delimiters.push('\n');
-  }
-  for (var _k = 0; _k < lines.length - 1; _k++) {
-    lines[_k] = lines[_k] + delimiters[_k];
-  }
-  return lines.join('');
-}
-
-// Wrapper that supports multiple file patches via callbacks.
-function applyPatches(uniDiff, options) {
-  if (typeof uniDiff === 'string') {
-    uniDiff = /*istanbul ignore start*/(0, _parse.parsePatch) /*istanbul ignore end*/(uniDiff);
-  }
-
-  var currentIndex = 0;
-  function processIndex() {
-    var index = uniDiff[currentIndex++];
-    if (!index) {
-      return options.complete();
-    }
-
-    options.loadFile(index, function (err, data) {
-      if (err) {
-        return options.complete(err);
-      }
-
-      var updatedContent = applyPatch(data, index, options);
-      options.patched(index, updatedContent, function (err) {
-        if (err) {
-          return options.complete(err);
-        }
-
-        processIndex();
-      });
-    });
-  }
-  processIndex();
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9wYXRjaC9hcHBseS5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Z0NBR2dCLFUsR0FBQSxVO3lEQStIQSxZLEdBQUEsWTs7QUFsSWhCLEkseUJBQUEsMkIsd0JBQUE7O0FBQ0EsSSx5QkFBQSx3RCx3QkFBQTs7Ozs7Ozt1QkFFTyxTQUFTLFVBQVQsQ0FBb0IsTUFBcEIsRUFBNEIsT0FBNUIsRUFBbUQ7MkJBQUEsSSx1QkFBZCxPQUFjLHlEQUFKLEVBQUk7O0FBQ3hELE1BQUksT0FBTyxPQUFQLEtBQW1CLFFBQXZCLEVBQWlDO0FBQy9CLGMseUJBQVUsc0Isd0JBQUEsQ0FBVyxPQUFYLENBQVY7QUFDRDs7QUFFRCxNQUFJLE1BQU0sT0FBTixDQUFjLE9BQWQsQ0FBSixFQUE0QjtBQUMxQixRQUFJLFFBQVEsTUFBUixHQUFpQixDQUFyQixFQUF3QjtBQUN0QixZQUFNLElBQUksS0FBSixDQUFVLDRDQUFWLENBQU47QUFDRDs7QUFFRCxjQUFVLFFBQVEsQ0FBUixDQUFWO0FBQ0Q7OztBQUdELE1BQUksUUFBUSxPQUFPLEtBQVAsQ0FBYSxxQkFBYixDQUFaO0FBQUEsTUFDSSxhQUFhLE9BQU8sS0FBUCxDQUFhLHNCQUFiLEtBQXdDLEVBRHpEO0FBQUEsTUFFSSxRQUFRLFFBQVEsS0FGcEI7QUFBQSxNQUlJLGNBQWMsUUFBUSxXQUFSLElBQXdCLFVBQUMsVUFBRCxFQUFhLElBQWIsRUFBbUIsU0FBbkIsRUFBOEIsWUFBOUIsRSx5QkFBQTtBQUFBLFcsd0JBQStDLFNBQVM7QUFBeEQ7QUFBQSxHQUoxQztBQUFBLE1BS0ksYUFBYSxDQUxqQjtBQUFBLE1BTUksYUFBYSxRQUFRLFVBQVIsSUFBc0IsQ0FOdkM7QUFBQSxNQU9JLFVBQVUsQ0FQZDtBQUFBLE1BUUksU0FBUyxDQVJiO0FBQUEsTUFVSSxjLHlCQUFBLE0sd0JBVko7QUFBQSxNQVdJLFcseUJBQUEsTSx3QkFYSjs7Ozs7QUFnQkEsV0FBUyxRQUFULENBQWtCLElBQWxCLEVBQXdC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QUFFRCxVQUFJLGlCQUFpQixXQUFXLElBQVgsRUFBaUIsS0FBakIsRUFBd0IsT0FBeEIsQ0FBckI7QUFDQSxjQUFRLE9BQVIsQ0FBZ0IsS0FBaEIsRUFBdUIsY0FBdkIsRUFBdUMsVUFBUyxHQUFULEVBQWM7QUFDbkQsWUFBSSxHQUFKLEVBQVM7QUFDUCxpQkFBTyxRQUFRLFFBQVIsQ0FBaUIsR0FBakIsQ0FBUDtBQUNEOztBQUVEO0FBQ0QsT0FORDtBQU9ELEtBYkQ7QUFjRDtBQUNEO0FBQ0QiLCJmaWxlIjoiYXBwbHkuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge3BhcnNlUGF0Y2h9IGZyb20gJy4vcGFyc2UnO1xuaW1wb3J0IGRpc3RhbmNlSXRlcmF0b3IgZnJvbSAnLi4vdXRpbC9kaXN0YW5jZS1pdGVyYXRvcic7XG5cbmV4cG9ydCBmdW5jdGlvbiBhcHBseVBhdGNoKHNvdXJjZSwgdW5pRGlmZiwgb3B0aW9ucyA9IHt9KSB7XG4gIGlmICh0eXBlb2YgdW5pRGlmZiA9PT0gJ3N0cmluZycpIHtcbiAgICB1bmlEaWZmID0gcGFyc2VQYXRjaCh1bmlEaWZmKTtcbiAgfVxuXG4gIGlmIChBcnJheS5pc0FycmF5KHVuaURpZmYpKSB7XG4gICAgaWYgKHVuaURpZmYubGVuZ3RoID4gMSkge1xuICAgICAgdGhyb3cgbmV3IEVycm9yKCdhcHBseVBhdGNoIG9ubHkgd29ya3Mgd2l0aCBhIHNpbmdsZSBpbnB1dC4nKTtcbiAgICB9XG5cbiAgICB1bmlEaWZmID0gdW5pRGlmZlswXTtcbiAgfVxuXG4gIC8vIEFwcGx5IHRoZSBkaWZmIHRvIHRoZSBpbnB1dFxuICBsZXQgbGluZXMgPSBzb3VyY2Uuc3BsaXQoL1xcclxcbnxbXFxuXFx2XFxmXFxyXFx4ODVdLyksXG4gICAgICBkZWxpbWl0ZXJzID0gc291cmNlLm1hdGNoKC9cXHJcXG58W1xcblxcdlxcZlxcclxceDg1XS9nKSB8fCBbXSxcbiAgICAgIGh1bmtzID0gdW5pRGlmZi5odW5rcyxcblxuICAgICAgY29tcGFyZUxpbmUgPSBvcHRpb25zLmNvbXBhcmVMaW5lIHx8ICgobGluZU51bWJlciwgbGluZSwgb3BlcmF0aW9uLCBwYXRjaENvbnRlbnQpID0+IGxpbmUgPT09IHBhdGNoQ29udGVudCksXG4gICAgICBlcnJvckNvdW50ID0gMCxcbiAgICAgIGZ1enpGYWN0b3IgPSBvcHRpb25zLmZ1enpGYWN0b3IgfHwgMCxcbiAgICAgIG1pbkxpbmUgPSAwLFxuICAgICAgb2Zmc2V0ID0gMCxcblxuICAgICAgcmVtb3ZlRU9GTkwsXG4gICAgICBhZGRFT0ZOTDtcblxuICAvKipcbiAgICogQ2hlY2tzIGlmIHRoZSBodW5rIGV4YWN0bHkgZml0cyBvbiB0aGUgcHJvdmlkZWQgbG9jYXRpb25cbiAgICovXG4gIGZ1bmN0aW9uIGh1bmtGaXRzKGh1bmssIHRvUG9zKSB7XG4gICAgZm9yIChsZXQgaiA9IDA7IGogPCBodW5rLmxpbmVzLmxlbmd0aDsgaisrKSB7XG4gICAgICBsZXQgbGluZSA9IGh1bmsubGluZXNbal0sXG4gICAgICAgICAgb3BlcmF0aW9uID0gbGluZVswXSxcbiAgICAgICAgICBjb250ZW50ID0gbGluZS5zdWJzdHIoMSk7XG5cbiAgICAgIGlmIChvcGVyYXRpb24gPT09ICcgJyB8fCBvcGVyYXRpb24gPT09ICctJykge1xuICAgICAgICAvLyBDb250ZXh0IHNhbml0eSBjaGVja1xuICAgICAgICBpZiAoIWNvbXBhcmVMaW5lKHRvUG9zICsgMSwgbGluZXNbdG9Qb3NdLCBvcGVyYXRpb24sIGNvbnRlbnQpKSB7XG4gICAgICAgICAgZXJyb3JDb3VudCsrO1xuXG4gICAgICAgICAgaWYgKGVycm9yQ291bnQgPiBmdXp6RmFjdG9yKSB7XG4gICAgICAgICAgICByZXR1cm4gZmFsc2U7XG4gICAgICAgICAgfVxuICAgICAgICB9XG4gICAgICAgIHRvUG9zKys7XG4gICAgICB9XG4gICAgfVxuXG4gICAgcmV0dXJuIHRydWU7XG4gIH1cblxuICAvLyBTZWFyY2ggYmVzdCBmaXQgb2Zmc2V0cyBmb3IgZWFjaCBodW5rIGJhc2VkIG9uIHRoZSBwcmV2aW91cyBvbmVzXG4gIGZvciAobGV0IGkgPSAwOyBpIDwgaHVua3MubGVuZ3RoOyBpKyspIHtcbiAgICBsZXQgaHVuayA9IGh1bmtzW2ldLFxuICAgICAgICBtYXhMaW5lID0gbGluZXMubGVuZ3RoIC0gaHVuay5vbGRMaW5lcyxcbiAgICAgICAgbG9jYWxPZmZzZXQgPSAwLFxuICAgICAgICB0b1BvcyA9IG9mZnNldCArIGh1bmsub2xkU3RhcnQgLSAxO1xuXG4gICAgbGV0IGl0ZXJhdG9yID0gZGlzdGFuY2VJdGVyYXRvcih0b1BvcywgbWluTGluZSwgbWF4TGluZSk7XG5cbiAgICBmb3IgKDsgbG9jYWxPZmZzZXQgIT09IHVuZGVmaW5lZDsgbG9jYWxPZmZzZXQgPSBpdGVyYXRvcigpKSB7XG4gICAgICBpZiAoaHVua0ZpdHMoaHVuaywgdG9Qb3MgKyBsb2NhbE9mZnNldCkpIHtcbiAgICAgICAgaHVuay5vZmZzZXQgPSBvZmZzZXQgKz0gbG9jYWxPZmZzZXQ7XG4gICAgICAgIGJyZWFrO1xuICAgICAgfVxuICAgIH1cblxuICAgIGlmIChsb2NhbE9mZnNldCA9PT0gdW5kZWZpbmVkKSB7XG4gICAgICByZXR1cm4gZmFsc2U7XG4gICAgfVxuXG4gICAgLy8gU2V0IGxvd2VyIHRleHQgbGltaXQgdG8gZW5kIG9mIHRoZSBjdXJyZW50IGh1bmssIHNvIG5leHQgb25lcyBkb24ndCB0cnlcbiAgICAvLyB0byBmaXQgb3ZlciBhbHJlYWR5IHBhdGNoZWQgdGV4dFxuICAgIG1pbkxpbmUgPSBodW5rLm9mZnNldCArIGh1bmsub2xkU3RhcnQgKyBodW5rLm9sZExpbmVzO1xuICB9XG5cbiAgLy8gQXBwbHkgcGF0Y2ggaHVua3NcbiAgZm9yIChsZXQgaSA9IDA7IGkgPCBodW5rcy5sZW5ndGg7IGkrKykge1xuICAgIGxldCBodW5rID0gaHVua3NbaV0sXG4gICAgICAgIHRvUG9zID0gaHVuay5vZmZzZXQgKyBodW5rLm5ld1N0YXJ0IC0gMTtcbiAgICBpZiAoaHVuay5uZXdMaW5lcyA9PSAwKSB7IHRvUG9zKys7IH1cblxuICAgIGZvciAobGV0IGogPSAwOyBqIDwgaHVuay5saW5lcy5sZW5ndGg7IGorKykge1xuICAgICAgbGV0IGxpbmUgPSBodW5rLmxpbmVzW2pdLFxuICAgICAgICAgIG9wZXJhdGlvbiA9IGxpbmVbMF0sXG4gICAgICAgICAgY29udGVudCA9IGxpbmUuc3Vic3RyKDEpLFxuICAgICAgICAgIGRlbGltaXRlciA9IGh1bmsubGluZWRlbGltaXRlcnNbal07XG5cbiAgICAgIGlmIChvcGVyYXRpb24gPT09ICcgJykge1xuICAgICAgICB0b1BvcysrO1xuICAgICAgfSBlbHNlIGlmIChvcGVyYXRpb24gPT09ICctJykge1xuICAgICAgICBsaW5lcy5zcGxpY2UodG9Qb3MsIDEpO1xuICAgICAgICBkZWxpbWl0ZXJzLnNwbGljZSh0b1BvcywgMSk7XG4gICAgICAvKiBpc3RhbmJ1bCBpZ25vcmUgZWxzZSAqL1xuICAgICAgfSBlbHNlIGlmIChvcGVyYXRpb24gPT09ICcrJykge1xuICAgICAgICBsaW5lcy5zcGxpY2UodG9Qb3MsIDAsIGNvbnRlbnQpO1xuICAgICAgICBkZWxpbWl0ZXJzLnNwbGljZSh0b1BvcywgMCwgZGVsaW1pdGVyKTtcbiAgICAgICAgdG9Qb3MrKztcbiAgICAgIH0gZWxzZSBpZiAob3BlcmF0aW9uID09PSAnXFxcXCcpIHtcbiAgICAgICAgbGV0IHByZXZpb3VzT3BlcmF0aW9uID0gaHVuay5saW5lc1tqIC0gMV0gPyBodW5rLmxpbmVzW2ogLSAxXVswXSA6IG51bGw7XG4gICAgICAgIGlmIChwcmV2aW91c09wZXJhdGlvbiA9PT0gJysnKSB7XG4gICAgICAgICAgcmVtb3ZlRU9GTkwgPSB0cnVlO1xuICAgICAgICB9IGVsc2UgaWYgKHByZXZpb3VzT3BlcmF0aW9uID09PSAnLScpIHtcbiAgICAgICAgICBhZGRFT0ZOTCA9IHRydWU7XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICB9XG4gIH1cblxuICAvLyBIYW5kbGUgRU9GTkwgaW5zZXJ0aW9uL3JlbW92YWxcbiAgaWYgKHJlbW92ZUVPRk5MKSB7XG4gICAgd2hpbGUgKCFsaW5lc1tsaW5lcy5sZW5ndGggLSAxXSkge1xuICAgICAgbGluZXMucG9wKCk7XG4gICAgICBkZWxpbWl0ZXJzLnBvcCgpO1xuICAgIH1cbiAgfSBlbHNlIGlmIChhZGRFT0ZOTCkge1xuICAgIGxpbmVzLnB1c2goJycpO1xuICAgIGRlbGltaXRlcnMucHVzaCgnXFxuJyk7XG4gIH1cbiAgZm9yIChsZXQgX2sgPSAwOyBfayA8IGxpbmVzLmxlbmd0aCAtIDE7IF9rKyspIHtcbiAgICBsaW5lc1tfa10gPSBsaW5lc1tfa10gKyBkZWxpbWl0ZXJzW19rXTtcbiAgfVxuICByZXR1cm4gbGluZXMuam9pbignJyk7XG59XG5cbi8vIFdyYXBwZXIgdGhhdCBzdXBwb3J0cyBtdWx0aXBsZSBmaWxlIHBhdGNoZXMgdmlhIGNhbGxiYWNrcy5cbmV4cG9ydCBmdW5jdGlvbiBhcHBseVBhdGNoZXModW5pRGlmZiwgb3B0aW9ucykge1xuICBpZiAodHlwZW9mIHVuaURpZmYgPT09ICdzdHJpbmcnKSB7XG4gICAgdW5pRGlmZiA9IHBhcnNlUGF0Y2godW5pRGlmZik7XG4gIH1cblxuICBsZXQgY3VycmVudEluZGV4ID0gMDtcbiAgZnVuY3Rpb24gcHJvY2Vzc0luZGV4KCkge1xuICAgIGxldCBpbmRleCA9IHVuaURpZmZbY3VycmVudEluZGV4KytdO1xuICAgIGlmICghaW5kZXgpIHtcbiAgICAgIHJldHVybiBvcHRpb25zLmNvbXBsZXRlKCk7XG4gICAgfVxuXG4gICAgb3B0aW9ucy5sb2FkRmlsZShpbmRleCwgZnVuY3Rpb24oZXJyLCBkYXRhKSB7XG4gICAgICBpZiAoZXJyKSB7XG4gICAgICAgIHJldHVybiBvcHRpb25zLmNvbXBsZXRlKGVycik7XG4gICAgICB9XG5cbiAgICAgIGxldCB1cGRhdGVkQ29udGVudCA9IGFwcGx5UGF0Y2goZGF0YSwgaW5kZXgsIG9wdGlvbnMpO1xuICAgICAgb3B0aW9ucy5wYXRjaGVkKGluZGV4LCB1cGRhdGVkQ29udGVudCwgZnVuY3Rpb24oZXJyKSB7XG4gICAgICAgIGlmIChlcnIpIHtcbiAgICAgICAgICByZXR1cm4gb3B0aW9ucy5jb21wbGV0ZShlcnIpO1xuICAgICAgICB9XG5cbiAgICAgICAgcHJvY2Vzc0luZGV4KCk7XG4gICAgICB9KTtcbiAgICB9KTtcbiAgfVxuICBwcm9jZXNzSW5kZXgoKTtcbn1cbiJdfQ==
-
-
-/***/ }),
-/* 136 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-exports. /*istanbul ignore end*/structuredPatch = structuredPatch;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/createTwoFilesPatch = createTwoFilesPatch;
-/*istanbul ignore start*/exports. /*istanbul ignore end*/createPatch = createPatch;
-
-var /*istanbul ignore start*/_line = __webpack_require__(41) /*istanbul ignore end*/;
-
-/*istanbul ignore start*/
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-/*istanbul ignore end*/function structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options) {
-  if (!options) {
-    options = {};
-  }
-  if (typeof options.context === 'undefined') {
-    options.context = 4;
-  }
-
-  var diff = /*istanbul ignore start*/(0, _line.diffLines) /*istanbul ignore end*/(oldStr, newStr, options);
-  diff.push({ value: '', lines: [] }); // Append an empty value to make cleanup easier
-
-  function contextLines(lines) {
-    return lines.map(function (entry) {
-      return ' ' + entry;
-    });
-  }
-
-  var hunks = [];
-  var oldRangeStart = 0,
-      newRangeStart = 0,
-      curRange = [],
-      oldLine = 1,
-      newLine = 1;
-  /*istanbul ignore start*/
-  var _loop = function _loop( /*istanbul ignore end*/i) {
-    var current = diff[i],
-        lines = current.lines || current.value.replace(/\n$/, '').split('\n');
-    current.lines = lines;
-
-    if (current.added || current.removed) {
-      /*istanbul ignore start*/
-      var _curRange;
-
-      /*istanbul ignore end*/
-      // If we have previous context, start with that
-      if (!oldRangeStart) {
-        var prev = diff[i - 1];
-        oldRangeStart = oldLine;
-        newRangeStart = newLine;
-
-        if (prev) {
-          curRange = options.context > 0 ? contextLines(prev.lines.slice(-options.context)) : [];
-          oldRangeStart -= curRange.length;
-          newRangeStart -= curRange.length;
-        }
-      }
-
-      // Output our changes
-      /*istanbul ignore start*/(_curRange = /*istanbul ignore end*/curRange).push. /*istanbul ignore start*/apply /*istanbul ignore end*/( /*istanbul ignore start*/_curRange /*istanbul ignore end*/, /*istanbul ignore start*/_toConsumableArray( /*istanbul ignore end*/lines.map(function (entry) {
-        return (current.added ? '+' : '-') + entry;
-      })));
-
-      // Track the updated file position
-      if (current.added) {
-        newLine += lines.length;
-      } else {
-        oldLine += lines.length;
-      }
-    } else {
-      // Identical context lines. Track line changes
-      if (oldRangeStart) {
-        // Close out any changes that have been output (or join overlapping)
-        if (lines.length <= options.context * 2 && i < diff.length - 2) {
-          /*istanbul ignore start*/
-          var _curRange2;
-
-          /*istanbul ignore end*/
-          // Overlapping
-          /*istanbul ignore start*/(_curRange2 = /*istanbul ignore end*/curRange).push. /*istanbul ignore start*/apply /*istanbul ignore end*/( /*istanbul ignore start*/_curRange2 /*istanbul ignore end*/, /*istanbul ignore start*/_toConsumableArray( /*istanbul ignore end*/contextLines(lines)));
-        } else {
-          /*istanbul ignore start*/
-          var _curRange3;
-
-          /*istanbul ignore end*/
-          // end the range and output
-          var contextSize = Math.min(lines.length, options.context);
-          /*istanbul ignore start*/(_curRange3 = /*istanbul ignore end*/curRange).push. /*istanbul ignore start*/apply /*istanbul ignore end*/( /*istanbul ignore start*/_curRange3 /*istanbul ignore end*/, /*istanbul ignore start*/_toConsumableArray( /*istanbul ignore end*/contextLines(lines.slice(0, contextSize))));
-
-          var hunk = {
-            oldStart: oldRangeStart,
-            oldLines: oldLine - oldRangeStart + contextSize,
-            newStart: newRangeStart,
-            newLines: newLine - newRangeStart + contextSize,
-            lines: curRange
-          };
-          if (i >= diff.length - 2 && lines.length <= options.context) {
-            // EOF is inside this hunk
-            var oldEOFNewline = /\n$/.test(oldStr);
-            var newEOFNewline = /\n$/.test(newStr);
-            if (lines.length == 0 && !oldEOFNewline) {
-              // special case: old has no eol and no trailing context; no-nl can end up before adds
-              curRange.splice(hunk.oldLines, 0, '\\ No newline at end of file');
-            } else if (!oldEOFNewline || !newEOFNewline) {
-              curRange.push('\\ No newline at end of file');
-            }
-          }
-          hunks.push(hunk);
-
-          oldRangeStart = 0;
-          newRangeStart = 0;
-          curRange = [];
-        }
-      }
-      oldLine += lines.length;
-      newLine += lines.length;
-    }
-  };
-
-  for (var i = 0; i < diff.length; i++) {
-    /*istanbul ignore start*/
-    _loop( /*istanbul ignore end*/i);
-  }
-
-  return {
-    oldFileName: oldFileName, newFileName: newFileName,
-    oldHeader: oldHeader, newHeader: newHeader,
-    hunks: hunks
-  };
-}
-
-function createTwoFilesPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options) {
-  var diff = structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options);
-
-  var ret = [];
-  if (oldFileName == newFileName) {
-    ret.push('Index: ' + oldFileName);
-  }
-  ret.push('===================================================================');
-  ret.push('--- ' + diff.oldFileName + (typeof diff.oldHeader === 'undefined' ? '' : '\t' + diff.oldHeader));
-  ret.push('+++ ' + diff.newFileName + (typeof diff.newHeader === 'undefined' ? '' : '\t' + diff.newHeader));
-
-  for (var i = 0; i < diff.hunks.length; i++) {
-    var hunk = diff.hunks[i];
-    ret.push('@@ -' + hunk.oldStart + ',' + hunk.oldLines + ' +' + hunk.newStart + ',' + hunk.newLines + ' @@');
-    ret.push.apply(ret, hunk.lines);
-  }
-
-  return ret.join('\n') + '\n';
-}
-
-function createPatch(fileName, oldStr, newStr, oldHeader, newHeader, options) {
-  return createTwoFilesPatch(fileName, fileName, oldStr, newStr, oldHeader, newHeader, options);
-}
-//# sourceMappingURL=data:application/json;base64,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QixHQUR6QixHQUMrQixLQUFLLFFBRHBDLEdBRUUsS0FISjtBQUtBLFFBQUksSUFBSixDQUFTLEtBQVQsQ0FBZSxHQUFmLEVBQW9CLEtBQUssS0FBekI7QUFDRDs7QUFFRCxTQUFPLElBQUksSUFBSixDQUFTLElBQVQsSUFBaUIsSUFBeEI7QUFDRDs7QUFFTSxTQUFTLFdBQVQsQ0FBcUIsUUFBckIsRUFBK0IsTUFBL0IsRUFBdUMsTUFBdkMsRUFBK0MsU0FBL0MsRUFBMEQsU0FBMUQsRUFBcUUsT0FBckUsRUFBOEU7QUFDbkYsU0FBTyxvQkFBb0IsUUFBcEIsRUFBOEIsUUFBOUIsRUFBd0MsTUFBeEMsRUFBZ0QsTUFBaEQsRUFBd0QsU0FBeEQsRUFBbUUsU0FBbkUsRUFBOEUsT0FBOUUsQ0FBUDtBQUNEIiwiZmlsZSI6ImNyZWF0ZS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7ZGlmZkxpbmVzfSBmcm9tICcuLi9kaWZmL2xpbmUnO1xuXG5leHBvcnQgZnVuY3Rpb24gc3RydWN0dXJlZFBhdGNoKG9sZEZpbGVOYW1lLCBuZXdGaWxlTmFtZSwgb2xkU3RyLCBuZXdTdHIsIG9sZEhlYWRlciwgbmV3SGVhZGVyLCBvcHRpb25zKSB7XG4gIGlmICghb3B0aW9ucykge1xuICAgIG9wdGlvbnMgPSB7fTtcbiAgfVxuICBpZiAodHlwZW9mIG9wdGlvbnMuY29udGV4dCA9PT0gJ3VuZGVmaW5lZCcpIHtcbiAgICBvcHRpb25zLmNvbnRleHQgPSA0O1xuICB9XG5cbiAgY29uc3QgZGlmZiA9IGRpZmZMaW5lcyhvbGRTdHIsIG5ld1N0ciwgb3B0aW9ucyk7XG4gIGRpZmYucHVzaCh7dmFsdWU6ICcnLCBsaW5lczogW119KTsgICAvLyBBcHBlbmQgYW4gZW1wdHkgdmFsdWUgdG8gbWFrZSBjbGVhbnVwIGVhc2llclxuXG4gIGZ1bmN0aW9uIGNvbnRleHRMaW5lcyhsaW5lcykge1xuICAgIHJldHVybiBsaW5lcy5tYXAoZnVuY3Rpb24oZW50cnkpIHsgcmV0dXJuICcgJyArIGVudHJ5OyB9KTtcbiAgfVxuXG4gIGxldCBodW5rcyA9IFtdO1xuICBsZXQgb2xkUmFuZ2VTdGFydCA9IDAsIG5ld1JhbmdlU3RhcnQgPSAwLCBjdXJSYW5nZSA9IFtdLFxuICAgICAgb2xkTGluZSA9IDEsIG5ld0xpbmUgPSAxO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IGRpZmYubGVuZ3RoOyBpKyspIHtcbiAgICBjb25zdCBjdXJyZW50ID0gZGlmZltpXSxcbiAgICAgICAgICBsaW5lcyA9IGN1cnJlbnQubGluZXMgfHwgY3VycmVudC52YWx1ZS5yZXBsYWNlKC9cXG4kLywgJycpLnNwbGl0KCdcXG4nKTtcbiAgICBjdXJyZW50LmxpbmVzID0gbGluZXM7XG5cbiAgICBpZiAoY3VycmVudC5hZGRlZCB8fCBjdXJyZW50LnJlbW92ZWQpIHtcbiAgICAgIC8vIElmIHdlIGhhdmUgcHJldmlvdXMgY29udGV4dCwgc3RhcnQgd2l0aCB0aGF0XG4gICAgICBpZiAoIW9sZFJhbmdlU3RhcnQpIHtcbiAgICAgICAgY29uc3QgcHJldiA9IGRpZmZbaSAtIDFdO1xuICAgICAgICBvbGRSYW5nZVN0YXJ0ID0gb2xkTGluZTtcbiAgICAgICAgbmV3UmFuZ2VTdGFydCA9IG5ld0xpbmU7XG5cbiAgICAgICAgaWYgKHByZXYpIHtcbiAgICAgICAgICBjdXJSYW5nZSA9IG9wdGlvbnMuY29udGV4dCA+IDAgPyBjb250ZXh0TGluZXMocHJldi5saW5lcy5zbGljZSgtb3B0aW9ucy5jb250ZXh0KSkgOiBbXTtcbiAgICAgICAgICBvbGRSYW5nZVN0YXJ0IC09IGN1clJhbmdlLmxlbmd0aDtcbiAgICAgICAgICBuZXdSYW5nZVN0YXJ0IC09IGN1clJhbmdlLmxlbmd0aDtcbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBPdXRwdXQgb3VyIGNoYW5nZXNcbiAgICAgIGN1clJhbmdlLnB1c2goLi4uIGxpbmVzLm1hcChmdW5jdGlvbihlbnRyeSkge1xuICAgICAgICByZXR1cm4gKGN1cnJlbnQuYWRkZWQgPyAnKycgOiAnLScpICsgZW50cnk7XG4gICAgICB9KSk7XG5cbiAgICAgIC8vIFRyYWNrIHRoZSB1cGRhdGVkIGZpbGUgcG9zaXRpb25cbiAgICAgIGlmIChjdXJyZW50LmFkZGVkKSB7XG4gICAgICAgIG5ld0xpbmUgKz0gbGluZXMubGVuZ3RoO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgb2xkTGluZSArPSBsaW5lcy5sZW5ndGg7XG4gICAgICB9XG4gICAgfSBlbHNlIHtcbiAgICAgIC8vIElkZW50aWNhbCBjb250ZXh0IGxpbmVzLiBUcmFjayBsaW5lIGNoYW5nZXNcbiAgICAgIGlmIChvbGRSYW5nZVN0YXJ0KSB7XG4gICAgICAgIC8vIENsb3NlIG91dCBhbnkgY2hhbmdlcyB0aGF0IGhhdmUgYmVlbiBvdXRwdXQgKG9yIGpvaW4gb3ZlcmxhcHBpbmcpXG4gICAgICAgIGlmIChsaW5lcy5sZW5ndGggPD0gb3B0aW9ucy5jb250ZXh0ICogMiAmJiBpIDwgZGlmZi5sZW5ndGggLSAyKSB7XG4gICAgICAgICAgLy8gT3ZlcmxhcHBpbmdcbiAgICAgICAgICBjdXJSYW5nZS5wdXNoKC4uLiBjb250ZXh0TGluZXMobGluZXMpKTtcbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAvLyBlbmQgdGhlIHJhbmdlIGFuZCBvdXRwdXRcbiAgICAgICAgICBsZXQgY29udGV4dFNpemUgPSBNYXRoLm1pbihsaW5lcy5sZW5ndGgsIG9wdGlvbnMuY29udGV4dCk7XG4gICAgICAgICAgY3VyUmFuZ2UucHVzaCguLi4gY29udGV4dExpbmVzKGxpbmVzLnNsaWNlKDAsIGNvbnRleHRTaXplKSkpO1xuXG4gICAgICAgICAgbGV0IGh1bmsgPSB7XG4gICAgICAgICAgICBvbGRTdGFydDogb2xkUmFuZ2VTdGFydCxcbiAgICAgICAgICAgIG9sZExpbmVzOiAob2xkTGluZSAtIG9sZFJhbmdlU3RhcnQgKyBjb250ZXh0U2l6ZSksXG4gICAgICAgICAgICBuZXdTdGFydDogbmV3UmFuZ2VTdGFydCxcbiAgICAgICAgICAgIG5ld0xpbmVzOiAobmV3TGluZSAtIG5ld1JhbmdlU3RhcnQgKyBjb250ZXh0U2l6ZSksXG4gICAgICAgICAgICBsaW5lczogY3VyUmFuZ2VcbiAgICAgICAgICB9O1xuICAgICAgICAgIGlmIChpID49IGRpZmYubGVuZ3RoIC0gMiAmJiBsaW5lcy5sZW5ndGggPD0gb3B0aW9ucy5jb250ZXh0KSB7XG4gICAgICAgICAgICAvLyBFT0YgaXMgaW5zaWRlIHRoaXMgaHVua1xuICAgICAgICAgICAgbGV0IG9sZEVPRk5ld2xpbmUgPSAoL1xcbiQvLnRlc3Qob2xkU3RyKSk7XG4gICAgICAgICAgICBsZXQgbmV3RU9GTmV3bGluZSA9ICgvXFxuJC8udGVzdChuZXdTdHIpKTtcbiAgICAgICAgICAgIGlmIChsaW5lcy5sZW5ndGggPT0gMCAmJiAhb2xkRU9GTmV3bGluZSkge1xuICAgICAgICAgICAgICAvLyBzcGVjaWFsIGNhc2U6IG9sZCBoYXMgbm8gZW9sIGFuZCBubyB0cmFpbGluZyBjb250ZXh0OyBuby1ubCBjYW4gZW5kIHVwIGJlZm9yZSBhZGRzXG4gICAgICAgICAgICAgIGN1clJhbmdlLnNwbGljZShodW5rLm9sZExpbmVzLCAwLCAnXFxcXCBObyBuZXdsaW5lIGF0IGVuZCBvZiBmaWxlJyk7XG4gICAgICAgICAgICB9IGVsc2UgaWYgKCFvbGRFT0ZOZXdsaW5lIHx8ICFuZXdFT0ZOZXdsaW5lKSB7XG4gICAgICAgICAgICAgIGN1clJhbmdlLnB1c2goJ1xcXFwgTm8gbmV3bGluZSBhdCBlbmQgb2YgZmlsZScpO1xuICAgICAgICAgICAgfVxuICAgICAgICAgIH1cbiAgICAgICAgICBodW5rcy5wdXNoKGh1bmspO1xuXG4gICAgICAgICAgb2xkUmFuZ2VTdGFydCA9IDA7XG4gICAgICAgICAgbmV3UmFuZ2VTdGFydCA9IDA7XG4gICAgICAgICAgY3VyUmFuZ2UgPSBbXTtcbiAgICAgICAgfVxuICAgICAgfVxuICAgICAgb2xkTGluZSArPSBsaW5lcy5sZW5ndGg7XG4gICAgICBuZXdMaW5lICs9IGxpbmVzLmxlbmd0aDtcbiAgICB9XG4gIH1cblxuICByZXR1cm4ge1xuICAgIG9sZEZpbGVOYW1lOiBvbGRGaWxlTmFtZSwgbmV3RmlsZU5hbWU6IG5ld0ZpbGVOYW1lLFxuICAgIG9sZEhlYWRlcjogb2xkSGVhZGVyLCBuZXdIZWFkZXI6IG5ld0hlYWRlcixcbiAgICBodW5rczogaHVua3NcbiAgfTtcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIGNyZWF0ZVR3b0ZpbGVzUGF0Y2gob2xkRmlsZU5hbWUsIG5ld0ZpbGVOYW1lLCBvbGRTdHIsIG5ld1N0ciwgb2xkSGVhZGVyLCBuZXdIZWFkZXIsIG9wdGlvbnMpIHtcbiAgY29uc3QgZGlmZiA9IHN0cnVjdHVyZWRQYXRjaChvbGRGaWxlTmFtZSwgbmV3RmlsZU5hbWUsIG9sZFN0ciwgbmV3U3RyLCBvbGRIZWFkZXIsIG5ld0hlYWRlciwgb3B0aW9ucyk7XG5cbiAgY29uc3QgcmV0ID0gW107XG4gIGlmIChvbGRGaWxlTmFtZSA9PSBuZXdGaWxlTmFtZSkge1xuICAgIHJldC5wdXNoKCdJbmRleDogJyArIG9sZEZpbGVOYW1lKTtcbiAgfVxuICByZXQucHVzaCgnPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PScpO1xuICByZXQucHVzaCgnLS0tICcgKyBkaWZmLm9sZEZpbGVOYW1lICsgKHR5cGVvZiBkaWZmLm9sZEhlYWRlciA9PT0gJ3VuZGVmaW5lZCcgPyAnJyA6ICdcXHQnICsgZGlmZi5vbGRIZWFkZXIpKTtcbiAgcmV0LnB1c2goJysrKyAnICsgZGlmZi5uZXdGaWxlTmFtZSArICh0eXBlb2YgZGlmZi5uZXdIZWFkZXIgPT09ICd1bmRlZmluZWQnID8gJycgOiAnXFx0JyArIGRpZmYubmV3SGVhZGVyKSk7XG5cbiAgZm9yIChsZXQgaSA9IDA7IGkgPCBkaWZmLmh1bmtzLmxlbmd0aDsgaSsrKSB7XG4gICAgY29uc3QgaHVuayA9IGRpZmYuaHVua3NbaV07XG4gICAgcmV0LnB1c2goXG4gICAgICAnQEAgLScgKyBodW5rLm9sZFN0YXJ0ICsgJywnICsgaHVuay5vbGRMaW5lc1xuICAgICAgKyAnICsnICsgaHVuay5uZXdTdGFydCArICcsJyArIGh1bmsubmV3TGluZXNcbiAgICAgICsgJyBAQCdcbiAgICApO1xuICAgIHJldC5wdXNoLmFwcGx5KHJldCwgaHVuay5saW5lcyk7XG4gIH1cblxuICByZXR1cm4gcmV0LmpvaW4oJ1xcbicpICsgJ1xcbic7XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBjcmVhdGVQYXRjaChmaWxlTmFtZSwgb2xkU3RyLCBuZXdTdHIsIG9sZEhlYWRlciwgbmV3SGVhZGVyLCBvcHRpb25zKSB7XG4gIHJldHVybiBjcmVhdGVUd29GaWxlc1BhdGNoKGZpbGVOYW1lLCBmaWxlTmFtZSwgb2xkU3RyLCBuZXdTdHIsIG9sZEhlYWRlciwgbmV3SGVhZGVyLCBvcHRpb25zKTtcbn1cbiJdfQ==
-
-
-/***/ }),
-/* 137 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*istanbul ignore start*/
-
-exports.__esModule = true;
-
-exports["default"] = /*istanbul ignore end*/function (start, minLine, maxLine) {
-  var wantForward = true,
-      backwardExhausted = false,
-      forwardExhausted = false,
-      localOffset = 1;
-
-  return function iterator() {
-    if (wantForward && !forwardExhausted) {
-      if (backwardExhausted) {
-        localOffset++;
-      } else {
-        wantForward = false;
-      }
-
-      // Check if trying to fit beyond text length, and if not, check it fits
-      // after offset location (or desired location on first iteration)
-      if (start + localOffset <= maxLine) {
-        return localOffset;
-      }
-
-      forwardExhausted = true;
-    }
-
-    if (!backwardExhausted) {
-      if (!forwardExhausted) {
-        wantForward = true;
-      }
-
-      // Check if trying to fit before text beginning, and if not, check it fits
-      // before offset location
-      if (minLine <= start - localOffset) {
-        return -localOffset++;
-      }
-
-      backwardExhausted = true;
-      return iterator();
-    }
-
-    // We tried to fit hunk before text beginning and beyond text lenght, then
-    // hunk can't fit on the text. Return undefined
-  };
-};
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy91dGlsL2Rpc3RhbmNlLWl0ZXJhdG9yLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7NENBR2UsVUFBUyxLQUFULEVBQWdCLE9BQWhCLEVBQXlCLE9BQXpCLEVBQWtDO0FBQy9DLE1BQUksY0FBYyxJQUFsQjtBQUFBLE1BQ0ksb0JBQW9CLEtBRHhCO0FBQUEsTUFFSSxtQkFBbUIsS0FGdkI7QUFBQSxNQUdJLGNBQWMsQ0FIbEI7O0FBS0EsU0FBTyxTQUFTLFFBQVQsR0FBb0I7QUFDekIsUUFBSSxlQUFlLENBQUMsZ0JBQXBCLEVBQXNDO0FBQ3BDLFVBQUksaUJBQUosRUFBdUI7QUFDckI7QUFDRCxPQUZELE1BRU87QUFDTCxzQkFBYyxLQUFkO0FBQ0Q7Ozs7QUFJRCxVQUFJLFFBQVEsV0FBUixJQUF1QixPQUEzQixFQUFvQztBQUNsQyxlQUFPLFdBQVA7QUFDRDs7QUFFRCx5QkFBbUIsSUFBbkI7QUFDRDs7QUFFRCxRQUFJLENBQUMsaUJBQUwsRUFBd0I7QUFDdEIsVUFBSSxDQUFDLGdCQUFMLEVBQXVCO0FBQ3JCLHNCQUFjLElBQWQ7QUFDRDs7OztBQUlELFVBQUksV0FBVyxRQUFRLFdBQXZCLEVBQW9DO0FBQ2xDLGVBQU8sQ0FBQyxhQUFSO0FBQ0Q7O0FBRUQsMEJBQW9CLElBQXBCO0FBQ0EsYUFBTyxVQUFQO0FBQ0Q7Ozs7QUFJRixHQWxDRDtBQW1DRCxDIiwiZmlsZSI6ImRpc3RhbmNlLWl0ZXJhdG9yLmpzIiwic291cmNlc0NvbnRlbnQiOlsiLy8gSXRlcmF0b3IgdGhhdCB0cmF2ZXJzZXMgaW4gdGhlIHJhbmdlIG9mIFttaW4sIG1heF0sIHN0ZXBwaW5nXG4vLyBieSBkaXN0YW5jZSBmcm9tIGEgZ2l2ZW4gc3RhcnQgcG9zaXRpb24uIEkuZS4gZm9yIFswLCA0XSwgd2l0aFxuLy8gc3RhcnQgb2YgMiwgdGhpcyB3aWxsIGl0ZXJhdGUgMiwgMywgMSwgNCwgMC5cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uKHN0YXJ0LCBtaW5MaW5lLCBtYXhMaW5lKSB7XG4gIGxldCB3YW50Rm9yd2FyZCA9IHRydWUsXG4gICAgICBiYWNrd2FyZEV4aGF1c3RlZCA9IGZhbHNlLFxuICAgICAgZm9yd2FyZEV4aGF1c3RlZCA9IGZhbHNlLFxuICAgICAgbG9jYWxPZmZzZXQgPSAxO1xuXG4gIHJldHVybiBmdW5jdGlvbiBpdGVyYXRvcigpIHtcbiAgICBpZiAod2FudEZvcndhcmQgJiYgIWZvcndhcmRFeGhhdXN0ZWQpIHtcbiAgICAgIGlmIChiYWNrd2FyZEV4aGF1c3RlZCkge1xuICAgICAgICBsb2NhbE9mZnNldCsrO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgd2FudEZvcndhcmQgPSBmYWxzZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ2hlY2sgaWYgdHJ5aW5nIHRvIGZpdCBiZXlvbmQgdGV4dCBsZW5ndGgsIGFuZCBpZiBub3QsIGNoZWNrIGl0IGZpdHNcbiAgICAgIC8vIGFmdGVyIG9mZnNldCBsb2NhdGlvbiAob3IgZGVzaXJlZCBsb2NhdGlvbiBvbiBmaXJzdCBpdGVyYXRpb24pXG4gICAgICBpZiAoc3RhcnQgKyBsb2NhbE9mZnNldCA8PSBtYXhMaW5lKSB7XG4gICAgICAgIHJldHVybiBsb2NhbE9mZnNldDtcbiAgICAgIH1cblxuICAgICAgZm9yd2FyZEV4aGF1c3RlZCA9IHRydWU7XG4gICAgfVxuXG4gICAgaWYgKCFiYWNrd2FyZEV4aGF1c3RlZCkge1xuICAgICAgaWYgKCFmb3J3YXJkRXhoYXVzdGVkKSB7XG4gICAgICAgIHdhbnRGb3J3YXJkID0gdHJ1ZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ2hlY2sgaWYgdHJ5aW5nIHRvIGZpdCBiZWZvcmUgdGV4dCBiZWdpbm5pbmcsIGFuZCBpZiBub3QsIGNoZWNrIGl0IGZpdHNcbiAgICAgIC8vIGJlZm9yZSBvZmZzZXQgbG9jYXRpb25cbiAgICAgIGlmIChtaW5MaW5lIDw9IHN0YXJ0IC0gbG9jYWxPZmZzZXQpIHtcbiAgICAgICAgcmV0dXJuIC1sb2NhbE9mZnNldCsrO1xuICAgICAgfVxuXG4gICAgICBiYWNrd2FyZEV4aGF1c3RlZCA9IHRydWU7XG4gICAgICByZXR1cm4gaXRlcmF0b3IoKTtcbiAgICB9XG5cbiAgICAvLyBXZSB0cmllZCB0byBmaXQgaHVuayBiZWZvcmUgdGV4dCBiZWdpbm5pbmcgYW5kIGJleW9uZCB0ZXh0IGxlbmdodCwgdGhlblxuICAgIC8vIGh1bmsgY2FuJ3QgZml0IG9uIHRoZSB0ZXh0LiBSZXR1cm4gdW5kZWZpbmVkXG4gIH07XG59XG4iXX0=
-
-
-/***/ }),
-/* 138 */
+/* 143 */
 /***/ (function(module, exports) {
 
 module.exports = Array.isArray || function (arr) {
@@ -15952,10 +21104,10 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 139 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isarray = __webpack_require__(138)
+var isarray = __webpack_require__(143)
 
 /**
  * Expose `pathToRegexp`.
@@ -16384,424 +21536,13 @@ function pathToRegexp (path, keys, options) {
 
 
 /***/ }),
-/* 140 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/* !
- * type-detect
- * Copyright(c) 2013 jake luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-var promiseExists = typeof Promise === 'function';
-var globalObject = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : self; // eslint-disable-line
-var isDom = 'location' in globalObject && 'document' in globalObject;
-var symbolExists = typeof Symbol !== 'undefined';
-var mapExists = typeof Map !== 'undefined';
-var setExists = typeof Set !== 'undefined';
-var weakMapExists = typeof WeakMap !== 'undefined';
-var weakSetExists = typeof WeakSet !== 'undefined';
-var dataViewExists = typeof DataView !== 'undefined';
-var symbolIteratorExists = symbolExists && typeof Symbol.iterator !== 'undefined';
-var symbolToStringTagExists = symbolExists && typeof Symbol.toStringTag !== 'undefined';
-var setEntriesExists = setExists && typeof Set.prototype.entries === 'function';
-var mapEntriesExists = mapExists && typeof Map.prototype.entries === 'function';
-var setIteratorPrototype = setEntriesExists && Object.getPrototypeOf(new Set().entries());
-var mapIteratorPrototype = mapEntriesExists && Object.getPrototypeOf(new Map().entries());
-var arrayIteratorExists = symbolIteratorExists && typeof Array.prototype[Symbol.iterator] === 'function';
-var arrayIteratorPrototype = arrayIteratorExists && Object.getPrototypeOf([][Symbol.iterator]());
-var stringIteratorExists = symbolIteratorExists && typeof Array.prototype[Symbol.iterator] === 'function';
-var stringIteratorPrototype = stringIteratorExists && Object.getPrototypeOf(''[Symbol.iterator]());
-var toStringLeftSliceLength = 8;
-var toStringRightSliceLength = -1;
-/**
- * ### typeOf (obj)
- *
- * Uses `Object.prototype.toString` to determine the type of an object,
- * normalising behaviour across engine versions & well optimised.
- *
- * @param {Mixed} object
- * @return {String} object type
- * @api public
- */
-module.exports = function typeDetect(obj) {
-  /* ! Speed optimisation
-   * Pre:
-   *   string literal     x 3,039,035 ops/sec ±1.62% (78 runs sampled)
-   *   boolean literal    x 1,424,138 ops/sec ±4.54% (75 runs sampled)
-   *   number literal     x 1,653,153 ops/sec ±1.91% (82 runs sampled)
-   *   undefined          x 9,978,660 ops/sec ±1.92% (75 runs sampled)
-   *   function           x 2,556,769 ops/sec ±1.73% (77 runs sampled)
-   * Post:
-   *   string literal     x 38,564,796 ops/sec ±1.15% (79 runs sampled)
-   *   boolean literal    x 31,148,940 ops/sec ±1.10% (79 runs sampled)
-   *   number literal     x 32,679,330 ops/sec ±1.90% (78 runs sampled)
-   *   undefined          x 32,363,368 ops/sec ±1.07% (82 runs sampled)
-   *   function           x 31,296,870 ops/sec ±0.96% (83 runs sampled)
-   */
-  var typeofObj = typeof obj;
-  if (typeofObj !== 'object') {
-    return typeofObj;
-  }
-
-  /* ! Speed optimisation
-   * Pre:
-   *   null               x 28,645,765 ops/sec ±1.17% (82 runs sampled)
-   * Post:
-   *   null               x 36,428,962 ops/sec ±1.37% (84 runs sampled)
-   */
-  if (obj === null) {
-    return 'null';
-  }
-
-  /* ! Spec Conformance
-   * Test: `Object.prototype.toString.call(window)``
-   *  - Node === "[object global]"
-   *  - Chrome === "[object global]"
-   *  - Firefox === "[object Window]"
-   *  - PhantomJS === "[object Window]"
-   *  - Safari === "[object Window]"
-   *  - IE 11 === "[object Window]"
-   *  - IE Edge === "[object Window]"
-   * Test: `Object.prototype.toString.call(this)``
-   *  - Chrome Worker === "[object global]"
-   *  - Firefox Worker === "[object DedicatedWorkerGlobalScope]"
-   *  - Safari Worker === "[object DedicatedWorkerGlobalScope]"
-   *  - IE 11 Worker === "[object WorkerGlobalScope]"
-   *  - IE Edge Worker === "[object WorkerGlobalScope]"
-   */
-  if (obj === globalObject) {
-    return 'global';
-  }
-
-  /* ! Speed optimisation
-   * Pre:
-   *   array literal      x 2,888,352 ops/sec ±0.67% (82 runs sampled)
-   * Post:
-   *   array literal      x 22,479,650 ops/sec ±0.96% (81 runs sampled)
-   */
-  if (Array.isArray(obj)) {
-    return 'Array';
-  }
-
-  if (isDom) {
-    /* ! Spec Conformance
-     * (https://html.spec.whatwg.org/multipage/browsers.html#location)
-     * WhatWG HTML$7.7.3 - The `Location` interface
-     * Test: `Object.prototype.toString.call(window.location)``
-     *  - IE <=11 === "[object Object]"
-     *  - IE Edge <=13 === "[object Object]"
-     */
-    if (obj === globalObject.location) {
-      return 'Location';
-    }
-
-    /* ! Spec Conformance
-     * (https://html.spec.whatwg.org/#document)
-     * WhatWG HTML$3.1.1 - The `Document` object
-     * Note: Most browsers currently adher to the W3C DOM Level 2 spec
-     *       (https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-26809268)
-     *       which suggests that browsers should use HTMLTableCellElement for
-     *       both TD and TH elements. WhatWG separates these.
-     *       WhatWG HTML states:
-     *         > For historical reasons, Window objects must also have a
-     *         > writable, configurable, non-enumerable property named
-     *         > HTMLDocument whose value is the Document interface object.
-     * Test: `Object.prototype.toString.call(document)``
-     *  - Chrome === "[object HTMLDocument]"
-     *  - Firefox === "[object HTMLDocument]"
-     *  - Safari === "[object HTMLDocument]"
-     *  - IE <=10 === "[object Document]"
-     *  - IE 11 === "[object HTMLDocument]"
-     *  - IE Edge <=13 === "[object HTMLDocument]"
-     */
-    if (obj === globalObject.document) {
-      return 'Document';
-    }
-
-    /* ! Spec Conformance
-     * (https://html.spec.whatwg.org/multipage/webappapis.html#mimetypearray)
-     * WhatWG HTML$8.6.1.5 - Plugins - Interface MimeTypeArray
-     * Test: `Object.prototype.toString.call(navigator.mimeTypes)``
-     *  - IE <=10 === "[object MSMimeTypesCollection]"
-     */
-    if (obj === (globalObject.navigator || {}).mimeTypes) {
-      return 'MimeTypeArray';
-    }
-
-    /* ! Spec Conformance
-     * (https://html.spec.whatwg.org/multipage/webappapis.html#pluginarray)
-     * WhatWG HTML$8.6.1.5 - Plugins - Interface PluginArray
-     * Test: `Object.prototype.toString.call(navigator.plugins)``
-     *  - IE <=10 === "[object MSPluginsCollection]"
-     */
-    if (obj === (globalObject.navigator || {}).plugins) {
-      return 'PluginArray';
-    }
-
-    /* ! Spec Conformance
-     * (https://html.spec.whatwg.org/multipage/webappapis.html#pluginarray)
-     * WhatWG HTML$4.4.4 - The `blockquote` element - Interface `HTMLQuoteElement`
-     * Test: `Object.prototype.toString.call(document.createElement('blockquote'))``
-     *  - IE <=10 === "[object HTMLBlockElement]"
-     */
-    if (obj instanceof HTMLElement && obj.tagName === 'BLOCKQUOTE') {
-      return 'HTMLQuoteElement';
-    }
-
-    /* ! Spec Conformance
-     * (https://html.spec.whatwg.org/#htmltabledatacellelement)
-     * WhatWG HTML$4.9.9 - The `td` element - Interface `HTMLTableDataCellElement`
-     * Note: Most browsers currently adher to the W3C DOM Level 2 spec
-     *       (https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-82915075)
-     *       which suggests that browsers should use HTMLTableCellElement for
-     *       both TD and TH elements. WhatWG separates these.
-     * Test: Object.prototype.toString.call(document.createElement('td'))
-     *  - Chrome === "[object HTMLTableCellElement]"
-     *  - Firefox === "[object HTMLTableCellElement]"
-     *  - Safari === "[object HTMLTableCellElement]"
-     */
-    if (obj instanceof HTMLElement && obj.tagName === 'TD') {
-      return 'HTMLTableDataCellElement';
-    }
-
-    /* ! Spec Conformance
-     * (https://html.spec.whatwg.org/#htmltableheadercellelement)
-     * WhatWG HTML$4.9.9 - The `td` element - Interface `HTMLTableHeaderCellElement`
-     * Note: Most browsers currently adher to the W3C DOM Level 2 spec
-     *       (https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-82915075)
-     *       which suggests that browsers should use HTMLTableCellElement for
-     *       both TD and TH elements. WhatWG separates these.
-     * Test: Object.prototype.toString.call(document.createElement('th'))
-     *  - Chrome === "[object HTMLTableCellElement]"
-     *  - Firefox === "[object HTMLTableCellElement]"
-     *  - Safari === "[object HTMLTableCellElement]"
-     */
-    if (obj instanceof HTMLElement && obj.tagName === 'TH') {
-      return 'HTMLTableHeaderCellElement';
-    }
-  }
-
-  /* ! Speed optimisation
-  * Pre:
-  *   Float64Array       x 625,644 ops/sec ±1.58% (80 runs sampled)
-  *   Float32Array       x 1,279,852 ops/sec ±2.91% (77 runs sampled)
-  *   Uint32Array        x 1,178,185 ops/sec ±1.95% (83 runs sampled)
-  *   Uint16Array        x 1,008,380 ops/sec ±2.25% (80 runs sampled)
-  *   Uint8Array         x 1,128,040 ops/sec ±2.11% (81 runs sampled)
-  *   Int32Array         x 1,170,119 ops/sec ±2.88% (80 runs sampled)
-  *   Int16Array         x 1,176,348 ops/sec ±5.79% (86 runs sampled)
-  *   Int8Array          x 1,058,707 ops/sec ±4.94% (77 runs sampled)
-  *   Uint8ClampedArray  x 1,110,633 ops/sec ±4.20% (80 runs sampled)
-  * Post:
-  *   Float64Array       x 7,105,671 ops/sec ±13.47% (64 runs sampled)
-  *   Float32Array       x 5,887,912 ops/sec ±1.46% (82 runs sampled)
-  *   Uint32Array        x 6,491,661 ops/sec ±1.76% (79 runs sampled)
-  *   Uint16Array        x 6,559,795 ops/sec ±1.67% (82 runs sampled)
-  *   Uint8Array         x 6,463,966 ops/sec ±1.43% (85 runs sampled)
-  *   Int32Array         x 5,641,841 ops/sec ±3.49% (81 runs sampled)
-  *   Int16Array         x 6,583,511 ops/sec ±1.98% (80 runs sampled)
-  *   Int8Array          x 6,606,078 ops/sec ±1.74% (81 runs sampled)
-  *   Uint8ClampedArray  x 6,602,224 ops/sec ±1.77% (83 runs sampled)
-  */
-  var stringTag = (symbolToStringTagExists && obj[Symbol.toStringTag]);
-  if (typeof stringTag === 'string') {
-    return stringTag;
-  }
-
-  var objPrototype = Object.getPrototypeOf(obj);
-  /* ! Speed optimisation
-  * Pre:
-  *   regex literal      x 1,772,385 ops/sec ±1.85% (77 runs sampled)
-  *   regex constructor  x 2,143,634 ops/sec ±2.46% (78 runs sampled)
-  * Post:
-  *   regex literal      x 3,928,009 ops/sec ±0.65% (78 runs sampled)
-  *   regex constructor  x 3,931,108 ops/sec ±0.58% (84 runs sampled)
-  */
-  if (objPrototype === RegExp.prototype) {
-    return 'RegExp';
-  }
-
-  /* ! Speed optimisation
-  * Pre:
-  *   date               x 2,130,074 ops/sec ±4.42% (68 runs sampled)
-  * Post:
-  *   date               x 3,953,779 ops/sec ±1.35% (77 runs sampled)
-  */
-  if (objPrototype === Date.prototype) {
-    return 'Date';
-  }
-
-  /* ! Spec Conformance
-   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-promise.prototype-@@tostringtag)
-   * ES6$25.4.5.4 - Promise.prototype[@@toStringTag] should be "Promise":
-   * Test: `Object.prototype.toString.call(Promise.resolve())``
-   *  - Chrome <=47 === "[object Object]"
-   *  - Edge <=20 === "[object Object]"
-   *  - Firefox 29-Latest === "[object Promise]"
-   *  - Safari 7.1-Latest === "[object Promise]"
-   */
-  if (promiseExists && objPrototype === Promise.prototype) {
-    return 'Promise';
-  }
-
-  /* ! Speed optimisation
-  * Pre:
-  *   set                x 2,222,186 ops/sec ±1.31% (82 runs sampled)
-  * Post:
-  *   set                x 4,545,879 ops/sec ±1.13% (83 runs sampled)
-  */
-  if (setExists && objPrototype === Set.prototype) {
-    return 'Set';
-  }
-
-  /* ! Speed optimisation
-  * Pre:
-  *   map                x 2,396,842 ops/sec ±1.59% (81 runs sampled)
-  * Post:
-  *   map                x 4,183,945 ops/sec ±6.59% (82 runs sampled)
-  */
-  if (mapExists && objPrototype === Map.prototype) {
-    return 'Map';
-  }
-
-  /* ! Speed optimisation
-  * Pre:
-  *   weakset            x 1,323,220 ops/sec ±2.17% (76 runs sampled)
-  * Post:
-  *   weakset            x 4,237,510 ops/sec ±2.01% (77 runs sampled)
-  */
-  if (weakSetExists && objPrototype === WeakSet.prototype) {
-    return 'WeakSet';
-  }
-
-  /* ! Speed optimisation
-  * Pre:
-  *   weakmap            x 1,500,260 ops/sec ±2.02% (78 runs sampled)
-  * Post:
-  *   weakmap            x 3,881,384 ops/sec ±1.45% (82 runs sampled)
-  */
-  if (weakMapExists && objPrototype === WeakMap.prototype) {
-    return 'WeakMap';
-  }
-
-  /* ! Spec Conformance
-   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-dataview.prototype-@@tostringtag)
-   * ES6$24.2.4.21 - DataView.prototype[@@toStringTag] should be "DataView":
-   * Test: `Object.prototype.toString.call(new DataView(new ArrayBuffer(1)))``
-   *  - Edge <=13 === "[object Object]"
-   */
-  if (dataViewExists && objPrototype === DataView.prototype) {
-    return 'DataView';
-  }
-
-  /* ! Spec Conformance
-   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%mapiteratorprototype%-@@tostringtag)
-   * ES6$23.1.5.2.2 - %MapIteratorPrototype%[@@toStringTag] should be "Map Iterator":
-   * Test: `Object.prototype.toString.call(new Map().entries())``
-   *  - Edge <=13 === "[object Object]"
-   */
-  if (mapExists && objPrototype === mapIteratorPrototype) {
-    return 'Map Iterator';
-  }
-
-  /* ! Spec Conformance
-   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%setiteratorprototype%-@@tostringtag)
-   * ES6$23.2.5.2.2 - %SetIteratorPrototype%[@@toStringTag] should be "Set Iterator":
-   * Test: `Object.prototype.toString.call(new Set().entries())``
-   *  - Edge <=13 === "[object Object]"
-   */
-  if (setExists && objPrototype === setIteratorPrototype) {
-    return 'Set Iterator';
-  }
-
-  /* ! Spec Conformance
-   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%arrayiteratorprototype%-@@tostringtag)
-   * ES6$22.1.5.2.2 - %ArrayIteratorPrototype%[@@toStringTag] should be "Array Iterator":
-   * Test: `Object.prototype.toString.call([][Symbol.iterator]())``
-   *  - Edge <=13 === "[object Object]"
-   */
-  if (arrayIteratorExists && objPrototype === arrayIteratorPrototype) {
-    return 'Array Iterator';
-  }
-
-  /* ! Spec Conformance
-   * (http://www.ecma-international.org/ecma-262/6.0/index.html#sec-%stringiteratorprototype%-@@tostringtag)
-   * ES6$21.1.5.2.2 - %StringIteratorPrototype%[@@toStringTag] should be "String Iterator":
-   * Test: `Object.prototype.toString.call(''[Symbol.iterator]())``
-   *  - Edge <=13 === "[object Object]"
-   */
-  if (stringIteratorExists && objPrototype === stringIteratorPrototype) {
-    return 'String Iterator';
-  }
-
-  /* ! Speed optimisation
-  * Pre:
-  *   object from null   x 2,424,320 ops/sec ±1.67% (76 runs sampled)
-  * Post:
-  *   object from null   x 5,838,000 ops/sec ±0.99% (84 runs sampled)
-  */
-  if (objPrototype === null) {
-    return 'Object';
-  }
-
-  return Object
-    .prototype
-    .toString
-    .call(obj)
-    .slice(toStringLeftSliceLength, toStringRightSliceLength);
-};
-
-module.exports.typeDetect = module.exports;
-
-
-/***/ }),
-/* 141 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var irreducible = __webpack_require__(4);
-var isArray = __webpack_require__(9);
-
-module.exports = irreducible('Array', isArray);
-
-
-/***/ }),
-/* 142 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var irreducible = __webpack_require__(4);
-
-module.exports = irreducible('Date', function (x) { return x instanceof Date; });
-
-
-/***/ }),
-/* 143 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var irreducible = __webpack_require__(4);
-
-module.exports = irreducible('Error', function (x) { return x instanceof Error; });
-
-
-/***/ }),
-/* 144 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var refinement = __webpack_require__(46);
-var Number = __webpack_require__(73);
-
-module.exports = refinement(Number, function (x) { return x % 1 === 0; }, 'Integer');
-
-
-/***/ }),
 /* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var irreducible = __webpack_require__(4);
-var isObject = __webpack_require__(11);
+var isArray = __webpack_require__(10);
 
-module.exports = irreducible('Object', isObject);
+module.exports = irreducible('Array', isArray);
 
 
 /***/ }),
@@ -16810,11 +21551,49 @@ module.exports = irreducible('Object', isObject);
 
 var irreducible = __webpack_require__(4);
 
-module.exports = irreducible('RegExp', function (x) { return x instanceof RegExp; });
+module.exports = irreducible('Date', function (x) { return x instanceof Date; });
 
 
 /***/ }),
 /* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var irreducible = __webpack_require__(4);
+
+module.exports = irreducible('Error', function (x) { return x instanceof Error; });
+
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var refinement = __webpack_require__(52);
+var Number = __webpack_require__(78);
+
+module.exports = refinement(Number, function (x) { return x % 1 === 0; }, 'Integer');
+
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var irreducible = __webpack_require__(4);
+var isObject = __webpack_require__(12);
+
+module.exports = irreducible('Object', isObject);
+
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var irreducible = __webpack_require__(4);
+
+module.exports = irreducible('RegExp', function (x) { return x instanceof RegExp; });
+
+
+/***/ }),
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var irreducible = __webpack_require__(4);
@@ -16823,16 +21602,16 @@ var isType = __webpack_require__(3);
 module.exports = irreducible('Type', isType);
 
 /***/ }),
-/* 148 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
 var isType = __webpack_require__(3);
-var isNil = __webpack_require__(6);
-var mixin = __webpack_require__(45);
+var isNil = __webpack_require__(7);
+var mixin = __webpack_require__(51);
 var getTypeName = __webpack_require__(1);
-var isUnion = __webpack_require__(78);
+var isUnion = __webpack_require__(83);
 
 // All the .declare-d types should be clearly different from each other thus they should have
 // different names when a name was not explicitly provided.
@@ -16885,7 +21664,7 @@ module.exports = function declare(name) {
 
 
 /***/ }),
-/* 149 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isType = __webpack_require__(3);
@@ -16916,14 +21695,14 @@ function decompose(type) {
 module.exports = decompose;
 
 /***/ }),
-/* 150 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
-var forbidNewOperator = __webpack_require__(24);
-var isString = __webpack_require__(32);
-var isObject = __webpack_require__(11);
+var forbidNewOperator = __webpack_require__(27);
+var isString = __webpack_require__(38);
+var isObject = __webpack_require__(12);
 
 function getDefaultName(map) {
   return Object.keys(map).map(function (k) { return assert.stringify(k); }).join(' | ');
@@ -16980,7 +21759,7 @@ module.exports = enums;
 
 
 /***/ }),
-/* 151 */
+/* 155 */
 /***/ (function(module, exports) {
 
 module.exports = function fail(message) {
@@ -16988,20 +21767,20 @@ module.exports = function fail(message) {
 };
 
 /***/ }),
-/* 152 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
-var FunctionType = __webpack_require__(30);
-var isArray = __webpack_require__(9);
-var list = __webpack_require__(79);
-var isObject = __webpack_require__(11);
-var create = __webpack_require__(7);
-var isNil = __webpack_require__(6);
-var isBoolean = __webpack_require__(31);
-var tuple = __webpack_require__(81);
-var getFunctionName = __webpack_require__(25);
+var FunctionType = __webpack_require__(36);
+var isArray = __webpack_require__(10);
+var list = __webpack_require__(84);
+var isObject = __webpack_require__(12);
+var create = __webpack_require__(8);
+var isNil = __webpack_require__(7);
+var isBoolean = __webpack_require__(37);
+var tuple = __webpack_require__(86);
+var getFunctionName = __webpack_require__(28);
 var getTypeName = __webpack_require__(1);
 var isType = __webpack_require__(3);
 
@@ -17130,24 +21909,24 @@ module.exports = func;
 
 
 /***/ }),
-/* 153 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
-var String = __webpack_require__(43);
-var Function = __webpack_require__(30);
-var isBoolean = __webpack_require__(31);
-var isObject = __webpack_require__(11);
-var isNil = __webpack_require__(6);
-var create = __webpack_require__(7);
+var String = __webpack_require__(49);
+var Function = __webpack_require__(36);
+var isBoolean = __webpack_require__(37);
+var isObject = __webpack_require__(12);
+var isNil = __webpack_require__(7);
+var create = __webpack_require__(8);
 var getTypeName = __webpack_require__(1);
-var dict = __webpack_require__(44);
-var getDefaultInterfaceName = __webpack_require__(76);
-var isIdentity = __webpack_require__(10);
-var is = __webpack_require__(8);
-var extend = __webpack_require__(75);
-var assign = __webpack_require__(74);
+var dict = __webpack_require__(50);
+var getDefaultInterfaceName = __webpack_require__(81);
+var isIdentity = __webpack_require__(11);
+var is = __webpack_require__(9);
+var extend = __webpack_require__(80);
+var assign = __webpack_require__(79);
 
 function extendInterface(mixins, name) {
   return extend(inter, mixins, name);
@@ -17267,17 +22046,17 @@ module.exports = inter;
 
 
 /***/ }),
-/* 154 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
 var isFunction = __webpack_require__(2);
-var isArray = __webpack_require__(9);
-var forbidNewOperator = __webpack_require__(10);
-var is = __webpack_require__(8);
+var isArray = __webpack_require__(10);
+var forbidNewOperator = __webpack_require__(11);
+var is = __webpack_require__(9);
 var getTypeName = __webpack_require__(1);
-var isIdentity = __webpack_require__(10);
+var isIdentity = __webpack_require__(11);
 
 function getDefaultName(types) {
   return types.map(getTypeName).join(' & ');
@@ -17334,7 +22113,7 @@ module.exports = intersection;
 
 
 /***/ }),
-/* 155 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isType = __webpack_require__(3);
@@ -17344,7 +22123,7 @@ module.exports = function isInterface(x) {
 };
 
 /***/ }),
-/* 156 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isType = __webpack_require__(3);
@@ -17354,7 +22133,7 @@ module.exports = function isMaybe(x) {
 };
 
 /***/ }),
-/* 157 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isType = __webpack_require__(3);
@@ -17364,13 +22143,13 @@ module.exports = function isStruct(x) {
 };
 
 /***/ }),
-/* 158 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isFunction = __webpack_require__(2);
 var isType = __webpack_require__(3);
-var Any = __webpack_require__(42);
+var Any = __webpack_require__(48);
 
 module.exports = function match(x) {
   var type, guard, f, count;
@@ -17404,19 +22183,19 @@ module.exports = function match(x) {
 
 
 /***/ }),
-/* 159 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
 var isFunction = __webpack_require__(2);
-var isMaybe = __webpack_require__(156);
-var isIdentity = __webpack_require__(10);
-var Any = __webpack_require__(42);
-var create = __webpack_require__(7);
-var Nil = __webpack_require__(72);
-var forbidNewOperator = __webpack_require__(24);
-var is = __webpack_require__(8);
+var isMaybe = __webpack_require__(160);
+var isIdentity = __webpack_require__(11);
+var Any = __webpack_require__(48);
+var create = __webpack_require__(8);
+var Nil = __webpack_require__(77);
+var forbidNewOperator = __webpack_require__(27);
+var is = __webpack_require__(9);
 var getTypeName = __webpack_require__(1);
 
 function getDefaultName(type) {
@@ -17467,21 +22246,21 @@ module.exports = maybe;
 
 
 /***/ }),
-/* 160 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
-var String = __webpack_require__(43);
-var Function = __webpack_require__(30);
-var isBoolean = __webpack_require__(31);
-var isObject = __webpack_require__(11);
-var isNil = __webpack_require__(6);
-var create = __webpack_require__(7);
+var String = __webpack_require__(49);
+var Function = __webpack_require__(36);
+var isBoolean = __webpack_require__(37);
+var isObject = __webpack_require__(12);
+var isNil = __webpack_require__(7);
+var create = __webpack_require__(8);
 var getTypeName = __webpack_require__(1);
-var dict = __webpack_require__(44);
-var getDefaultInterfaceName = __webpack_require__(76);
-var extend = __webpack_require__(75);
+var dict = __webpack_require__(50);
+var getDefaultInterfaceName = __webpack_require__(81);
+var extend = __webpack_require__(80);
 
 function getDefaultName(props) {
   return 'Struct' + getDefaultInterfaceName(props);
@@ -17595,20 +22374,20 @@ module.exports = struct;
 
 
 /***/ }),
-/* 161 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
 var isTypeName = __webpack_require__(5);
 var isFunction = __webpack_require__(2);
 var getTypeName = __webpack_require__(1);
-var isIdentity = __webpack_require__(10);
-var isArray = __webpack_require__(9);
-var create = __webpack_require__(7);
-var is = __webpack_require__(8);
-var forbidNewOperator = __webpack_require__(24);
-var isUnion = __webpack_require__(78);
-var isNil = __webpack_require__(6);
+var isIdentity = __webpack_require__(11);
+var isArray = __webpack_require__(10);
+var create = __webpack_require__(8);
+var is = __webpack_require__(9);
+var forbidNewOperator = __webpack_require__(27);
+var isUnion = __webpack_require__(83);
+var isNil = __webpack_require__(7);
 
 function getDefaultName(types) {
   return types.map(getTypeName).join(' | ');
@@ -17692,15 +22471,15 @@ module.exports = union;
 
 
 /***/ }),
-/* 162 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assert = __webpack_require__(0);
-var isObject = __webpack_require__(11);
+var isObject = __webpack_require__(12);
 var isFunction = __webpack_require__(2);
-var isArray = __webpack_require__(9);
-var isNumber = __webpack_require__(77);
-var assign = __webpack_require__(74);
+var isArray = __webpack_require__(10);
+var isNumber = __webpack_require__(82);
+var assign = __webpack_require__(79);
 
 function getShallowCopy(x) {
   if (isObject(x)) {
@@ -17863,13 +22642,13 @@ module.exports = update;
 
 
 /***/ }),
-/* 163 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // This is free and unencumbered software released into the public domain.
 // See LICENSE.md for more information.
 
-var encoding = __webpack_require__(165);
+var encoding = __webpack_require__(169);
 
 module.exports = {
   TextEncoder: encoding.TextEncoder,
@@ -17878,7 +22657,7 @@ module.exports = {
 
 
 /***/ }),
-/* 164 */
+/* 168 */
 /***/ (function(module, exports) {
 
 (function(global) {
@@ -17930,7 +22709,7 @@ module.exports = {
 }(this || {}));
 
 /***/ }),
-/* 165 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // This is free and unencumbered software released into the public domain.
@@ -17947,7 +22726,7 @@ module.exports = {
   if (typeof module !== "undefined" && module.exports &&
     !global["encoding-indexes"]) {
     global["encoding-indexes"] =
-      __webpack_require__(164)["encoding-indexes"];
+      __webpack_require__(168)["encoding-indexes"];
   }
 
   //
@@ -21248,147 +26027,7 @@ module.exports = {
 }(this || {}));
 
 /***/ }),
-/* 166 */
-/***/ (function(module, exports) {
-
-/*!
- * type-detect
- * Copyright(c) 2013 jake luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-
-/*!
- * Primary Exports
- */
-
-var exports = module.exports = getType;
-
-/**
- * ### typeOf (obj)
- *
- * Use several different techniques to determine
- * the type of object being tested.
- *
- *
- * @param {Mixed} object
- * @return {String} object type
- * @api public
- */
-var objectTypeRegexp = /^\[object (.*)\]$/;
-
-function getType(obj) {
-  var type = Object.prototype.toString.call(obj).match(objectTypeRegexp)[1].toLowerCase();
-  // Let "new String('')" return 'object'
-  if (typeof Promise === 'function' && obj instanceof Promise) return 'promise';
-  // PhantomJS has type "DOMWindow" for null
-  if (obj === null) return 'null';
-  // PhantomJS has type "DOMWindow" for undefined
-  if (obj === undefined) return 'undefined';
-  return type;
-}
-
-exports.Library = Library;
-
-/**
- * ### Library
- *
- * Create a repository for custom type detection.
- *
- * ```js
- * var lib = new type.Library;
- * ```
- *
- */
-
-function Library() {
-  if (!(this instanceof Library)) return new Library();
-  this.tests = {};
-}
-
-/**
- * #### .of (obj)
- *
- * Expose replacement `typeof` detection to the library.
- *
- * ```js
- * if ('string' === lib.of('hello world')) {
- *   // ...
- * }
- * ```
- *
- * @param {Mixed} object to test
- * @return {String} type
- */
-
-Library.prototype.of = getType;
-
-/**
- * #### .define (type, test)
- *
- * Add a test to for the `.test()` assertion.
- *
- * Can be defined as a regular expression:
- *
- * ```js
- * lib.define('int', /^[0-9]+$/);
- * ```
- *
- * ... or as a function:
- *
- * ```js
- * lib.define('bln', function (obj) {
- *   if ('boolean' === lib.of(obj)) return true;
- *   var blns = [ 'yes', 'no', 'true', 'false', 1, 0 ];
- *   if ('string' === lib.of(obj)) obj = obj.toLowerCase();
- *   return !! ~blns.indexOf(obj);
- * });
- * ```
- *
- * @param {String} type
- * @param {RegExp|Function} test
- * @api public
- */
-
-Library.prototype.define = function(type, test) {
-  if (arguments.length === 1) return this.tests[type];
-  this.tests[type] = test;
-  return this;
-};
-
-/**
- * #### .test (obj, test)
- *
- * Assert that an object is of type. Will first
- * check natives, and if that does not pass it will
- * use the user defined custom tests.
- *
- * ```js
- * assert(lib.test('1', 'int'));
- * assert(lib.test('yes', 'bln'));
- * ```
- *
- * @param {Mixed} object
- * @param {String} type
- * @return {Boolean} result
- * @api public
- */
-
-Library.prototype.test = function(obj, type) {
-  if (type === getType(obj)) return true;
-  var test = this.tests[type];
-
-  if (test && 'regexp' === getType(test)) {
-    return test.test(obj);
-  } else if (test && 'function' === getType(test)) {
-    return test(obj);
-  } else {
-    throw new ReferenceError('Type test "' + type + '" not defined or invalid.');
-  }
-};
-
-
-/***/ }),
-/* 167 */
+/* 170 */
 /***/ (function(module, exports) {
 
 
@@ -21480,25 +26119,19 @@ module.exports = log
 
 
 /***/ }),
-/* 168 */
-/***/ (function(module, exports) {
-
-module.exports = require("buffer");
-
-/***/ }),
-/* 169 */
+/* 171 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 170 */
+/* 172 */
 /***/ (function(module, exports) {
 
 module.exports = require("net");
 
 /***/ }),
-/* 171 */
+/* 173 */
 /***/ (function(module, exports) {
 
 module.exports = require("util");
