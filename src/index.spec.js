@@ -239,45 +239,45 @@ describe('is(x , type)', function(){
 		expect(is(function(x){}, 'string')).to.eq(false)
 		expect(is(function(x,y){}, 'string')).to.eq(false)
 	})
+})
 
-	describe('like(type)', function(){
-		it('is a function', function(){
-			expect(like).to.be.a('function')		
+describe('like(type)', function(){
+	it('is a function', function(){
+		expect(like).to.be.a('function')		
+	})
+	it('tests whether `x` can be treated as `type` (has the same interface)', function(){
+		var Looker = mix(superclass => class Looker extends superclass {
+			look(){}
 		})
-		it('tests whether `x` can be treated as `type` (has the same interface)', function(){
-			var Looker = mix(superclass => class Looker extends superclass {
-				look(){}
-			})
-			expect(like('Hi', Looker)).to.eq(false)
-			expect(like(8, Looker)).to.eq(false)
-			expect(like({}, Looker)).to.eq(false)
-			expect(like(new Looker(), Looker)).to.eq(true)
-			expect(like({look(){}}, Looker)).to.eq(true)
-			expect(like({walk(){}}, Looker)).to.eq(false)
-			class Base {look(){}}
-			expect(like(Base, Looker)).to.eq(true)
-			expect(like(new Base(), Looker)).to.eq(true)
-			class Derived extends Base {}
-			expect(like(Derived, Looker)).to.eq(true)
-			expect(like(new Derived(), Looker)).to.eq(true)
-		})
+		expect(like('Hi', Looker)).to.eq(false)
+		expect(like(8, Looker)).to.eq(false)
+		expect(like({}, Looker)).to.eq(false)
+		expect(like(new Looker(), Looker)).to.eq(true)
+		expect(like({look(){}}, Looker)).to.eq(true)
+		expect(like({walk(){}}, Looker)).to.eq(false)
+		class Base {look(){}}
+		expect(like(Base, Looker)).to.eq(true)
+		expect(like(new Base(), Looker)).to.eq(true)
+		class Derived extends Base {}
+		expect(like(Derived, Looker)).to.eq(true)
+		expect(like(new Derived(), Looker)).to.eq(true)
+	})
 
-		it('allows mixins to be used as interfaces', (done) => {
-			var expected = 'Hello, World!'
-			var Thenable = mix(superclass => class Thenable extends superclass {
-				then(results) {}
-			})
-			class MyPromise {
-				then(resolve, reject) {
-					resolve(expected)
-				}
+	it('allows mixins to be used as interfaces', (done) => {
+		var expected = 'Hello, World!'
+		var Thenable = mix(superclass => class Thenable extends superclass {
+			then(results) {}
+		})
+		class MyPromise {
+			then(resolve, reject) {
+				resolve(expected)
 			}
-			var promise = new MyPromise()
-			expect(like(promise, Thenable)).to.eq(true)
-			Promise.resolve(promise).then((result) => {
-				expect(result).to.eq(expected)
-				done()
-			})
+		}
+		var promise = new MyPromise()
+		expect(like(promise, Thenable)).to.eq(true)
+		Promise.resolve(promise).then((result) => {
+			expect(result).to.eq(expected)
+			done()
 		})
 	})
 })
