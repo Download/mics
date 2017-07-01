@@ -202,7 +202,7 @@ is(Duck, Walker)              // true
 is(Talker, Walker)            // false
 ```
 
-#### like(type)
+#### like(subject, type)
 Often, we don't really care whether the object *is* a certain type, we just want to know 
 whether we can treat it *like* a certain type. Use `like(subject, type)` to test whether 
 a subject adheres to the same interface as is defined by `type`:
