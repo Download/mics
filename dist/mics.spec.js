@@ -7693,7 +7693,7 @@ function is(x, type) {
 		while (c !== Object) {
 			if (c === type || c === type.class) return true;
 			if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true;
-			c = c.prototype.__proto__.constructor;
+			c = Object.getPrototypeOf(c.prototype).constructor;
 		}
 	}
 	return false;
@@ -7720,7 +7720,7 @@ function getPropertyNames(proto) {
 		Object.getOwnPropertyNames(proto).reduce(function (arr, k) {
 			return arr.indexOf(k) === -1 ? arr.push(k) && arr : arr;
 		}, results);
-		proto = proto.__proto__.constructor.prototype;
+		proto = Object.getPrototypeOf(proto).constructor.prototype;
 	}
 	return results;
 }
