@@ -8639,115 +8639,115 @@ describe('is(x , type)', function () {
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'string')).to.eq(false);
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'string')).to.eq(false);
 	});
+});
 
-	describe('like(type)', function () {
-		it('is a function', function () {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */]).to.be.a('function');
-		});
-		it('tests whether `x` can be treated as `type` (has the same interface)', function () {
-			var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass26) {
-					_inherits(Looker, _superclass26);
+describe('like(type)', function () {
+	it('is a function', function () {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */]).to.be.a('function');
+	});
+	it('tests whether `x` can be treated as `type` (has the same interface)', function () {
+		var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass26) {
+				_inherits(Looker, _superclass26);
 
-					function Looker() {
-						_classCallCheck(this, Looker);
+				function Looker() {
+					_classCallCheck(this, Looker);
 
-						return _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).apply(this, arguments));
-					}
-
-					_createClass(Looker, [{
-						key: 'look',
-						value: function look() {}
-					}]);
-
-					return Looker;
-				}(superclass);
-			});
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])('Hi', Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(8, Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({}, Looker)).to.eq(false);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Looker(), Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
-				look: function look() {}
-			}, Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
-				walk: function walk() {}
-			}, Looker)).to.eq(false);
-
-			var Base = function () {
-				function Base() {
-					_classCallCheck(this, Base);
+					return _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).apply(this, arguments));
 				}
 
-				_createClass(Base, [{
+				_createClass(Looker, [{
 					key: 'look',
 					value: function look() {}
 				}]);
 
-				return Base;
-			}();
-
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Base, Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Base(), Looker)).to.eq(true);
-
-			var Derived = function (_Base) {
-				_inherits(Derived, _Base);
-
-				function Derived() {
-					_classCallCheck(this, Derived);
-
-					return _possibleConstructorReturn(this, (Derived.__proto__ || Object.getPrototypeOf(Derived)).apply(this, arguments));
-				}
-
-				return Derived;
-			}(Base);
-
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Derived, Looker)).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Derived(), Looker)).to.eq(true);
+				return Looker;
+			}(superclass);
 		});
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])('Hi', Looker)).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(8, Looker)).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({}, Looker)).to.eq(false);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Looker(), Looker)).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
+			look: function look() {}
+		}, Looker)).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
+			walk: function walk() {}
+		}, Looker)).to.eq(false);
 
-		it('allows mixins to be used as interfaces', function (done) {
-			var expected = 'Hello, World!';
-			var Thenable = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-				return function (_superclass27) {
-					_inherits(Thenable, _superclass27);
+		var Base = function () {
+			function Base() {
+				_classCallCheck(this, Base);
+			}
 
-					function Thenable() {
-						_classCallCheck(this, Thenable);
+			_createClass(Base, [{
+				key: 'look',
+				value: function look() {}
+			}]);
 
-						return _possibleConstructorReturn(this, (Thenable.__proto__ || Object.getPrototypeOf(Thenable)).apply(this, arguments));
-					}
+			return Base;
+		}();
 
-					_createClass(Thenable, [{
-						key: 'then',
-						value: function then(results) {}
-					}]);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Base, Looker)).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Base(), Looker)).to.eq(true);
 
-					return Thenable;
-				}(superclass);
-			});
+		var Derived = function (_Base) {
+			_inherits(Derived, _Base);
 
-			var MyPromise = function () {
-				function MyPromise() {
-					_classCallCheck(this, MyPromise);
+			function Derived() {
+				_classCallCheck(this, Derived);
+
+				return _possibleConstructorReturn(this, (Derived.__proto__ || Object.getPrototypeOf(Derived)).apply(this, arguments));
+			}
+
+			return Derived;
+		}(Base);
+
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Derived, Looker)).to.eq(true);
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Derived(), Looker)).to.eq(true);
+	});
+
+	it('allows mixins to be used as interfaces', function (done) {
+		var expected = 'Hello, World!';
+		var Thenable = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+			return function (_superclass27) {
+				_inherits(Thenable, _superclass27);
+
+				function Thenable() {
+					_classCallCheck(this, Thenable);
+
+					return _possibleConstructorReturn(this, (Thenable.__proto__ || Object.getPrototypeOf(Thenable)).apply(this, arguments));
 				}
 
-				_createClass(MyPromise, [{
+				_createClass(Thenable, [{
 					key: 'then',
-					value: function then(resolve, reject) {
-						resolve(expected);
-					}
+					value: function then(results) {}
 				}]);
 
-				return MyPromise;
-			}();
+				return Thenable;
+			}(superclass);
+		});
 
-			var promise = new MyPromise();
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(promise, Thenable)).to.eq(true);
-			Promise.resolve(promise).then(function (result) {
-				__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(result).to.eq(expected);
-				done();
-			});
+		var MyPromise = function () {
+			function MyPromise() {
+				_classCallCheck(this, MyPromise);
+			}
+
+			_createClass(MyPromise, [{
+				key: 'then',
+				value: function then(resolve, reject) {
+					resolve(expected);
+				}
+			}]);
+
+			return MyPromise;
+		}();
+
+		var promise = new MyPromise();
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(promise, Thenable)).to.eq(true);
+		Promise.resolve(promise).then(function (result) {
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(result).to.eq(expected);
+			done();
 		});
 	});
 });
