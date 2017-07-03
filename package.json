@@ -26,7 +26,17 @@
     "microscopically small",
     "2kB"
   ],
-  "author": "Stijn de Witt",
+  "author": {
+    "name": "Stijn de Witt",
+    "email": "StijnDeWitt@hotmail.com",
+    "url": "https://StijnDeWitt.com"
+  },
+  "contributors": [
+    {
+      "name": "Marco Alka",
+      "url": "https://marco-alka.de/"
+    }
+  ],
   "license": "CC-BY-4.0",
   "bugs": {
     "url": "https://github.com/download/mics/issues"

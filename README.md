@@ -314,8 +314,11 @@ to let me know of any problems you find, or questions you may have.
 Credits go to [Justin Fagnani](http://justinfagnani.com) for his excellent blog post ["Real" Mixins with JavaScript Classes](http://justinfagnani.com/2015/12/21/real-mixins-with-javascript-classes/) and the accompanying library
 [mixwith.js](https://github.com/justinfagnani/mixwith.js).
 
+## Contributors
+Many thanks to [Marco Alka](https://marco-alka.de/) for his contributions to this project.
+
 ## Copyright
-Copyright 2017 by [Stijn de Witt](https://StijnDeWitt.com). Some rights reserved.
+Copyright 2017 by [Stijn de Witt](https://StijnDeWitt.com) and contributors. Some rights reserved.
 
 ## License
 Licensed under the [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/) Open Source license.
