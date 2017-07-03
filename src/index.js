@@ -65,7 +65,7 @@ function getPropertyNames(proto) {
 	var results = []
 	while (proto !== Object.prototype) {
 		Object.getOwnPropertyNames(proto).reduce((arr,k) => arr.indexOf(k) === -1 ? arr.push(k) && arr : arr, results)
-		proto = proto.__proto__.constructor.prototype
+		proto = Object.getPrototypeOf(proto).constructor.prototype
 	}
 	return results
 }

@@ -98,7 +98,7 @@ function getPropertyNames(proto) {
 		Object.getOwnPropertyNames(proto).reduce(function (arr, k) {
 			return arr.indexOf(k) === -1 ? arr.push(k) && arr : arr;
 		}, results);
-		proto = proto.__proto__.constructor.prototype;
+		proto = Object.getPrototypeOf(proto).constructor.prototype;
 	}
 	return results;
 }
