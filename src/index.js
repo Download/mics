@@ -42,7 +42,7 @@ function is(x, type) {
 		while (c !== Object) {
 			if (c === type || c === type.class) return true
 			if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true
-			c = c.prototype.__proto__.constructor
+			c = Object.getPrototypeOf(c.prototype).constructor
 		}
 	}
 	return false
