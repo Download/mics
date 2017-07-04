@@ -1,0 +1,28 @@
+{
+  "extends": ["eslint:recommended"],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true,
+    "mocha": true
+  },
+  "rules": {
+    "eol-last": ["error", "always"],
+    "max-len": ["warn", {
+      "code": 120
+    }],
+    "indent": ["warn", 4],
+    "newline-after-var": "warn",
+    "newline-per-chained-call": "warn",
+    "one-var-declaration-per-line": "warn",
+    "no-redeclare": "error",
+    "object-curly-spacing": ["warn", "always"],
+    "arrow-spacing": "warn",
+    "no-multi-spaces": "warn",
+    "no-multiple-empty-lines": "warn"
+  }
+}
