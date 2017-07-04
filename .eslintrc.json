@@ -15,12 +15,12 @@
     "max-len": ["warn", {
       "code": 120
     }],
-    "indent": ["warn", "tab"],
+    "indent": ["warn", 4],
     "newline-after-var": "warn",
     "newline-per-chained-call": "warn",
     "one-var-declaration-per-line": "warn",
     "no-redeclare": "error",
-    "object-curly-spacing": "warn",
+    "object-curly-spacing": ["warn", "always"],
     "arrow-spacing": "warn",
     "no-multi-spaces": "warn",
     "no-multiple-empty-lines": "warn"
