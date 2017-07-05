@@ -8,6 +8,8 @@
 [![greenkeeper](https://img.shields.io/david/Download/mics.svg)](https://greenkeeper.io/)
 ![mind BLOWN](https://img.shields.io/badge/mind-BLOWN-ff69b4.svg)
 
+![MICS logo](https://cdn.rawgit.com/download/mics/0.6.3/mics.jpg)
+
 > Multiple Inheritance is like a parachute. You don't often need it, but when you do, you really need it.
 *Grady Booch*
 
@@ -65,6 +67,8 @@ define(['mics'], function(mics){
 
 ## Usage
 ### Creating a mixin
+![](https://raw.githubusercontent.com/download/mics/0.6.3/mixins-are-classes-on-steroids.jpg)
+
 Mixins are like classes on steroids. They look and feel a lot like ES6 classes,
 but they have some additional capabilities that ES6 classes do not have:
 * They can 'extend' from multiple other mixins including (at most one) ES6 class
