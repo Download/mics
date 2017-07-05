@@ -1458,7 +1458,7 @@ var uuid = 0;
 
 // Public API
 var spyApi = {
-    formatters: __webpack_require__(136),
+    formatters: __webpack_require__(138),
 
     reset: function () {
         if (this.invoking) {
@@ -1817,14 +1817,14 @@ module.exports = spy;
 
 
 var behavior = __webpack_require__(63);
-var behaviors = __webpack_require__(133);
+var behaviors = __webpack_require__(135);
 var spy = __webpack_require__(23);
 var extend = __webpack_require__(15);
 var functionToString = __webpack_require__(42);
 var getPropertyDescriptor = __webpack_require__(16);
 var wrapMethod = __webpack_require__(26);
-var stubEntireObject = __webpack_require__(138);
-var stubDescriptor = __webpack_require__(137);
+var stubEntireObject = __webpack_require__(140);
+var stubDescriptor = __webpack_require__(139);
 var throwOnFalsyObject = __webpack_require__(68);
 
 var slice = Array.prototype.slice;
@@ -3550,7 +3550,7 @@ var fakeXhr = __webpack_require__(47);
 var push = [].push;
 var format = __webpack_require__(22);
 var configureLogError = __webpack_require__(43);
-var pathToRegexp = __webpack_require__(144);
+var pathToRegexp = __webpack_require__(130);
 
 function responseArray(handler) {
     var response = handler;
@@ -3906,7 +3906,7 @@ var supportsProgress = typeof ProgressEvent !== "undefined";
 var supportsCustomEvent = typeof CustomEvent !== "undefined";
 var supportsFormData = typeof FormData !== "undefined";
 var supportsArrayBuffer = typeof ArrayBuffer !== "undefined";
-var supportsBlob = __webpack_require__(131).isSupported;
+var supportsBlob = __webpack_require__(133).isSupported;
 var isReactNative = global.navigator && global.navigator.product === "ReactNative";
 var sinonXhr = { XMLHttpRequest: global.XMLHttpRequest };
 sinonXhr.GlobalXMLHttpRequest = global.XMLHttpRequest;
@@ -6328,7 +6328,7 @@ module.exports = collectOwnMethods;
 var sinonSpy = __webpack_require__(23);
 var sinonStub = __webpack_require__(24);
 var sinonMock = __webpack_require__(67);
-var sandboxStub = __webpack_require__(134);
+var sandboxStub = __webpack_require__(136);
 var collectOwnMethods = __webpack_require__(64);
 
 var push = [].push;
@@ -7629,117 +7629,133 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 function mix() {
-	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-		args[_key] = arguments[_key];
-	}
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+    }
 
-	var superclass = !is(args[0], 'factory') && args.shift() || baseclass;
-	var factory = is(args[args.length - 1], 'factory') && args.pop() || derive;
-	superclass = is(superclass, 'mixin') ? superclass.class : derive(superclass);
-	if (args.length) factory = function (org) {
-		return function (superclass) {
-			return org(args.reduce(function (s, m) {
-				return m.mixin(s);
-			}, superclass));
-		};
-	}(factory);
-	function mixin(superclass) {
-		var result = is(superclass, mixin) ? superclass : factory(superclass);
-		if (mixin.classes.indexOf(result) === -1) mixin.classes.push(result);
-		return result;
-	}
-	Object.defineProperties(mixin, {
-		classes: { value: [], writable: false },
-		mixins: { value: args, writable: false }
-	});
-	var Class = mixin(superclass);
-	var constructor = Class.hasOwnProperty('constructor') ? Class.constructor.bind(Class) : function () {
-		for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-			args[_key2] = arguments[_key2];
-		}
+    // todo: refactor to make const
+    var superclass = !is(args[0], 'factory') && args.shift() || baseclass;
+    var factory = is(args[args.length - 1], 'factory') && args.pop() || derive;
 
-		return new (Function.prototype.bind.apply(Class, [null].concat(args)))();
-	};
-	Object.getOwnPropertyNames(Class).forEach(function (k) {
-		return Object.defineProperty(constructor, k, { value: Class[k] });
-	});
-	return Object.defineProperties(constructor, {
-		mixin: { value: mixin, writable: false },
-		class: { value: Class, writable: false },
-		interface: { get: function (x) {
-				return function () {
-					return x ? x : x = getInterface(Class.prototype);
-				};
-			}() }
-	});
+    superclass = is(superclass, 'mixin') ? superclass.class : derive(superclass);
+    if (args.length) factory = function (org) {
+        return function (superclass) {
+            return org(args.reduce(function (s, m) {
+                return m.mixin(s);
+            }, superclass));
+        };
+    }(factory);
+
+    function mixin(superclass) {
+        var result = is(superclass, mixin) ? superclass : factory(superclass);
+
+        if (mixin.classes.indexOf(result) === -1) mixin.classes.push(result);
+        return result;
+    }
+
+    Object.defineProperties(mixin, {
+        classes: { value: [], writable: false },
+        mixins: { value: args, writable: false }
+    });
+
+    var Class = mixin(superclass);
+    var constructor = Class.hasOwnProperty('constructor') ? Class.constructor.bind(Class) : function () {
+        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            args[_key2] = arguments[_key2];
+        }
+
+        return new (Function.prototype.bind.apply(Class, [null].concat(args)))();
+    };
+
+    Object.getOwnPropertyNames(Class).forEach(function (k) {
+        return Object.defineProperty(constructor, k, { value: Class[k] });
+    });
+
+    return Object.defineProperties(constructor, {
+        mixin: { value: mixin, writable: false },
+        class: { value: Class, writable: false },
+        interface: { get: function (x) {
+                return function () {
+                    return x ? x : x = getInterface(Class.prototype);
+                };
+            }() }
+    });
 }
 
 function is(x, type) {
-	if (typeof type == 'string') {
-		return type == 'class' ? is(x, 'function') && function (s) {
-			return (/^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, ''))
-			);
-		}(x.toString()) : type == 'mixin' ? is(x, 'function') && !!x.mixin : type == 'factory' ? is(x, 'function') && !is(x, 'mixin') && !is(x, 'class') && x.length == 1 : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
-	}
-	if ((typeof x === 'undefined' ? 'undefined' : _typeof(x)) == 'object') {
-		if (x instanceof type) return true;
-		if (type.class && x instanceof type.class) return true;
-		if (type.mixin && type.mixin.classes) return type.mixin.classes.reduce(function (f, c) {
-			return f || is(x, c);
-		}, false);
-	} else if (typeof x == 'function') {
-		if (x.mixin && x.mixin.mixins.indexOf(type) !== -1) return true;
-		var c = x;
-		while (c !== Object) {
-			if (c === type || c === type.class) return true;
-			if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true;
-			c = Object.getPrototypeOf(c.prototype).constructor;
-		}
-	}
-	return false;
+    if (typeof type == 'string') {
+        return type == 'class' ? is(x, 'function') && function (s) {
+            return (/^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, ''))
+            );
+        }(x.toString()) : type == 'mixin' ? is(x, 'function') && !!x.mixin : type == 'factory' ? is(x, 'function') && !is(x, 'mixin') && !is(x, 'class') && x.length == 1 : (typeof x === 'undefined' ? 'undefined' : _typeof(x)) == type;
+    }
+
+    if ((typeof x === 'undefined' ? 'undefined' : _typeof(x)) == 'object') {
+        if (x instanceof type) return true;
+        if (type.class && x instanceof type.class) return true;
+        if (type.mixin && type.mixin.classes) return type.mixin.classes.reduce(function (f, c) {
+            return f || is(x, c);
+        }, false);
+    } else if (typeof x == 'function') {
+        if (x.mixin && x.mixin.mixins.indexOf(type) !== -1) return true;
+
+        var c = x;
+
+        while (c !== Object) {
+            if (c === type || c === type.class) return true;
+            if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true;
+            c = Object.getPrototypeOf(c.prototype).constructor;
+        }
+    }
+
+    return false;
 }
 
 function like(x, type) {
-	if (is(x, type)) return true;
-	var itf = type.interface || is(type, 'function') && getInterface(type.prototype);
-	var subject = is(x, 'function') ? x.interface || getInterface(x.prototype) : x;
-	return itf && Object.keys(itf).reduce(function (f, k) {
-		return f && (is(itf[k], 'function') ? is(subject[k], 'function') : k in subject);
-	}, true);
+    if (is(x, type)) return true;
+
+    var itf = type.interface || is(type, 'function') && getInterface(type.prototype);
+    var subject = is(x, 'function') ? x.interface || getInterface(x.prototype) : x;
+
+    return itf && Object.keys(itf).reduce(function (f, k) {
+        return f && (is(itf[k], 'function') ? is(subject[k], 'function') : k in subject);
+    }, true);
 }
 
 function getInterface(proto) {
-	return getPropertyNames(proto).reduce(function (o, k) {
-		o[k] = proto[k];return o;
-	}, {});
+    return getPropertyNames(proto).reduce(function (o, k) {
+        o[k] = proto[k];return o;
+    }, {});
 }
 
 function getPropertyNames(proto) {
-	var results = [];
-	while (proto !== Object.prototype) {
-		Object.getOwnPropertyNames(proto).reduce(function (arr, k) {
-			return arr.indexOf(k) === -1 ? arr.push(k) && arr : arr;
-		}, results);
-		proto = Object.getPrototypeOf(proto).constructor.prototype;
-	}
-	return results;
+    var results = [];
+
+    while (proto !== Object.prototype) {
+        Object.getOwnPropertyNames(proto).reduce(function (arr, k) {
+            return arr.indexOf(k) === -1 ? arr.push(k) && arr : arr;
+        }, results);
+        proto = Object.getPrototypeOf(proto).constructor.prototype;
+    }
+
+    return results;
 }
 
 var baseclass = function Object() {
-	_classCallCheck(this, Object);
-},
-    derive = function derive(superclass) {
-	return {}[superclass.name || 'Object'] = function (_superclass) {
-		_inherits(_class, _superclass);
+    _classCallCheck(this, Object);
+};
+var derive = function derive(superclass) {
+    return {}[superclass.name || 'Object'] = function (_superclass) {
+        _inherits(_class, _superclass);
 
-		function _class() {
-			_classCallCheck(this, _class);
+        function _class() {
+            _classCallCheck(this, _class);
 
-			return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
-		}
+            return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+        }
 
-		return _class;
-	}(superclass);
+        return _class;
+    }(superclass);
 };
 
 /***/ }),
@@ -7787,7 +7803,7 @@ function exposeEventTarget(target, eventTarget) {
 }
 
 // Expose internal utilities on `sinon` global for backwards compatibility.
-exposeCoreUtils(exports, __webpack_require__(141));
+exposeCoreUtils(exports, __webpack_require__(143));
 
 exports.assert = __webpack_require__(40);
 exports.collection = __webpack_require__(65);
@@ -7796,7 +7812,7 @@ exports.spy = __webpack_require__(23);
 exports.spyCall = __webpack_require__(33);
 exports.stub = __webpack_require__(24);
 exports.mock = __webpack_require__(67);
-exports.sandbox = __webpack_require__(135);
+exports.sandbox = __webpack_require__(137);
 exports.expectation = __webpack_require__(66);
 exports.createStubInstance = __webpack_require__(24).createStubInstance;
 
@@ -8022,996 +8038,1028 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var log = __WEBPACK_IMPORTED_MODULE_0_ulog___default()('mics:spec');
 
 describe('mix([superclass] [, ...mixins] [, factory])', function () {
-	it('is a function', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */]).to.be.a('function');
-	});
-
-	it('creates a mixin from a class factory', function () {
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass) {
-				_inherits(M, _superclass);
-
-				function M() {
-					_classCallCheck(this, M);
-
-					return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
-				}
-
-				return M;
-			}(superclass);
-		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(M).to.be.a('function');
-	});
-
-	it('creates a mixin from other mixins and a class factory', function () {
-		var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass2) {
-				_inherits(X, _superclass2);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(superclass);
-		});
-		var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass3) {
-				_inherits(X, _superclass3);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(superclass);
-		});
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(X, Y, function (superclass) {
-			return function (_superclass4) {
-				_inherits(M, _superclass4);
-
-				function M() {
-					_classCallCheck(this, M);
-
-					return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
-				}
-
-				return M;
-			}(superclass);
-		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(M).to.be.a('function');
-	});
-
-	it('creates a mixin from other mixins', function () {
-		var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass5) {
-				_inherits(X, _superclass5);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(superclass);
-		});
-		var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass6) {
-				_inherits(X, _superclass6);
-
-				function X() {
-					_classCallCheck(this, X);
-
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
-
-				return X;
-			}(superclass);
-		});
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(X, Y);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M, 'mixin')).to.eq(true);
-	});
-
-	it('creates a mix from a superclass', function () {
-		var C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function Base() {
-			_classCallCheck(this, Base);
-		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(C).to.be.a('function');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
-		// special case: class with one-arg constructor looks like a factory
-
-		var Base = function Base(arg) {
-			_classCallCheck(this, Base);
-		};
-
-		C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Base);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(C).to.be.a('function');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(new C() instanceof Base).to.eq(true);
-	});
-
-	it('creates a mix from a mixed superclass', function () {
-		var C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function Base() {
-			_classCallCheck(this, Base);
-		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
-		var D = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(C);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(D, 'mixin')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(new D() instanceof D).to.eq(true);
-	});
-
-	it('created mixins can be invoked with new to instantiate instances', function () {
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass7) {
-				_inherits(M, _superclass7);
-
-				function M() {
-					_classCallCheck(this, M);
-
-					return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
-				}
-
-				return M;
-			}(superclass);
-		});
-		var m = new M();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(m).to.be.an('object');
-	});
-
-	it('created mixins can be invoked without new to instantiate instances', function () {
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass8) {
-				_inherits(M, _superclass8);
-
-				function M() {
-					_classCallCheck(this, M);
-
-					return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
-				}
-
-				return M;
-			}(superclass);
-		});
-		var m = M();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(m).to.be.an('object');
-	});
-
-	it('arguments passed when invoking the mixin with new are passed on to the constructor', function () {
-		var xarg, yarg, zarg;
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass9) {
-				_inherits(M, _superclass9);
-
-				function M(x, y, z) {
-					_classCallCheck(this, M);
-
-					var _this9 = _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).call(this));
-
-					xarg = x;
-					yarg = y;
-					zarg = z;
-					return _this9;
-				}
-
-				return M;
-			}(superclass);
-		});
-		var m = new M('x', 'y', 'z');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(xarg).to.eq('x');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(yarg).to.eq('y');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(zarg).to.eq('z');
-	});
-
-	it('arguments passed when invoking the mixin without new are passed on to the constructor', function () {
-		var xarg, yarg, zarg;
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass10) {
-				_inherits(M, _superclass10);
-
-				function M(x, y, z) {
-					_classCallCheck(this, M);
-
-					var _this10 = _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).call(this));
-
-					xarg = x;
-					yarg = y;
-					zarg = z;
-					return _this10;
-				}
-
-				return M;
-			}(superclass);
-		});
-		var m = M('x', 'y', 'z');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(xarg).to.eq('x');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(yarg).to.eq('y');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(zarg).to.eq('z');
-	});
-
-	it('var args in constructor has correct length when invoking with new', function () {
-		var argsarg;
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass11) {
-				_inherits(M, _superclass11);
-
-				function M() {
-					_classCallCheck(this, M);
-
-					var _this11 = _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).call(this));
-
-					for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-						args[_key] = arguments[_key];
-					}
-
-					argsarg = args;
-					return _this11;
-				}
-
-				return M;
-			}(superclass);
-		});
-		var m = new M('x', 'y', 'z');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(argsarg.length).to.eq(3);
-		var m = new M();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(argsarg.length).to.eq(0);
-	});
-
-	it('var args in constructor has correct length when invoking without new', function () {
-		var argsarg;
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass12) {
-				_inherits(M, _superclass12);
-
-				function M() {
-					_classCallCheck(this, M);
-
-					var _this12 = _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).call(this));
-
-					for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-						args[_key2] = arguments[_key2];
-					}
-
-					argsarg = args;
-					return _this12;
-				}
-
-				return M;
-			}(superclass);
-		});
-		var m = M('x', 'y', 'z');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(argsarg.length).to.eq(3);
-		var m = M();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(argsarg.length).to.eq(0);
-	});
-
-	it('result of invoking constructor with new is instanceof mixin', function () {
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass13) {
-				_inherits(M, _superclass13);
-
-				function M() {
-					_classCallCheck(this, M);
-
-					return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
-				}
-
-				return M;
-			}(superclass);
-		});
-		var m = new M('x', 'y', 'z');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(m instanceof M).to.eq(true);
-	});
-
-	it('result of invoking constructor without new is instanceof mixin', function () {
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass14) {
-				_inherits(M, _superclass14);
-
-				function M() {
-					_classCallCheck(this, M);
-
-					return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
-				}
-
-				return M;
-			}(superclass);
-		});
-		var m = M('x', 'y', 'z');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(m instanceof M).to.eq(true);
-	});
-
-	it('picks up a static class method `constructor` and uses it in place of the default constructor', function () {
-		var check = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass15) {
-				_inherits(M, _superclass15);
-
-				function M() {
-					_classCallCheck(this, M);
-
-					return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
-				}
-
-				_createClass(M, null, [{
-					key: 'constructor',
-					value: function constructor() {
-						log.log('Custom constructor');
-						check();
-
-						for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-							args[_key3] = arguments[_key3];
-						}
-
-						return new (Function.prototype.bind.apply(this, [null].concat(args)))();
-					}
-				}]);
-
-				return M;
-			}(superclass);
-		});
-		var m = M();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(check.called).to.eq(true);
-	});
-
-	it('has no side effects on it\'s arguments', function () {
-		var Test = function Test() {
-			_classCallCheck(this, Test);
-		};
-
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
-		var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Test);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M, 'mixin')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
-		var N = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Test, function (superclass) {
-			return function (_superclass16) {
-				_inherits(N, _superclass16);
-
-				function N() {
-					_classCallCheck(this, N);
-
-					return _possibleConstructorReturn(this, (N.__proto__ || Object.getPrototypeOf(N)).apply(this, arguments));
-				}
-
-				return N;
-			}(superclass);
-		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(N, 'mixin')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
-	});
+    it('is a function', function () {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */]).to.be.a('function');
+    });
+
+    it('creates a mixin from a class factory', function () {
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass) {
+                _inherits(M, _superclass);
+
+                function M() {
+                    _classCallCheck(this, M);
+
+                    return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
+                }
+
+                return M;
+            }(superclass);
+        });
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(M).to.be.a('function');
+    });
+
+    it('creates a mixin from other mixins and a class factory', function () {
+        var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass2) {
+                _inherits(X, _superclass2);
+
+                function X() {
+                    _classCallCheck(this, X);
+
+                    return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+                }
+
+                return X;
+            }(superclass);
+        });
+        var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass3) {
+                _inherits(X, _superclass3);
+
+                function X() {
+                    _classCallCheck(this, X);
+
+                    return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+                }
+
+                return X;
+            }(superclass);
+        });
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(X, Y, function (superclass) {
+            return function (_superclass4) {
+                _inherits(M, _superclass4);
+
+                function M() {
+                    _classCallCheck(this, M);
+
+                    return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
+                }
+
+                return M;
+            }(superclass);
+        });
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(M).to.be.a('function');
+    });
+
+    it('creates a mixin from other mixins', function () {
+        var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass5) {
+                _inherits(X, _superclass5);
+
+                function X() {
+                    _classCallCheck(this, X);
+
+                    return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+                }
+
+                return X;
+            }(superclass);
+        });
+        var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass6) {
+                _inherits(X, _superclass6);
+
+                function X() {
+                    _classCallCheck(this, X);
+
+                    return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+                }
+
+                return X;
+            }(superclass);
+        });
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(X, Y);
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M, 'mixin')).to.eq(true);
+    });
+
+    it('creates a mix from a superclass', function () {
+        var C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function Base() {
+            _classCallCheck(this, Base);
+        });
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(C).to.be.a('function');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
+        // special case: class with one-arg constructor looks like a factory
+
+        var Base = function Base() {
+            _classCallCheck(this, Base);
+        };
+
+        C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Base);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(C).to.be.a('function');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(new C() instanceof Base).to.eq(true);
+    });
+
+    it('creates a mix from a mixed superclass', function () {
+        var C = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function Base() {
+            _classCallCheck(this, Base);
+        });
+        var D = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(C);
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(C, 'mixin')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(D, 'mixin')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(new D() instanceof D).to.eq(true);
+    });
+
+    it('created mixins can be invoked with new to instantiate instances', function () {
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass7) {
+                _inherits(M, _superclass7);
+
+                function M() {
+                    _classCallCheck(this, M);
+
+                    return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
+                }
+
+                return M;
+            }(superclass);
+        });
+        var m = new M();
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(m).to.be.an('object');
+    });
+
+    it('created mixins can be invoked without new to instantiate instances', function () {
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass8) {
+                _inherits(M, _superclass8);
+
+                function M() {
+                    _classCallCheck(this, M);
+
+                    return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
+                }
+
+                return M;
+            }(superclass);
+        });
+        var m = M();
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(m).to.be.an('object');
+    });
+
+    it('arguments passed when invoking the mixin with new are passed on to the constructor', function () {
+        var xarg = void 0,
+            yarg = void 0,
+            zarg = void 0;
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass9) {
+                _inherits(M, _superclass9);
+
+                function M(x, y, z) {
+                    _classCallCheck(this, M);
+
+                    var _this9 = _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).call(this));
+
+                    xarg = x;
+                    yarg = y;
+                    zarg = z;
+                    return _this9;
+                }
+
+                return M;
+            }(superclass);
+        });
+
+        new M('x', 'y', 'z');
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(xarg).to.eq('x');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(yarg).to.eq('y');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(zarg).to.eq('z');
+    });
+
+    it('arguments passed when invoking the mixin without new are passed on to the constructor', function () {
+        var xarg = void 0,
+            yarg = void 0,
+            zarg = void 0;
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass10) {
+                _inherits(M, _superclass10);
+
+                function M(x, y, z) {
+                    _classCallCheck(this, M);
+
+                    var _this10 = _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).call(this));
+
+                    xarg = x;
+                    yarg = y;
+                    zarg = z;
+                    return _this10;
+                }
+
+                return M;
+            }(superclass);
+        });
+
+        new M('x', 'y', 'z');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(xarg).to.eq('x');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(yarg).to.eq('y');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(zarg).to.eq('z');
+    });
+
+    it('var args in constructor has correct length when invoking with new', function () {
+        var argsarg = void 0;
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass11) {
+                _inherits(M, _superclass11);
+
+                function M() {
+                    _classCallCheck(this, M);
+
+                    var _this11 = _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).call(this));
+
+                    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                        args[_key] = arguments[_key];
+                    }
+
+                    argsarg = args;
+                    return _this11;
+                }
+
+                return M;
+            }(superclass);
+        });
+
+        new M('x', 'y', 'z');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(argsarg.length).to.eq(3);
+
+        new M();
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(argsarg.length).to.eq(0);
+    });
+
+    it('var args in constructor has correct length when invoking without new', function () {
+        var argsarg = void 0;
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass12) {
+                _inherits(M, _superclass12);
+
+                function M() {
+                    _classCallCheck(this, M);
+
+                    var _this12 = _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).call(this));
+
+                    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                        args[_key2] = arguments[_key2];
+                    }
+
+                    argsarg = args;
+                    return _this12;
+                }
+
+                return M;
+            }(superclass);
+        });
+
+        M('x', 'y', 'z');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(argsarg.length).to.eq(3);
+
+        M();
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(argsarg.length).to.eq(0);
+    });
+
+    it('result of invoking constructor with new is instanceof mixin', function () {
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass13) {
+                _inherits(M, _superclass13);
+
+                function M() {
+                    _classCallCheck(this, M);
+
+                    return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
+                }
+
+                return M;
+            }(superclass);
+        });
+        var m = new M('x', 'y', 'z');
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(m instanceof M).to.eq(true);
+    });
+
+    it('result of invoking constructor without new is instanceof mixin', function () {
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass14) {
+                _inherits(M, _superclass14);
+
+                function M() {
+                    _classCallCheck(this, M);
+
+                    return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
+                }
+
+                return M;
+            }(superclass);
+        });
+        var m = M('x', 'y', 'z');
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(m instanceof M).to.eq(true);
+    });
+
+    it('picks up a static class method `constructor` and uses it in place of the default constructor', function () {
+        var check = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass15) {
+                _inherits(M, _superclass15);
+
+                function M() {
+                    _classCallCheck(this, M);
+
+                    return _possibleConstructorReturn(this, (M.__proto__ || Object.getPrototypeOf(M)).apply(this, arguments));
+                }
+
+                _createClass(M, null, [{
+                    key: 'constructor',
+                    value: function constructor() {
+                        // todo: missing superclass constructor invocation?
+                        log.log('Custom constructor');
+                        check();
+
+                        for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+                            args[_key3] = arguments[_key3];
+                        }
+
+                        return new (Function.prototype.bind.apply(this, [null].concat(args)))();
+                    }
+                }]);
+
+                return M;
+            }(superclass);
+        });
+
+        M();
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(check.called).to.eq(true);
+    });
+
+    it('has no side effects on it\'s arguments', function () {
+        var Test = function Test() {
+            _classCallCheck(this, Test);
+        };
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
+        var M = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Test);
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(M, 'mixin')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
+        var N = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Test, function (superclass) {
+            return function (_superclass16) {
+                _inherits(N, _superclass16);
+
+                function N() {
+                    _classCallCheck(this, N);
+
+                    return _possibleConstructorReturn(this, (N.__proto__ || Object.getPrototypeOf(N)).apply(this, arguments));
+                }
+
+                return N;
+            }(superclass);
+        });
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(N, 'mixin')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(Test, 'mixin')).to.eq(false);
+    });
 });
 
 describe('is(x , type)', function () {
-	it('is a function', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */]).to.be.a('function');
-	});
+    it('is a function', function () {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */]).to.be.a('function');
+    });
 
-	it('accepts one or two arguments', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */].length).to.eq(2);
-	});
+    it('accepts one or two arguments', function () {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */].length).to.eq(2);
+    });
 
-	it('tests whether object `x` implements `type`', function () {
-		var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass17) {
-				_inherits(X, _superclass17);
+    it('tests whether object `x` implements `type`', function () {
+        var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass17) {
+                _inherits(X, _superclass17);
 
-				function X() {
-					_classCallCheck(this, X);
+                function X() {
+                    _classCallCheck(this, X);
 
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
+                    return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+                }
 
-				return X;
-			}(superclass);
-		});
-		var x = new X();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x, X)).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x, Date)).to.eq(false);
-	});
-	it('tests whether class `x` implements `type`', function () {
-		var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass18) {
-				_inherits(Y, _superclass18);
+                return X;
+            }(superclass);
+        });
+        var x = new X();
 
-				function Y() {
-					_classCallCheck(this, Y);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x, X)).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(x, Date)).to.eq(false);
+    });
+    it('tests whether class `x` implements `type`', function () {
+        var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass18) {
+                _inherits(Y, _superclass18);
 
-					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-				}
+                function Y() {
+                    _classCallCheck(this, Y);
 
-				return Y;
-			}(superclass);
-		});
-		var X = function (_mix) {
-			_inherits(X, _mix);
+                    return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+                }
 
-			function X() {
-				_classCallCheck(this, X);
+                return Y;
+            }(superclass);
+        });
+        var X = function (_mix) {
+            _inherits(X, _mix);
 
-				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-			}
+            function X() {
+                _classCallCheck(this, X);
 
-			return X;
-		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y));
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X, Y)).to.eq(true);
-	});
-	it('tests whether mixin `x` implements `type`', function () {
-		var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass19) {
-				_inherits(Y, _superclass19);
+                return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+            }
 
-				function Y() {
-					_classCallCheck(this, Y);
+            return X;
+        }(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y));
 
-					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-				}
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X, Y)).to.eq(true);
+    });
+    it('tests whether mixin `x` implements `type`', function () {
+        var Y = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass19) {
+                _inherits(Y, _superclass19);
 
-				return Y;
-			}(superclass);
-		});
-		var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y, function (superclass) {
-			return function (_superclass20) {
-				_inherits(X, _superclass20);
+                function Y() {
+                    _classCallCheck(this, Y);
 
-				function X() {
-					_classCallCheck(this, X);
+                    return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+                }
 
-					return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-				}
+                return Y;
+            }(superclass);
+        });
+        var X = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Y, function (superclass) {
+            return function (_superclass20) {
+                _inherits(X, _superclass20);
 
-				return X;
-			}(superclass);
-		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X, Y)).to.eq(true);
-	});
-	it('for type == "mixin", tests whether `x` is a mixin', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-			_classCallCheck(this, X);
-		}, 'mixin')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass21) {
-				_inherits(Y, _superclass21);
+                function X() {
+                    _classCallCheck(this, X);
 
-				function Y() {
-					_classCallCheck(this, Y);
+                    return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+                }
 
-					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-				}
+                return X;
+            }(superclass);
+        });
 
-				return Y;
-			}(superclass);
-		}), 'mixin')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'mixin')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'mixin')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'mixin')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'mixin')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'mixin')).to.eq(false);
-	});
-	it('for type == "factory", tests whether `x` is a class factory', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-			_classCallCheck(this, X);
-		}, 'factory')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-			_classCallCheck(this, X);
-		}), 'factory')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix2) {
-			_inherits(X, _mix2);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(X, Y)).to.eq(true);
+    });
+    it('for type == "mixin", tests whether `x` is a mixin', function () {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+            _classCallCheck(this, X);
+        }, 'mixin')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass21) {
+                _inherits(Y, _superclass21);
 
-			function X() {
-				_classCallCheck(this, X);
+                function Y() {
+                    _classCallCheck(this, Y);
 
-				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-			}
+                    return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+                }
 
-			return X;
-		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'factory')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass22) {
-				_inherits(Y, _superclass22);
+                return Y;
+            }(superclass);
+        }), 'mixin')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'mixin')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'mixin')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'mixin')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'mixin')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'mixin')).to.eq(false);
+    });
+    it('for type == "factory", tests whether `x` is a class factory', function () {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+            _classCallCheck(this, X);
+        }, 'factory')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+            _classCallCheck(this, X);
+        }), 'factory')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix2) {
+            _inherits(X, _mix2);
 
-				function Y() {
-					_classCallCheck(this, Y);
+            function X() {
+                _classCallCheck(this, X);
 
-					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-				}
+                return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+            }
 
-				return Y;
-			}(superclass);
-		}), 'factory')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'factory')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'factory')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'factory')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'factory')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'factory')).to.eq(false);
-	});
-	it('for type == "function", tests whether `x` is a function', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-			_classCallCheck(this, X);
-		}, 'function')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-			_classCallCheck(this, X);
-		}), 'function')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix3) {
-			_inherits(X, _mix3);
+            return X;
+        }(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'factory')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass22) {
+                _inherits(Y, _superclass22);
 
-			function X() {
-				_classCallCheck(this, X);
+                function Y() {
+                    _classCallCheck(this, Y);
 
-				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-			}
+                    return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+                }
 
-			return X;
-		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'function')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass23) {
-				_inherits(Y, _superclass23);
+                return Y;
+            }(superclass);
+        }), 'factory')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'factory')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'factory')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'factory')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'factory')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'factory')).to.eq(false);
+    });
+    it('for type == "function", tests whether `x` is a function', function () {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+            _classCallCheck(this, X);
+        }, 'function')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+            _classCallCheck(this, X);
+        }), 'function')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix3) {
+            _inherits(X, _mix3);
 
-				function Y() {
-					_classCallCheck(this, Y);
+            function X() {
+                _classCallCheck(this, X);
 
-					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-				}
+                return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+            }
 
-				return Y;
-			}(superclass);
-		}), 'function')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'function')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'function')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'function')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'function')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'function')).to.eq(true);
-	});
-	it('for type == "object", tests whether `x` is an object', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-			_classCallCheck(this, X);
-		}, 'object')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-			_classCallCheck(this, X);
-		}), 'object')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix4) {
-			_inherits(X, _mix4);
+            return X;
+        }(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'function')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass23) {
+                _inherits(Y, _superclass23);
 
-			function X() {
-				_classCallCheck(this, X);
+                function Y() {
+                    _classCallCheck(this, Y);
 
-				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-			}
+                    return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+                }
 
-			return X;
-		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'object')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass24) {
-				_inherits(Y, _superclass24);
+                return Y;
+            }(superclass);
+        }), 'function')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'function')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'function')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'function')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'function')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'function')).to.eq(true);
+    });
+    it('for type == "object", tests whether `x` is an object', function () {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+            _classCallCheck(this, X);
+        }, 'object')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+            _classCallCheck(this, X);
+        }), 'object')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix4) {
+            _inherits(X, _mix4);
 
-				function Y() {
-					_classCallCheck(this, Y);
+            function X() {
+                _classCallCheck(this, X);
 
-					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-				}
+                return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+            }
 
-				return Y;
-			}(superclass);
-		}), 'object')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'object')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'object')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'object')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'object')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'object')).to.eq(false);
-	});
-	it('for type == "string", tests whether `x` is a string', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
-			_classCallCheck(this, X);
-		}, 'string')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
-			_classCallCheck(this, X);
-		}), 'string')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix5) {
-			_inherits(X, _mix5);
+            return X;
+        }(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'object')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass24) {
+                _inherits(Y, _superclass24);
 
-			function X() {
-				_classCallCheck(this, X);
+                function Y() {
+                    _classCallCheck(this, Y);
 
-				return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
-			}
+                    return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+                }
 
-			return X;
-		}(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'string')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass25) {
-				_inherits(Y, _superclass25);
+                return Y;
+            }(superclass);
+        }), 'object')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'object')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'object')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'object')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'object')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'object')).to.eq(false);
+    });
+    it('for type == "string", tests whether `x` is a string', function () {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function X() {
+            _classCallCheck(this, X);
+        }, 'string')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function X() {
+            _classCallCheck(this, X);
+        }), 'string')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (_mix5) {
+            _inherits(X, _mix5);
 
-				function Y() {
-					_classCallCheck(this, Y);
+            function X() {
+                _classCallCheck(this, X);
 
-					return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
-				}
+                return _possibleConstructorReturn(this, (X.__proto__ || Object.getPrototypeOf(X)).apply(this, arguments));
+            }
 
-				return Y;
-			}(superclass);
-		}), 'string')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'string')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'string')).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'string')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'string')).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'string')).to.eq(false);
-	});
+            return X;
+        }(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])()), 'string')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass25) {
+                _inherits(Y, _superclass25);
+
+                function Y() {
+                    _classCallCheck(this, Y);
+
+                    return _possibleConstructorReturn(this, (Y.__proto__ || Object.getPrototypeOf(Y)).apply(this, arguments));
+                }
+
+                return Y;
+            }(superclass);
+        }), 'string')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])({}, 'string')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])('Hi', 'string')).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function () {}, 'string')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x) {}, 'string')).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["b" /* is */])(function (x, y) {}, 'string')).to.eq(false);
+    });
 });
 
 describe('like(type)', function () {
-	it('is a function', function () {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */]).to.be.a('function');
-	});
-	it('tests whether `x` can be treated as `type` (has the same interface)', function () {
-		var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass26) {
-				_inherits(Looker, _superclass26);
+    it('is a function', function () {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */]).to.be.a('function');
+    });
+    it('tests whether `x` can be treated as `type` (has the same interface)', function () {
+        var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass26) {
+                _inherits(Looker, _superclass26);
 
-				function Looker() {
-					_classCallCheck(this, Looker);
+                function Looker() {
+                    _classCallCheck(this, Looker);
 
-					return _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).apply(this, arguments));
-				}
+                    return _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).apply(this, arguments));
+                }
 
-				_createClass(Looker, [{
-					key: 'look',
-					value: function look() {}
-				}]);
+                _createClass(Looker, [{
+                    key: 'look',
+                    value: function look() {}
+                }]);
 
-				return Looker;
-			}(superclass);
-		});
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])('Hi', Looker)).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(8, Looker)).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({}, Looker)).to.eq(false);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Looker(), Looker)).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
-			look: function look() {}
-		}, Looker)).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
-			walk: function walk() {}
-		}, Looker)).to.eq(false);
+                return Looker;
+            }(superclass);
+        });
 
-		var Base = function () {
-			function Base() {
-				_classCallCheck(this, Base);
-			}
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])('Hi', Looker)).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(8, Looker)).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({}, Looker)).to.eq(false);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Looker(), Looker)).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
+            look: function look() {}
+        }, Looker)).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])({
+            walk: function walk() {}
+        }, Looker)).to.eq(false);
 
-			_createClass(Base, [{
-				key: 'look',
-				value: function look() {}
-			}]);
+        var Base = function () {
+            function Base() {
+                _classCallCheck(this, Base);
+            }
 
-			return Base;
-		}();
+            _createClass(Base, [{
+                key: 'look',
+                value: function look() {}
+            }]);
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Base, Looker)).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Base(), Looker)).to.eq(true);
+            return Base;
+        }();
 
-		var Derived = function (_Base) {
-			_inherits(Derived, _Base);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Base, Looker)).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Base(), Looker)).to.eq(true);
 
-			function Derived() {
-				_classCallCheck(this, Derived);
+        var Derived = function (_Base) {
+            _inherits(Derived, _Base);
 
-				return _possibleConstructorReturn(this, (Derived.__proto__ || Object.getPrototypeOf(Derived)).apply(this, arguments));
-			}
+            function Derived() {
+                _classCallCheck(this, Derived);
 
-			return Derived;
-		}(Base);
+                return _possibleConstructorReturn(this, (Derived.__proto__ || Object.getPrototypeOf(Derived)).apply(this, arguments));
+            }
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Derived, Looker)).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Derived(), Looker)).to.eq(true);
-	});
+            return Derived;
+        }(Base);
 
-	it('allows mixins to be used as interfaces', function (done) {
-		var expected = 'Hello, World!';
-		var Thenable = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass27) {
-				_inherits(Thenable, _superclass27);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(Derived, Looker)).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(new Derived(), Looker)).to.eq(true);
+    });
 
-				function Thenable() {
-					_classCallCheck(this, Thenable);
+    it('allows mixins to be used as interfaces', function (done) {
+        var expected = 'Hello, World!';
+        var Thenable = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass27) {
+                _inherits(Thenable, _superclass27);
 
-					return _possibleConstructorReturn(this, (Thenable.__proto__ || Object.getPrototypeOf(Thenable)).apply(this, arguments));
-				}
+                function Thenable() {
+                    _classCallCheck(this, Thenable);
 
-				_createClass(Thenable, [{
-					key: 'then',
-					value: function then(results) {}
-				}]);
+                    return _possibleConstructorReturn(this, (Thenable.__proto__ || Object.getPrototypeOf(Thenable)).apply(this, arguments));
+                }
 
-				return Thenable;
-			}(superclass);
-		});
+                _createClass(Thenable, [{
+                    key: 'then',
+                    value: function then(results) {}
+                }]);
 
-		var MyPromise = function () {
-			function MyPromise() {
-				_classCallCheck(this, MyPromise);
-			}
+                return Thenable;
+            }(superclass);
+        });
 
-			_createClass(MyPromise, [{
-				key: 'then',
-				value: function then(resolve, reject) {
-					resolve(expected);
-				}
-			}]);
+        var MyPromise = function () {
+            function MyPromise() {
+                _classCallCheck(this, MyPromise);
+            }
 
-			return MyPromise;
-		}();
+            _createClass(MyPromise, [{
+                key: 'then',
+                value: function then(resolve, reject) {
+                    resolve(expected);
+                }
+            }]);
 
-		var promise = new MyPromise();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(promise, Thenable)).to.eq(true);
-		Promise.resolve(promise).then(function (result) {
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(result).to.eq(expected);
-			done();
-		});
-	});
+            return MyPromise;
+        }();
+
+        var promise = new MyPromise();
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["c" /* like */])(promise, Thenable)).to.eq(true);
+        Promise.resolve(promise).then(function (result) {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(result).to.eq(expected);
+            done();
+        });
+    });
 });
 
 describe('mix example', function () {
-	it('shows how to create a mixin using an es6 class', function () {
-		var constr = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
-		    _look = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
+    it('shows how to create a mixin using an es6 class', function () {
+        var constr = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
+        var _look = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
 
-		var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass28) {
-				_inherits(Looker, _superclass28);
+        var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass28) {
+                _inherits(Looker, _superclass28);
 
-				function Looker() {
-					_classCallCheck(this, Looker);
+                function Looker() {
+                    _classCallCheck(this, Looker);
 
-					var _this34 = _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).call(this));
+                    var _this34 = _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).call(this));
 
-					log.log('A looker is born!');
-					constr();
-					return _this34;
-				}
+                    log.log('A looker is born!');
+                    constr();
+                    return _this34;
+                }
 
-				_createClass(Looker, [{
-					key: 'look',
-					value: function look() {
-						log.log('Looking good!');
-						_look();
-					}
-				}]);
+                _createClass(Looker, [{
+                    key: 'look',
+                    value: function look() {
+                        log.log('Looking good!');
+                        _look();
+                    }
+                }]);
 
-				return Looker;
-			}(superclass);
-		});
+                return Looker;
+            }(superclass);
+        });
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(Looker).to.be.a('function');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(Looker).to.be.a('function');
 
-		var looker = new Looker();
+        var looker = new Looker();
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(looker).to.be.an('object');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(constr.called).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(looker).to.be.an('object');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(constr.called).to.eq(true);
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(looker).to.have.a.property('look');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(looker.look).to.be.a('function');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(looker).to.have.a.property('look');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(looker.look).to.be.a('function');
 
-		looker.look();
+        looker.look();
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_look.called).to.eq(true);
-	});
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_look.called).to.eq(true);
+    });
 
-	it('shows how to composes multiple mixins', function () {
-		var _look2 = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
-		    _walk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
-		    _talk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
-		var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass29) {
-				_inherits(Looker, _superclass29);
+    it('shows how to composes multiple mixins', function () {
+        var _look2 = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
+        var _walk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
+        var _talk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
+        var Looker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass29) {
+                _inherits(Looker, _superclass29);
 
-				function Looker() {
-					_classCallCheck(this, Looker);
+                function Looker() {
+                    _classCallCheck(this, Looker);
 
-					return _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).apply(this, arguments));
-				}
+                    return _possibleConstructorReturn(this, (Looker.__proto__ || Object.getPrototypeOf(Looker)).apply(this, arguments));
+                }
 
-				_createClass(Looker, [{
-					key: 'look',
-					value: function look() {
-						log.log('Looking good!');
-						_look2();
-					}
-				}]);
+                _createClass(Looker, [{
+                    key: 'look',
+                    value: function look() {
+                        log.log('Looking good!');
+                        _look2();
+                    }
+                }]);
 
-				return Looker;
-			}(superclass);
-		});
+                return Looker;
+            }(superclass);
+        });
 
-		var Walker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass30) {
-				_inherits(Walker, _superclass30);
+        var Walker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass30) {
+                _inherits(Walker, _superclass30);
 
-				function Walker() {
-					_classCallCheck(this, Walker);
+                function Walker() {
+                    _classCallCheck(this, Walker);
 
-					return _possibleConstructorReturn(this, (Walker.__proto__ || Object.getPrototypeOf(Walker)).apply(this, arguments));
-				}
+                    return _possibleConstructorReturn(this, (Walker.__proto__ || Object.getPrototypeOf(Walker)).apply(this, arguments));
+                }
 
-				_createClass(Walker, [{
-					key: 'walk',
-					value: function walk() {
-						log.log('Step, step, step...');
-						_walk();
-					}
-				}]);
+                _createClass(Walker, [{
+                    key: 'walk',
+                    value: function walk() {
+                        log.log('Step, step, step...');
+                        _walk();
+                    }
+                }]);
 
-				return Walker;
-			}(superclass);
-		});
+                return Walker;
+            }(superclass);
+        });
 
-		var Talker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass31) {
-				_inherits(Talker, _superclass31);
+        var Talker = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass31) {
+                _inherits(Talker, _superclass31);
 
-				function Talker() {
-					_classCallCheck(this, Talker);
+                function Talker() {
+                    _classCallCheck(this, Talker);
 
-					return _possibleConstructorReturn(this, (Talker.__proto__ || Object.getPrototypeOf(Talker)).apply(this, arguments));
-				}
+                    return _possibleConstructorReturn(this, (Talker.__proto__ || Object.getPrototypeOf(Talker)).apply(this, arguments));
+                }
 
-				_createClass(Talker, [{
-					key: 'talk',
-					value: function talk() {
-						log.log('Blah, blah, blah...');
-						_talk();
-					}
-				}]);
+                _createClass(Talker, [{
+                    key: 'talk',
+                    value: function talk() {
+                        log.log('Blah, blah, blah...');
+                        _talk();
+                    }
+                }]);
 
-				return Talker;
-			}(superclass);
-		});
+                return Talker;
+            }(superclass);
+        });
 
-		var duckTalk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
+        var duckTalk = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
 
-		var Duck = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Looker, Walker, Talker, function (superclass) {
-			return function (_superclass32) {
-				_inherits(Duck, _superclass32);
+        var Duck = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(Looker, Walker, Talker, function (superclass) {
+            return function (_superclass32) {
+                _inherits(Duck, _superclass32);
 
-				function Duck() {
-					_classCallCheck(this, Duck);
+                function Duck() {
+                    _classCallCheck(this, Duck);
 
-					return _possibleConstructorReturn(this, (Duck.__proto__ || Object.getPrototypeOf(Duck)).apply(this, arguments));
-				}
+                    return _possibleConstructorReturn(this, (Duck.__proto__ || Object.getPrototypeOf(Duck)).apply(this, arguments));
+                }
 
-				_createClass(Duck, [{
-					key: 'talk',
-					value: function talk() {
-						log.log('Quack, quack, quack!');
-						duckTalk();
-						_get(Duck.prototype.__proto__ || Object.getPrototypeOf(Duck.prototype), 'talk', this).call(this);
-					}
-				}]);
+                _createClass(Duck, [{
+                    key: 'talk',
+                    value: function talk() {
+                        log.log('Quack, quack, quack!');
+                        duckTalk();
+                        _get(Duck.prototype.__proto__ || Object.getPrototypeOf(Duck.prototype), 'talk', this).call(this);
+                    }
+                }]);
 
-				return Duck;
-			}(superclass);
-		});
+                return Duck;
+            }(superclass);
+        });
 
-		var duck = new Duck();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.be.an('object');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck instanceof Duck).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck instanceof Looker).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck instanceof Walker).to.eq(false);
+        var duck = new Duck();
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.have.a.property('look');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck.look).to.be.a('function');
-		duck.look();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_look2.called).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.be.an('object');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck instanceof Duck).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck instanceof Looker).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck instanceof Walker).to.eq(false);
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.have.a.property('walk');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck.walk).to.be.a('function');
-		duck.walk();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_walk.called).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.have.a.property('look');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck.look).to.be.a('function');
+        duck.look();
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_look2.called).to.eq(true);
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.have.a.property('talk');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck.talk).to.be.a('function');
-		duck.talk();
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_talk.called).to.eq(true);
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duckTalk.called).to.eq(true);
-	});
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.have.a.property('walk');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck.walk).to.be.a('function');
+        duck.walk();
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_walk.called).to.eq(true);
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck).to.have.a.property('talk');
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duck.talk).to.be.a('function');
+        duck.talk();
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(_talk.called).to.eq(true);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(duckTalk.called).to.eq(true);
+    });
 });
 
 describe('type checked mixins with tcomb', function () {
-	it('shows how to create an immutable, type-checked mixin with tcomb', function () {
-		// This is experimental... I think it shows we need to be able to hook into the
-		// mixin process itself. To enable this example I already added a hook for the
-		// ES5 constructor function: the `static constructor` will be picked up by `mix`
-		// and used as the result instead of the default generated constructor.
-		var a = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])(),
-		    b = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
-		var Person = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
-			return function (_superclass33) {
-				_inherits(Person, _superclass33);
+    it('shows how to create an immutable, type-checked mixin with tcomb', function () {
+        // This is experimental... I think it shows we need to be able to hook into the
+        // mixin process itself. To enable this example I already added a hook for the
+        // ES5 constructor function: the `static constructor` will be picked up by `mix`
+        // and used as the result instead of the default generated constructor.
+        var a = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
+        var b = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_sinon__["spy"])();
+        var Person = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4____["a" /* mix */])(function (superclass) {
+            return function (_superclass33) {
+                _inherits(Person, _superclass33);
 
-				_createClass(Person, null, [{
-					key: 'testA',
-					value: function testA() {
-						a();
-						log.log('A');
-					}
-				}, {
-					key: 'testB',
-					value: function testB() {
-						this.testA();
-						b();
-						log.log('B');
-					}
-				}, {
-					key: 'constructor',
-					value: function constructor() {
-						for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-							args[_key4] = arguments[_key4];
-						}
+                _createClass(Person, null, [{
+                    key: 'testA',
+                    value: function testA() {
+                        a();
+                        log.log('A');
+                    }
+                }, {
+                    key: 'testB',
+                    value: function testB() {
+                        this.testA();
+                        b();
+                        log.log('B');
+                    }
+                }, {
+                    key: 'constructor',
+                    value: function constructor() {
+                        for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+                            args[_key4] = arguments[_key4];
+                        }
 
-						return this.type(new (Function.prototype.bind.apply(this, [null].concat(args)))());
-					}
-				}, {
-					key: 'type',
-					get: function get() {
-						if (!this._tcomb) this._tcomb = __WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.struct({
-							name: __WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.String, // required string
-							surname: __WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.maybe(__WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.String), // optional string
-							age: __WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.Integer, // required integer
-							tags: __WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.list(__WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.String) // a list of strings
-						}, 'Person');
-						return this._tcomb;
-					}
-				}]);
+                        // todo: missing superclass constructor call?
+                        return this.type(new (Function.prototype.bind.apply(this, [null].concat(args)))());
+                    }
+                }, {
+                    key: 'type',
+                    get: function get() {
+                        if (!this._tcomb) this._tcomb = __WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.struct({
+                            name: __WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.String, // required string
+                            surname: __WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.maybe(__WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.String), // optional string
+                            age: __WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.Integer, // required integer
+                            tags: __WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.list(__WEBPACK_IMPORTED_MODULE_3_tcomb___default.a.String) // a list of strings
+                        }, 'Person');
+                        return this._tcomb;
+                    }
+                }]);
 
-				function Person() {
-					var _ref;
+                function Person() {
+                    var _ref;
 
-					_classCallCheck(this, Person);
+                    _classCallCheck(this, Person);
 
-					for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-						args[_key5] = arguments[_key5];
-					}
+                    for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+                        args[_key5] = arguments[_key5];
+                    }
 
-					var _this39 = _possibleConstructorReturn(this, (_ref = Person.__proto__ || Object.getPrototypeOf(Person)).call.apply(_ref, [this].concat(args)));
+                    var _this39 = _possibleConstructorReturn(this, (_ref = Person.__proto__ || Object.getPrototypeOf(Person)).call.apply(_ref, [this].concat(args)));
 
-					Object.assign.apply(Object, [_this39].concat(args));
-					return _this39;
-				}
+                    Object.assign.apply(Object, [_this39].concat(args));
+                    return _this39;
+                }
 
-				return Person;
-			}(superclass);
-		});
+                return Person;
+            }(superclass);
+        });
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(function () {
-			var person = Person({
-				surname: 'Canti'
-			});
-		}).to.throw(TypeError); // required fields missing
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(function () {
+            var person = Person({
+                surname: 'Canti'
+            });
+        }).to.throw(TypeError); // required fields missing
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(function () {
-			var person = Person({
-				name: 'Stijn',
-				age: 40,
-				tags: ['developer']
-			});
-		}).to.not.throw(); // ok
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(function () {
+            var person = Person({
+                name: 'Stijn',
+                age: 40,
+                tags: ['developer']
+            });
+        }).to.not.throw(); // ok
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(function () {
-			var person = Person({
-				name: 'Stijn',
-				age: 40,
-				tags: ['developer']
-			});
-			person.age = 41;
-		}).to.throw(TypeError); // immutable
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(function () {
+            var person = Person({
+                name: 'Stijn',
+                age: 40,
+                tags: ['developer']
+            });
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(function () {
-			Person.testB();
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(a.called).to.eq(true);
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(b.called).to.eq(true);
-		}).to.not.throw(); // ok
-	});
+            person.age = 41;
+        }).to.throw(TypeError); // immutable
+
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(function () {
+            Person.testB();
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(a.called).to.eq(true);
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_chai__["expect"])(b.called).to.eq(true);
+        }).to.not.throw(); // ok
+    });
 });
 
 /***/ }),
@@ -16695,7 +16743,7 @@ module.exports = function getOwnEnumerableProperties(obj) {
  * Dependencies that are used for multiple exports are required here only once
  */
 
-var pathval = __webpack_require__(130);
+var pathval = __webpack_require__(132);
 
 /*!
  * test utility
@@ -20003,1111 +20051,7 @@ exports.install = function install(target, now, toFake, loopLimit) {
 /* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-/* !
- * Chai - pathval utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * @see https://github.com/logicalparadox/filtr
- * MIT Licensed
- */
-
-/**
- * ### .hasProperty(object, name)
- *
- * This allows checking whether an object has own
- * or inherited from prototype chain named property.
- *
- * Basically does the same thing as the `in`
- * operator but works properly with null/undefined values
- * and other primitives.
- *
- *     var obj = {
- *         arr: ['a', 'b', 'c']
- *       , str: 'Hello'
- *     }
- *
- * The following would be the results.
- *
- *     hasProperty(obj, 'str');  // true
- *     hasProperty(obj, 'constructor');  // true
- *     hasProperty(obj, 'bar');  // false
- *
- *     hasProperty(obj.str, 'length'); // true
- *     hasProperty(obj.str, 1);  // true
- *     hasProperty(obj.str, 5);  // false
- *
- *     hasProperty(obj.arr, 'length');  // true
- *     hasProperty(obj.arr, 2);  // true
- *     hasProperty(obj.arr, 3);  // false
- *
- * @param {Object} object
- * @param {String|Symbol} name
- * @returns {Boolean} whether it exists
- * @namespace Utils
- * @name hasProperty
- * @api public
- */
-
-function hasProperty(obj, name) {
-  if (typeof obj === 'undefined' || obj === null) {
-    return false;
-  }
-
-  // The `in` operator does not work with primitives.
-  return name in Object(obj);
-}
-
-/* !
- * ## parsePath(path)
- *
- * Helper function used to parse string object
- * paths. Use in conjunction with `internalGetPathValue`.
- *
- *      var parsed = parsePath('myobject.property.subprop');
- *
- * ### Paths:
- *
- * * Can be infinitely deep and nested.
- * * Arrays are also valid using the formal `myobject.document[3].property`.
- * * Literal dots and brackets (not delimiter) must be backslash-escaped.
- *
- * @param {String} path
- * @returns {Object} parsed
- * @api private
- */
-
-function parsePath(path) {
-  var str = path.replace(/([^\\])\[/g, '$1.[');
-  var parts = str.match(/(\\\.|[^.]+?)+/g);
-  return parts.map(function mapMatches(value) {
-    var regexp = /^\[(\d+)\]$/;
-    var mArr = regexp.exec(value);
-    var parsed = null;
-    if (mArr) {
-      parsed = { i: parseFloat(mArr[1]) };
-    } else {
-      parsed = { p: value.replace(/\\([.\[\]])/g, '$1') };
-    }
-
-    return parsed;
-  });
-}
-
-/* !
- * ## internalGetPathValue(obj, parsed[, pathDepth])
- *
- * Helper companion function for `.parsePath` that returns
- * the value located at the parsed address.
- *
- *      var value = getPathValue(obj, parsed);
- *
- * @param {Object} object to search against
- * @param {Object} parsed definition from `parsePath`.
- * @param {Number} depth (nesting level) of the property we want to retrieve
- * @returns {Object|Undefined} value
- * @api private
- */
-
-function internalGetPathValue(obj, parsed, pathDepth) {
-  var temporaryValue = obj;
-  var res = null;
-  pathDepth = (typeof pathDepth === 'undefined' ? parsed.length : pathDepth);
-
-  for (var i = 0; i < pathDepth; i++) {
-    var part = parsed[i];
-    if (temporaryValue) {
-      if (typeof part.p === 'undefined') {
-        temporaryValue = temporaryValue[part.i];
-      } else {
-        temporaryValue = temporaryValue[part.p];
-      }
-
-      if (i === (pathDepth - 1)) {
-        res = temporaryValue;
-      }
-    }
-  }
-
-  return res;
-}
-
-/* !
- * ## internalSetPathValue(obj, value, parsed)
- *
- * Companion function for `parsePath` that sets
- * the value located at a parsed address.
- *
- *  internalSetPathValue(obj, 'value', parsed);
- *
- * @param {Object} object to search and define on
- * @param {*} value to use upon set
- * @param {Object} parsed definition from `parsePath`
- * @api private
- */
-
-function internalSetPathValue(obj, val, parsed) {
-  var tempObj = obj;
-  var pathDepth = parsed.length;
-  var part = null;
-  // Here we iterate through every part of the path
-  for (var i = 0; i < pathDepth; i++) {
-    var propName = null;
-    var propVal = null;
-    part = parsed[i];
-
-    // If it's the last part of the path, we set the 'propName' value with the property name
-    if (i === (pathDepth - 1)) {
-      propName = typeof part.p === 'undefined' ? part.i : part.p;
-      // Now we set the property with the name held by 'propName' on object with the desired val
-      tempObj[propName] = val;
-    } else if (typeof part.p !== 'undefined' && tempObj[part.p]) {
-      tempObj = tempObj[part.p];
-    } else if (typeof part.i !== 'undefined' && tempObj[part.i]) {
-      tempObj = tempObj[part.i];
-    } else {
-      // If the obj doesn't have the property we create one with that name to define it
-      var next = parsed[i + 1];
-      // Here we set the name of the property which will be defined
-      propName = typeof part.p === 'undefined' ? part.i : part.p;
-      // Here we decide if this property will be an array or a new object
-      propVal = typeof next.p === 'undefined' ? [] : {};
-      tempObj[propName] = propVal;
-      tempObj = tempObj[propName];
-    }
-  }
-}
-
-/**
- * ### .getPathInfo(object, path)
- *
- * This allows the retrieval of property info in an
- * object given a string path.
- *
- * The path info consists of an object with the
- * following properties:
- *
- * * parent - The parent object of the property referenced by `path`
- * * name - The name of the final property, a number if it was an array indexer
- * * value - The value of the property, if it exists, otherwise `undefined`
- * * exists - Whether the property exists or not
- *
- * @param {Object} object
- * @param {String} path
- * @returns {Object} info
- * @namespace Utils
- * @name getPathInfo
- * @api public
- */
-
-function getPathInfo(obj, path) {
-  var parsed = parsePath(path);
-  var last = parsed[parsed.length - 1];
-  var info = {
-    parent: parsed.length > 1 ? internalGetPathValue(obj, parsed, parsed.length - 1) : obj,
-    name: last.p || last.i,
-    value: internalGetPathValue(obj, parsed),
-  };
-  info.exists = hasProperty(info.parent, info.name);
-
-  return info;
-}
-
-/**
- * ### .getPathValue(object, path)
- *
- * This allows the retrieval of values in an
- * object given a string path.
- *
- *     var obj = {
- *         prop1: {
- *             arr: ['a', 'b', 'c']
- *           , str: 'Hello'
- *         }
- *       , prop2: {
- *             arr: [ { nested: 'Universe' } ]
- *           , str: 'Hello again!'
- *         }
- *     }
- *
- * The following would be the results.
- *
- *     getPathValue(obj, 'prop1.str'); // Hello
- *     getPathValue(obj, 'prop1.att[2]'); // b
- *     getPathValue(obj, 'prop2.arr[0].nested'); // Universe
- *
- * @param {Object} object
- * @param {String} path
- * @returns {Object} value or `undefined`
- * @namespace Utils
- * @name getPathValue
- * @api public
- */
-
-function getPathValue(obj, path) {
-  var info = getPathInfo(obj, path);
-  return info.value;
-}
-
-/**
- * ### .setPathValue(object, path, value)
- *
- * Define the value in an object at a given string path.
- *
- * ```js
- * var obj = {
- *     prop1: {
- *         arr: ['a', 'b', 'c']
- *       , str: 'Hello'
- *     }
- *   , prop2: {
- *         arr: [ { nested: 'Universe' } ]
- *       , str: 'Hello again!'
- *     }
- * };
- * ```
- *
- * The following would be acceptable.
- *
- * ```js
- * var properties = require('tea-properties');
- * properties.set(obj, 'prop1.str', 'Hello Universe!');
- * properties.set(obj, 'prop1.arr[2]', 'B');
- * properties.set(obj, 'prop2.arr[0].nested.value', { hello: 'universe' });
- * ```
- *
- * @param {Object} object
- * @param {String} path
- * @param {Mixed} value
- * @api private
- */
-
-function setPathValue(obj, path, val) {
-  var parsed = parsePath(path);
-  internalSetPathValue(obj, val, parsed);
-  return obj;
-}
-
-module.exports = {
-  hasProperty: hasProperty,
-  getPathInfo: getPathInfo,
-  getPathValue: getPathValue,
-  setPathValue: setPathValue,
-};
-
-
-/***/ }),
-/* 131 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*global Blob */
-
-
-exports.isSupported = (function () {
-    try {
-        return !!new Blob();
-    } catch (e) {
-        return false;
-    }
-}());
-
-
-/***/ }),
-/* 132 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var canColor = typeof process !== "undefined";
-
-function colorize(str, color) {
-    if (!canColor) {
-        return str;
-    }
-
-    return "\x1b[" + color + "m" + str + "\x1b[0m";
-}
-
-exports.red = function (str) {
-    return colorize(str, 31);
-};
-
-exports.green = function (str) {
-    return colorize(str, 32);
-};
-
-
-/***/ }),
-/* 133 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var getPropertyDescriptor = __webpack_require__(16);
-
-var slice = [].slice;
-var useLeftMostCallback = -1;
-var useRightMostCallback = -2;
-
-function throwsException(fake, error, message) {
-    if (typeof error === "string") {
-        fake.exception = new Error(message || "");
-        fake.exception.name = error;
-    } else if (!error) {
-        fake.exception = new Error("Error");
-    } else {
-        fake.exception = error;
-    }
-}
-
-function isPropertyConfigurable(obj, propName) {
-    var propertyDescriptor = getPropertyDescriptor(obj, propName);
-
-    return propertyDescriptor ? propertyDescriptor.configurable : true;
-}
-
-module.exports = {
-    callsFake: function callsFake(fake, fn) {
-        fake.fakeFn = fn;
-    },
-
-    callsArg: function callsArg(fake, pos) {
-        if (typeof pos !== "number") {
-            throw new TypeError("argument index is not number");
-        }
-
-        fake.callArgAt = pos;
-        fake.callbackArguments = [];
-        fake.callbackContext = undefined;
-        fake.callArgProp = undefined;
-        fake.callbackAsync = false;
-    },
-
-    callsArgOn: function callsArgOn(fake, pos, context) {
-        if (typeof pos !== "number") {
-            throw new TypeError("argument index is not number");
-        }
-
-        fake.callArgAt = pos;
-        fake.callbackArguments = [];
-        fake.callbackContext = context;
-        fake.callArgProp = undefined;
-        fake.callbackAsync = false;
-    },
-
-    callsArgWith: function callsArgWith(fake, pos) {
-        if (typeof pos !== "number") {
-            throw new TypeError("argument index is not number");
-        }
-
-        fake.callArgAt = pos;
-        fake.callbackArguments = slice.call(arguments, 2);
-        fake.callbackContext = undefined;
-        fake.callArgProp = undefined;
-        fake.callbackAsync = false;
-    },
-
-    callsArgOnWith: function callsArgWith(fake, pos, context) {
-        if (typeof pos !== "number") {
-            throw new TypeError("argument index is not number");
-        }
-
-        fake.callArgAt = pos;
-        fake.callbackArguments = slice.call(arguments, 3);
-        fake.callbackContext = context;
-        fake.callArgProp = undefined;
-        fake.callbackAsync = false;
-    },
-
-    usingPromise: function usingPromise(fake, promiseLibrary) {
-        fake.promiseLibrary = promiseLibrary;
-    },
-
-    yields: function (fake) {
-        fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice.call(arguments, 1);
-        fake.callbackContext = undefined;
-        fake.callArgProp = undefined;
-        fake.callbackAsync = false;
-    },
-
-    yieldsRight: function (fake) {
-        fake.callArgAt = useRightMostCallback;
-        fake.callbackArguments = slice.call(arguments, 1);
-        fake.callbackContext = undefined;
-        fake.callArgProp = undefined;
-        fake.callbackAsync = false;
-    },
-
-    yieldsOn: function (fake, context) {
-        fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice.call(arguments, 2);
-        fake.callbackContext = context;
-        fake.callArgProp = undefined;
-        fake.callbackAsync = false;
-    },
-
-    yieldsTo: function (fake, prop) {
-        fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice.call(arguments, 2);
-        fake.callbackContext = undefined;
-        fake.callArgProp = prop;
-        fake.callbackAsync = false;
-    },
-
-    yieldsToOn: function (fake, prop, context) {
-        fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice.call(arguments, 3);
-        fake.callbackContext = context;
-        fake.callArgProp = prop;
-        fake.callbackAsync = false;
-    },
-
-    throws: throwsException,
-    throwsException: throwsException,
-
-    returns: function returns(fake, value) {
-        fake.returnValue = value;
-        fake.resolve = false;
-        fake.reject = false;
-        fake.returnValueDefined = true;
-        fake.exception = undefined;
-        fake.fakeFn = undefined;
-    },
-
-    returnsArg: function returnsArg(fake, pos) {
-        if (typeof pos !== "number") {
-            throw new TypeError("argument index is not number");
-        }
-
-        fake.returnArgAt = pos;
-    },
-
-    throwsArg: function throwsArg(fake, pos) {
-        if (typeof pos !== "number") {
-            throw new TypeError("argument index is not number");
-        }
-
-        fake.throwArgAt = pos;
-    },
-
-    returnsThis: function returnsThis(fake) {
-        fake.returnThis = true;
-    },
-
-    resolves: function resolves(fake, value) {
-        fake.returnValue = value;
-        fake.resolve = true;
-        fake.reject = false;
-        fake.returnValueDefined = true;
-        fake.exception = undefined;
-        fake.fakeFn = undefined;
-    },
-
-    rejects: function rejects(fake, error, message) {
-        var reason;
-        if (typeof error === "string") {
-            reason = new Error(message || "");
-            reason.name = error;
-        } else if (!error) {
-            reason = new Error("Error");
-        } else {
-            reason = error;
-        }
-        fake.returnValue = reason;
-        fake.resolve = false;
-        fake.reject = true;
-        fake.returnValueDefined = true;
-        fake.exception = undefined;
-        fake.fakeFn = undefined;
-
-        return fake;
-    },
-
-    callThrough: function callThrough(fake) {
-        fake.callsThrough = true;
-    },
-
-    get: function get(fake, getterFunction) {
-        var rootStub = fake.stub || fake;
-
-        Object.defineProperty(rootStub.rootObj, rootStub.propName, {
-            get: getterFunction,
-            configurable: isPropertyConfigurable(rootStub.rootObj, rootStub.propName)
-        });
-
-        return fake;
-    },
-
-    set: function set(fake, setterFunction) {
-        var rootStub = fake.stub || fake;
-
-        Object.defineProperty(rootStub.rootObj, rootStub.propName, { // eslint-disable-line accessor-pairs
-            set: setterFunction,
-            configurable: isPropertyConfigurable(rootStub.rootObj, rootStub.propName)
-        });
-
-        return fake;
-    },
-
-    value: function value(fake, newVal) {
-        var rootStub = fake.stub || fake;
-
-        Object.defineProperty(rootStub.rootObj, rootStub.propName, {
-            value: newVal,
-            enumerable: true,
-            configurable: isPropertyConfigurable(rootStub.rootObj, rootStub.propName)
-        });
-
-        return fake;
-    }
-};
-
-function createAsyncVersion(syncFnName) {
-    return function () {
-        var result = module.exports[syncFnName].apply(this, arguments);
-        this.callbackAsync = true;
-        return result;
-    };
-}
-
-// create asynchronous versions of callsArg* and yields* methods
-Object.keys(module.exports).forEach(function (method) {
-    // need to avoid creating anotherasync versions of the newly added async methods
-    if (method.match(/^(callsArg|yields)/) && !method.match(/Async/)) {
-        module.exports[method + "Async"] = createAsyncVersion(method);
-    }
-});
-
-
-/***/ }),
-/* 134 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var collectOwnMethods = __webpack_require__(64);
-var deprecated = __webpack_require__(41);
-var getPropertyDescriptor = __webpack_require__(16);
-var stubNonFunctionProperty = __webpack_require__(139);
-var sinonStub = __webpack_require__(24);
-var throwOnFalsyObject = __webpack_require__(68);
-
-// This is deprecated and will be removed in a future version of sinon.
-// We will only consider pull requests that fix serious bugs in the implementation
-function sandboxStub(object, property/*, value*/) {
-    deprecated.printWarning(
-      "sandbox.stub(obj, 'meth', val) is deprecated and will be removed from " +
-      "the public API in a future version of sinon." +
-      "\n Use sandbox.stub(obj, 'meth').callsFake(fn) instead in order to stub a function." +
-      "\n Use sandbox.stub(obj, 'meth').value(fn) instead in order to stub a non-function value."
-    );
-
-    throwOnFalsyObject.apply(null, arguments);
-
-    var actualDescriptor = getPropertyDescriptor(object, property);
-    var isStubbingEntireObject = typeof property === "undefined" && typeof object === "object";
-    var isStubbingNonFuncProperty = typeof object === "object"
-                                    && typeof property !== "undefined"
-                                    && (typeof actualDescriptor === "undefined"
-                                    || typeof actualDescriptor.value !== "function");
-
-
-    // When passing a value as third argument it will be applied to stubNonFunctionProperty
-    var stubbed = isStubbingNonFuncProperty ?
-                    stubNonFunctionProperty.apply(null, arguments) :
-                    sinonStub.apply(null, arguments);
-
-    if (isStubbingEntireObject) {
-        var ownMethods = collectOwnMethods(stubbed);
-        ownMethods.forEach(this.add.bind(this));
-        if (this.promiseLibrary) {
-            ownMethods.forEach(this.addUsingPromise.bind(this));
-        }
-    } else {
-        this.add(stubbed);
-        if (this.promiseLibrary) {
-            stubbed.usingPromise(this.promiseLibrary);
-        }
-    }
-
-    return stubbed;
-}
-
-module.exports = sandboxStub;
-
-
-/***/ }),
-/* 135 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var extend = __webpack_require__(15);
-var sinonCollection = __webpack_require__(65);
-var sinonMatch = __webpack_require__(14);
-var sinonAssert = __webpack_require__(40);
-var sinonClock = __webpack_require__(46);
-var fakeServer = __webpack_require__(45);
-var fakeXhr = __webpack_require__(47);
-var fakeServerWithClock = __webpack_require__(75);
-
-var push = [].push;
-
-var sinonSandbox = Object.create(sinonCollection);
-
-function exposeValue(sandbox, config, key, value) {
-    if (!value) {
-        return;
-    }
-
-    if (config.injectInto && !(key in config.injectInto)) {
-        config.injectInto[key] = value;
-        sandbox.injectedKeys.push(key);
-    } else {
-        push.call(sandbox.args, value);
-    }
-}
-
-function prepareSandboxFromConfig(config) {
-    var sandbox = Object.create(sinonSandbox);
-
-    if (config.useFakeServer) {
-        if (typeof config.useFakeServer === "object") {
-            sandbox.serverPrototype = config.useFakeServer;
-        }
-
-        sandbox.useFakeServer();
-    }
-
-    if (config.useFakeTimers) {
-        if (typeof config.useFakeTimers === "object") {
-            sandbox.useFakeTimers.apply(sandbox, config.useFakeTimers);
-        } else {
-            sandbox.useFakeTimers();
-        }
-    }
-
-    return sandbox;
-}
-
-extend(sinonSandbox, {
-    useFakeTimers: function useFakeTimers() {
-        this.clock = sinonClock.useFakeTimers.apply(null, arguments);
-
-        return this.add(this.clock);
-    },
-
-    serverPrototype: fakeServerWithClock,
-
-    useFakeServer: function useFakeServer() {
-        var proto = this.serverPrototype || fakeServer;
-
-        if (!proto || !proto.create) {
-            return null;
-        }
-
-        this.server = proto.create();
-        return this.add(this.server);
-    },
-
-    useFakeXMLHttpRequest: function useFakeXMLHttpRequest() {
-        var xhr = fakeXhr.useFakeXMLHttpRequest();
-        return this.add(xhr);
-    },
-
-    inject: function (obj) {
-        sinonCollection.inject.call(this, obj);
-
-        if (this.clock) {
-            obj.clock = this.clock;
-        }
-
-        if (this.server) {
-            obj.server = this.server;
-            obj.requests = this.server.requests;
-        }
-
-        obj.match = sinonMatch;
-
-        return obj;
-    },
-
-    usingPromise: function (promiseLibrary) {
-
-        this.promiseLibrary = promiseLibrary;
-
-        return this;
-    },
-
-    restore: function () {
-        if (arguments.length) {
-            throw new Error("sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()");
-        }
-
-        sinonCollection.restore.apply(this, arguments);
-        this.restoreContext();
-    },
-
-    restoreContext: function () {
-        var injectedKeys = this.injectedKeys;
-        var injectInto = this.injectInto;
-
-        if (!injectedKeys) {
-            return;
-        }
-
-        injectedKeys.forEach(function (injectedKey) {
-            delete injectInto[injectedKey];
-        });
-
-        injectedKeys = [];
-    },
-
-    create: function (config) {
-        if (!config) {
-            return Object.create(sinonSandbox);
-        }
-
-        var sandbox = prepareSandboxFromConfig(config);
-        sandbox.args = sandbox.args || [];
-        sandbox.injectedKeys = [];
-        sandbox.injectInto = config.injectInto;
-        var exposed = sandbox.inject({});
-
-        if (config.properties) {
-            config.properties.forEach(function (prop) {
-                var value = exposed[prop] || prop === "sandbox" && sandbox;
-                exposeValue(sandbox, config, prop, value);
-            });
-        } else {
-            exposeValue(sandbox, config, "sandbox");
-        }
-
-        return sandbox;
-    },
-
-    match: sinonMatch,
-
-    assert: sinonAssert
-});
-
-module.exports = sinonSandbox;
-
-
-/***/ }),
-/* 136 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var color = __webpack_require__(132);
-var timesInWords = __webpack_require__(34);
-var sinonFormat = __webpack_require__(22);
-var sinonMatch = __webpack_require__(14);
-var jsDiff = __webpack_require__(124);
-var push = Array.prototype.push;
-
-function colorSinonMatchText(matcher, calledArg, calledArgMessage) {
-    if (!matcher.test(calledArg)) {
-        matcher.message = color.red(matcher.message);
-        if (calledArgMessage) {
-            calledArgMessage = color.green(calledArgMessage);
-        }
-    }
-    return calledArgMessage + " " + matcher.message;
-}
-
-function colorDiffText(diff) {
-    var objects = diff.map(function (part) {
-        var text = part.value;
-        if (part.added) {
-            text = color.green(text);
-        } else if (part.removed) {
-            text = color.red(text);
-        }
-        if (diff.length === 2) {
-            text += " "; // format simple diffs
-        }
-        return text;
-    });
-    return objects.join("");
-}
-
-module.exports = {
-    c: function (spyInstance) {
-        return timesInWords(spyInstance.callCount);
-    },
-
-    n: function (spyInstance) {
-        return spyInstance.toString();
-    },
-
-    D: function (spyInstance, args) {
-        var message = "";
-
-        for (var i = 0, l = spyInstance.callCount; i < l; ++i) {
-            // describe multiple calls
-            if (l > 1) {
-                if (i > 0) {
-                    message += "\n";
-                }
-                message += "Call " + (i + 1) + ":";
-            }
-            var calledArgs = spyInstance.getCall(i).args;
-            for (var j = 0; j < calledArgs.length || j < args.length; ++j) {
-                message += "\n";
-                var calledArgMessage = j < calledArgs.length ? sinonFormat(calledArgs[j]) : "";
-                if (sinonMatch.isMatcher(args[j])) {
-                    message += colorSinonMatchText(args[j], calledArgs[j], calledArgMessage);
-                } else {
-                    var expectedArgMessage = j < args.length ? sinonFormat(args[j]) : "";
-                    var diff = jsDiff.diffJson(calledArgMessage, expectedArgMessage);
-                    message += colorDiffText(diff);
-                }
-            }
-        }
-
-        return message;
-    },
-
-    C: function (spyInstance) {
-        var calls = [];
-
-        for (var i = 0, l = spyInstance.callCount; i < l; ++i) {
-            var stringifiedCall = "    " + spyInstance.getCall(i).toString();
-            if (/\n/.test(calls[i - 1])) {
-                stringifiedCall = "\n" + stringifiedCall;
-            }
-            push.call(calls, stringifiedCall);
-        }
-
-        return calls.length > 0 ? "\n" + calls.join("\n") : "";
-    },
-
-    t: function (spyInstance) {
-        var objects = [];
-
-        for (var i = 0, l = spyInstance.callCount; i < l; ++i) {
-            push.call(objects, sinonFormat(spyInstance.thisValues[i]));
-        }
-
-        return objects.join(", ");
-    },
-
-    "*": function (spyInstance, args) {
-        return args.map(function (arg) { return sinonFormat(arg); }).join(", ");
-    }
-};
-
-
-/***/ }),
-/* 137 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var deprecated = __webpack_require__(41);
-var spy = __webpack_require__(23);
-var wrapMethod = __webpack_require__(26);
-
-// This is deprecated and will be removed in a future version of sinon.
-// We will only consider pull requests that fix serious bugs in the implementation
-function stubDescriptor(object, property, descriptor) {
-    var wrapper;
-
-    deprecated.printWarning(
-      "sinon.stub(obj, 'meth', fn) is deprecated and will be removed from " +
-      "the public API in a future version of sinon." +
-      "\n Use stub(obj, 'meth').callsFake(fn)." +
-      "\n Codemod available at https://github.com/hurrymaplelad/sinon-codemod"
-    );
-
-    if (!!descriptor && typeof descriptor !== "function" && typeof descriptor !== "object") {
-        throw new TypeError("Custom stub should be a property descriptor");
-    }
-
-    if (typeof descriptor === "object" && Object.keys(descriptor).length === 0) {
-        throw new TypeError("Expected property descriptor to have at least one key");
-    }
-
-    if (typeof descriptor === "function") {
-        wrapper = spy && spy.create ? spy.create(descriptor) : descriptor;
-    } else {
-        wrapper = descriptor;
-        if (spy && spy.create) {
-            Object.keys(wrapper).forEach(function (type) {
-                wrapper[type] = spy.create(wrapper[type]);
-            });
-        }
-    }
-
-    return wrapMethod(object, property, wrapper);
-}
-
-module.exports = stubDescriptor;
-
-
-/***/ }),
-/* 138 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var getPropertyDescriptor = __webpack_require__(16);
-var walk = __webpack_require__(35);
-
-function stubEntireObject(stub, object) {
-    walk(object || {}, function (prop, propOwner) {
-        // we don't want to stub things like toString(), valueOf(), etc. so we only stub if the object
-        // is not Object.prototype
-        if (
-            propOwner !== Object.prototype &&
-            prop !== "constructor" &&
-            typeof getPropertyDescriptor(propOwner, prop).value === "function"
-        ) {
-            stub(object, prop);
-        }
-    });
-
-    return object;
-}
-
-module.exports = stubEntireObject;
-
-
-/***/ }),
-/* 139 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var valueToString = __webpack_require__(17);
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-function stubNonFunctionProperty(object, property, value) {
-    var original = object[property];
-
-    if (!hasOwnProperty.call(object, property)) {
-        throw new TypeError("Cannot stub non-existent own property " + valueToString(property));
-    }
-
-    object[property] = value;
-
-    return {
-        restore: function restore() {
-            object[property] = original;
-        }
-    };
-}
-
-module.exports = stubNonFunctionProperty;
-
-
-/***/ }),
-/* 140 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var defaultConfig = __webpack_require__(70);
-
-module.exports = function getConfig(custom) {
-    var config = {};
-    var prop;
-
-    custom = custom || {};
-
-    for (prop in defaultConfig) {
-        if (defaultConfig.hasOwnProperty(prop)) {
-            config[prop] = custom.hasOwnProperty(prop) ? custom[prop] : defaultConfig[prop];
-        }
-    }
-
-    return config;
-};
-
-
-/***/ }),
-/* 141 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = {
-    calledInOrder: __webpack_require__(69),
-    configureLogError: __webpack_require__(43),
-    defaultConfig: __webpack_require__(70),
-    deepEqual: __webpack_require__(21),
-    every: __webpack_require__(71),
-    extend: __webpack_require__(15),
-    format: __webpack_require__(22),
-    functionName: __webpack_require__(25),
-    functionToString: __webpack_require__(42),
-    getConfig: __webpack_require__(140),
-    getPropertyDescriptor: __webpack_require__(16),
-    iterableToString: __webpack_require__(72),
-    orderByFirstCall: __webpack_require__(73),
-    restore: __webpack_require__(142),
-    timesInWords: __webpack_require__(34),
-    typeOf: __webpack_require__(44),
-    walk: __webpack_require__(35),
-    wrapMethod: __webpack_require__(26)
-};
-
-
-/***/ }),
-/* 142 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var walk = __webpack_require__(35);
-
-function isRestorable(obj) {
-    return typeof obj === "function" && typeof obj.restore === "function" && obj.restore.sinon;
-}
-
-module.exports = function restore(object) {
-    if (object !== null && typeof object === "object") {
-        walk(object, function (prop) {
-            if (isRestorable(object[prop])) {
-                object[prop].restore();
-            }
-        });
-    } else if (isRestorable(object)) {
-        object.restore();
-    }
-};
-
-
-/***/ }),
-/* 143 */
-/***/ (function(module, exports) {
-
-module.exports = Array.isArray || function (arr) {
-  return Object.prototype.toString.call(arr) == '[object Array]';
-};
-
-
-/***/ }),
-/* 144 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isarray = __webpack_require__(143)
+var isarray = __webpack_require__(131)
 
 /**
  * Expose `pathToRegexp`.
@@ -21533,6 +20477,1110 @@ function pathToRegexp (path, keys, options) {
 
   return stringToRegexp(/** @type {string} */ (path), /** @type {!Array} */ (keys), options)
 }
+
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports) {
+
+module.exports = Array.isArray || function (arr) {
+  return Object.prototype.toString.call(arr) == '[object Array]';
+};
+
+
+/***/ }),
+/* 132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/* !
+ * Chai - pathval utility
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * @see https://github.com/logicalparadox/filtr
+ * MIT Licensed
+ */
+
+/**
+ * ### .hasProperty(object, name)
+ *
+ * This allows checking whether an object has own
+ * or inherited from prototype chain named property.
+ *
+ * Basically does the same thing as the `in`
+ * operator but works properly with null/undefined values
+ * and other primitives.
+ *
+ *     var obj = {
+ *         arr: ['a', 'b', 'c']
+ *       , str: 'Hello'
+ *     }
+ *
+ * The following would be the results.
+ *
+ *     hasProperty(obj, 'str');  // true
+ *     hasProperty(obj, 'constructor');  // true
+ *     hasProperty(obj, 'bar');  // false
+ *
+ *     hasProperty(obj.str, 'length'); // true
+ *     hasProperty(obj.str, 1);  // true
+ *     hasProperty(obj.str, 5);  // false
+ *
+ *     hasProperty(obj.arr, 'length');  // true
+ *     hasProperty(obj.arr, 2);  // true
+ *     hasProperty(obj.arr, 3);  // false
+ *
+ * @param {Object} object
+ * @param {String|Symbol} name
+ * @returns {Boolean} whether it exists
+ * @namespace Utils
+ * @name hasProperty
+ * @api public
+ */
+
+function hasProperty(obj, name) {
+  if (typeof obj === 'undefined' || obj === null) {
+    return false;
+  }
+
+  // The `in` operator does not work with primitives.
+  return name in Object(obj);
+}
+
+/* !
+ * ## parsePath(path)
+ *
+ * Helper function used to parse string object
+ * paths. Use in conjunction with `internalGetPathValue`.
+ *
+ *      var parsed = parsePath('myobject.property.subprop');
+ *
+ * ### Paths:
+ *
+ * * Can be infinitely deep and nested.
+ * * Arrays are also valid using the formal `myobject.document[3].property`.
+ * * Literal dots and brackets (not delimiter) must be backslash-escaped.
+ *
+ * @param {String} path
+ * @returns {Object} parsed
+ * @api private
+ */
+
+function parsePath(path) {
+  var str = path.replace(/([^\\])\[/g, '$1.[');
+  var parts = str.match(/(\\\.|[^.]+?)+/g);
+  return parts.map(function mapMatches(value) {
+    var regexp = /^\[(\d+)\]$/;
+    var mArr = regexp.exec(value);
+    var parsed = null;
+    if (mArr) {
+      parsed = { i: parseFloat(mArr[1]) };
+    } else {
+      parsed = { p: value.replace(/\\([.\[\]])/g, '$1') };
+    }
+
+    return parsed;
+  });
+}
+
+/* !
+ * ## internalGetPathValue(obj, parsed[, pathDepth])
+ *
+ * Helper companion function for `.parsePath` that returns
+ * the value located at the parsed address.
+ *
+ *      var value = getPathValue(obj, parsed);
+ *
+ * @param {Object} object to search against
+ * @param {Object} parsed definition from `parsePath`.
+ * @param {Number} depth (nesting level) of the property we want to retrieve
+ * @returns {Object|Undefined} value
+ * @api private
+ */
+
+function internalGetPathValue(obj, parsed, pathDepth) {
+  var temporaryValue = obj;
+  var res = null;
+  pathDepth = (typeof pathDepth === 'undefined' ? parsed.length : pathDepth);
+
+  for (var i = 0; i < pathDepth; i++) {
+    var part = parsed[i];
+    if (temporaryValue) {
+      if (typeof part.p === 'undefined') {
+        temporaryValue = temporaryValue[part.i];
+      } else {
+        temporaryValue = temporaryValue[part.p];
+      }
+
+      if (i === (pathDepth - 1)) {
+        res = temporaryValue;
+      }
+    }
+  }
+
+  return res;
+}
+
+/* !
+ * ## internalSetPathValue(obj, value, parsed)
+ *
+ * Companion function for `parsePath` that sets
+ * the value located at a parsed address.
+ *
+ *  internalSetPathValue(obj, 'value', parsed);
+ *
+ * @param {Object} object to search and define on
+ * @param {*} value to use upon set
+ * @param {Object} parsed definition from `parsePath`
+ * @api private
+ */
+
+function internalSetPathValue(obj, val, parsed) {
+  var tempObj = obj;
+  var pathDepth = parsed.length;
+  var part = null;
+  // Here we iterate through every part of the path
+  for (var i = 0; i < pathDepth; i++) {
+    var propName = null;
+    var propVal = null;
+    part = parsed[i];
+
+    // If it's the last part of the path, we set the 'propName' value with the property name
+    if (i === (pathDepth - 1)) {
+      propName = typeof part.p === 'undefined' ? part.i : part.p;
+      // Now we set the property with the name held by 'propName' on object with the desired val
+      tempObj[propName] = val;
+    } else if (typeof part.p !== 'undefined' && tempObj[part.p]) {
+      tempObj = tempObj[part.p];
+    } else if (typeof part.i !== 'undefined' && tempObj[part.i]) {
+      tempObj = tempObj[part.i];
+    } else {
+      // If the obj doesn't have the property we create one with that name to define it
+      var next = parsed[i + 1];
+      // Here we set the name of the property which will be defined
+      propName = typeof part.p === 'undefined' ? part.i : part.p;
+      // Here we decide if this property will be an array or a new object
+      propVal = typeof next.p === 'undefined' ? [] : {};
+      tempObj[propName] = propVal;
+      tempObj = tempObj[propName];
+    }
+  }
+}
+
+/**
+ * ### .getPathInfo(object, path)
+ *
+ * This allows the retrieval of property info in an
+ * object given a string path.
+ *
+ * The path info consists of an object with the
+ * following properties:
+ *
+ * * parent - The parent object of the property referenced by `path`
+ * * name - The name of the final property, a number if it was an array indexer
+ * * value - The value of the property, if it exists, otherwise `undefined`
+ * * exists - Whether the property exists or not
+ *
+ * @param {Object} object
+ * @param {String} path
+ * @returns {Object} info
+ * @namespace Utils
+ * @name getPathInfo
+ * @api public
+ */
+
+function getPathInfo(obj, path) {
+  var parsed = parsePath(path);
+  var last = parsed[parsed.length - 1];
+  var info = {
+    parent: parsed.length > 1 ? internalGetPathValue(obj, parsed, parsed.length - 1) : obj,
+    name: last.p || last.i,
+    value: internalGetPathValue(obj, parsed),
+  };
+  info.exists = hasProperty(info.parent, info.name);
+
+  return info;
+}
+
+/**
+ * ### .getPathValue(object, path)
+ *
+ * This allows the retrieval of values in an
+ * object given a string path.
+ *
+ *     var obj = {
+ *         prop1: {
+ *             arr: ['a', 'b', 'c']
+ *           , str: 'Hello'
+ *         }
+ *       , prop2: {
+ *             arr: [ { nested: 'Universe' } ]
+ *           , str: 'Hello again!'
+ *         }
+ *     }
+ *
+ * The following would be the results.
+ *
+ *     getPathValue(obj, 'prop1.str'); // Hello
+ *     getPathValue(obj, 'prop1.att[2]'); // b
+ *     getPathValue(obj, 'prop2.arr[0].nested'); // Universe
+ *
+ * @param {Object} object
+ * @param {String} path
+ * @returns {Object} value or `undefined`
+ * @namespace Utils
+ * @name getPathValue
+ * @api public
+ */
+
+function getPathValue(obj, path) {
+  var info = getPathInfo(obj, path);
+  return info.value;
+}
+
+/**
+ * ### .setPathValue(object, path, value)
+ *
+ * Define the value in an object at a given string path.
+ *
+ * ```js
+ * var obj = {
+ *     prop1: {
+ *         arr: ['a', 'b', 'c']
+ *       , str: 'Hello'
+ *     }
+ *   , prop2: {
+ *         arr: [ { nested: 'Universe' } ]
+ *       , str: 'Hello again!'
+ *     }
+ * };
+ * ```
+ *
+ * The following would be acceptable.
+ *
+ * ```js
+ * var properties = require('tea-properties');
+ * properties.set(obj, 'prop1.str', 'Hello Universe!');
+ * properties.set(obj, 'prop1.arr[2]', 'B');
+ * properties.set(obj, 'prop2.arr[0].nested.value', { hello: 'universe' });
+ * ```
+ *
+ * @param {Object} object
+ * @param {String} path
+ * @param {Mixed} value
+ * @api private
+ */
+
+function setPathValue(obj, path, val) {
+  var parsed = parsePath(path);
+  internalSetPathValue(obj, val, parsed);
+  return obj;
+}
+
+module.exports = {
+  hasProperty: hasProperty,
+  getPathInfo: getPathInfo,
+  getPathValue: getPathValue,
+  setPathValue: setPathValue,
+};
+
+
+/***/ }),
+/* 133 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*global Blob */
+
+
+exports.isSupported = (function () {
+    try {
+        return !!new Blob();
+    } catch (e) {
+        return false;
+    }
+}());
+
+
+/***/ }),
+/* 134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var canColor = typeof process !== "undefined";
+
+function colorize(str, color) {
+    if (!canColor) {
+        return str;
+    }
+
+    return "\x1b[" + color + "m" + str + "\x1b[0m";
+}
+
+exports.red = function (str) {
+    return colorize(str, 31);
+};
+
+exports.green = function (str) {
+    return colorize(str, 32);
+};
+
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var getPropertyDescriptor = __webpack_require__(16);
+
+var slice = [].slice;
+var useLeftMostCallback = -1;
+var useRightMostCallback = -2;
+
+function throwsException(fake, error, message) {
+    if (typeof error === "string") {
+        fake.exception = new Error(message || "");
+        fake.exception.name = error;
+    } else if (!error) {
+        fake.exception = new Error("Error");
+    } else {
+        fake.exception = error;
+    }
+}
+
+function isPropertyConfigurable(obj, propName) {
+    var propertyDescriptor = getPropertyDescriptor(obj, propName);
+
+    return propertyDescriptor ? propertyDescriptor.configurable : true;
+}
+
+module.exports = {
+    callsFake: function callsFake(fake, fn) {
+        fake.fakeFn = fn;
+    },
+
+    callsArg: function callsArg(fake, pos) {
+        if (typeof pos !== "number") {
+            throw new TypeError("argument index is not number");
+        }
+
+        fake.callArgAt = pos;
+        fake.callbackArguments = [];
+        fake.callbackContext = undefined;
+        fake.callArgProp = undefined;
+        fake.callbackAsync = false;
+    },
+
+    callsArgOn: function callsArgOn(fake, pos, context) {
+        if (typeof pos !== "number") {
+            throw new TypeError("argument index is not number");
+        }
+
+        fake.callArgAt = pos;
+        fake.callbackArguments = [];
+        fake.callbackContext = context;
+        fake.callArgProp = undefined;
+        fake.callbackAsync = false;
+    },
+
+    callsArgWith: function callsArgWith(fake, pos) {
+        if (typeof pos !== "number") {
+            throw new TypeError("argument index is not number");
+        }
+
+        fake.callArgAt = pos;
+        fake.callbackArguments = slice.call(arguments, 2);
+        fake.callbackContext = undefined;
+        fake.callArgProp = undefined;
+        fake.callbackAsync = false;
+    },
+
+    callsArgOnWith: function callsArgWith(fake, pos, context) {
+        if (typeof pos !== "number") {
+            throw new TypeError("argument index is not number");
+        }
+
+        fake.callArgAt = pos;
+        fake.callbackArguments = slice.call(arguments, 3);
+        fake.callbackContext = context;
+        fake.callArgProp = undefined;
+        fake.callbackAsync = false;
+    },
+
+    usingPromise: function usingPromise(fake, promiseLibrary) {
+        fake.promiseLibrary = promiseLibrary;
+    },
+
+    yields: function (fake) {
+        fake.callArgAt = useLeftMostCallback;
+        fake.callbackArguments = slice.call(arguments, 1);
+        fake.callbackContext = undefined;
+        fake.callArgProp = undefined;
+        fake.callbackAsync = false;
+    },
+
+    yieldsRight: function (fake) {
+        fake.callArgAt = useRightMostCallback;
+        fake.callbackArguments = slice.call(arguments, 1);
+        fake.callbackContext = undefined;
+        fake.callArgProp = undefined;
+        fake.callbackAsync = false;
+    },
+
+    yieldsOn: function (fake, context) {
+        fake.callArgAt = useLeftMostCallback;
+        fake.callbackArguments = slice.call(arguments, 2);
+        fake.callbackContext = context;
+        fake.callArgProp = undefined;
+        fake.callbackAsync = false;
+    },
+
+    yieldsTo: function (fake, prop) {
+        fake.callArgAt = useLeftMostCallback;
+        fake.callbackArguments = slice.call(arguments, 2);
+        fake.callbackContext = undefined;
+        fake.callArgProp = prop;
+        fake.callbackAsync = false;
+    },
+
+    yieldsToOn: function (fake, prop, context) {
+        fake.callArgAt = useLeftMostCallback;
+        fake.callbackArguments = slice.call(arguments, 3);
+        fake.callbackContext = context;
+        fake.callArgProp = prop;
+        fake.callbackAsync = false;
+    },
+
+    throws: throwsException,
+    throwsException: throwsException,
+
+    returns: function returns(fake, value) {
+        fake.returnValue = value;
+        fake.resolve = false;
+        fake.reject = false;
+        fake.returnValueDefined = true;
+        fake.exception = undefined;
+        fake.fakeFn = undefined;
+    },
+
+    returnsArg: function returnsArg(fake, pos) {
+        if (typeof pos !== "number") {
+            throw new TypeError("argument index is not number");
+        }
+
+        fake.returnArgAt = pos;
+    },
+
+    throwsArg: function throwsArg(fake, pos) {
+        if (typeof pos !== "number") {
+            throw new TypeError("argument index is not number");
+        }
+
+        fake.throwArgAt = pos;
+    },
+
+    returnsThis: function returnsThis(fake) {
+        fake.returnThis = true;
+    },
+
+    resolves: function resolves(fake, value) {
+        fake.returnValue = value;
+        fake.resolve = true;
+        fake.reject = false;
+        fake.returnValueDefined = true;
+        fake.exception = undefined;
+        fake.fakeFn = undefined;
+    },
+
+    rejects: function rejects(fake, error, message) {
+        var reason;
+        if (typeof error === "string") {
+            reason = new Error(message || "");
+            reason.name = error;
+        } else if (!error) {
+            reason = new Error("Error");
+        } else {
+            reason = error;
+        }
+        fake.returnValue = reason;
+        fake.resolve = false;
+        fake.reject = true;
+        fake.returnValueDefined = true;
+        fake.exception = undefined;
+        fake.fakeFn = undefined;
+
+        return fake;
+    },
+
+    callThrough: function callThrough(fake) {
+        fake.callsThrough = true;
+    },
+
+    get: function get(fake, getterFunction) {
+        var rootStub = fake.stub || fake;
+
+        Object.defineProperty(rootStub.rootObj, rootStub.propName, {
+            get: getterFunction,
+            configurable: isPropertyConfigurable(rootStub.rootObj, rootStub.propName)
+        });
+
+        return fake;
+    },
+
+    set: function set(fake, setterFunction) {
+        var rootStub = fake.stub || fake;
+
+        Object.defineProperty(rootStub.rootObj, rootStub.propName, { // eslint-disable-line accessor-pairs
+            set: setterFunction,
+            configurable: isPropertyConfigurable(rootStub.rootObj, rootStub.propName)
+        });
+
+        return fake;
+    },
+
+    value: function value(fake, newVal) {
+        var rootStub = fake.stub || fake;
+
+        Object.defineProperty(rootStub.rootObj, rootStub.propName, {
+            value: newVal,
+            enumerable: true,
+            configurable: isPropertyConfigurable(rootStub.rootObj, rootStub.propName)
+        });
+
+        return fake;
+    }
+};
+
+function createAsyncVersion(syncFnName) {
+    return function () {
+        var result = module.exports[syncFnName].apply(this, arguments);
+        this.callbackAsync = true;
+        return result;
+    };
+}
+
+// create asynchronous versions of callsArg* and yields* methods
+Object.keys(module.exports).forEach(function (method) {
+    // need to avoid creating anotherasync versions of the newly added async methods
+    if (method.match(/^(callsArg|yields)/) && !method.match(/Async/)) {
+        module.exports[method + "Async"] = createAsyncVersion(method);
+    }
+});
+
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var collectOwnMethods = __webpack_require__(64);
+var deprecated = __webpack_require__(41);
+var getPropertyDescriptor = __webpack_require__(16);
+var stubNonFunctionProperty = __webpack_require__(141);
+var sinonStub = __webpack_require__(24);
+var throwOnFalsyObject = __webpack_require__(68);
+
+// This is deprecated and will be removed in a future version of sinon.
+// We will only consider pull requests that fix serious bugs in the implementation
+function sandboxStub(object, property/*, value*/) {
+    deprecated.printWarning(
+      "sandbox.stub(obj, 'meth', val) is deprecated and will be removed from " +
+      "the public API in a future version of sinon." +
+      "\n Use sandbox.stub(obj, 'meth').callsFake(fn) instead in order to stub a function." +
+      "\n Use sandbox.stub(obj, 'meth').value(fn) instead in order to stub a non-function value."
+    );
+
+    throwOnFalsyObject.apply(null, arguments);
+
+    var actualDescriptor = getPropertyDescriptor(object, property);
+    var isStubbingEntireObject = typeof property === "undefined" && typeof object === "object";
+    var isStubbingNonFuncProperty = typeof object === "object"
+                                    && typeof property !== "undefined"
+                                    && (typeof actualDescriptor === "undefined"
+                                    || typeof actualDescriptor.value !== "function");
+
+
+    // When passing a value as third argument it will be applied to stubNonFunctionProperty
+    var stubbed = isStubbingNonFuncProperty ?
+                    stubNonFunctionProperty.apply(null, arguments) :
+                    sinonStub.apply(null, arguments);
+
+    if (isStubbingEntireObject) {
+        var ownMethods = collectOwnMethods(stubbed);
+        ownMethods.forEach(this.add.bind(this));
+        if (this.promiseLibrary) {
+            ownMethods.forEach(this.addUsingPromise.bind(this));
+        }
+    } else {
+        this.add(stubbed);
+        if (this.promiseLibrary) {
+            stubbed.usingPromise(this.promiseLibrary);
+        }
+    }
+
+    return stubbed;
+}
+
+module.exports = sandboxStub;
+
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var extend = __webpack_require__(15);
+var sinonCollection = __webpack_require__(65);
+var sinonMatch = __webpack_require__(14);
+var sinonAssert = __webpack_require__(40);
+var sinonClock = __webpack_require__(46);
+var fakeServer = __webpack_require__(45);
+var fakeXhr = __webpack_require__(47);
+var fakeServerWithClock = __webpack_require__(75);
+
+var push = [].push;
+
+var sinonSandbox = Object.create(sinonCollection);
+
+function exposeValue(sandbox, config, key, value) {
+    if (!value) {
+        return;
+    }
+
+    if (config.injectInto && !(key in config.injectInto)) {
+        config.injectInto[key] = value;
+        sandbox.injectedKeys.push(key);
+    } else {
+        push.call(sandbox.args, value);
+    }
+}
+
+function prepareSandboxFromConfig(config) {
+    var sandbox = Object.create(sinonSandbox);
+
+    if (config.useFakeServer) {
+        if (typeof config.useFakeServer === "object") {
+            sandbox.serverPrototype = config.useFakeServer;
+        }
+
+        sandbox.useFakeServer();
+    }
+
+    if (config.useFakeTimers) {
+        if (typeof config.useFakeTimers === "object") {
+            sandbox.useFakeTimers.apply(sandbox, config.useFakeTimers);
+        } else {
+            sandbox.useFakeTimers();
+        }
+    }
+
+    return sandbox;
+}
+
+extend(sinonSandbox, {
+    useFakeTimers: function useFakeTimers() {
+        this.clock = sinonClock.useFakeTimers.apply(null, arguments);
+
+        return this.add(this.clock);
+    },
+
+    serverPrototype: fakeServerWithClock,
+
+    useFakeServer: function useFakeServer() {
+        var proto = this.serverPrototype || fakeServer;
+
+        if (!proto || !proto.create) {
+            return null;
+        }
+
+        this.server = proto.create();
+        return this.add(this.server);
+    },
+
+    useFakeXMLHttpRequest: function useFakeXMLHttpRequest() {
+        var xhr = fakeXhr.useFakeXMLHttpRequest();
+        return this.add(xhr);
+    },
+
+    inject: function (obj) {
+        sinonCollection.inject.call(this, obj);
+
+        if (this.clock) {
+            obj.clock = this.clock;
+        }
+
+        if (this.server) {
+            obj.server = this.server;
+            obj.requests = this.server.requests;
+        }
+
+        obj.match = sinonMatch;
+
+        return obj;
+    },
+
+    usingPromise: function (promiseLibrary) {
+
+        this.promiseLibrary = promiseLibrary;
+
+        return this;
+    },
+
+    restore: function () {
+        if (arguments.length) {
+            throw new Error("sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()");
+        }
+
+        sinonCollection.restore.apply(this, arguments);
+        this.restoreContext();
+    },
+
+    restoreContext: function () {
+        var injectedKeys = this.injectedKeys;
+        var injectInto = this.injectInto;
+
+        if (!injectedKeys) {
+            return;
+        }
+
+        injectedKeys.forEach(function (injectedKey) {
+            delete injectInto[injectedKey];
+        });
+
+        injectedKeys = [];
+    },
+
+    create: function (config) {
+        if (!config) {
+            return Object.create(sinonSandbox);
+        }
+
+        var sandbox = prepareSandboxFromConfig(config);
+        sandbox.args = sandbox.args || [];
+        sandbox.injectedKeys = [];
+        sandbox.injectInto = config.injectInto;
+        var exposed = sandbox.inject({});
+
+        if (config.properties) {
+            config.properties.forEach(function (prop) {
+                var value = exposed[prop] || prop === "sandbox" && sandbox;
+                exposeValue(sandbox, config, prop, value);
+            });
+        } else {
+            exposeValue(sandbox, config, "sandbox");
+        }
+
+        return sandbox;
+    },
+
+    match: sinonMatch,
+
+    assert: sinonAssert
+});
+
+module.exports = sinonSandbox;
+
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var color = __webpack_require__(134);
+var timesInWords = __webpack_require__(34);
+var sinonFormat = __webpack_require__(22);
+var sinonMatch = __webpack_require__(14);
+var jsDiff = __webpack_require__(124);
+var push = Array.prototype.push;
+
+function colorSinonMatchText(matcher, calledArg, calledArgMessage) {
+    if (!matcher.test(calledArg)) {
+        matcher.message = color.red(matcher.message);
+        if (calledArgMessage) {
+            calledArgMessage = color.green(calledArgMessage);
+        }
+    }
+    return calledArgMessage + " " + matcher.message;
+}
+
+function colorDiffText(diff) {
+    var objects = diff.map(function (part) {
+        var text = part.value;
+        if (part.added) {
+            text = color.green(text);
+        } else if (part.removed) {
+            text = color.red(text);
+        }
+        if (diff.length === 2) {
+            text += " "; // format simple diffs
+        }
+        return text;
+    });
+    return objects.join("");
+}
+
+module.exports = {
+    c: function (spyInstance) {
+        return timesInWords(spyInstance.callCount);
+    },
+
+    n: function (spyInstance) {
+        return spyInstance.toString();
+    },
+
+    D: function (spyInstance, args) {
+        var message = "";
+
+        for (var i = 0, l = spyInstance.callCount; i < l; ++i) {
+            // describe multiple calls
+            if (l > 1) {
+                if (i > 0) {
+                    message += "\n";
+                }
+                message += "Call " + (i + 1) + ":";
+            }
+            var calledArgs = spyInstance.getCall(i).args;
+            for (var j = 0; j < calledArgs.length || j < args.length; ++j) {
+                message += "\n";
+                var calledArgMessage = j < calledArgs.length ? sinonFormat(calledArgs[j]) : "";
+                if (sinonMatch.isMatcher(args[j])) {
+                    message += colorSinonMatchText(args[j], calledArgs[j], calledArgMessage);
+                } else {
+                    var expectedArgMessage = j < args.length ? sinonFormat(args[j]) : "";
+                    var diff = jsDiff.diffJson(calledArgMessage, expectedArgMessage);
+                    message += colorDiffText(diff);
+                }
+            }
+        }
+
+        return message;
+    },
+
+    C: function (spyInstance) {
+        var calls = [];
+
+        for (var i = 0, l = spyInstance.callCount; i < l; ++i) {
+            var stringifiedCall = "    " + spyInstance.getCall(i).toString();
+            if (/\n/.test(calls[i - 1])) {
+                stringifiedCall = "\n" + stringifiedCall;
+            }
+            push.call(calls, stringifiedCall);
+        }
+
+        return calls.length > 0 ? "\n" + calls.join("\n") : "";
+    },
+
+    t: function (spyInstance) {
+        var objects = [];
+
+        for (var i = 0, l = spyInstance.callCount; i < l; ++i) {
+            push.call(objects, sinonFormat(spyInstance.thisValues[i]));
+        }
+
+        return objects.join(", ");
+    },
+
+    "*": function (spyInstance, args) {
+        return args.map(function (arg) { return sinonFormat(arg); }).join(", ");
+    }
+};
+
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var deprecated = __webpack_require__(41);
+var spy = __webpack_require__(23);
+var wrapMethod = __webpack_require__(26);
+
+// This is deprecated and will be removed in a future version of sinon.
+// We will only consider pull requests that fix serious bugs in the implementation
+function stubDescriptor(object, property, descriptor) {
+    var wrapper;
+
+    deprecated.printWarning(
+      "sinon.stub(obj, 'meth', fn) is deprecated and will be removed from " +
+      "the public API in a future version of sinon." +
+      "\n Use stub(obj, 'meth').callsFake(fn)." +
+      "\n Codemod available at https://github.com/hurrymaplelad/sinon-codemod"
+    );
+
+    if (!!descriptor && typeof descriptor !== "function" && typeof descriptor !== "object") {
+        throw new TypeError("Custom stub should be a property descriptor");
+    }
+
+    if (typeof descriptor === "object" && Object.keys(descriptor).length === 0) {
+        throw new TypeError("Expected property descriptor to have at least one key");
+    }
+
+    if (typeof descriptor === "function") {
+        wrapper = spy && spy.create ? spy.create(descriptor) : descriptor;
+    } else {
+        wrapper = descriptor;
+        if (spy && spy.create) {
+            Object.keys(wrapper).forEach(function (type) {
+                wrapper[type] = spy.create(wrapper[type]);
+            });
+        }
+    }
+
+    return wrapMethod(object, property, wrapper);
+}
+
+module.exports = stubDescriptor;
+
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var getPropertyDescriptor = __webpack_require__(16);
+var walk = __webpack_require__(35);
+
+function stubEntireObject(stub, object) {
+    walk(object || {}, function (prop, propOwner) {
+        // we don't want to stub things like toString(), valueOf(), etc. so we only stub if the object
+        // is not Object.prototype
+        if (
+            propOwner !== Object.prototype &&
+            prop !== "constructor" &&
+            typeof getPropertyDescriptor(propOwner, prop).value === "function"
+        ) {
+            stub(object, prop);
+        }
+    });
+
+    return object;
+}
+
+module.exports = stubEntireObject;
+
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var valueToString = __webpack_require__(17);
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+function stubNonFunctionProperty(object, property, value) {
+    var original = object[property];
+
+    if (!hasOwnProperty.call(object, property)) {
+        throw new TypeError("Cannot stub non-existent own property " + valueToString(property));
+    }
+
+    object[property] = value;
+
+    return {
+        restore: function restore() {
+            object[property] = original;
+        }
+    };
+}
+
+module.exports = stubNonFunctionProperty;
+
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var defaultConfig = __webpack_require__(70);
+
+module.exports = function getConfig(custom) {
+    var config = {};
+    var prop;
+
+    custom = custom || {};
+
+    for (prop in defaultConfig) {
+        if (defaultConfig.hasOwnProperty(prop)) {
+            config[prop] = custom.hasOwnProperty(prop) ? custom[prop] : defaultConfig[prop];
+        }
+    }
+
+    return config;
+};
+
+
+/***/ }),
+/* 143 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = {
+    calledInOrder: __webpack_require__(69),
+    configureLogError: __webpack_require__(43),
+    defaultConfig: __webpack_require__(70),
+    deepEqual: __webpack_require__(21),
+    every: __webpack_require__(71),
+    extend: __webpack_require__(15),
+    format: __webpack_require__(22),
+    functionName: __webpack_require__(25),
+    functionToString: __webpack_require__(42),
+    getConfig: __webpack_require__(142),
+    getPropertyDescriptor: __webpack_require__(16),
+    iterableToString: __webpack_require__(72),
+    orderByFirstCall: __webpack_require__(73),
+    restore: __webpack_require__(144),
+    timesInWords: __webpack_require__(34),
+    typeOf: __webpack_require__(44),
+    walk: __webpack_require__(35),
+    wrapMethod: __webpack_require__(26)
+};
+
+
+/***/ }),
+/* 144 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var walk = __webpack_require__(35);
+
+function isRestorable(obj) {
+    return typeof obj === "function" && typeof obj.restore === "function" && obj.restore.sinon;
+}
+
+module.exports = function restore(object) {
+    if (object !== null && typeof object === "object") {
+        walk(object, function (prop) {
+            if (isRestorable(object[prop])) {
+                object[prop].restore();
+            }
+        });
+    } else if (isRestorable(object)) {
+        object.restore();
+    }
+};
 
 
 /***/ }),
