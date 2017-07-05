@@ -1,5 +1,7 @@
 # mics <sup><sub>0.6.3</sub></sup>
 ### Multiple Inheritance Class System
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/Download/mics.svg)](https://greenkeeper.io/)
 **Intuitive mixins for ES6 classes**
 
 [![npm](https://img.shields.io/npm/v/mics.svg)](https://npmjs.com/package/mics)
