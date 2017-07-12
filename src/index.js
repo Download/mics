@@ -16,6 +16,10 @@ export { mix, is, like }
  * })
  *
  * @param {function} args
+ *   Consists of the following three argument groups:
+ *   {function} superclass (optional)
+ *   {function} mixins... (0 or more)
+ *   {function} factory (optional)
  * @return {function}
  */
 function mix(...args) {
@@ -98,10 +102,21 @@ function is(x, type) {
  * Often, we don't really care whether the object is a certain type,
  * we just want to know whether we can treat it like a certain type.
  * Use like(subject, type) to test whether a subject adheres to the same interface as is defined by type
- * Example: like(looker, 'object')
+ * Example:
+ *
+ * var Looker = mix(superclass => class Looker extends superclass {
+ *   look() {}
+ * })
+ *
+ * var Viewer = {
+ *   look() {} // same interface as Looker
+ * }
+ *
+ * var viewer = new Viewer()
+ * like(viewer, Looker) // true
  *
  * @param {object|function} x
- * @param {string|function} type
+ * @param {function} type
  * @return {boolean}
  */
 function like(x, type) {
