@@ -1,5 +1,27 @@
 export { mix, is, like }
 
+/**
+ * Accepts an optional superclass as the first argument,
+ * then a bunch of mixins and an optional class factory as the last argument and returns a mixin.
+ * Mostly, you will be using mix with a factory to create mixins, like this:
+ *
+ * var Looker = mix(superclass => class Looker extends superclass {
+ *   constructor() {
+ *     super()
+ *     console.info('A looker is born!')
+ *   }
+ *   look() {
+ *     console.info('Looking good!')
+ *   }
+ * })
+ *
+ * @param {function} args
+ *   Consists of the following three argument groups:
+ *   {function} superclass (optional)
+ *   {function} mixins... (0 or more)
+ *   {function} factory (optional)
+ * @return {function}
+ */
 function mix(...args) {
     // todo: refactor to make const
     let superclass = !is(args[0], 'factory') && args.shift() || baseclass
@@ -34,6 +56,14 @@ function mix(...args) {
     })
 }
 
+/**
+ * Tests whether `x` is a type or extends from type.
+ * Example: is(looker, Looker)
+ *
+ * @param {object|function} x
+ * @param {string|function} type
+ * @return {boolean}
+ */
 function is(x, type) {
     if (typeof type == 'string') {
         return type == 'class'
@@ -68,6 +98,27 @@ function is(x, type) {
     return false
 }
 
+/**
+ * Often, we don't really care whether the object is a certain type,
+ * we just want to know whether we can treat it like a certain type.
+ * Use like(subject, type) to test whether a subject adheres to the same interface as is defined by type
+ * Example:
+ *
+ * var Looker = mix(superclass => class Looker extends superclass {
+ *   look() {}
+ * })
+ *
+ * var Viewer = {
+ *   look() {} // same interface as Looker
+ * }
+ *
+ * var viewer = new Viewer()
+ * like(viewer, Looker) // true
+ *
+ * @param {object|function} x
+ * @param {function} type
+ * @return {boolean}
+ */
 function like(x, type) {
     if (is(x, type)) return true
 
@@ -79,10 +130,22 @@ function like(x, type) {
     )
 }
 
+/**
+ * Get all parts of an interface as an array of strings
+ *
+ * @param {object} proto
+ * @return {array<string>}
+ */
 function getInterface(proto) {
     return getPropertyNames(proto).reduce((o,k) => { o[k] = proto[k]; return o }, {})
 }
 
+/**
+ * Get all properties of an object an an array of strings
+ *
+ * @param {object|function} proto
+ * @return {array<string>}
+ */
 function getPropertyNames(proto) {
     const results = []
 
