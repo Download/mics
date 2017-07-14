@@ -1,5 +1,7 @@
-# mics <sup><sub>0.6.3</sub></sup>
+# mics <sup><sub>0.7.0</sub></sup>
 ### Multiple Inheritance Class System
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/Download/mics.svg)](https://greenkeeper.io/)
 **Intuitive mixins for ES6 classes**
 
 [![npm](https://img.shields.io/npm/v/mics.svg)](https://npmjs.com/package/mics)
@@ -28,8 +30,8 @@ npm install --save mics
 ```
 
 ## Direct download
-* [mics.umd.js](https://cdn.rawgit.com/download/mics/0.6.3/dist/mics.umd.js) (universal module works in browser and node)
-* [mics.min.js](https://cdn.rawgit.com/download/mics/0.6.3/dist/mics.min.js) (minified version of universal module file)
+* [mics.umd.js](https://cdn.rawgit.com/download/mics/0.7.0/dist/mics.umd.js) (universal module works in browser and node)
+* [mics.min.js](https://cdn.rawgit.com/download/mics/0.7.0/dist/mics.min.js) (minified version of universal module file)
 
 
 ## Include in your app
@@ -57,7 +59,7 @@ define(['mics'], function(mics){
 
 ### Script tag
 ```html
-<script src="https://cdn.rawgit.com/download/mics/0.6.3/dist/mics.min.js"></script>
+<script src="https://cdn.rawgit.com/download/mics/0.7.0/dist/mics.min.js"></script>
 <script>
   var mix = mics.mix
   var is = mics.is
