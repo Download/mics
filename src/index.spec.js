@@ -31,19 +31,19 @@ describe('mix([superclass] [, ...mixins] [, factory])', function() {
         const Y = mix(superclass => class X extends superclass {})
         const M = mix(X, Y)
 
-        expect(is(M, 'mixin')).to.eq(true)
+        expect(isMixin(M)).to.eq(true)
     })
 
     it('creates a mix from a superclass', function(){
         let C = mix(class Base {})
 
         expect(C).to.be.a('function')
-        expect(is(C, 'mixin')).to.eq(true)
+        expect(isMixin(C)).to.eq(true)
         // special case: class with one-arg constructor looks like a factory
         class Base {constructor(){}}
         C = mix(Base)
         expect(C).to.be.a('function')
-        expect(is(C, 'mixin')).to.eq(true)
+        expect(isMixin(C)).to.eq(true)
         expect(new C() instanceof Base).to.eq(true)
     })
 
@@ -51,8 +51,8 @@ describe('mix([superclass] [, ...mixins] [, factory])', function() {
         const C = mix(class Base {})
         const D = mix(C)
 
-        expect(is(C, 'mixin')).to.eq(true)
-        expect(is(D, 'mixin')).to.eq(true)
+        expect(isMixin(C)).to.eq(true)
+        expect(isMixin(D)).to.eq(true)
         expect(new D() instanceof D).to.eq(true)
     })
 
@@ -156,6 +156,13 @@ describe('mix([superclass] [, ...mixins] [, factory])', function() {
         const M = mix(superclass => class M extends superclass {
             static constructor(...args) {
             	// todo: missing superclass constructor invocation?
+                // stijn: this is not a normal constructor but a 'static' constructor...
+                // It is the ES5 function that is returned by `mix`, can be invoked without
+                // `new` and in turn calls the 'real' ES6 constructor.
+                // Unless you make a static constructor like in this test, `mix` will
+                // generate an ES5 constructor function for you on the fly. This mechanism
+                // allows you to customize that. The call to `new this(...args)` will
+                // call the ES6 constructor which will call super as usual.
                 log.log('Custom constructor')
                 check()
                 return new this(...args)
@@ -168,15 +175,15 @@ describe('mix([superclass] [, ...mixins] [, factory])', function() {
 
     it('has no side effects on it\'s arguments', function(){
         class Test{}
-        expect(is(Test, 'mixin')).to.eq(false)
+        expect(isMixin(Test)).to.eq(false)
         const M = mix(Test)
 
-        expect(is(M, 'mixin')).to.eq(true)
-        expect(is(Test, 'mixin')).to.eq(false)
+        expect(isMixin(M)).to.eq(true)
+        expect(isMixin(Test)).to.eq(false)
         const N = mix(Test, superclass => class N extends superclass {})
 
-        expect(is(N, 'mixin')).to.eq(true)
-        expect(is(Test, 'mixin')).to.eq(false)
+        expect(isMixin(N)).to.eq(true)
+        expect(isMixin(Test)).to.eq(false)
     })
 })
 
@@ -209,59 +216,6 @@ describe('is(x , type)', function(){
 
         expect(is(X, Y)).to.eq(true)
     })
-    it('for type == "mixin", tests whether `x` is a mixin', function(){
-        expect(is(class X {}, 'mixin')).to.eq(false)
-        expect(is(mix(superclass => class Y extends superclass {}), 'mixin')).to.eq(true)
-        expect(is({}, 'mixin')).to.eq(false)
-        expect(is('Hi', 'mixin')).to.eq(false)
-        expect(is(function(){}, 'mixin')).to.eq(false)
-        expect(is(function(x){}, 'mixin')).to.eq(false)
-        expect(is(function(x,y){}, 'mixin')).to.eq(false)
-    })
-    it('for type == "factory", tests whether `x` is a class factory', function(){
-        expect(is(class X {}, 'factory')).to.eq(false)
-        expect(is(mix(class X {}), 'factory')).to.eq(false)
-        expect(is(class X extends mix(){}, 'factory')).to.eq(false)
-        expect(is(mix(superclass => class Y extends superclass {}), 'factory')).to.eq(false)
-        expect(is({}, 'factory')).to.eq(false)
-        expect(is('Hi', 'factory')).to.eq(false)
-        expect(is(function(){}, 'factory')).to.eq(false)
-        expect(is(function(x){}, 'factory')).to.eq(true)
-        expect(is(function(x,y){}, 'factory')).to.eq(false)
-    })
-    it('for type == "function", tests whether `x` is a function', function(){
-        expect(is(class X {}, 'function')).to.eq(true)
-        expect(is(mix(class X {}), 'function')).to.eq(true)
-        expect(is(class X extends mix(){}, 'function')).to.eq(true)
-        expect(is(mix(superclass => class Y extends superclass {}), 'function')).to.eq(true)
-        expect(is({}, 'function')).to.eq(false)
-        expect(is('Hi', 'function')).to.eq(false)
-        expect(is(function(){}, 'function')).to.eq(true)
-        expect(is(function(x){}, 'function')).to.eq(true)
-        expect(is(function(x,y){}, 'function')).to.eq(true)
-    })
-    it('for type == "object", tests whether `x` is an object', function(){
-        expect(is(class X {}, 'object')).to.eq(false)
-        expect(is(mix(class X {}), 'object')).to.eq(false)
-        expect(is(class X extends mix(){}, 'object')).to.eq(false)
-        expect(is(mix(superclass => class Y extends superclass {}), 'object')).to.eq(false)
-        expect(is({}, 'object')).to.eq(true)
-        expect(is('Hi', 'object')).to.eq(false)
-        expect(is(function(){}, 'object')).to.eq(false)
-        expect(is(function(x){}, 'object')).to.eq(false)
-        expect(is(function(x,y){}, 'object')).to.eq(false)
-    })
-    it('for type == "string", tests whether `x` is a string', function(){
-        expect(is(class X {}, 'string')).to.eq(false)
-        expect(is(mix(class X {}), 'string')).to.eq(false)
-        expect(is(class X extends mix(){}, 'string')).to.eq(false)
-        expect(is(mix(superclass => class Y extends superclass {}), 'string')).to.eq(false)
-        expect(is({}, 'string')).to.eq(false)
-        expect(is('Hi', 'string')).to.eq(true)
-        expect(is(function(){}, 'string')).to.eq(false)
-        expect(is(function(x){}, 'string')).to.eq(false)
-        expect(is(function(x,y){}, 'string')).to.eq(false)
-    })
 })
 
 describe('like(type)', function(){
@@ -290,11 +244,11 @@ describe('like(type)', function(){
     it('allows mixins to be used as interfaces', (done) => {
         const expected = 'Hello, World!'
         const Thenable = mix(superclass => class Thenable extends superclass {
-            then(results) {}
+            then() {}
         })
 
         class MyPromise {
-            then(resolve, reject) {
+            then(resolve) {
                 resolve(expected)
             }
         }
@@ -445,13 +399,13 @@ describe('type checked mixins with tcomb', function(){
         })
 		
         expect(function(){
-            const person = Person({
+            Person({
                 surname: 'Canti'
             });	
         }).to.throw(TypeError) // required fields missing
 		
         expect(function(){
-            const person = Person({
+            Person({
                 name: 'Stijn',
                 age: 40,
                 tags: ['developer']
@@ -475,3 +429,9 @@ describe('type checked mixins with tcomb', function(){
         }).to.not.throw() // ok
     })
 })
+
+// Helper copied straight from `mics`. Was used in some tests so this is easiest
+function isMixin(x) {
+    return (typeof x == 'function') && !!x.mixin
+}
+

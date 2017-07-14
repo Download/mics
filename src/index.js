@@ -24,15 +24,13 @@ export { mix, is, like }
  */
 function mix(...args) {
     // todo: refactor to make const
-    let superclass = !is(args[0], 'factory') && args.shift() || baseclass
-    let factory = (is(args[args.length-1], 'factory') && args.pop()) || derive
-
-    superclass = is(superclass, 'mixin') ? superclass.class : derive(superclass)
+    let superclass = !isFactory(args[0]) && args.shift() || baseclass
+    let factory = (isFactory(args[args.length-1]) && args.pop()) || derive
+    superclass = isMixin(superclass) ? superclass.class : derive(superclass)
     if (args.length) factory = (org => superclass => org(args.reduce((s,m) => m.mixin(s), superclass)))(factory)
 
     function mixin(superclass) {
         const result = is(superclass, mixin) ? superclass : factory(superclass)
-
         if (mixin.classes.indexOf(result) === -1) mixin.classes.push(result)
         return result
     }
@@ -41,14 +39,11 @@ function mix(...args) {
         classes: { value:[], writable:false },
         mixins: { value:args, writable:false },
     })
-
     const Class = mixin(superclass)
     const constructor = Class.hasOwnProperty('constructor')
         ? Class.constructor.bind(Class)
         : (...args) => new Class(...args)
-
     Object.getOwnPropertyNames(Class).forEach(k => Object.defineProperty(constructor, k, { value: Class[k] }))
-
     return Object.defineProperties(constructor, {
         mixin: { value:mixin, writable:false },
         class: { value: Class, writable:false },
@@ -61,23 +56,10 @@ function mix(...args) {
  * Example: is(looker, Looker)
  *
  * @param {object|function} x
- * @param {string|function} type
+ * @param {function} type
  * @return {boolean}
  */
 function is(x, type) {
-    if (typeof type == 'string') {
-        return type == 'class'
-            ? (
-                is(x, 'function') && (s => /^class\s/.test(s)
-    || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/,'').replace(/\s*}[^}]*$/,'')))(x.toString())
-            )
-            : type == 'mixin'
-                ? is(x, 'function') && !!x.mixin
-                : type == 'factory'
-                    ? is(x, 'function') && !is(x, 'mixin') && !is(x, 'class') && x.length == 1
-                    : typeof x == type;
-    }
-
     if (typeof x == 'object') {
         if (x instanceof type) return true
         if (type.class && x instanceof type.class) return true
@@ -85,16 +67,13 @@ function is(x, type) {
     }
     else if (typeof x == 'function') {
         if (x.mixin && x.mixin.mixins.indexOf(type) !== -1) return true
-
         let c = x
-
         while (c !== Object) {
             if (c === type || c === type.class) return true
             if (type.mixin && type.mixin.classes && type.mixin.classes.indexOf(c) !== -1) return true
             c = Object.getPrototypeOf(c.prototype).constructor
         }
     }
-
     return false
 }
 
@@ -121,12 +100,10 @@ function is(x, type) {
  */
 function like(x, type) {
     if (is(x, type)) return true
-
-    const itf = type.interface || (is(type, 'function') && getInterface(type.prototype))
-    const subject = is(x, 'function') ? x.interface || getInterface(x.prototype) : x
-
+    const itf = type.interface || ((typeof type == 'function') && getInterface(type.prototype))
+    const subject = typeof x == 'function' ? x.interface || getInterface(x.prototype) : x
     return itf && Object.keys(itf).reduce((f, k) => 
-        f && (is(itf[k], 'function') ? is(subject[k], 'function') : k in subject), true
+        f && ((typeof itf[k] == 'function') ? (typeof subject[k] == 'function') : k in subject), true
     )
 }
 
@@ -148,14 +125,27 @@ function getInterface(proto) {
  */
 function getPropertyNames(proto) {
     const results = []
-
     while (proto !== Object.prototype) {
         Object.getOwnPropertyNames(proto).reduce((arr,k) => arr.indexOf(k) === -1 ? arr.push(k) && arr : arr, results)
         proto = Object.getPrototypeOf(proto).constructor.prototype
     }
-
     return results
 }
+
+function isMixin(x) {
+    return (typeof x == 'function') && !!x.mixin
+}
+
+function isClass(x) {
+    if (typeof x != 'function') return false
+    const s = x.toString()
+    return /^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/,'').replace(/\s*}[^}]*$/,''))
+}
+
+function isFactory(x) {
+    return (typeof x == 'function') && !isMixin(x) && !isClass(x) && x.length == 1
+}
+
 
 const baseclass = class Object{}
 const derive = superclass => ({}[superclass.name || 'Object'] = class extends superclass {})

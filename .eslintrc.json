@@ -16,7 +16,6 @@
       "code": 120
     }],
     "indent": ["warn", 4],
-    "newline-after-var": "warn",
     "newline-per-chained-call": "warn",
     "one-var-declaration-per-line": "warn",
     "no-redeclare": "error",
