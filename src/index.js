@@ -137,8 +137,9 @@ function isMixin(x) {
 }
 
 function isClass(x) {
-    return (typeof x == 'function') && (s => /^class\s/.test(s)
-        || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/,'').replace(/\s*}[^}]*$/,'')))(x.toString())
+    if (typeof x != 'function') return false
+    const s = x.toString()
+    return /^class\s/.test(s) || /^.*classCallCheck\(/.test(s.replace(/^[^{]*{\s*/,'').replace(/\s*}[^}]*$/,''))
 }
 
 function isFactory(x) {
