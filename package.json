@@ -52,7 +52,7 @@
     "chai": "^4.0.2",
     "cross-env": "^5.0.1",
     "eslint": "^4.1.1",
-    "mocha": "^3.4.2",
+    "mocha": "^5.2.0",
     "mocha-loader": "^1.1.1",
     "rollup": "^0.46.0",
     "rollup-plugin-babel": "^2.7.1",
