@@ -61,7 +61,7 @@
     "rollup-plugin-uglify": "^2.0.1",
     "sinon": "^3.0.0",
     "tcomb": "^3.2.21",
-    "webpack": "^3.0.0",
+    "webpack": "^4.9.0",
     "webpack-dev-server": "^2.5.0"
   },
   "dependencies": {
