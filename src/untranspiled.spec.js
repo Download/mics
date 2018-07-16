@@ -1,11 +1,13 @@
-import ulog from 'ulog'
-import { expect } from 'chai'
-import { spy } from 'sinon'
-import t from 'tcomb'
+const ulog = require('ulog')
+const expect = require('chai').expect
+const spy = require('sinon').spy
+const t = require('tcomb')
 
-import { mix, is, like } from './'
+const mix = require('./').mix
+const is = require('./').is
+const like = require('./').like
 
-const log = ulog('mics:spec')
+const log = ulog('mics:untranspiled:spec')
 
 describe('mix([superclass] [, ...mixins] [, factory])', function() {
     it('is a function', function(){

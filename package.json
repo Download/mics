@@ -6,6 +6,7 @@
   "module": "dist/mics.es.js",
   "scripts": {
     "test": "mocha \"dist/mics.spec.js\"",
+    "test-untranspiled": "mocha \"src/untranspiled.spec.js\"",
     "dev": "webpack-dev-server --output-path test --output-filename index.spec.js \"mocha-loader!./index.spec.js\" --content-base test --port 8888",
     "build": "npm run build-cjs && npm run build-umd && npm run build-min && npm run build-es && npm run build-test",
     "build-cjs": "webpack --output-path dist --output-filename mics.cjs.js --output-library-target commonjs2 \"./index.js\" ",

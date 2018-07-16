@@ -1,4 +1,4 @@
-export { mix, is, like }
+module.exports = { mix, is, like }
 
 /**
  * Accepts an optional superclass as the first argument,
