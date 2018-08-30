@@ -58,7 +58,7 @@
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^2.0.1",
+    "rollup-plugin-uglify": "^5.0.2",
     "sinon": "^3.0.0",
     "tcomb": "^3.2.21",
     "webpack": "^3.0.0",
