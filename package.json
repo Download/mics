@@ -54,7 +54,7 @@
     "eslint": "^4.1.1",
     "mocha": "^3.4.2",
     "mocha-loader": "^1.1.1",
-    "rollup": "^0.46.0",
+    "rollup": "^1.19.3",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
